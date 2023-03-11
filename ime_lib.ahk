@@ -128,8 +128,13 @@ ImeIsPauseWindowActive()
 
 ImeIsWaitingInput()
 {
+    return ImeModeIsChinese() && !ImeIsPauseWindowActive()
+}
+
+ImeModeIsChinese()
+{
     global ime_mode_language
-    return ime_mode_language == "cn" && !ImeIsPauseWindowActive()
+    return ime_mode_language == "cn"
 }
 
 ;*******************************************************************************
@@ -302,7 +307,7 @@ Gosub, ImeUpdateTooltip
 return
 #if
 
-#if (ime_mode_language == "cn")
+#if ImeModeIsChinese()
 ; LShift 以英文文字上屏
 Shift::
 TrySetImeModeEn:
@@ -317,7 +322,7 @@ return
 #if
 
 TrySetImeModeCn:
-if ( ime_mode_language == "en" ) {
+if ( !ImeModeIsChinese() ) {
     Gosub, SetImeModeCn
     Hotkey, LShift up, TrySetImeModeCn, Off
 }
@@ -353,7 +358,7 @@ ImeUpdateIconState()
         ToolTip(4, "", tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
-        if ( ime_mode_language == "en" ) {
+        if ( !ImeModeIsChinese() ) {
             tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
             info_text := "英"
         } else {
