@@ -24,10 +24,10 @@ ImeInputChar(key, pos := -1, try_puts := 0)
 
 ImeInputNumber(key)
 {
-    global ime_open_select_menu
+    global ime_selectmenu_open
 
     ; 选择相应的编号并上屏
-    if( ime_open_select_menu ) {
+    if( ime_selectmenu_open ) {
         PutCharacterByIndex(key)
         ImeOpenSelectMenu(false)
         ImeTooltipUpdate()
@@ -62,7 +62,7 @@ return
 ; 如果有展开候选框则关闭
 ; 否则删除所有输入的字符
 Esc::
-    if( ime_open_select_menu ) {
+    if( ime_selectmenu_open ) {
         ImeOpenSelectMenu(false)
     } else {
         ImeClearInputString()
@@ -89,10 +89,10 @@ return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
 Down::
-    if( !ime_open_select_menu ) {
+    if( !ime_selectmenu_open ) {
         ImeOpenSelectMenu(true)
     } else {
-        ime_select_index := Min(ime_max_select_cnt, ime_candidate_sentences.Length(), ime_select_index + 1)
+        ime_select_index := Min(ime_selectmenu_column, ime_candidate_sentences.Length(), ime_select_index + 1)
     }
     ImeTooltipUpdate()
 return

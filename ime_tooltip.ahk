@@ -6,8 +6,8 @@ ImeTooltipUpdate()
     global ime_input_string
     global ime_candidate_sentences
     global ime_input_caret_pos
-    global ime_open_select_menu
-    global ime_max_select_cnt
+    global ime_selectmenu_open
+    global ime_selectmenu_column
     global ime_select_index
     global ime_tooltip_pos
     static last_ime_input := ""
@@ -25,8 +25,8 @@ ImeTooltipUpdate()
         }
 
         ime_select_tip := ""
-        if( ime_open_select_menu ) {
-            Loop % Min(ime_candidate_sentences.Length(), ime_max_select_cnt) {
+        if( ime_selectmenu_open ) {
+            Loop % Min(ime_candidate_sentences.Length(), ime_selectmenu_column) {
                 tvar := A_Index
 
                 Index := ime_for_select_obj.Push(str)
