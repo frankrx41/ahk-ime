@@ -204,6 +204,12 @@ ImeOpenSelectMenu(open)
     return
 }
 
+ImeIsSelectMenuOpen()
+{
+    global ime_selectmenu_open
+    return ime_selectmenu_open
+}
+
 ImeSetIconState(mode)
 {
     local

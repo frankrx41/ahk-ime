@@ -5,12 +5,11 @@ ImeClearInputString()
     global ime_input_string
     global ime_input_caret_pos
     global ime_select_index
-    global ime_selectmenu_open
 
     ime_input_string := ""
     ime_input_caret_pos := 0
     ime_select_index := 1
-    ime_selectmenu_open := 0
+    ImeOpenSelectMenu(false)
     return
 }
 
