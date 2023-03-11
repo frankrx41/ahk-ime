@@ -109,7 +109,7 @@ if (ime_input_string) {
     ImeTooltipUpdate()
 }
 ImeSetModeLanguage("en")
-ImeUpdateIconState()
+ImeSetIconState("en")
 return
 #if
 
@@ -121,7 +121,7 @@ Suspend
 ImeClearInputString()
 ImeTooltipUpdate()
 ImeTrySetModeLanguage("cn")
-ImeUpdateIconState()
+ImeUpdateActiveState()
 return
 
 ; Win + Alt + Space: reload

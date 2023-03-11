@@ -30,7 +30,7 @@ symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠",
 ; 注册 tooltip 样式
 ToolTip(1, "", "Q0 B" ime_tooltip_background_color " T"  ime_tooltip_text_color " S" ime_tooltip_font_size, ime_tooltip_font_family, ime_tooltip_font_bold)
 ImeRegisterHotkey()
-ImeUpdateIconState()
+ImeUpdateActiveState()
 
 DllCall("SetWinEventHook", "UInt", 0x06, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
 PinyinInit()
@@ -50,13 +50,13 @@ EventProcHook(phook, msg, hwnd)
     case 0x03:                  ; EVENT_SYSTEM_FOREGROUND
         WinGetClass, win_class, ahk_id %hwnd%
         ime_active_window_class := win_class
-        ImeUpdateIconState()
+        ImeUpdateActiveState()
     case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
-        ImeUpdateIconState()
+        ImeUpdateActiveState()
     case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
-        ImeUpdateIconState()
+        ImeUpdateActiveState()
     }
     return
 }
@@ -107,6 +107,18 @@ ImeRegisterHotkey()
 
 ;*******************************************************************************
 ; Ime state
+ImeUpdateActiveState()
+{
+    if(A_IsSuspended || ImeIsPauseWindowActive()){
+        mode := ""
+    } else {
+        global ime_mode_language
+        mode := ime_mode_language
+    }
+
+    ImeSetIconState(mode)
+}
+
 ImeIsPauseWindowActive()
 {
     ; 菜单打开时，暂停 IME
@@ -160,7 +172,7 @@ ImeTrySetModeLanguage(mode)
     if ( mode != ime_mode_language ) {
         ; CallBackBeforeToggleMode(ime_mode_language, mode)
         ImeSetModeLanguage(mode)
-        ImeUpdateIconState()
+        ImeSetIconState(mode)
     }
     return
 }
@@ -181,21 +193,19 @@ ImeOpenSelectMenu(open)
     return
 }
 
-ImeUpdateIconState()
+ImeSetIconState(mode)
 {
     local
     static ime_opt_icon_path := "ime.icl"
     tooltip_option := "X2300 Y1200"
-    if(A_IsSuspended || ImeIsPauseWindowActive()){
+    if( !mode ){
         ToolTip(4, "", tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
-        if ( !ImeModeIsChinese() ) {
-            tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
-            info_text := "英"
-        } else {
-            tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
-            info_text := "中"
+        switch (mode) {
+        case "cn": info_text := "中", tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
+        case "en": info_text := "英", tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
+        case "tw": info_text := "漢", tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
         }
         ToolTip(4, info_text, tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 1, 1
