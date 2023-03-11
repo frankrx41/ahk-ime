@@ -3,9 +3,11 @@
 ImeInitialize:
 ime_mode_language := "cn"       ; "cn", "en", "tw"
 
+ime_input_string := ""          ; 輸入字符
+ime_input_caret_pos := 0        ; 光标位置
+
 ime_tooltip_pos := ""           ; 输入法提示框光标位置 {x:0,y:0,h:0,t:"",Hwnd:Hwnd}
 
-ImeInputInitialize()
 ImeSelectInitialize()
 
 ime_is_active_system_menu := 0  ; 是否打开菜单

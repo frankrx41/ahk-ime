@@ -3,7 +3,7 @@ ImeSelectInitialize()
     global ime_select_index
     global ime_selectmenu_column
     global ime_selectmenu_open
-    global ime_candidate_sentences
+    global ime_candidate_sentences ; TODO: hide this variable only in this file
 
     ime_select_index                := 1        ; 选定的候选词，从 1 开始
     ime_selectmenu_column           := 10       ; 最大候选词个数
@@ -47,4 +47,10 @@ GetSelectWordIndex()
 {
     global ime_select_index
     return ime_select_index
+}
+
+GetSelectMenuColumn()
+{
+    global ime_selectmenu_column
+    return ime_selectmenu_column
 }

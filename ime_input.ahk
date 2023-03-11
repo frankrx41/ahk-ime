@@ -1,12 +1,3 @@
-ImeInputInitialize()
-{
-    global ime_input_string
-    global ime_input_caret_pos
-    
-    ime_input_string := ""          ; 輸入字符
-    ime_input_caret_pos := 0        ; 光标位置
-}
-
 ;*******************************************************************************
 ; 清除输入字符
 ImeClearInputString()
