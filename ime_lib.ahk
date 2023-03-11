@@ -7,12 +7,12 @@ ImeIsWaitingInput()
 
 SetImeModeEn:
 ime_mode_language := "en"
-Gosub, ImeShowIcon
+ImeUpdateIconState()
 return
 
 SetImeModeCn:
 ime_mode_language := "cn"
-Gosub, ImeShowIcon
+ImeUpdateIconState()
 return
 
 ;*******************************************************************************
@@ -40,7 +40,7 @@ symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠",
 ; 注册 tooltip 样式
 ToolTip(1, "", "Q1 B" tooltip_background_color " T"  tooltip_text_color " S" tooltip_font_size, tooltip_font_family, tooltip_font_bold)
 Gosub, ImeRegisterHotkey
-Gosub, ImeShowIcon
+ImeUpdateIconState()
 
 DllCall("SetWinEventHook", "UInt", 0x06, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
 PinyinInit()
@@ -55,10 +55,10 @@ EventProcHook(phook, msg, Hwnd)
     {
     case 0x6:                   ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_system_menu_open := 1
-        Gosub, ImeShowIcon
+        ImeUpdateIconState()
     case 0x7:                   ; EVENT_SYSTEM_MENUPOPUPEND
         ime_system_menu_open := 0
-        Gosub, ImeShowIcon
+        ImeUpdateIconState()
     }
     return
 }
@@ -303,7 +303,7 @@ Suspend
 Gosub, ImeClearInputString
 Gosub, ImeUpdateTooltip
 Gosub, TrySetImeModeCn
-Gosub, ImeShowIcon
+ImeUpdateIconState()
 return
 
 ImeSuspend:
@@ -316,20 +316,24 @@ return
 ExitApp,
 return
 
-ImeShowIcon:
-tooltip_option := "X2300 Y1200"
-if(A_IsSuspended || ime_system_menu_open){
-    ToolTip(4, "", tooltip_option)
-    Menu, Tray, Icon,ime.icl, 2, 1
-} else {
-    if ( !ime_mode_is_chinese ) {
-        tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
-        info_text := "英"
+ImeUpdateIconState()
+{
+    local
+    static ime_opt_icon_path := "ime.icl"
+    tooltip_option := "X2300 Y1200"
+    if(A_IsSuspended || ime_system_menu_open){
+        ToolTip(4, "", tooltip_option)
+        Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
-        tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
-        info_text := "中"
+        if ( ime_mode_language == "en" ) {
+            tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
+            info_text := "英"
+        } else {
+            tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
+            info_text := "中"
+        }
+        ToolTip(4, info_text, tooltip_option)
+        Menu, Tray, Icon, %ime_opt_icon_path%, 1, 1
     }
-    ToolTip(4, info_text, tooltip_option)
-    Menu, Tray, Icon, ime.icl, 1, 1
+    return
 }
-return
