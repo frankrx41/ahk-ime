@@ -81,7 +81,7 @@ return
 
 ; 上下选择
 Up::
-    ime_select_index := Max(1, ime_select_index - 1)
+    UpdateSelectWordIndex(-1)
     ImeTooltipUpdate()
 return
 
@@ -90,7 +90,7 @@ Down::
     if( !ImeIsSelectMenuOpen() ) {
         ImeOpenSelectMenu(true)
     } else {
-        ime_select_index := Min(ime_selectmenu_column, ime_candidate_sentences.Length(), ime_select_index + 1)
+        UpdateSelectWordIndex(+1)
     }
     ImeTooltipUpdate()
 return
