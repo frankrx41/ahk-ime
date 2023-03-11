@@ -16,7 +16,7 @@ ime_is_active_system_menu := 0  ; 是否打开菜单
 ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
 ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
 
-ime_tooltip_font_size           := 14
+ime_tooltip_font_size           := 13
 ime_tooltip_font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
 ime_tooltip_font_bold           := false
 ime_tooltip_background_color    := "373832"
@@ -28,7 +28,7 @@ symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠",
 , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" }
 
 ; 注册 tooltip 样式
-ToolTip(1, "", "Q1 B" ime_tooltip_background_color " T"  ime_tooltip_text_color " S" ime_tooltip_font_size, ime_tooltip_font_family, ime_tooltip_font_bold)
+ToolTip(1, "", "Q0 B" ime_tooltip_background_color " T"  ime_tooltip_text_color " S" ime_tooltip_font_size, ime_tooltip_font_family, ime_tooltip_font_bold)
 Gosub, ImeRegisterHotkey
 ImeUpdateIconState()
 
