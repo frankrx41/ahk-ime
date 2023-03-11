@@ -127,7 +127,7 @@ ImeIsWaitingInput()
     return ImeModeIsChinese() && !ImeIsPauseWindowActive()
 }
 
-ImeSetMode(mode)
+ImeSetModeLanguage(mode)
 {
     global ime_mode_language
     switch (mode) {
@@ -178,7 +178,7 @@ return
 
 TrySetImeModeCn:
 if ( !ImeModeIsChinese() ) {
-    ImeSetMode("cn")
+    ImeSetModeLanguage("cn")
     ImeUpdateIconState()
     Hotkey, LShift up, TrySetImeModeCn, Off
 }

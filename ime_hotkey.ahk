@@ -108,7 +108,7 @@ if (ime_input_string) {
     Gosub, ImeClearInputString
     ImeTooltipUpdate()
 }
-ImeSetMode("en")
+ImeSetModeLanguage("en")
 ImeUpdateIconState()
 Hotkey, LShift up, TrySetImeModeCn, On
 return
