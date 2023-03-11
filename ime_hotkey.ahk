@@ -28,7 +28,7 @@ ImeInputNumber(key)
 
     ; 选择相应的编号并上屏
     if( ime_selectmenu_open ) {
-        PutCharacterByIndex(key)
+        PutCharacterByIndex(key == 0 ? 10 : key)
         ImeOpenSelectMenu(false)
         ImeTooltipUpdate()
     }
