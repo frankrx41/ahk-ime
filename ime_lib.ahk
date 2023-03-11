@@ -29,7 +29,7 @@ symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠",
 
 ; 注册 tooltip 样式
 ToolTip(1, "", "Q0 B" ime_tooltip_background_color " T"  ime_tooltip_text_color " S" ime_tooltip_font_size, ime_tooltip_font_family, ime_tooltip_font_bold)
-Gosub, ImeRegisterHotkey
+ImeRegisterHotkey()
 ImeUpdateIconState()
 
 DllCall("SetWinEventHook", "UInt", 0x06, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
@@ -61,44 +61,50 @@ EventProcHook(phook, msg, hwnd)
 
 ;*******************************************************************************
 ; 注册按键
-ImeRegisterHotkey:
-; 当处于中文模式下
-ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
-Hotkey if, % ime_is_waiting_input_fn
-; 注册符号
-for key, char in symbol_ctrl_start_hotkey
+ImeRegisterHotkey()
 {
-    func := Func("ImeInputChar").Bind(char, -1, 1)
-    Hotkey, %key%, %func%
-}
-; 注册 a-z
-loop 26
-{
-    func := Func("ImeInputChar").Bind(Chr(96+A_Index))
-    Hotkey, % Chr(96+A_Index), %func%
-    ; 当输入大写字母后关闭输入法
-    Hotkey, % "~+" Chr(96+A_Index), TrySetImeModeEn
-}
-; 注册空格，用于分词
-func := Func("ImeInputChar").Bind(" ", -1, 1)
-Hotkey, Space, %func%
-Hotkey, if,
+    global symbol_ctrl_start_hotkey
 
-; 当有输入字符时
-Hotkey, if, ime_input_string
-; 注册数字 0-9
-loop 10 {
-    func := Func("ImeInputNumber").Bind(A_Index-1)
-    Hotkey, % A_Index-1, %func%
-    Hotkey, % "Numpad" A_Index-1, %func%
+    ; 当处于中文模式下
+    ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
+    Hotkey if, % ime_is_waiting_input_fn
+    ; 注册符号
+    for key, char in symbol_ctrl_start_hotkey
+    {
+        func := Func("ImeInputChar").Bind(char, -1, 1)
+        Hotkey, %key%, %func%
+    }
+    ; 注册 a-z
+    loop 26
+    {
+        func := Func("ImeInputChar").Bind(Chr(96+A_Index))
+        Hotkey, % Chr(96+A_Index), %func%
+        ; 当输入大写字母后关闭输入法
+        Hotkey, % "~+" Chr(96+A_Index), TrySetImeModeEn
+    }
+    Hotkey, if,
+
+    ; 当有输入字符时
+    Hotkey, if, ime_input_string
+    ; 注册空格，用于分词
+    func := Func("ImeInputChar").Bind("'", -1, 1)
+    Hotkey, Space, %func%
+    func := Func("ImeInputChar").Bind("'")
+    Hotkey, ', %func%
+    ; 注册数字 0-9
+    loop 10 {
+        func := Func("ImeInputNumber").Bind(A_Index-1)
+        Hotkey, % A_Index-1, %func%
+        Hotkey, % "Numpad" A_Index-1, %func%
+    }
+    ; 数字 0-9 作为上屏用
+    ; loop 10 {
+    ;     key := "^" A_Index-1
+    ;     Hotkey, % key, SelectAndPut
+    ; }
+    Hotkey, if,
+    return
 }
-; 数字 0-9 作为上屏用
-; loop 10 {
-;     key := "^" A_Index-1
-;     Hotkey, % key, SelectAndPut
-; }
-Hotkey, if,
-return
 
 ;*******************************************************************************
 ImeIsPauseWindowActive()
