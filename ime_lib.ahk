@@ -140,7 +140,7 @@ ImeSetMode(mode)
 ImeModeIsChinese()
 {
     global ime_mode_language
-    return ime_mode_language == "cn"
+    return ime_mode_language == "cn" || ime_mode_language == "tw"
 }
 
 PutCharacterByIndex(select_index)
