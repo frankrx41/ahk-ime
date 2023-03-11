@@ -10,7 +10,7 @@ if not A_IsAdmin
 	Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
-Menu, Tray, Tip, AHK Ime v0.01
+Menu, Tray, Tip, AHK Ime v0.02
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 global history_field_array := []

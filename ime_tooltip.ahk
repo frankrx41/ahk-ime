@@ -1,4 +1,3 @@
-
 ; 更新提示
 ImeTooltipUpdate()
 {
