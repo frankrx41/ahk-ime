@@ -28,6 +28,7 @@ return
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
 #Include, ime_hotkey.ahk
+#Include, ime_input.ahk
 
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
