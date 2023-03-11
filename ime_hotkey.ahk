@@ -5,7 +5,7 @@
 ; Enter 上屏文字
 Enter::
 NumpadEnter::
-    PutCharacterByIndex(ime_select_index)
+    PutCharacterByIndex(GetSelectWordIndex())
     ImeOpenSelectMenu(false)
     ImeTooltipUpdate()
 return
@@ -44,7 +44,7 @@ return
 
 ; 上下选择
 Up::
-    UpdateSelectWordIndex(-1)
+    OffsetSelectWordIndex(-1)
     ImeTooltipUpdate()
 return
 
@@ -53,7 +53,7 @@ Down::
     if( !ImeIsSelectMenuOpen() ) {
         ImeOpenSelectMenu(true)
     } else {
-        UpdateSelectWordIndex(+1)
+        OffsetSelectWordIndex(+1)
     }
     ImeTooltipUpdate()
 return

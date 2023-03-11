@@ -7,7 +7,6 @@ ImeTooltipUpdate()
     global ime_candidate_sentences
     global ime_input_caret_pos
     global ime_selectmenu_column
-    global ime_select_index
     global ime_tooltip_pos
     static last_ime_input := ""
 
@@ -31,7 +30,7 @@ ImeTooltipUpdate()
                 Index := ime_for_select_obj.Push(str)
                 begin_str :=
                 ime_select_tip .= "`n"
-                if ( ime_select_index == A_Index ) {
+                if ( GetSelectWordIndex() == A_Index ) {
                     begin_str .= ">["
                 } else {
                     if( A_Index == "10" ) {
@@ -41,14 +40,14 @@ ImeTooltipUpdate()
                         begin_str .=  A_Index "."
                     }
                 }
-                end_str := ime_select_index == A_Index ? "]" : " "
+                end_str := GetSelectWordIndex() == A_Index ? "]" : " "
 
                 ime_select_tip .= begin_str . ime_candidate_sentences[A_Index, 2] . end_str . ime_candidate_sentences[A_Index, 1] 
             }
         } else {
-            ime_select_tip .= ime_candidate_sentences[ime_select_index, 2]
+            ime_select_tip .= ime_candidate_sentences[GetSelectWordIndex(), 2]
         }
-        debug_tip := "`n----------------`n" ime_candidate_sentences.Length() "`n" ime_select_index
+        debug_tip := "`n----------------`n" ime_candidate_sentences.Length() "`n" GetSelectWordIndex()
         ; ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_input_caret_pos "`n" ime_candidate_sentences.Length(), "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
         ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_select_tip debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }else{

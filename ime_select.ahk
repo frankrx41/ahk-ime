@@ -11,6 +11,7 @@ ImeSelectInitialize()
     ime_candidate_sentences         := [] ; 候选句子
 }
 
+;*******************************************************************************
 ImeOpenSelectMenu(open)
 {
     global ime_selectmenu_open
@@ -27,13 +28,19 @@ ImeIsSelectMenuOpen()
     return ime_selectmenu_open
 }
 
-UpdateSelectWordIndex(offset)
+OffsetSelectWordIndex(offset)
+{
+    global ime_select_index
+    SetSelectWordIndex(ime_select_index + offset)
+}
+
+SetSelectWordIndex(index)
 {
     global ime_select_index
     global ime_candidate_sentences
     global ime_selectmenu_column
 
-    ime_select_index := Max(1, Min(ime_selectmenu_column, ime_candidate_sentences.Length(), ime_select_index + offset))
+    ime_select_index := Max(1, Min(ime_selectmenu_column, ime_candidate_sentences.Length(), index))
 }
 
 GetSelectWordIndex()
