@@ -97,8 +97,21 @@ if( !ime_open_select_menu ) {
 ImeTooltipUpdate()
 return
 
+; 更新候选框位置
+~WheelUp::
+~WheelDown::
+~LButton up::
+    ime_tooltip_pos := 0
+    SetTimer, ImeTooltipUpdateTimer, -10
+return
+
+ImeTooltipUpdateTimer:
+    ImeTooltipUpdate()
+return
+
 #if
 
+;*******************************************************************************
 #if ImeModeIsChinese()
 ; LShift 以英文文字上屏
 Shift::
