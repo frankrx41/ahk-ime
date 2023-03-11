@@ -38,8 +38,6 @@ return
 Suspend
 ToolTip, Reload %A_ScriptName%
 Sleep, 500
-; Run "%A_AhkPath%" /force /ErrorStdOut /debug=localhost:9000 "%A_ScriptFullPath%"
-; ExitApp,
 Reload
 return
 #if
