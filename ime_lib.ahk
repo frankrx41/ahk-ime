@@ -20,13 +20,17 @@ return
 ImeInitialize:
 ime_input_string := ""      ; 輸入字符
 ime_mode_language := "cn"    ; "cn", "en", "tw"
-ime_is_active_system_menu := 0   ; 在打开菜单时临时禁用
 ime_caret_pos := 0          ; 光标位置
 ime_screeen_caret := ""     ; 输入法提示框光标位置
 ime_select_index := 1       ; 选定的候选词，从 1 开始
 ime_max_select_cnt := 9     ; 最大候选词个数
 ime_candidate_sentences := [] ; 候选句子
 ime_open_select_menu := 0   ; 是否打开选字窗口
+
+ime_is_active_system_menu := 0  ; 是否打开菜单
+ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
+ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
+
 
 tooltip_font_size := 13
 tooltip_font_family := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
@@ -46,17 +50,23 @@ DllCall("SetWinEventHook", "UInt", 0x06, "UInt", 0x07, "Ptr", 0, "Ptr", Register
 PinyinInit()
 return
 
-EventProcHook(phook, msg, Hwnd)
+EventProcHook(phook, msg, hwnd)
 {
+    global ime_active_window_class
     global ime_is_active_system_menu
+
     if (A_IsSuspended)
         return
     Switch msg
     {
-    case 0x6:                   ; EVENT_SYSTEM_MENUPOPUPSTART
+    case 0x03:                  ; EVENT_SYSTEM_FOREGROUND
+        WinGetClass, win_class, ahk_id %hwnd%
+        ime_active_window_class := win_class
+        ImeUpdateIconState()
+    case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
         ImeUpdateIconState()
-    case 0x7:                   ; EVENT_SYSTEM_MENUPOPUPEND
+    case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
         ImeUpdateIconState()
     }
