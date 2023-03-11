@@ -28,7 +28,7 @@ ImeInputNumber(key) {
     ; 选择相应的编号并上屏
     if( ime_open_select_menu ) {
         PutCharacterByIndex(key)
-        Gosub, CloseSelectMenu
+        ImeOpenSelectMenu(false)
         ImeTooltipUpdate()
     }
     else {
@@ -44,7 +44,7 @@ ImeInputNumber(key) {
 Enter::
 NumpadEnter::
 PutCharacterByIndex(ime_select_index)
-Gosub, CloseSelectMenu
+ImeOpenSelectMenu(false)
 ImeTooltipUpdate()
 return
 
@@ -63,7 +63,7 @@ return
 ; 否则删除所有输入的字符
 Esc::
 if( ime_open_select_menu ) {
-    Gosub, CloseSelectMenu
+    ImeOpenSelectMenu(false)
 } else {
     ImeClearInputString()
 }
@@ -90,7 +90,7 @@ return
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
 Down::
 if( !ime_open_select_menu ) {
-    Gosub, OpenSelectMenu
+    ImeOpenSelectMenu(true)
 } else {
     ime_select_index := Min(ime_max_select_cnt, ime_candidate_sentences.Length(), ime_select_index + 1)
 }

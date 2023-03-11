@@ -146,15 +146,15 @@ ImeModeIsChinese()
     return ime_mode_language == "cn" || ime_mode_language == "tw"
 }
 
-OpenSelectMenu:
-ime_open_select_menu := 1
-ime_select_index := 1
-return
+ImeOpenSelectMenu(open)
+{
+    global ime_open_select_menu
+    global ime_select_index
 
-CloseSelectMenu:
-ime_open_select_menu := 0
-ime_select_index := 1
-return
+    ime_open_select_menu := open
+    ime_select_index := 1
+    return
+}
 
 TrySetImeModeCn:
 if ( !ImeModeIsChinese() ) {
