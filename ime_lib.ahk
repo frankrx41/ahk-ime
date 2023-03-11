@@ -1,10 +1,3 @@
-ImeIsWaitingInput()
-{
-    global ime_mode_language
-    global ime_is_active_system_menu
-    return ime_mode_language == "cn" && !ime_is_active_system_menu
-}
-
 SetImeModeEn:
 ime_mode_language := "en"
 ImeUpdateIconState()
@@ -113,6 +106,31 @@ loop 10 {
 ; }
 Hotkey, if,
 return
+
+;*******************************************************************************
+ImeIsPauseWindowActive()
+{
+    ; 菜单打开时，暂停 IME
+    global ime_is_active_system_menu
+    if( ime_is_active_system_menu ) {
+        return 1
+    }
+    ; 当前激活的窗口的 class 在禁用列表中，暂停 IME
+    global ime_active_window_class
+    global ime_opt_pause_window_name_list
+    for index, name in ime_opt_pause_window_name_list {
+        if( name == ime_active_window_class ) {
+            return 1
+        }
+    }
+    return 0
+}
+
+ImeIsWaitingInput()
+{
+    global ime_mode_language
+    return ime_mode_language == "cn" && !ImeIsPauseWindowActive()
+}
 
 ;*******************************************************************************
 ; 输入相关的函数
@@ -331,7 +349,7 @@ ImeUpdateIconState()
     local
     static ime_opt_icon_path := "ime.icl"
     tooltip_option := "X2300 Y1200"
-    if(A_IsSuspended || ime_is_active_system_menu){
+    if(A_IsSuspended || ImeIsPauseWindowActive()){
         ToolTip(4, "", tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
