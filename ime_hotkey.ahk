@@ -102,7 +102,6 @@ return
 #if ImeModeIsChinese()
 ; LShift 以英文文字上屏
 Shift::
-TrySetImeModeEn:
 if (ime_input_string) {
     PutCharacter(ime_input_string)
     ImeClearInputString()
