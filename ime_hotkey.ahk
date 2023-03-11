@@ -7,10 +7,10 @@ ImeInputChar(key, pos := -1, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_screeen_caret
+    global ime_tooltip_pos
 
     if (!ime_input_string ) {
-        ime_screeen_caret := 0
+        ime_tooltip_pos := 0
     }
     pos := pos != -1 ? pos : ime_input_caret_pos
     ime_input_string := SubStr(ime_input_string, 1, pos) . key . SubStr(ime_input_string, pos+1)
