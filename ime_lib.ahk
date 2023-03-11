@@ -63,45 +63,42 @@ EventProcHook(phook, msg, hwnd)
 ; 注册按键
 ImeRegisterHotkey()
 {
-    global symbol_ctrl_start_hotkey
-
-    ; 当处于中文模式下
     ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
     Hotkey if, % ime_is_waiting_input_fn
-    ; 注册符号
-    for key, char in symbol_ctrl_start_hotkey
     {
-        func := Func("ImeInputChar").Bind(char, -1, 1)
-        Hotkey, %key%, %func%
-    }
-    ; 注册 a-z
-    loop 26
-    {
-        func := Func("ImeInputChar").Bind(Chr(96+A_Index))
-        Hotkey, % Chr(96+A_Index), %func%
-        ; 当输入大写字母后关闭输入法
-        Hotkey, % "~+" Chr(96+A_Index), TrySetImeModeEn
+        ; symbol
+        global symbol_ctrl_start_hotkey
+        for key, char in symbol_ctrl_start_hotkey
+        {
+            func := Func("ImeInputChar").Bind(char, -1, 1)
+            Hotkey, %key%, %func%
+        }
+        loop 26
+        {
+            ; a-z
+            func := Func("ImeInputChar").Bind(Chr(96+A_Index))
+            Hotkey, % Chr(96+A_Index), %func%
+            ; A-Z
+            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
+            Hotkey, % "+" Chr(96+A_Index), %func%
+        }
     }
     Hotkey, if,
 
-    ; 当有输入字符时
     Hotkey, if, ime_input_string
-    ; 注册空格，用于分词
-    func := Func("ImeInputChar").Bind("'", -1, 1)
-    Hotkey, Space, %func%
-    func := Func("ImeInputChar").Bind("'")
-    Hotkey, ', %func%
-    ; 注册数字 0-9
-    loop 10 {
-        func := Func("ImeInputNumber").Bind(A_Index-1)
-        Hotkey, % A_Index-1, %func%
-        Hotkey, % "Numpad" A_Index-1, %func%
+    {
+        ; Space and ' to spilt word
+        func := Func("ImeInputChar").Bind("'", -1, 1)
+        Hotkey, Space, %func%
+        func := Func("ImeInputChar").Bind("'")
+        Hotkey, ', %func%
+        ; 0-9
+        loop 10 {
+            func := Func("ImeInputNumber").Bind(A_Index-1)
+            Hotkey, % A_Index-1, %func%
+            Hotkey, % "Numpad" A_Index-1, %func%
+        }
     }
-    ; 数字 0-9 作为上屏用
-    ; loop 10 {
-    ;     key := "^" A_Index-1
-    ;     Hotkey, % key, SelectAndPut
-    ; }
     Hotkey, if,
     return
 }
