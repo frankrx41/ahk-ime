@@ -31,7 +31,7 @@ return
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk
 
-#if WinActive("AhkIme")
+#if WinActive("AHK-Ime")
 ~^S::
 Suspend
 ToolTip, Reload %A_ScriptName%
