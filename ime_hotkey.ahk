@@ -17,7 +17,7 @@ ImeInputChar(key, pos := -1, try_puts := 0)
     ime_input_caret_pos := pos + 1
     if( try_puts && StrLen(ime_input_string) == 1 ) {
         PutCharacter(key)
-        Gosub, ImeClearInputString
+        ImeClearInputString()
     }
     ImeTooltipUpdate()
 }
@@ -65,7 +65,7 @@ Esc::
 if( ime_open_select_menu ) {
     Gosub, CloseSelectMenu
 } else {
-    Gosub, ImeClearInputString
+    ImeClearInputString()
 }
 ImeTooltipUpdate()
 return
@@ -105,7 +105,7 @@ Shift::
 TrySetImeModeEn:
 if (ime_input_string) {
     PutCharacter(ime_input_string)
-    Gosub, ImeClearInputString
+    ImeClearInputString()
     ImeTooltipUpdate()
 }
 ImeSetModeLanguage("en")
@@ -119,7 +119,7 @@ return
 #Space::
 ImeToggleSuspend:
 Suspend
-Gosub, ImeClearInputString
+ImeClearInputString()
 ImeTooltipUpdate()
 Gosub, TrySetImeModeCn
 ImeUpdateIconState()
