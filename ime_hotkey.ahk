@@ -5,16 +5,16 @@
 ; 输入音调
 ImeInputChar(key, pos := -1, try_puts := 0)
 {
-    global ime_caret_pos
+    global ime_input_caret_pos
     global ime_input_string
     global ime_screeen_caret
 
     if (!ime_input_string ) {
         ime_screeen_caret := 0
     }
-    pos := pos != -1 ? pos : ime_caret_pos
+    pos := pos != -1 ? pos : ime_input_caret_pos
     ime_input_string := SubStr(ime_input_string, 1, pos) . key . SubStr(ime_input_string, pos+1)
-    ime_caret_pos := pos + 1
+    ime_input_caret_pos := pos + 1
     if( try_puts && StrLen(ime_input_string) == 1 ) {
         PutCharacter(key)
         Gosub, ImeClearInputString
@@ -50,9 +50,9 @@ return
 
 ; BackSpace 删除光标前面的空格
 BackSpace::
-if( ime_caret_pos != 0 ) {
-    ime_input_string := SubStr(ime_input_string, 1, ime_caret_pos-1) . SubStr(ime_input_string, ime_caret_pos+1)
-    ime_caret_pos := ime_caret_pos-1
+if( ime_input_caret_pos != 0 ) {
+    ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
+    ime_input_caret_pos := ime_input_caret_pos-1
     ImeTooltipUpdate()
 }
 return
@@ -72,12 +72,12 @@ return
 
 ; 左右键移动光标
 Left::
-ime_caret_pos := Max(0, ime_caret_pos-1)
+ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
 ImeTooltipUpdate()
 return
 
 Right::
-ime_caret_pos := Min(StrLen(ime_input_string), ime_caret_pos+1)
+ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
 ImeTooltipUpdate()
 return
 

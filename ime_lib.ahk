@@ -1,10 +1,12 @@
 ;*******************************************************************************
 ; 全局变量
 ImeInitialize:
-ime_input_string := ""      ; 輸入字符
-ime_mode_language := "cn"    ; "cn", "en", "tw"
-ime_caret_pos := 0          ; 光标位置
-ime_screeen_caret := ""     ; 输入法提示框光标位置
+ime_mode_language := "cn"       ; "cn", "en", "tw"
+
+ime_input_string := ""          ; 輸入字符
+ime_input_caret_pos := 0        ; 光标位置
+ime_screeen_caret := ""         ; 输入法提示框光标位置
+
 ime_select_index := 1       ; 选定的候选词，从 1 开始
 ime_max_select_cnt := 9     ; 最大候选词个数
 ime_candidate_sentences := [] ; 候选句子
@@ -156,7 +158,7 @@ PutCharacterByIndex(select_index)
 ; 清除输入字符
 ImeClearInputString:
 ime_input_string := ""
-ime_caret_pos := 0
+ime_input_caret_pos := 0
 ime_select_index := 1
 ime_open_select_menu := 0
 return

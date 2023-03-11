@@ -5,7 +5,7 @@ ImeTooltipUpdate()
     local
     global ime_input_string
     global ime_candidate_sentences
-    global ime_caret_pos
+    global ime_input_caret_pos
     global ime_open_select_menu
     global ime_max_select_cnt
     global ime_select_index
@@ -16,8 +16,8 @@ ImeTooltipUpdate()
         if (!ime_screeen_caret) {
             ime_screeen_caret := GetCaretPos()
         }
-        tooltip_string := SubStr(ime_input_string, 1, ime_caret_pos) "|" SubStr(ime_input_string, ime_caret_pos+1)
-        ; ToolTip, % ime_input_string "`n" tooltip_string "`n" ime_caret_pos
+        tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
+        ; ToolTip, % ime_input_string "`n" tooltip_string "`n" ime_input_caret_pos
 
         if (last_ime_input != ime_input_string) {
             last_ime_input := ime_input_string
@@ -42,7 +42,7 @@ ImeTooltipUpdate()
             ime_select_tip .= ime_candidate_sentences[ime_select_index, 2]
         }
         debug_tip := "`n----------------`n" ime_candidate_sentences.Length() "`n" ime_select_index
-        ; ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_caret_pos "`n" ime_candidate_sentences.Length(), "x" ime_screeen_caret.x " y" ime_screeen_caret.Y+ime_screeen_caret.H)
+        ; ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_input_caret_pos "`n" ime_candidate_sentences.Length(), "x" ime_screeen_caret.x " y" ime_screeen_caret.Y+ime_screeen_caret.H)
         ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_select_tip debug_tip, "x" ime_screeen_caret.x " y" ime_screeen_caret.Y+ime_screeen_caret.H)
     }else{
         ToolTip(1, "")
