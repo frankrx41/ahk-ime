@@ -30,15 +30,20 @@ ImeTooltipUpdate()
                 Index := ime_for_select_obj.Push(str)
                 begin_str :=
                 ime_select_tip .= "`n"
-                if ( GetSelectWordIndex() == word_index ) {
-                    begin_str .= ">["
+                if( word_index <= ime_candidate_sentences.Length() )
+                {
+                    if ( GetSelectWordIndex() == word_index ) {
+                        begin_str .= ">["
+                    } else {
+                        begin_str .=  Mod(word_index, 10) "."
+                        ; begin_str .=  word_index "."
+                    }
+                    end_str := GetSelectWordIndex() == word_index ? "]" : " "
+                    ime_select_tip .= begin_str . ime_candidate_sentences[word_index, 2] . end_str . ime_candidate_sentences[word_index, 3] 
                 } else {
-                    begin_str .=  Mod(word_index, 10) "."
-                    ; begin_str .=  word_index "."
+                    ime_select_tip .= ""
                 }
-                end_str := GetSelectWordIndex() == word_index ? "]" : " "
 
-                ime_select_tip .= begin_str . ime_candidate_sentences[word_index, 2] . end_str . ime_candidate_sentences[word_index, 3] 
             }
         } else {
             ime_select_tip := ime_candidate_sentences[GetSelectWordIndex(), 2]
