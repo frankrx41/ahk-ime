@@ -26,6 +26,7 @@ return
 #Include, ime_lib.ahk
 #Include, ime_pinyin.ahk
 #Include, ime_db.ahk
+#Include, ime_tooltip.ahk
 
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
