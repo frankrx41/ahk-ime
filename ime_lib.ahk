@@ -158,7 +158,7 @@ ImeInputChar(key, pos := -1, try_puts := 0)
         PutCharacter(key)
         Gosub, ImeClearInputString
     }
-    Gosub, ImeUpdateTooltip
+    ImeTooltipUpdate()
 }
 
 ImeInputNumber(key) {
@@ -168,7 +168,7 @@ ImeInputNumber(key) {
     if( ime_open_select_menu ) {
         PutCharacterByIndex(key)
         Gosub, CloseSelectMenu
-        Gosub, ImeUpdateTooltip
+        ImeTooltipUpdate()
     }
     else {
         ImeInputChar(key)
@@ -216,7 +216,7 @@ Enter::
 NumpadEnter::
 PutCharacterByIndex(ime_select_index)
 Gosub, CloseSelectMenu
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 return
 
 ; BackSpace 删除光标前面的空格
@@ -224,7 +224,7 @@ BackSpace::
 if( ime_caret_pos != 0 ) {
     ime_input_string := SubStr(ime_input_string, 1, ime_caret_pos-1) . SubStr(ime_input_string, ime_caret_pos+1)
     ime_caret_pos := ime_caret_pos-1
-    Gosub, ImeUpdateTooltip
+    ImeTooltipUpdate()
 }
 return
 
@@ -237,24 +237,24 @@ if( ime_open_select_menu ) {
 } else {
     Gosub, ImeClearInputString
 }
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 return
 
 ; 左右键移动光标
 Left::
 ime_caret_pos := Max(0, ime_caret_pos-1)
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 return
 
 Right::
 ime_caret_pos := Min(StrLen(ime_input_string), ime_caret_pos+1)
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 return
 
 ; 上下选择
 Up::
 ime_select_index := Max(1, ime_select_index - 1)
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
@@ -264,7 +264,7 @@ if( !ime_open_select_menu ) {
 } else {
     ime_select_index := Min(ime_max_select_cnt, ime_candidate_sentences.Length(), ime_select_index + 1)
 }
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 return
 #if
 
@@ -275,7 +275,7 @@ TrySetImeModeEn:
 if (ime_input_string) {
     PutCharacter(ime_input_string)
     Gosub, ImeClearInputString
-    Gosub, ImeUpdateTooltip
+    ImeTooltipUpdate()
 }
 ImeSetMode("en")
 ImeUpdateIconState()
@@ -297,7 +297,7 @@ return
 ImeToggleSuspend:
 Suspend
 Gosub, ImeClearInputString
-Gosub, ImeUpdateTooltip
+ImeTooltipUpdate()
 Gosub, TrySetImeModeCn
 ImeUpdateIconState()
 return
