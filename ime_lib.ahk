@@ -36,6 +36,8 @@ DllCall("SetWinEventHook", "UInt", 0x06, "UInt", 0x07, "Ptr", 0, "Ptr", Register
 PinyinInit()
 return
 
+;*******************************************************************************
+;
 EventProcHook(phook, msg, hwnd)
 {
     global ime_active_window_class
@@ -60,7 +62,7 @@ EventProcHook(phook, msg, hwnd)
 }
 
 ;*******************************************************************************
-; 注册按键
+; Ime hotkeys
 ImeRegisterHotkey()
 {
     ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
@@ -104,6 +106,7 @@ ImeRegisterHotkey()
 }
 
 ;*******************************************************************************
+; Ime state
 ImeIsPauseWindowActive()
 {
     ; 菜单打开时，暂停 IME
