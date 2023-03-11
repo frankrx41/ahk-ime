@@ -1,13 +1,3 @@
-SetImeModeEn:
-ime_mode_language := "en"
-ImeUpdateIconState()
-return
-
-SetImeModeCn:
-ime_mode_language := "cn"
-ImeUpdateIconState()
-return
-
 ;*******************************************************************************
 ; 全局变量
 ImeInitialize:
@@ -129,6 +119,16 @@ ImeIsPauseWindowActive()
 ImeIsWaitingInput()
 {
     return ImeModeIsChinese() && !ImeIsPauseWindowActive()
+}
+
+ImeSetMode(mode)
+{
+    global ime_mode_language
+    switch (mode) {
+    case "cn", "en", "tw":  ime_mode_language := mode
+    default:                ime_mode_language := "en"
+    }
+    return
 }
 
 ImeModeIsChinese()
@@ -316,14 +316,16 @@ if (ime_input_string) {
     Gosub, ImeClearInputString
     Gosub, ImeUpdateTooltip
 }
-Gosub, SetImeModeEn
+ImeSetMode("en")
+ImeUpdateIconState()
 Hotkey, LShift up, TrySetImeModeCn, On
 return
 #if
 
 TrySetImeModeCn:
 if ( !ImeModeIsChinese() ) {
-    Gosub, SetImeModeCn
+    ImeSetMode("cn")
+    ImeUpdateIconState()
     Hotkey, LShift up, TrySetImeModeCn, Off
 }
 return
