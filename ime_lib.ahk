@@ -1,8 +1,8 @@
 ImeIsWaitingInput()
 {
     global ime_mode_language
-    global ime_system_menu_open
-    return ime_mode_language == "cn" && !ime_system_menu_open
+    global ime_is_active_system_menu
+    return ime_mode_language == "cn" && !ime_is_active_system_menu
 }
 
 SetImeModeEn:
@@ -20,7 +20,7 @@ return
 ImeInitialize:
 ime_input_string := ""      ; 輸入字符
 ime_mode_language := "cn"    ; "cn", "en", "tw"
-ime_system_menu_open := 0   ; 在打开菜单时临时禁用
+ime_is_active_system_menu := 0   ; 在打开菜单时临时禁用
 ime_caret_pos := 0          ; 光标位置
 ime_screeen_caret := ""     ; 输入法提示框光标位置
 ime_select_index := 1       ; 选定的候选词，从 1 开始
@@ -48,16 +48,16 @@ return
 
 EventProcHook(phook, msg, Hwnd)
 {
-    global ime_system_menu_open
+    global ime_is_active_system_menu
     if (A_IsSuspended)
         return
     Switch msg
     {
     case 0x6:                   ; EVENT_SYSTEM_MENUPOPUPSTART
-        ime_system_menu_open := 1
+        ime_is_active_system_menu := 1
         ImeUpdateIconState()
     case 0x7:                   ; EVENT_SYSTEM_MENUPOPUPEND
-        ime_system_menu_open := 0
+        ime_is_active_system_menu := 0
         ImeUpdateIconState()
     }
     return
@@ -321,7 +321,7 @@ ImeUpdateIconState()
     local
     static ime_opt_icon_path := "ime.icl"
     tooltip_option := "X2300 Y1200"
-    if(A_IsSuspended || ime_system_menu_open){
+    if(A_IsSuspended || ime_is_active_system_menu){
         ToolTip(4, "", tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
