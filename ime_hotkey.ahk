@@ -130,7 +130,7 @@ return
 #Space::
 ImeToggleSuspend:
     Suspend
-    ImeUpdateActiveState()
+    ImeUpdateActiveState("cn")
 return
 
 ; Win + Alt + Space: reload
