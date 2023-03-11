@@ -9,6 +9,8 @@ ImeStateInitialize()
     ime_is_active_system_menu := 0  ; 是否打开菜单
     ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
+
+    DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
 }
 
 ;*******************************************************************************
