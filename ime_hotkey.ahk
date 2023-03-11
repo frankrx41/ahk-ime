@@ -112,23 +112,22 @@ return
 #if
 
 ;*******************************************************************************
-#if ImeModeIsChinese()
-; LShift 以英文文字上屏
-Shift::
-if (ime_input_string) {
-    PutCharacter(ime_input_string)
-    ImeClearInputString()
-    ImeTooltipUpdate()
-}
-ImeSetModeLanguage("en")
-ImeSetIconState("en")
-return
-#if
+; #if ImeModeIsChinese()
+; ; LShift 以英文文字上屏
+; Shift::
+; if (ime_input_string) {
+;     PutCharacter(ime_input_string)
+;     ImeClearInputString()
+;     ImeTooltipUpdate()
+; }
+; ImeSetModeLanguage("en")
+; ImeSetIconState("en")
+; return
+; #if
 
 ;*******************************************************************************
 ; Win + Space: toggle cn and en
 #Space::
-ImeToggleSuspend:
     Suspend
     ImeUpdateActiveState("cn")
 return

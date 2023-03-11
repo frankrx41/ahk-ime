@@ -14,6 +14,19 @@ ImeClearInputString()
     return
 }
 
+;*******************************************************************************
+; 切换成英文前以原始输入上屏文字
+CallBackBeforeToggleEn()
+{
+    global ime_input_string
+
+    if ( ime_input_string ) {
+        PutCharacter(ime_input_string)
+        ImeClearInputString()
+    }
+    return
+}
+
 PutCharacterByIndex(select_index)
 {
     global ime_candidate_sentences

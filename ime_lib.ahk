@@ -115,7 +115,8 @@ ImeUpdateActiveState(mode := "")
     } else {
         global ime_mode_language
         mode := mode ? mode : ime_mode_language
-        ImeTrySetModeLanguage(mode)
+        ImeSetModeLanguage(mode)
+        ImeUpdateModeHotkey()
     }
 
     ImeTooltipUpdate()
@@ -152,9 +153,13 @@ ImeSetModeLanguage(mode)
     case "cn", "en", "tw":  ime_mode_language := mode
     default:                ime_mode_language := "en"
     }
+    return
+}
 
-    func_to_cn := Func("ImeTrySetModeLanguage").Bind("cn")
-    func_to_en := Func("ImeTrySetModeLanguage").Bind("en")
+ImeUpdateModeHotkey()
+{
+    func_to_cn := Func("ImeSetModeLanguageByHotkey").Bind("cn")
+    func_to_en := Func("ImeSetModeLanguageByHotkey").Bind("en")
     if( ImeModeIsChinese() ) {
         ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
         Hotkey, Shift, % func_to_cn, Off
@@ -165,18 +170,19 @@ ImeSetModeLanguage(mode)
         Hotkey, Shift, % func_to_en, Off
         Hotkey, Shift, % func_to_cn, On
     }
-    return
 }
 
-ImeTrySetModeLanguage(mode)
+ImeSetModeLanguageByHotkey(mode)
 {
     global ime_mode_language
 
-    if ( mode != ime_mode_language ) {
-        ; CallBackBeforeToggleMode(ime_mode_language, mode)
-        ImeSetModeLanguage(mode)
-        ImeSetIconState(mode)
+    if( mode == "en" ){
+        CallBackBeforeToggleEn()
     }
+    ImeSetModeLanguage(mode)
+    ImeUpdateModeHotkey()
+    ImeTooltipUpdate()
+    ImeSetIconState(mode)
     return
 }
 
