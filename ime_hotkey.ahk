@@ -110,7 +110,6 @@ if (ime_input_string) {
 }
 ImeSetModeLanguage("en")
 ImeUpdateIconState()
-Hotkey, LShift up, TrySetImeModeCn, On
 return
 #if
 
@@ -121,7 +120,7 @@ ImeToggleSuspend:
 Suspend
 ImeClearInputString()
 ImeTooltipUpdate()
-Gosub, TrySetImeModeCn
+ImeTrySetModeLanguage("cn")
 ImeUpdateIconState()
 return
 
