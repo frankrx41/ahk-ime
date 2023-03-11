@@ -40,7 +40,7 @@ SetSelectWordIndex(index)
     global ime_candidate_sentences
     global ime_selectmenu_column
 
-    ime_select_index := Max(1, Min(ime_selectmenu_column, ime_candidate_sentences.Length(), index))
+    ime_select_index := Max(1, Min(ime_candidate_sentences.Length(), index))
 }
 
 GetSelectWordIndex()

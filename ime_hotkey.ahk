@@ -26,7 +26,8 @@ ImeInputNumber(key)
 {
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
-        PutCharacterByIndex(key == 0 ? 10 : key)
+        start_index := Floor(GetSelectWordIndex() / GetSelectMenuColumn()) * GetSelectMenuColumn()
+        PutCharacterByIndex(start_index + (key == 0 ? 10 : key))
         ImeOpenSelectMenu(false)
         ImeTooltipUpdate()
     }
@@ -70,12 +71,20 @@ return
 
 ; 左右键移动光标
 Left::
-    ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
+    if( ImeIsSelectMenuOpen() ){
+        OffsetSelectWordIndex(-GetSelectMenuColumn())
+    } else {
+        ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
+    }
     ImeTooltipUpdate()
 return
 
 Right::
-    ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
+    if( ImeIsSelectMenuOpen() ){
+        OffsetSelectWordIndex(+GetSelectMenuColumn())
+    } else {
+        ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
+    }
     ImeTooltipUpdate()
 return
 

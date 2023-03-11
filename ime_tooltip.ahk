@@ -23,25 +23,22 @@ ImeTooltipUpdate()
 
         ime_select_tip := ""
         if( ImeIsSelectMenuOpen() ) {
+            start_index := Floor(GetSelectWordIndex() / GetSelectMenuColumn()) * GetSelectMenuColumn()
             Loop % Min(ime_candidate_sentences.Length(), GetSelectMenuColumn()) {
-                tvar := A_Index
+                word_index := start_index + A_Index
 
                 Index := ime_for_select_obj.Push(str)
                 begin_str :=
                 ime_select_tip .= "`n"
-                if ( GetSelectWordIndex() == A_Index ) {
+                if ( GetSelectWordIndex() == word_index ) {
                     begin_str .= ">["
                 } else {
-                    if( A_Index == "10" ) {
-                        begin_str .= "0."
-                    }
-                    else {
-                        begin_str .=  A_Index "."
-                    }
+                    begin_str .=  Mod(word_index, 10) "."
+                    ; begin_str .=  word_index "."
                 }
-                end_str := GetSelectWordIndex() == A_Index ? "]" : " "
+                end_str := GetSelectWordIndex() == word_index ? "]" : " "
 
-                ime_select_tip .= begin_str . ime_candidate_sentences[A_Index, 2] . end_str . ime_candidate_sentences[A_Index, 1] 
+                ime_select_tip .= begin_str . ime_candidate_sentences[word_index, 2] . end_str . ime_candidate_sentences[A_Index, 1] 
             }
         } else {
             ime_select_tip .= ime_candidate_sentences[GetSelectWordIndex(), 2]
