@@ -31,7 +31,7 @@ PutCharacterByIndex(select_index)
     global ime_input_string
     string := ime_candidate_sentences[select_index,2]
     occupied_characters := ime_candidate_sentences[select_index,1]
-    ime_input_string := SubStr(ime_input_string, StrLen(occupied_characters)+1)
+    ime_input_string := SubStr(ime_input_string, StrLen(occupied_characters)+1-StrLen(string)+1)
     ; MsgBox, % StrLen(occupied_characters) "`n" ime_input_string
     PutCharacter( string )
     if( !ime_input_string ) {
