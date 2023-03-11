@@ -32,7 +32,7 @@ ToolTip(1, "", "Q0 B" ime_tooltip_background_color " T"  ime_tooltip_text_color 
 ImeRegisterHotkey()
 ImeUpdateActiveState()
 
-DllCall("SetWinEventHook", "UInt", 0x06, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
+DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
 PinyinInit()
 return
 
