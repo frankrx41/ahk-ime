@@ -10,6 +10,7 @@ ImeTooltipUpdate()
     global ime_max_select_cnt
     global ime_select_index
     static last_ime_input := ""
+    static ime_screeen_caret := 0
 
     if(ime_input_string){
         if (!ime_screeen_caret) {
