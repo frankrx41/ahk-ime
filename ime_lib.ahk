@@ -111,11 +111,14 @@ ImeUpdateActiveState()
 {
     if(A_IsSuspended || ImeIsPauseWindowActive()){
         mode := ""
+        ImeClearInputString()
     } else {
         global ime_mode_language
         mode := ime_mode_language
+        ImeTrySetModeLanguage(mode)
     }
 
+    ImeTooltipUpdate()
     ImeSetIconState(mode)
 }
 

@@ -129,21 +129,18 @@ return
 ; Win + Space: toggle cn and en
 #Space::
 ImeToggleSuspend:
-Suspend
-ImeClearInputString()
-ImeTooltipUpdate()
-ImeTrySetModeLanguage("cn")
-ImeUpdateActiveState()
+    Suspend
+    ImeUpdateActiveState()
 return
 
 ; Win + Alt + Space: reload
 #!Space::
-ToolTip, Reload %A_ScriptName%
-Sleep, 500
-Reload
+    ToolTip, Reload %A_ScriptName%
+    Sleep, 500
+    Reload
 return
 
 ; Ctrl + Shift + F12: exit
 ^+F12::
-ExitApp,
+    ExitApp,
 return
