@@ -30,13 +30,21 @@ ImeTooltipUpdate()
                 tvar := A_Index
 
                 Index := ime_for_select_obj.Push(str)
+                begin_str :=
                 ime_select_tip .= "`n"
                 if ( ime_select_index == A_Index ) {
-                    ime_select_tip .= "> "
+                    begin_str .= ">["
                 } else {
-                    ime_select_tip .= A_Index "."
+                    if( A_Index == "10" ) {
+                        begin_str .= "0."
+                    }
+                    else {
+                        begin_str .=  A_Index "."
+                    }
                 }
-                ime_select_tip .= ime_candidate_sentences[A_Index, 2] . " " . ime_candidate_sentences[A_Index, 1] 
+                end_str := ime_select_index == A_Index ? "]" : " "
+
+                ime_select_tip .= begin_str . ime_candidate_sentences[A_Index, 2] . end_str . ime_candidate_sentences[A_Index, 1] 
             }
         } else {
             ime_select_tip .= ime_candidate_sentences[ime_select_index, 2]
