@@ -1,17 +1,17 @@
 ImeIsWaitingInput()
 {
-    global ime_mode_is_chinese
+    global ime_mode_language
     global ime_system_menu_open
-    return ime_mode_is_chinese && !ime_system_menu_open
+    return ime_mode_language == "cn" && !ime_system_menu_open
 }
 
 SetImeModeEn:
-ime_mode_is_chinese := 0
+ime_mode_language := "en"
 Gosub, ImeShowIcon
 return
 
 SetImeModeCn:
-ime_mode_is_chinese := 1
+ime_mode_language := "cn"
 Gosub, ImeShowIcon
 return
 
@@ -19,7 +19,7 @@ return
 ; 全局变量
 ImeInitialize:
 ime_input_string := ""      ; 輸入字符
-ime_mode_is_chinese := 1    ; "cn", "en"
+ime_mode_language := "cn"    ; "cn", "en", "tw"
 ime_system_menu_open := 0   ; 在打开菜单时临时禁用
 ime_caret_pos := 0          ; 光标位置
 ime_screeen_caret := ""     ; 输入法提示框光标位置
@@ -274,7 +274,7 @@ Gosub, ImeUpdateTooltip
 return
 #if
 
-#if (ime_mode_is_chinese)
+#if (ime_mode_language == "cn")
 ; LShift 以英文文字上屏
 Shift::
 TrySetImeModeEn:
@@ -289,7 +289,7 @@ return
 #if
 
 TrySetImeModeCn:
-if ( !ime_mode_is_chinese ) {
+if ( ime_mode_language == "en" ) {
     Gosub, SetImeModeCn
     Hotkey, LShift up, TrySetImeModeCn, Off
 }
