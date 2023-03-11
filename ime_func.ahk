@@ -47,14 +47,14 @@ OutputDebug(info,type){
     static buffer:=""
     switch type
     {
-        Case 1:
+        case 1:
             FormatTime, Now, , [yyyy-MM-dd HH:mm:ss]
             FileAppend, % Now "`n" info "`n", debug.log, UTF-8
-        Case 2:
+        case 2:
             OutputDebug % info
-        Case 3:
+        case 3:
             MsgBox, 16, 错误, % StrReplace(info, "|", "`n")
-        Case 4:
+        case 4:
             buffer .= info "    "
             SetTimer, writeintolog, -1000
         Default:
