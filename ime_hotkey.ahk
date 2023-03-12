@@ -44,7 +44,7 @@ ImeInputNumber(key)
 Enter::
 NumpadEnter::
     PutCharacterByIndex(GetSelectWordIndex())
-    ImeOpenSelectMenu(false)
+    SetSelectWordIndex(1)
     ImeTooltipUpdate()
 return
 
