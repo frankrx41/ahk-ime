@@ -9,12 +9,12 @@ DisplaySelectItems()
     start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
     column_loop     := ImeIsSelectMenuMore() ? Floor(ime_candidate_sentences.Length() / column) +1 : 1
     max_item_len    := []
-    max_column_loop := 8
+    max_column_loop := 6
 
     if( column_loop > max_column_loop ) {
         column_loop := max_column_loop
         start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
-        start_index := Min(start_index, (Floor(ime_candidate_sentences.Length() / column)-max_column_loop)*column)
+        start_index := Min(start_index, (Floor((ime_candidate_sentences.Length()-1) / column)-max_column_loop+1)*column)
     }
 
     loop % Min(ime_candidate_sentences.Length(), column) {
