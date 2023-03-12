@@ -121,7 +121,12 @@ return
 ;*******************************************************************************
 ; Win + Space: toggle cn and en
 #Space::
+ImeToggleSuspend:
     Suspend
+    ; 英文状态下恢复成中文
+    if( A_ThisHotkey == "#Space" && A_IsSuspended && !ImeModeIsChinese() ){
+        Gosub, ImeToggleSuspend
+    }
     ImeUpdateActiveState("cn")
 return
 
