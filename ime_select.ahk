@@ -14,17 +14,13 @@ ImeSelectInitialize()
 }
 
 ;*******************************************************************************
-ImeOpenSelectMenu(open, more:=0)
+ImeOpenSelectMenu(open, more := false)
 {
     global ime_selectmenu_open
     global ime_selectmenu_more
-    global ime_select_index
 
     ime_selectmenu_open := open
     ime_selectmenu_more := more
-    if( !open ) {
-        ime_select_index := 1
-    }
     return
 }
 

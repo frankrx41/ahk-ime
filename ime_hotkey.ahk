@@ -48,9 +48,27 @@ NumpadEnter::
     ImeTooltipUpdate()
 return
 
+; Tab: Show more select items
 Tab::
     if( ImeIsSelectMenuOpen() ){
-        ImeOpenSelectMenu(true, !ImeIsSelectMenuMore())
+        if( !ImeIsSelectMenuMore() ) {
+            ImeOpenSelectMenu(true, true)
+        } else {
+            OffsetSelectWordIndex(+GetSelectMenuColumn())
+        }
+    } else {
+        ImeOpenSelectMenu(true, false)
+    }
+    ImeTooltipUpdate()
+return
+
++Tab::
+    if( ImeIsSelectMenuOpen() ){
+        if( ImeIsSelectMenuMore() ) {
+            ImeOpenSelectMenu(true, false)
+        } else {
+            ImeOpenSelectMenu(false)
+        }
         ImeTooltipUpdate()
     }
 return
@@ -72,6 +90,24 @@ Esc::
         ImeOpenSelectMenu(false)
     } else {
         ImeClearInputString()
+    }
+    ImeTooltipUpdate()
+return
+
+,::
+    if( ImeIsSelectMenuOpen() ){
+        OffsetSelectWordIndex(-GetSelectMenuColumn())
+    } else {
+        OffsetSelectWordIndex(-1)
+    }
+    ImeTooltipUpdate()
+return
+
+.::
+    if( ImeIsSelectMenuOpen() ){
+        OffsetSelectWordIndex(+GetSelectMenuColumn())
+    } else {
+        OffsetSelectWordIndex(+1)
     }
     ImeTooltipUpdate()
 return
@@ -104,7 +140,7 @@ return
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
 Down::
     if( !ImeIsSelectMenuOpen() ) {
-        ImeOpenSelectMenu(true)
+        ImeOpenSelectMenu(true, false)
     } else {
         OffsetSelectWordIndex(+1)
     }
