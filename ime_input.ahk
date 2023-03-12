@@ -38,3 +38,13 @@ PutCharacterByIndex(select_index)
         ImeClearInputString()
     }
 }
+
+PutCharacterWordByWord(select_index, offset)
+{
+    global ime_candidate_sentences
+    global ime_input_string
+
+    string := ime_candidate_sentences[select_index,2]
+    PutCharacter( SubStr(string, offset, 1) )
+    ImeClearInputString()
+}

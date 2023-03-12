@@ -48,6 +48,18 @@ NumpadEnter::
     ImeTooltipUpdate()
 return
 
+]::
+    PutCharacterWordByWord(GetSelectWordIndex(), 0)
+    ImeOpenSelectMenu(false)
+    ImeTooltipUpdate()
+return
+
+[::
+    PutCharacterWordByWord(GetSelectWordIndex(), 1)
+    ImeOpenSelectMenu(false)
+    ImeTooltipUpdate()
+return
+
 ; Tab: Show more select items
 Tab::
     if( ImeIsSelectMenuOpen() ){
