@@ -9,10 +9,11 @@ DisplaySelectItems()
     start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
     column_loop     := ImeIsSelectMenuMore() ? Floor(ime_candidate_sentences.Length() / column) +1 : 1
 
+    max_len         := []
     loop % Min(ime_candidate_sentences.Length(), column) {
-        word_index := start_index + A_Index
+        word_index      := start_index + A_Index
         ime_select_str  .= "`n"
-
+        row_index       := A_Index
         loop % column_loop
         {
             item_str := ""
@@ -29,10 +30,14 @@ DisplaySelectItems()
             } else {
                 item_str := ""
             }
-            len := StrPut(item_str, "UTF-8")
-            loop, % 12 - len {
+            len := StrPut(item_str, "CP936")
+            if( row_index == 1 ) {
+                max_len[A_Index] := len + 1
+            }
+            loop, % Max(12, max_len[A_Index]) - len {
                 item_str .= " "
             }
+            ; item_str .= "(" len ")"
             ime_select_str .= item_str
             word_index += column
         }
