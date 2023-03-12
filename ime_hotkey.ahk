@@ -133,7 +133,15 @@ return
 
 ; 上下选择
 Up::
-    OffsetSelectWordIndex(-1)
+    if( ImeIsSelectMenuOpen() ) {
+        OffsetSelectWordIndex(-1)
+    } else {
+        if( GetSelectWordIndex() >= 4 ) {
+            SetSelectWordIndex(1)
+        } else {
+            OffsetSelectWordIndex(+1)
+        }
+    }
     ImeTooltipUpdate()
 return
 
