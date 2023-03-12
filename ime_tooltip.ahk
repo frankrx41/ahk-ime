@@ -47,7 +47,7 @@ ImeTooltipUpdate()
         } else {
             ime_select_tip := ime_candidate_sentences[GetSelectWordIndex(), 2]
         }
-        debug_tip := "`n----------------`n" "[" GetSelectWordIndex() "/" ime_candidate_sentences.Length() "]"
+        debug_tip := "`n----------------`n" "[" GetSelectWordIndex() "/" ime_candidate_sentences.Length() "]" "`n" ImeIsSelectMenuMore()
         ; ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_input_caret_pos "`n" ime_candidate_sentences.Length(), "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
         ; ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_select_tip debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
         ToolTip(1, tooltip_string "`n" ime_select_tip debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
