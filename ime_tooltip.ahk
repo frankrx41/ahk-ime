@@ -8,33 +8,47 @@ DisplaySelectItems()
     ime_select_str  := "----------------"
     start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
     column_loop     := ImeIsSelectMenuMore() ? Floor(ime_candidate_sentences.Length() / column) +1 : 1
+    max_item_len    := []
 
-    max_len         := []
+    if( column_loop >= 6 ) {
+        column_loop := 6
+        start_index := Max(0, (Floor((select_index-1) / column)-4)*column)
+    }
+
     loop % Min(ime_candidate_sentences.Length(), column) {
         word_index      := start_index + A_Index
         ime_select_str  .= "`n"
         row_index       := A_Index
+
         loop % column_loop
         {
             item_str := ""
+            ; in_column := word_index / column >= start_index && word_index / column <= start_index + column
+            in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
             if( word_index <= ime_candidate_sentences.Length() )
             {
-                if ( select_index == word_index ) {
-                    begin_str := ">["
+                if( in_column ) {
+                    if ( select_index == word_index ) {
+                        begin_str := ">["
+                    } else {
+                        begin_str := Mod(word_index, 10) "."
+                        ; begin_str :=  word_index "."
+                    }
                 } else {
-                    begin_str :=  Mod(word_index, 10) "."
-                    ; begin_str :=  word_index "."
+                    begin_str := "  "
                 }
+
                 end_str := select_index == word_index ? "]" : " "
-                item_str := begin_str . ime_candidate_sentences[word_index, 2] . end_str . SubStr(ime_candidate_sentences[word_index, 3],3)
+                item_str := begin_str . ime_candidate_sentences[word_index, 2] . end_str
+                ; item_str .= SubStr(ime_candidate_sentences[word_index, 3],3)
             } else {
                 item_str := ""
             }
             len := StrPut(item_str, "CP936")
             if( row_index == 1 ) {
-                max_len[A_Index] := len + 1
+                max_item_len[A_Index] := len + 1
             }
-            loop, % Max(12, max_len[A_Index]) - len {
+            loop, % Max(8, max_item_len[A_Index]) - len {
                 item_str .= " "
             }
             ; item_str .= "(" len ")"
