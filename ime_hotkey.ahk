@@ -26,7 +26,7 @@ ImeInputNumber(key)
 {
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
-        start_index := Floor(GetSelectWordIndex() / GetSelectMenuColumn()) * GetSelectMenuColumn()
+        start_index := Floor((GetSelectWordIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         PutCharacterByIndex(start_index + (key == 0 ? 10 : key))
         ImeOpenSelectMenu(false)
         ImeTooltipUpdate()
