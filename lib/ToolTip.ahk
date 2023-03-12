@@ -32,7 +32,56 @@ Return Value: ToolTip returns hWnd of the ToolTip
 
 ToolTip(ID="",TEXT="",OPTIONS="",F:="",Style:=""){
 	static
+	static Init := 0
+	static TT_HWND_0 := 0
+	static TT_HWND_1 := 0
+	static TT_HWND_2 := 0
+	static TT_HWND_3 := 0
+	static TT_HWND_4 := 0
+	static TT_HWND_5 := 0
+	static TT_HWND_6 := 0
+	static TT_HWND_7 := 0
+	static TT_ALL_0 := 0
+	static TT_ALL_1 := 0
+	static TT_ALL_2 := 0
+	static TT_ALL_3 := 0
+	static TT_ALL_4 := 0
+	static TT_ALL_5 := 0
+	static TT_ALL_6 := 0
+	static TT_ALL_7 := 0
+	static v := 0
+	static l := 0
+	static C := 0
+	static hWndArray := 0
+	static idArray := 0
+	static R := 0
+	static BC := 0
+
+	static TOOLINFO_0 := 0
+	static TOOLINFO_1 := 0
+	static TOOLINFO_2 := 0
+	static TOOLINFO_3 := 0
+	static TOOLINFO_4 := 0
+	static TOOLINFO_5 := 0
+	static TOOLINFO_6 := 0
+	static TOOLINFO_7 := 0
+	static TC := 0
+	static N := 0
+
 	local option,a,b,d,k,o,p,q,s,t,w,x,y,xc,yc,xw,yw,RECT,#_DetectHiddenWindows
+	local p := 0
+	local o := 0
+	local d := 0
+	local w := 0
+	local a := 0
+	local x := 0
+	local y := 0
+	local q := ""
+	local k := 0
+	local t := 0
+	local b := 0
+	local #_DetectHiddenWindows := 0
+
 	If !Init
 		Gosub, TTM_INIT
 	DetectHiddenWindows:=A_DetectHiddenWindows

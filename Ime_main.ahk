@@ -26,6 +26,11 @@ return
 #Include, ime_lib.ahk
 #Include, ime_pinyin.ahk
 #Include, ime_db.ahk
+#Include, ime_tooltip.ahk
+#Include, ime_hotkey.ahk
+#Include, ime_input.ahk
+#Include, ime_select.ahk
+#Include, ime_state.ahk
 
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
@@ -36,8 +41,6 @@ return
 Suspend
 ToolTip, Reload %A_ScriptName%
 Sleep, 500
-; Run "%A_AhkPath%" /force /ErrorStdOut /debug=localhost:9000 "%A_ScriptFullPath%"
-; ExitApp,
 Reload
 return
 #if
