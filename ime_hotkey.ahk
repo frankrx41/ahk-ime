@@ -87,7 +87,11 @@ return
 ; 否则删除所有输入的字符
 Esc::
     if( ImeIsSelectMenuOpen() ) {
-        ImeOpenSelectMenu(false)
+        if( ImeIsSelectMenuMore() ) {
+            ImeOpenSelectMenu(true, false)
+        } else {
+            ImeOpenSelectMenu(false)
+        }
     } else {
         ImeClearInputString()
     }
