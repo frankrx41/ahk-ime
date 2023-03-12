@@ -48,6 +48,13 @@ NumpadEnter::
     ImeTooltipUpdate()
 return
 
+Tab::
+    if( ImeIsSelectMenuOpen() ){
+        ImeOpenSelectMenu(true, !ImeIsSelectMenuMore())
+        ImeTooltipUpdate()
+    }
+return
+
 ; BackSpace 删除光标前面的空格
 BackSpace::
     if( ime_input_caret_pos != 0 ) {
