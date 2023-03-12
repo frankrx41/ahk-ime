@@ -21,7 +21,8 @@ PinyinGetSentences(input, scheme:="pinyin"){
     srf_all_Input_["py"] := Trim(RegExReplace(PinyinSplit(srf_all_Input_for_trim, scheme, 1),"'?\\'?"," "), "'")
     srf_all_Input_for_trim := StrReplace(srf_all_Input_for_trim,"\",Chr(2))
 
-    if (1 ){
+    if( true )
+    {
         ; 正向最大划分
         loop % save_field_array.Length()
         {
@@ -31,22 +32,20 @@ PinyinGetSentences(input, scheme:="pinyin"){
                 index:=A_Index
                 break
             }
+            
             checkstr .= save_field_array[A_Index,0] "'"
             if InStr("^" srf_all_Input_for_trim "'", "^" checkstr){
                 t:=StrSplit(save_field_array[A_Index,0],"'").Length()
-                ; 奇偶词条高权重优先
-                ; if ((t>2)&&(Mod(t, 2)=1)&&(StrLen(checkstr)<StrLen(srf_all_Input_for_trim))&&(history_field_array[save_field_array[A_Index,0], 1, 3]<history_field_array[RegExReplace(save_field_array[A_Index,0],"'[a-z;]+$"), 1, 3])){
-                ;     index:=A_Index
-                ;     break
-                ; }
                 history_cutpos.Push(StrLen(checkstr))
             } else {
                 index:=A_Index
                 break
             }
         }
-        if (index)
+
+        if (index) {
             save_field_array.RemoveAt(index, save_field_array.Length()-index+1)
+        }
 
         srf_all_Input_for_trim_len:=StrLen(srf_all_Input_for_trim)
         if (save_field_array.Length()>0){
@@ -84,6 +83,7 @@ PinyinGetSentences(input, scheme:="pinyin"){
                 }
             }
         }
+
         if (tpos:=history_cutpos[history_cutpos.Length()])<srf_all_Input_for_trim_len
         {
             Loop_num:=0, begin:=A_TickCount
@@ -101,7 +101,6 @@ PinyinGetSentences(input, scheme:="pinyin"){
                 srf_Input_trim_right:=SubStr(srf_all_Input_for_trim,cutpos+1)
                 if srf_Input_trim_left&&!history_field_array.HasKey(srf_Input_trim_left){
                     history_field_array[srf_Input_trim_left]:= Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", mhyRegExObj, 0, (tpos?1:0), ((scheme="pinyin")&&(!InStr(srf_all_Input,srf_Input_trim_left))))
-                    ; jichu_for_select:= Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", , mhyRegExObj, (srf_Input_trim_right?0:1)&&(imagine?1:0), 0, ((scheme="pinyin")&&(!InStr(srf_all_Input,srf_Input_trim_left))))
                     if (history_field_array[srf_Input_trim_left, 1, 2]=""){
                         if InStr(srf_Input_trim_left,"'")
                             history_field_array[srf_Input_trim_left]:={0:srf_Input_trim_left}
@@ -114,26 +113,19 @@ PinyinGetSentences(input, scheme:="pinyin"){
                     continue
                 else {
                     t:=StrSplit(srf_Input_trim_left,"'").Length()
-                    ; 奇偶词条高权重优先
-                    ; if ((t>2)&&(Mod(t, 2)=1)&&srf_Input_trim_right&&(history_field_array[srf_Input_trim_left, 1, 3]<history_field_array[RegExReplace(srf_Input_trim_left,"'[a-z;]+$"), 1, 3]))
-                    ;     continue
                     Loop_num:=0
                     if (srf_Input_trim_left!="")
                         save_field_array.Push(CopyObj(history_field_array[srf_Input_trim_left])), history_cutpos[history_cutpos.Length()+1]:=history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left)
-                    ; history_cutpos:=[0]
-                    ; loop % save_field_array.Length()
-                    ;     history_cutpos[A_Index+1]:=history_cutpos[A_Index]+StrLen(save_field_array[A_Index,0])+1
                     tpos:=history_cutpos[history_cutpos.Length()]
                 }
             }
         }
     }
-    jichu_for_select:=""
+
     search_result:=[]
     if (save_field_array[1].Length()=2&&save_field_array[1,2,2]="")
         save_field_array[1]:=CopyObj(history_field_array[save_field_array[1,0]]:= Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", mhyRegExObj, 0, 0))
     if (save_field_array.Length()=1)||(tfzm){
-        ; search_result:=save_field_array[1]
         search_result:=CopyObj(save_field_array[1])
     } else {
         if (save_field_array[2,1,1]!=Chr(2)){
@@ -146,15 +138,17 @@ PinyinGetSentences(input, scheme:="pinyin"){
                 search_result:=CopyObj(history_field_array[ci])
             }
         }
-        if InStr(save_field_array[1, 0], "'")
-            loop % save_field_array[1].Length()
-                ; search_result.Push(save_field_array[1, A_Index])
+        if InStr(save_field_array[1, 0], "'") {
+            loop % save_field_array[1].Length() {
                 search_result.Push(CopyObj(save_field_array[1, A_Index]))
+            }
+        }
         search_result.InsertAt(1, firstzhuju(save_field_array)), search_result[1, 0]:="pinyin"
     }
 
     ; 插入候选词部分
-    if (ci:=RegExReplace(save_field_array[1,1,-1], "i)'[^']+$")){
+    if (ci:=RegExReplace(save_field_array[1,1,-1], "i)'[^']+$"))
+    {
         While InStr(ci,"'")&&(history_field_array[ci, 1, 2]=""){
             if (!history_field_array.HasKey(ci)){
                 history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", mhyRegExObj, 0, 0)
@@ -176,17 +170,18 @@ PinyinGetSentences(input, scheme:="pinyin"){
                 if (history_field_array[ci, 1, 2]!="")
                     loop % history_field_array[ci].Length()
                         search_result.Push(CopyObj(history_field_array[ci, A_Index]))
-                }
             }
         }
-    if !(tfzm||StrLen(fzm)=1)
-        && (imagine&&InStr(srf_all_Input_["py"], "'", , 1, 3)){
+    }
+
+    if !(tfzm||StrLen(fzm)=1) && (imagine&&InStr(srf_all_Input_["py"], "'", , 1, 3)){
         if (history_field_array[srf_all_Input_["tip"], -1]=""){
             history_field_array[srf_all_Input_["tip"], -1]:=Get_jianpin(DB, "", "'" srf_all_Input_["py"] "'", mhyRegExObj, 1, 0)
         }
         loop % tt:=history_field_array[srf_all_Input_["tip"], -1].Length()
             search_result.InsertAt(2, CopyObj(history_field_array[srf_all_Input_["tip"], -1, tt+1-A_Index]))
     }
+
     if (StrLen(fzm)=2&&SubStr(srf_all_Input_["tip"],-2,1)="'"){
         inspos:=2    ;, inspos:=search_result.Length()+1
         ; loop % tt:=saixuan.Length()
@@ -196,21 +191,26 @@ PinyinGetSentences(input, scheme:="pinyin"){
             search_result.InsertAt(1,saixuan[tt+1-A_Index])    ; 辅助词条优先
         inspos:=tt?1:2
     }
+
     ; 插入候选字部分
     ; if InStr(save_field_array[1, 0], "'"){
     zi:=SubStr(srf_all_Input_["tip"] ,1, InStr(srf_all_Input_["tip"] "'", "'")-1)
-    if !(history_field_array.HasKey(zi))||(history_field_array[zi].Length()=2&&history_field_array[zi,2,2]="")
+    if !(history_field_array.HasKey(zi))||(history_field_array[zi].Length()=2&&history_field_array[zi,2,2]="") {
         history_field_array[zi]:= Get_jianpin(DB, scheme, "'" zi "'", mhyRegExObj, 0, 0)
-    loop % history_field_array[zi].Length()
+    }
+    loop % history_field_array[zi].Length() {
         search_result.Push(CopyObj(history_field_array[zi, A_Index]))
-    ; }
-    ; if fuzhuma&&(((Inputscheme~="sp$")&&(srf_all_Input_["tip"]~="'[a-z][a-z]'$"))||((Inputscheme="pinyin")&&(srf_all_Input_["tip"]~="[a-z][aoeiuvng]'$"))){
-    if (fuzhuma){
-        loop % search_result.Length()
-            if InStr(search_result[A_Index, 0], "pinyin|")&&(search_result[A_Index, 6]="")
+    }
+
+    if (fuzhuma) {
+        loop % search_result.Length() {
+            if InStr(search_result[A_Index, 0], "pinyin|")&&(search_result[A_Index, 6]="") {
                 search_result[A_Index, 6]:=fzmfancha(search_result[A_Index, 2])
+            }
         }
-    if (tfzm){
+    }
+
+    if (tfzm) {
         saixuan:=[]
         loop % search_result.Length(){
             if (StrLen(search_result[A_Index,2])>1&&search_result[A_Index,6]~="i)" RegExReplace(tfzm,"(.)","$1(.*)?"))||(search_result[A_Index,6]~="i)^" tfzm)
@@ -238,14 +238,20 @@ PinyinGetSentences(input, scheme:="pinyin"){
             SetTimer, BDCloudInput, -10
         }
     }
+
     if (Useless&&search_result[1, 3]>0){
-        loop % len:=search_result.Length()
+        loop % len:=search_result.Length() {
             if (search_result[len+1-A_Index, 3]&&search_result[len+1-A_Index, 3]<=0)
                 search_result.RemoveAt(len+1-A_Index)
         }
-    if (search_result.HasKey(0))
+    }
+
+    if (search_result.HasKey(0)) {
         search_result.Delete(0)
+    }
+
     return search_result
+
     ; 云输入
     BDCloudInput:
         if (srf_all_Input_["py"]=""||InStr(srf_all_Input_["tip"],"\"))
@@ -260,42 +266,61 @@ PinyinInit()
     local
     global JSON
     global pinyin_table
-    static lsm:=["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]
-    ; 全拼声母韵母表    add "din"、"tin"、""、""
-    quanpinbiao =
+
+    ; 零声母
+    global zero_initials_table := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]
+
+    ; 全拼声母韵母表
+    full_spelling_json =
     (LTrim
-        {"i" :{"1":"i"},"u" :{"1":"u"},"v" :{"1":"v"},"a" :{"1":"a","ai":"i","an":"n","ang":"ng","ao":"o"}
-        ,"b" :{"1":"b","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","o":"o","u":"u","un":"un"}
-        ,"c" :{"1":"c", "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"}
-        ,"ch":{"1":"ch","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"}
-        ,"d" :{"1":"d","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","ei":"ei","eng":"eng","i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ing":"ing","iu":"iu","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"}
-        ,"e" :{"1":"e","ei":"i","en":"n","eng":"ng","er":"r"}
-        ,"f" :{"1":"f","a":"a","an":"an","ang":"ang","ei":"ei","en":"en","eng":"eng","iao":"iao","o":"o","ou":"ou","u":"u"}
-        ,"g" :{"1":"g","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"}
-        ,"h" :{"1":"h","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"}
-        ,"j" :{"1":"j","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iong":"iong","iu":"iu","u":"u","uan":"uan","ue":"ue","un":"un","v":"u","van":"uan","ve":"ue","vn":"un"}
-        ,"k" :{"1":"k","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","ei":"ei","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"}
-        ,"l" :{"1":"l","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","eng":"eng","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu","ong":"ong","on":"ong","ou":"ou","u":"u","v":"v","uan":"uan","ue":"ue","un":"un","uo":"uo","ve":"ue"}
-        ,"m" :{"1":"m","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu","o":"o","ou":"ou","u":"u"}
-        ,"n" :{"1":"n","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu","ong":"ong","on":"ong","ou":"ou","u":"u","v":"v","uan":"uan","ue":"ue","uo":"uo","un":"un","ve":"ue"}
-        ,"o" :{"1":"o","ou":"u"}
-        ,"p" :{"1":"p","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","o":"o","ou":"ou","u":"u"}
-        ,"q" :{"1":"q","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iong":"iong","iu":"iu","u":"u","uan":"uan","ue":"ue","un":"un","van":"uan","ve":"ue","vn":"un","v":"u"}
-        ,"r" :{"1":"r","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"}
-        ,"s" :{"1":"s", "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"}
-        ,"sh":{"1":"sh","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"}
-        ,"t" :{"1":"t","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","eng":"eng","ei":"ei","i":"i","ian":"ian","iao":"iao","ie":"ie","ing":"ing","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"}
-        ,"w" :{"1":"w","a":"a","ai":"ai","an":"an","ang":"ang","ei":"ei","en":"en","eng":"eng","o":"o","u":"u"}
-        ,"x" :{"1":"x","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iong":"iong","iu":"iu","u":"u","uan":"uan","un":"un","ue":"ue","van":"uan","ve":"ue","vn":"un","v":"u"}
-        ,"y" :{"1":"y","a":"a","an":"an","ang":"ang","ao":"ao","e":"e","i":"i","in":"in","ing":"ing","o":"o","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ue":"ue","un":"un","v":"u","van":"uan","ve":"ue","vn":"un"}
-        ,"z" :{"1":"z", "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"}
-        ,"zh":{"1":"zh","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uang":"uang"}}
+        {
+            "a" :{"1":"a","ai":"i","an":"n","ang":"ng","ao":"o"},
+            "e" :{"1":"e","ei":"i","en":"n","eng":"ng","er":"r"},
+            "o" :{"1":"o","ou":"u"},
+            "i" :{"1":"i"},
+            "u" :{"1":"u"},
+            "v" :{"1":"v"},
+
+            "b" :{"1":"b","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","o":"o","u":"u","un":"un"},
+            "p" :{"1":"p","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","o":"o","ou":"ou","u":"u"},
+            "m" :{"1":"m","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu","o":"o","ou":"ou","u":"u"},
+            "f" :{"1":"f","a":"a","an":"an","ang":"ang","ei":"ei","en":"en","eng":"eng","iao":"iao","o":"o","ou":"ou","u":"u"},
+
+            "d" :{"1":"d","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","ei":"ei","eng":"eng","i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ing":"ing","iu":"iu","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"},
+            "t" :{"1":"t","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","eng":"eng","ei":"ei","i":"i","ian":"ian","iao":"iao","ie":"ie","ing":"ing","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"},
+            "n" :{"1":"n","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu","ong":"ong","on":"ong","ou":"ou","u":"u","v":"v","uan":"uan","ue":"ue","uo":"uo","un":"un","ve":"ue"},
+            "l" :{"1":"l","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","eng":"eng","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu","ong":"ong","on":"ong","ou":"ou","u":"u","v":"v","uan":"uan","ue":"ue","un":"un","uo":"uo","ve":"ue"},
+
+            "g" :{"1":"g","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"},
+            "k" :{"1":"k","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","ei":"ei","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"},
+            "h" :{"1":"h","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"},
+
+            "j" :{"1":"j","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iong":"iong","iu":"iu","u":"u","uan":"uan","ue":"ue","un":"un","v":"u","van":"uan","ve":"ue","vn":"un"},
+            "q" :{"1":"q","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iong":"iong","iu":"iu","u":"u","uan":"uan","ue":"ue","un":"un","van":"uan","ve":"ue","vn":"un","v":"u"},
+            "x" :{"1":"x","i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iong":"iong","iu":"iu","u":"u","uan":"uan","un":"un","ue":"ue","van":"uan","ve":"ue","vn":"un","v":"u"},
+
+            "zh":{"1":"zh","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uang":"uang"},
+            "ch":{"1":"ch","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"},
+            "sh":{"1":"sh","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ou":"ou","u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"},
+            "r" :{"1":"r","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"},
+
+            "z" :{"1":"z", "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","ei":"ei","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"},
+            "c" :{"1":"c", "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"},
+            "s" :{"1":"s", "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","e":"e","en":"en","eng":"eng","i":"i","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"},
+
+            "y" :{"1":"y","a":"a","an":"an","ang":"ang","ao":"ao","e":"e","i":"i","in":"in","ing":"ing","o":"o","ong":"ong","on":"ong","ou":"ou","u":"u","uan":"uan","ue":"ue","un":"un","v":"u","van":"uan","ve":"ue","vn":"un"},
+            "w" :{"1":"w","a":"a","ai":"ai","an":"an","ang":"ang","ei":"ei","en":"en","eng":"eng","o":"o","u":"u"}
+        }
     )
-    qpb:=JSON.Load(quanpinbiao)
-    pinyin_table:=qpb, pinyin_table["l","ue"]:="ue", pinyin_table["n","ue"]:="ue"
-    For key,value In lsm
+
+    pinyin_table := JSON.Load(full_spelling_json)
+    pinyin_table["l","ue"] := "ue"
+    pinyin_table["n","ue"] := "ue"
+
+    for key,value In zero_initials_table
     {
-        if (StrLen(value)>1){
+        if (StrLen(value)>1)
+        {
             pinyin_table[t1:=SubStr(value, 1, 1)].Delete(value)
             pinyin_table[t1][t2:=SubStr(value, 2)]:=t2
         }
@@ -309,7 +334,6 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
     Critical
     static lsmmd := ""
     static vowels_max_test_len := 4
-    static lsm := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]    ; 零声母
     global pinyin_table
 
     index := 1
@@ -429,14 +453,14 @@ Get_jianpin(DB,scheme,str,RegExObj:="",lianxiang:=1,LimitNum:=100,cjjp:=false){
             rstr:=str
         else
             LimitNum:=100
-    rstr:=Trim(rstr,"'"), lsm:="o"
+    rstr:=Trim(rstr,"'"), zero_initials_table:="o"
     if (cpfg:=lianxiang){
         if (rstr~="[\.\*\?\|\[\]]")
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{' AND key REGEXP '^" rstr "' ORDER BY weight DESC LIMIT 3"
         else
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{'" (rstr?" AND key>='" rstr "''a' AND key<'" rstr "''{'":"") " ORDER BY weight DESC LIMIT 3"
-    } else if (cjjp&&(scheme~="i)^(abc|wr|sg)sp"||(lsm:=customspjm[scheme, "0"])~="^[a-zA-Z]$")&&InStr(str, lsm)){
-        tstr:=StrReplace(tstr, lsm, "_", nCount:=0), rstr:=StrReplace(tstr, "_", "[aoe]")
+    } else if (cjjp&&(scheme~="i)^(abc|wr|sg)sp"||(zero_initials_table:=customspjm[scheme, "0"])~="^[a-zA-Z]$")&&InStr(str, zero_initials_table)){
+        tstr:=StrReplace(tstr, zero_initials_table, "_", nCount:=0), rstr:=StrReplace(tstr, "_", "[aoe]")
         if (nCount>4 )
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE " Format("((jp>='{:s}a' AND jp<'{:s}b') OR (jp>='{:s}e' AND jp<'{:s}f') OR (jp>='{:s}o' AND jp<'{:s}p')) AND", SubStr(tstr, 1, InStr(tstr, "_")-1)) " jp like '" tstr "' AND jp REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
         else
