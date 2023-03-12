@@ -9,10 +9,12 @@ DisplaySelectItems()
     start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
     column_loop     := ImeIsSelectMenuMore() ? Floor(ime_candidate_sentences.Length() / column) +1 : 1
     max_item_len    := []
+    max_column_loop := 8
 
-    if( column_loop >= 6 ) {
-        column_loop := 6
-        start_index := Max(0, (Floor((select_index-1) / column)-4)*column)
+    if( column_loop > max_column_loop ) {
+        column_loop := max_column_loop
+        start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
+        start_index := Min(start_index, (Floor(ime_candidate_sentences.Length() / column)-max_column_loop)*column)
     }
 
     loop % Min(ime_candidate_sentences.Length(), column) {
@@ -39,8 +41,10 @@ DisplaySelectItems()
                 }
 
                 end_str := select_index == word_index ? "]" : " "
+                if( in_column ) {
+                    ; end_str .= SubStr(ime_candidate_sentences[word_index, 3],3)
+                }
                 item_str := begin_str . ime_candidate_sentences[word_index, 2] . end_str
-                ; item_str .= SubStr(ime_candidate_sentences[word_index, 3],3)
             } else {
                 item_str := ""
             }
