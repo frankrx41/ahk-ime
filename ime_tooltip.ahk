@@ -42,7 +42,7 @@ DisplaySelectItems()
 
                 end_str := select_index == word_index ? "]" : " "
                 if( in_column ) {
-                    ; end_str .= SubStr(ime_candidate_sentences[word_index, 3],3)
+                    end_str .= Floor(ime_candidate_sentences[word_index, 3]/100)
                 }
                 item_str := begin_str . ime_candidate_sentences[word_index, 2] . end_str
             } else {
