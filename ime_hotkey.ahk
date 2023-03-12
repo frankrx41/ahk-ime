@@ -28,7 +28,7 @@ ImeInputNumber(key)
     if( ImeIsSelectMenuOpen() ) {
         start_index := Floor((GetSelectWordIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         PutCharacterByIndex(start_index + (key == 0 ? 10 : key))
-        ImeOpenSelectMenu(false)
+        SetSelectWordIndex(1)
         ImeTooltipUpdate()
     }
     else {
