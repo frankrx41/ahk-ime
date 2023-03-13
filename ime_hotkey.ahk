@@ -8,7 +8,9 @@ ImeInputChar(key, pos := -1, try_puts := 0)
     global ime_input_caret_pos
     global ime_input_string
     global ime_tooltip_pos
+    global tooltip_debug
 
+    tooltip_debug := []
     if (!ime_input_string ) {
         ime_tooltip_pos := 0
     }
