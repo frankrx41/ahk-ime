@@ -1,56 +1,57 @@
 ; 拼音取词
 PinyinGetSentences(input, scheme:="pinyin"){
     local
-    global DB, fzm, Inputscheme, fuzhuma, history_field_array, save_field_array, chaojijp, imagine
-    , DebugLevel, Singleword, mhyRegExObj, CloudInput, jichu_for_select_Array, srf_all_Input, tfzm, dwselect
-    , insertpos, Useless, CloudinputApi
+    global DB, fzm, fuzhuma, history_field_array, save_field_array, chaojijp, imagine
+    , DebugLevel, mhyRegExObj, CloudInput, jichu_for_select_Array, srf_all_Input, tfzm, dwselect
+    , Useless, CloudinputApi
     
-    Loop_num:=0
-    history_cutpos:=[0]
-    index:=0
-    zisu:=10
-    estr:=input
-    begin:=A_TickCount
+    Loop_num        :=0
+    history_cutpos  :=[0]
+    index   :=0
+    zisu    := 10
+    estr    := input
+    begin   := A_TickCount
 
-    if (input~="[A-Z]"){
-        input:=Trim(StrReplace(RegExReplace(input,"([A-Z])","'$1'"),"''","'"),"'")
-    }
-    srf_all_Input_tip := srf_all_Input_for_trim := Trim(PinyinSplit(input, scheme, 0, DB), "'")
     fzm := ""
     
-    srf_all_Input_py := Trim(RegExReplace(PinyinSplit(srf_all_Input_for_trim, scheme, 1),"'?\\'?"," "), "'")
-    srf_all_Input_for_trim := StrReplace(srf_all_Input_for_trim,"\",Chr(2))
+    srf_all_Input_for_trim  := Trim(PinyinSplit(input, scheme, 0, DB), "'")
+    srf_all_Input_tip       := srf_all_Input_for_trim
+    
+    full_pinyin             := PinyinSplit(srf_all_Input_for_trim, scheme, 1)
+    srf_all_Input_py        := Trim(RegExReplace(full_pinyin,"'?\\'?"," "), "'")
+    srf_all_Input_for_trim  := StrReplace(srf_all_Input_for_trim,"\",Chr(2))
 
     if( true )
     {
         ; 正向最大划分
         loop % save_field_array.Length()
         {
-            if save_field_array[A_Index,0]=Chr(1)
+            if( save_field_array[A_Index,0] == Chr(1)) {
                 continue
-            if (save_field_array[A_Index,0]=""){
-                index:=A_Index
+            }
+            if( save_field_array[A_Index,0] == "" ) {
+                index := A_Index
                 break
             }
             
-            checkstr .= save_field_array[A_Index,0] "'"
-            if InStr("^" srf_all_Input_for_trim "'", "^" checkstr){
-                t:=StrSplit(save_field_array[A_Index,0],"'").Length()
-                history_cutpos.Push(StrLen(checkstr))
+            check_str .= save_field_array[A_Index,0] "'"
+            if( InStr("^" srf_all_Input_for_trim "'", "^" check_str) ) {
+                t := StrSplit(save_field_array[A_Index,0],"'").Length()
+                history_cutpos.Push(StrLen(check_str))
             } else {
-                index:=A_Index
+                index := A_Index
                 break
             }
         }
-
-        if (index) {
+        if( index ) {
             save_field_array.RemoveAt(index, save_field_array.Length()-index+1)
         }
 
-        srf_all_Input_for_trim_len:=StrLen(srf_all_Input_for_trim)
-        if (save_field_array.Length()>0){
-            if history_cutpos.Length()>1&&SubStr(srf_all_Input_for_trim,history_cutpos[history_cutpos.Length()],1)!="'"
+        srf_all_Input_for_trim_len := StrLen(srf_all_Input_for_trim)
+        if( save_field_array.Length()>0 ) {
+            if( history_cutpos.Length()>1 && SubStr(srf_all_Input_for_trim,history_cutpos[history_cutpos.Length()],1)!="'" ) {
                 history_cutpos.Pop(), save_field_array.Pop()
+            }
             begin:=A_TickCount
             loop % history_cutpos.Length()
             {
