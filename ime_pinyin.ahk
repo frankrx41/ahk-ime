@@ -113,12 +113,15 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                     break
                 }
                 check_char := SubStr(str, index+vowels_test_len, 1)
-                vowels_test_len += 1
-                if( check_char ~= "\d" || vowels_test_len >= 4) {
+                if( check_char ~= "\d" ){
                     break
                 }
                 if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
                     str := SubStr(str, 1, index+vowels_test_len-1) . Format("{:L}", check_char) . SubStr(str, index+vowels_test_len+1)
+                    break
+                }
+                vowels_test_len += 1
+                if( vowels_test_len >= 4) {
                     break
                 }
             }
