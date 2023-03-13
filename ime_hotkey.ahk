@@ -76,10 +76,14 @@ return
 
 +Tab::
     if( ImeIsSelectMenuOpen() ){
-        if( ImeIsSelectMenuMore() ) {
-            ImeOpenSelectMenu(true, false)
-        } else {
+        if( !ImeIsSelectMenuMore() ){
             ImeOpenSelectMenu(false)
+        }
+        else { 
+            OffsetSelectWordIndex(-GetSelectMenuColumn())
+            if( GetSelectMenuColumn() >= GetSelectWordIndex() ){
+                ImeOpenSelectMenu(true, false)
+            }
         }
         ImeTooltipUpdate()
     }
