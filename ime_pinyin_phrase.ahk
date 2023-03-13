@@ -1,9 +1,15 @@
+HasPinyinResult(pinyin)
+{
+    global history_field_array
+    return history_field_array[pinyin, 1, 2] != ""
+}
+
 ; 拼音取词
 PinyinGetSentences(input, scheme:="pinyin")
 {
     local
     static save_field_array := []
-    static history_field_array := []
+    global history_field_array := []
     static srf_all_Input := ""
 
     global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
@@ -88,7 +94,7 @@ PinyinGetSentences(input, scheme:="pinyin")
                 if( !history_field_array.HasKey(srf_all_Input_trim_off) )
                 {
                     history_field_array[srf_all_Input_trim_off] := Get_jianpin(DB, scheme, "'" srf_all_Input_trim_off "'", "", 0, A_Index=1?0:1)
-                    if( history_field_array[srf_all_Input_trim_off, 1, 2] == "" )
+                    if( !HasPinyinResult(srf_all_Input_trim_off) )
                     {
                         if( !InStr(srf_all_Input_trim_off, "'") ){
                             history_field_array[srf_all_Input_trim_off] := {0:srf_all_Input_trim_off, 1:[srf_all_Input_trim_off,srf_all_Input_trim_off=Chr(2)?"":srf_all_Input_trim_off]}
@@ -101,7 +107,7 @@ PinyinGetSentences(input, scheme:="pinyin")
                     }
                 }
                 ; Save into history_cutpos
-                if( history_field_array[srf_all_Input_trim_off, 1, 2] )
+                if( HasPinyinResult(srf_all_Input_trim_off) )
                 {
                     tarr := {}
                     Ln  := A_Index-1
@@ -152,7 +158,7 @@ PinyinGetSentences(input, scheme:="pinyin")
                     sql_result := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, limit_num, cjjp)
                     history_field_array[srf_Input_trim_left] := sql_result
 
-                    if( history_field_array[srf_Input_trim_left, 1, 2] == "" )
+                    if( !HasPinyinResult(srf_Input_trim_left) )
                     {
                         if InStr(srf_Input_trim_left,"'") {
                             history_field_array[srf_Input_trim_left] := {0:srf_Input_trim_left}
@@ -163,7 +169,9 @@ PinyinGetSentences(input, scheme:="pinyin")
                         history_field_array[srf_Input_trim_left].Push([])
                     }
                 }
-                if( history_field_array[srf_Input_trim_left, 1, 2]=="" && InStr(srf_Input_trim_left,"'") ) {
+
+                if( !HasPinyinResult(srf_Input_trim_left) && InStr(srf_Input_trim_left,"'") )
+                {
                     continue
                 }
                 else
@@ -196,7 +204,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         if( save_field_array[2,1,1]!=Chr(2) )
         {
             ci := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
-            While( InStr(ci,"'") && (history_field_array[ci, 1, 2]=="") ) {
+            While( InStr(ci,"'") && !HasPinyinResult(ci) ) {
                 ci:=RegExReplace(ci, "i)'([^']+)?$")
             }
             if( ci~="^" save_field_array[1, 0] "'[a-z;]+" ){
@@ -218,12 +226,12 @@ PinyinGetSentences(input, scheme:="pinyin")
     ; 插入候选词部分
     if( ci:=RegExReplace(save_field_array[1,1,-1], "i)'[^']+$") )
     {
-        While InStr(ci,"'")&&(history_field_array[ci, 1, 2]="")
+        While( InStr(ci,"'") && !HasPinyinResult(ci) )
         {
             if( !history_field_array.HasKey(ci) )
             {
                 history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
-                if( history_field_array[ci, 1, 2] ) {
+                if( HasPinyinResult(ci) ){
                     break
                 }
             }
@@ -244,7 +252,7 @@ PinyinGetSentences(input, scheme:="pinyin")
                 if( !history_field_array.HasKey(ci) || history_field_array[ci].Length()==2 && history_field_array[ci,2,2]=="" ){
                     history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
                 }
-                if( history_field_array[ci, 1, 2]!="" ){
+                if( HasPinyinResult(ci) ){
                     loop % history_field_array[ci].Length(){
                         search_result.Push(CopyObj(history_field_array[ci, A_Index]))
                     }
