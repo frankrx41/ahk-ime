@@ -22,19 +22,20 @@ ImeInputChar(key, pos := -1, try_puts := 0)
         ImeClearInputString()
     }
     ImeUpdateCandidate(ime_input_string)
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 }
 
 ImeInputNumber(key)
 {
     global ime_input_string
+    global ime_input_caret_pos
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
         start_index := Floor((GetSelectWordIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         PutCharacterByIndex(start_index + (key == 0 ? 10 : key))
         SetSelectWordIndex(1)
         ImeUpdateCandidate(ime_input_string)
-        ImeTooltipUpdate()
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
     }
     else {
         ImeInputChar(key)
@@ -50,19 +51,19 @@ Enter::
 NumpadEnter::
     PutCharacterByIndex(GetSelectWordIndex())
     SetSelectWordIndex(1)
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ]::
     PutCharacterWordByWord(GetSelectWordIndex(), 0)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 [::
     PutCharacterWordByWord(GetSelectWordIndex(), 1)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ; Tab: Show more select items
@@ -76,7 +77,7 @@ Tab::
     } else {
         ImeOpenSelectMenu(true, false)
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 +Tab::
@@ -90,7 +91,7 @@ return
                 ImeOpenSelectMenu(true, false)
             }
         }
-        ImeTooltipUpdate()
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
     }
 return
 
@@ -100,7 +101,7 @@ BackSpace::
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
         ImeUpdateCandidate(ime_input_string)
-        ImeTooltipUpdate()
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
     }
 return
 
@@ -117,7 +118,7 @@ Esc::
     } else {
         ImeClearInputString()
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ,::
@@ -126,7 +127,7 @@ return
     } else {
         OffsetSelectWordIndex(-1)
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 .::
@@ -135,7 +136,7 @@ return
     } else {
         OffsetSelectWordIndex(+1)
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ; 左右键移动光标
@@ -145,7 +146,7 @@ Left::
     } else {
         ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 Right::
@@ -154,7 +155,7 @@ Right::
     } else {
         ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ; 上下选择
@@ -168,7 +169,7 @@ Up::
             OffsetSelectWordIndex(+1)
         }
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
@@ -178,7 +179,7 @@ Down::
     } else {
         OffsetSelectWordIndex(+1)
     }
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 ; 更新候选框位置
@@ -190,7 +191,7 @@ return
 return
 
 ImeTooltipUpdateTimer:
-    ImeTooltipUpdate()
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
 return
 
 #if ; ime_input_string

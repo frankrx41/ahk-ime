@@ -60,15 +60,13 @@ DisplaySelectItems()
 }
 
 ; 更新提示
-ImeTooltipUpdate()
+ImeTooltipUpdate(input_string, caret_pos:=0)
 {
     local
-    global ime_input_string
-    global ime_input_caret_pos
     global ime_tooltip_pos
     global tooltip_debug
 
-    if( !ime_input_string )
+    if( !input_string )
     {
         ToolTip(1, "")
     }
@@ -88,7 +86,7 @@ ImeTooltipUpdate()
         for _, value in tooltip_debug {
             debug_tip .= "`n" value
         }
-        tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
+        tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
         ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
