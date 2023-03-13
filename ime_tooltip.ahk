@@ -72,7 +72,6 @@ ImeTooltipUpdate()
     global ime_input_caret_pos
     global ime_tooltip_pos
     static last_ime_input := ""
-    static last_tooltip_string := ""
 
     if( !ime_input_string )
     {
@@ -96,12 +95,8 @@ ImeTooltipUpdate()
         }
 
         debug_tip := "`n----------------`n" "[" GetSelectWordIndex() "/" ime_candidate_sentences.Length() "]"
-        input_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
-        tooltip_string := input_string "`n" ime_select_str debug_tip
-        if( tooltip_string != last_tooltip_string ) {
-            last_tooltip_string := tooltip_string
-            ToolTip(1, tooltip_string, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
-        }
+        tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
+        ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
 }
