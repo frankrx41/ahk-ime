@@ -159,7 +159,13 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
 
             last_vowels     := vowels
             last_initials   := initials
-            separate_words  .= initials . vowels . "'"
+            ; 转全拼显示
+            if (show_full) {
+                separate_words .= pinyin_table[initials][1] . pinyin_table[initials][vowels] "'"
+            }
+            else {
+                separate_words .= initials . vowels . "'"
+            }
 
             index += vowels_len
             if( pinyin_table[initials][vowels] ){
