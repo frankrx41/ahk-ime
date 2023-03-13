@@ -33,7 +33,7 @@ PutCandidateCharacter(candidate)
     global ime_input_string
 
     string := candidate.GetWord(candidate.GetSelectIndex())
-    occupied_characters := candidate.GetPinyin(candidate.GetSelectIndex())
+    occupied_characters := candidate.GetOccupiedPinyin()
     ime_input_string := SubStr(ime_input_string, StrLen(occupied_characters)+1-StrLen(string)+1)
     ; MsgBox, % StrLen(occupied_characters) "`n" ime_input_string
     PutCharacter( string )

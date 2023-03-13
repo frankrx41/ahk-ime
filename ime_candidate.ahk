@@ -7,6 +7,12 @@ class Candidate
     }
 
     Initialize(string) {
+        ; [
+        ;     ; -1 , 0         , 1
+        ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
+        ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
+        ;     ...
+        ; ]
         This.candidate := PinyinGetSentences(string)
         This.input_string := string
     }
@@ -28,6 +34,12 @@ class Candidate
     {
         return This.candidate.Length()
     }
+    GetOccupiedPinyin()
+    {
+        ; TODO: make it work
+        return This.GetPinyin(This.select_index)
+    }
+
     GetDebugInfo(index)
     {
         return This.candidate[index, 0]
