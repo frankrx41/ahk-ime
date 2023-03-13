@@ -1,16 +1,11 @@
 ImeSelectInitialize()
 {
-    global ime_select_index
-    global ime_selectmenu_column
-    global ime_selectmenu_open
-    global ime_selectmenu_more
-    global ime_candidate_sentences ; TODO: hide this variable only in this file
-
-    ime_select_index                := 1        ; 选定的候选词，从 1 开始
-    ime_selectmenu_column           := 10       ; 最大候选词个数
-    ime_selectmenu_open             := 0        ; 是否打开选字窗口
-    ime_selectmenu_more             := 0        ; Show more column
-    ime_candidate_sentences         := [] ; 候选句子
+    global ime_select_index         := 1        ; 选定的候选词，从 1 开始
+    global ime_selectmenu_column    := 10       ; 最大候选词个数
+    global ime_selectmenu_open      := 0        ; 是否打开选字窗口
+    global ime_selectmenu_more      := 0        ; Show more column
+    ;TODO: hide below variable only in this file
+    global ime_candidate_sentences  := []       ; 候选句子
 }
 
 ;*******************************************************************************
@@ -61,4 +56,56 @@ GetSelectMenuColumn()
 {
     global ime_selectmenu_column
     return ime_selectmenu_column
+}
+
+;*******************************************************************************
+;
+ImeUpdateCandidate(string)
+{
+    global tooltip_debug
+    global ime_candidate_sentences
+    static last_string := ""
+    ; [
+    ;     ; -1 , 0         , 1
+    ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
+    ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
+    ;     ...
+    ; ]
+    if( last_string != string ){
+        last_string := string
+        ime_candidate_sentences := PinyinGetSentences(string)
+        tooltip_debug[1] := "Update candidate: " string
+    } else {
+        tooltip_debug[1] := "Use old candidate: " string
+    }
+}
+
+ImeGetCandidateDebugInfo(index)
+{
+    global ime_candidate_sentences
+    return ime_candidate_sentences[index, 0]
+}
+
+ImeGetCandidatePinyin(index)
+{
+    global ime_candidate_sentences
+    return ime_candidate_sentences[index, 1]
+}
+
+ImeGetCandidateWord(index)
+{
+    global ime_candidate_sentences
+    return ime_candidate_sentences[index, 2]
+}
+
+ImeGetCandidateWeight(index)
+{
+    global ime_candidate_sentences
+    return ime_candidate_sentences[index, 3]
+}
+
+ImeGetCandidateListLength()
+{
+    global ime_candidate_sentences
+    return ime_candidate_sentences.Length()
 }

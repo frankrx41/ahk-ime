@@ -29,10 +29,10 @@ CallBackBeforeToggleEn()
 
 PutCharacterByIndex(select_index)
 {
-    global ime_candidate_sentences
     global ime_input_string
-    string := ime_candidate_sentences[select_index,2]
-    occupied_characters := ime_candidate_sentences[select_index,1]
+    
+    string := ImeGetCandidateWord(select_index)
+    occupied_characters := ImeGetCandidatePinyin(select_index)
     ime_input_string := SubStr(ime_input_string, StrLen(occupied_characters)+1-StrLen(string)+1)
     ; MsgBox, % StrLen(occupied_characters) "`n" ime_input_string
     PutCharacter( string )
@@ -41,12 +41,10 @@ PutCharacterByIndex(select_index)
     }
 }
 
+; 以词定字
 PutCharacterWordByWord(select_index, offset)
 {
-    global ime_candidate_sentences
-    global ime_input_string
-
-    string := ime_candidate_sentences[select_index,2]
+    string := ImeGetCandidateWord(select_index)
     PutCharacter( SubStr(string, offset, 1) )
     ImeClearInputString()
 }
