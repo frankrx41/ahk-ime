@@ -188,51 +188,52 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
     return separate_words
 }
 
-Get_jianpin(DB,scheme,str,RegExObj:="",lianxiang:=1,LimitNum:=100,cjjp:=false){
+Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=false){
     local
     Critical
     global SQL_buffer, customspjm
-    cpfg:=0, ystr:=Trim(str, "'")
-    if (scheme)
+    ystr := Trim(str, "'")
+
+    if( scheme ){
         str:=PinyinSplit(str,scheme,1)
-    str:=StrReplace(str, "'", "''"), str:=StrReplace(str, "on'", "ong'"), tstr:=Trim(RegExReplace(str, "([a-z]h?)[a-gi-z]+", "$1", nCount), "'")
-    tstr:=RegExReplace(tstr, "([csz])h", "$1")
-    if (nCount){
-        rstr:=RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
-        loop % RegExObj.Length()
+    }
+    str := StrReplace(str, "'", "''")
+    str := StrReplace(str, "on'", "ong'")
+    tstr := Trim(RegExReplace(str, "([a-z]h?)[a-gi-z]+", "$1", nCount), "'")
+    tstr := RegExReplace(tstr, "([csz])h", "$1")
+
+    if( nCount ){
+        rstr := RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
+        loop % RegExObj.Length() {
             rstr:=RegExReplace(rstr, RegExObj[A_Index,1], RegExObj[A_Index,2])
-    } else if (scheme="pinyin"){
-        tRegEx:=""
-        For _,key In ["c","s","z"]
-            if InStr(str,key "h")&&!InStr(RegExObj[1,1],key)
-                tRegEx .= key
-        if (tRegEx){
-            rstr:=RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
-            if (StrLen(tstr)=1)
-                LimitNum:=100
         }
-    } else {
-        tRegEx:=""
-        For _,key In ["c","s","z"]
-            if InStr(str,key)&&!InStr(RegExObj[1,1],key)
+    } 
+    else
+    {
+        tRegEx := ""
+        for _,key in ["c","s","z"] {
+            if InStr(str,key "h")&&!InStr(RegExObj[1,1],key) {
                 tRegEx .= key
-        if (tRegEx){
-            rstr:=RegExReplace(str, "'([" tRegEx "]h?)'", "'$1[^h]*'")
-            if (ystr~="[aoe]{2}")
-                rstr:=RegExReplace(rstr, "'([^aoe]h?)'", "'$1[a-z]*'")
-            else
-                rstr:=RegExReplace(rstr, "'([a-z]h?)'", "'$1[a-z]*'")
-            if (StrLen(tstr)=1)
+            }
+        }
+        if( tRegEx ){
+            rstr:=RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
+            if( StrLen(tstr)==1 )
                 LimitNum:=100
         }
     }
-    if (rstr="")
-        if (str~="^''[aoe](''[aoe])*''$")
+
+    if (rstr="") {
+        if (str~="^''[aoe](''[aoe])*''$") {
             rstr:=str
-        else
+        } else {
             LimitNum:=100
-    rstr:=Trim(rstr,"'"), zero_initials_table:="o"
-    if (cpfg:=lianxiang){
+        }
+    }
+
+    rstr := Trim(rstr,"'")
+    zero_initials_table:="o"
+    if( lianxiang ){
         if (rstr~="[\.\*\?\|\[\]]")
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{' AND key REGEXP '^" rstr "' ORDER BY weight DESC LIMIT 3"
         else
@@ -249,11 +250,11 @@ Get_jianpin(DB,scheme,str,RegExObj:="",lianxiang:=1,LimitNum:=100,cjjp:=false){
         else
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
     }
-    if DB.GetTable(_SQL,Result){
-        if (Result.RowCount){
-            if (cpfg){
 
-            } else {
+    if( DB.GetTable(_SQL,Result) )
+    {
+        if( Result.RowCount ){
+            if( !lianxiang ){
                 loop % Result.RowCount
                     Result.Rows[A_Index, -1]:=ystr, Result.Rows[A_Index, 0]:="pinyin|" A_Index, Result.Rows[A_Index, 4]:=Result.Rows[1, 3]
                 ; Result.Rows[1, 0]:="pinyin|0"
@@ -262,8 +263,9 @@ Get_jianpin(DB,scheme,str,RegExObj:="",lianxiang:=1,LimitNum:=100,cjjp:=false){
         }
         Result.Rows[0]:=ystr
         return Result.Rows        ; {1:[key1,value1],2:[key2,value2]...}
-    } else
+    } else {
         return []
+    }
 }
 
 firstzhuju(arr){    ; 首选组词

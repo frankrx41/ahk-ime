@@ -21,7 +21,7 @@ PinyinGetSentences(input, scheme:="pinyin")
     srf_all_Input_tip       := srf_all_Input_for_trim
     
     full_pinyin             := PinyinSplit(srf_all_Input_for_trim, scheme, 1)
-    srf_all_Input_py        := Trim(RegExReplace(full_pinyin,"'?\\'?"," "), "'")
+    srf_all_Input_py        := srf_all_Input_for_trim ; Trim(RegExReplace(full_pinyin,"'?\\'?"," "), "'")
     srf_all_Input_for_trim  := StrReplace(srf_all_Input_for_trim,"\",Chr(2))
 
     if( true )
