@@ -73,10 +73,12 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
     Critical
     global pinyin_table
 
-    index := 1
-    separate_words := ""
-    strlen := StrLen(str)
-    last_char := "'"
+    index           := 1
+    separate_words  := "'"
+    strlen          := StrLen(str)
+    last_char       := ""
+    last_vowels     := ""
+    last_initials   := ""
 
     loop
     {
