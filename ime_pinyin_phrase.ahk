@@ -14,7 +14,7 @@ PinyinHasKey(pinyin)
 PinyinGetSentences(input, scheme:="pinyin")
 {
     local
-    global history_field_array := []
+    global history_field_array
     global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
 
     static save_field_array := []
