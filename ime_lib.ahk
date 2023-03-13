@@ -8,6 +8,8 @@ ime_tooltip_pos := ""           ; 输入法提示框光标位置 {x:0,y:0,h:0,t:
 ImeDBInitialize()
 ImeSelectInitialize()
 ImeStateInitialize()
+PinyinInit()
+ImeUpdateActiveState()
 
 ; tooltip
 ime_tooltip_font_size           := 13
@@ -24,9 +26,6 @@ symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠",
 , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" }
 
 ImeRegisterHotkey()
-ImeUpdateActiveState()
-
-PinyinInit()
 return
 
 ;*******************************************************************************
