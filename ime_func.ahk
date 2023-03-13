@@ -7,6 +7,7 @@ PutCharacter(str, mode:=""){
 ; https://www.autohotkey.com/board/topic/76062-ahk-l-how-to-get-callstack-solution/
 CallStack(deepness = 5, printLines = 1)
 {
+    stack := ""
     loop % deepness
     {
         lvl := -2 - deepness + A_Index
