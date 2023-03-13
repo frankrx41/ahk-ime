@@ -18,13 +18,14 @@ PinyinGetSentences(input, scheme:="pinyin")
     global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
 
     static save_field_array := []
-    static srf_all_Input := ""
+    local srf_all_Input
 
+    srf_all_Input := input
     ; Those variable should be used
     tfzm := ""
     imagine := 0    ; 逐码提示 联想
     fuzhuma := 0
-    chaojijp := 0   ; 超级简拼 显示四字及以上的简拼候选
+    chaojijp := 0   ; 超级简拼 显示 4~8 字简拼候选
     jichu_for_select_Array := []
     Useless := 1    ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
 
@@ -161,14 +162,14 @@ PinyinGetSentences(input, scheme:="pinyin")
                 {
                     limit_num :=  (test_pos?1:0)
                     cjjp := !InStr(srf_all_Input, srf_Input_trim_left)
-                    sql_result := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, limit_num, cjjp)
-                    history_field_array[srf_Input_trim_left] := sql_result
+                    history_field_array[srf_Input_trim_left] := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, limit_num, cjjp)
 
                     if( !PinyinHasResult(srf_Input_trim_left) )
                     {
-                        if InStr(srf_Input_trim_left,"'") {
+                        if( InStr(srf_Input_trim_left,"'") ){
                             history_field_array[srf_Input_trim_left] := {0:srf_Input_trim_left}
                         } else {
+                            CallStack()
                             history_field_array[srf_Input_trim_left] := {0:srf_Input_trim_left,1:[srf_Input_trim_left,srf_Input_trim_left=Chr(2)?"":srf_Input_trim_left]}
                         }
                     } else if (test_pos) {
@@ -298,7 +299,8 @@ PinyinGetSentences(input, scheme:="pinyin")
         {
             history_field_array[first_word]:= Get_jianpin(DB, scheme, "'" first_word "'", "", 0, 0)
         }
-        loop % history_field_array[first_word].Length() {
+        loop % history_field_array[first_word].Length()
+        {
             search_result.Push(CopyObj(history_field_array[first_word, A_Index]))
         }
     }
