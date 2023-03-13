@@ -195,7 +195,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         }
     }
 
-    search_result:=[]
+    search_result := []
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
     {
         sql_result := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0)
@@ -290,18 +290,20 @@ PinyinGetSentences(input, scheme:="pinyin")
         inspos:=1
     }
 
-    ; 插入候选字部分
-    zi := SubStr(srf_all_Input_tip ,1, InStr(srf_all_Input_tip "'", "'")-1)
-    if( !(PinyinHasKey(zi)) || (history_field_array[zi].Length()==2 && history_field_array[zi,2,2]=="") )
+    ; 插入字部分
     {
-        ; Get result
-        history_field_array[zi]:= Get_jianpin(DB, scheme, "'" zi "'", "", 0, 0)
-    }
-    loop % history_field_array[zi].Length() {
-        search_result.Push(CopyObj(history_field_array[zi, A_Index]))
+        word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
+        if( !PinyinHasKey(word) || (history_field_array[word].Length()==2 && history_field_array[word,2,2]=="") )
+        {
+            history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
+        }
+        loop % history_field_array[word].Length() {
+            search_result.Push(CopyObj(history_field_array[word, A_Index]))
+        }
     }
 
-    if( fuzhuma ){
+    if( fuzhuma )
+    {
         loop % search_result.Length() {
             if( InStr(search_result[A_Index, 0], "pinyin|") && (search_result[A_Index, 6]=="") ){
                 search_result[A_Index, 6]:=fzmfancha(search_result[A_Index, 2])
