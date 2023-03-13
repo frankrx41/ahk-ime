@@ -220,8 +220,9 @@ CheckPinyinSplit(DB, str)
 Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=false){
     local
     Critical
-    global SQL_buffer, customspjm
+    customspjm := []
     ystr := Trim(str, "'")
+    rstr := ""
 
     if( scheme ){
         str:=PinyinSplit(str,scheme,1)
@@ -234,7 +235,7 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     if( nCount ){
         rstr := RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
         loop % RegExObj.Length() {
-            rstr:=RegExReplace(rstr, RegExObj[A_Index,1], RegExObj[A_Index,2])
+            rstr := RegExReplace(rstr, RegExObj[A_Index,1], RegExObj[A_Index,2])
         }
     } 
     else
@@ -246,13 +247,13 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
             }
         }
         if( tRegEx ){
-            rstr:=RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
+            rstr := RegExReplace(str, "'([^aoe]h?)'", "'$1[a-z]*'")
             if( StrLen(tstr)==1 )
                 LimitNum:=100
         }
     }
 
-    if (rstr="") {
+    if (rstr=="") {
         if (str~="^''[aoe](''[aoe])*''$") {
             rstr:=str
         } else {
@@ -288,7 +289,6 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
                     Result.Rows[A_Index, -1]:=ystr, Result.Rows[A_Index, 0]:="pinyin|" A_Index, Result.Rows[A_Index, 4]:=Result.Rows[1, 3]
                 ; Result.Rows[1, 0]:="pinyin|0"
             }
-            SQL_buffer[ystr]:=_SQL
         }
         Result.Rows[0]:=ystr
         return Result.Rows        ; {1:[key1,value1],2:[key2,value2]...}

@@ -4,11 +4,18 @@ PinyinGetSentences(input, scheme:="pinyin")
     local
     static save_field_array := []
     static history_field_array := []
+    static srf_all_Input := ""
 
-    global DB, fzm, fuzhuma, chaojijp, imagine
-    , DebugLevel, mhyRegExObj, CloudInput, jichu_for_select_Array, srf_all_Input, tfzm, dwselect
-    , Useless, CloudinputApi
+    global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
     
+    ; Those variable should be used
+    tfzm := ""
+    imagine := 0 ; 逐码提示
+    fuzhuma := 0
+    chaojijp := 0
+    jichu_for_select_Array := []
+    Useless := 1 ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
+
     Loop_num        :=0
     history_cutpos  :=[0]
     index   :=0
@@ -29,6 +36,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         ; 正向最大划分
 
         ; Clear saved history
+        check_str := ""
         loop % save_field_array.Length()
         {
             if( save_field_array[A_Index,0] == Chr(1)) {
@@ -79,7 +87,7 @@ PinyinGetSentences(input, scheme:="pinyin")
                 }
                 if( !history_field_array.HasKey(srf_all_Input_trim_off) )
                 {
-                    history_field_array[srf_all_Input_trim_off] := Get_jianpin(DB, scheme, "'" srf_all_Input_trim_off "'", mhyRegExObj, 0, A_Index=1?0:1)
+                    history_field_array[srf_all_Input_trim_off] := Get_jianpin(DB, scheme, "'" srf_all_Input_trim_off "'", "", 0, A_Index=1?0:1)
                     if( history_field_array[srf_all_Input_trim_off, 1, 2] == "" )
                     {
                         if( !InStr(srf_all_Input_trim_off, "'") ){
@@ -135,7 +143,7 @@ PinyinGetSentences(input, scheme:="pinyin")
                 srf_Input_trim_right := SubStr(srf_all_Input_for_trim,cutpos+1)
                 if( srf_Input_trim_left && !history_field_array.HasKey(srf_Input_trim_left) )
                 {
-                    history_field_array[srf_Input_trim_left] := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", mhyRegExObj, 0, (tpos?1:0), ((scheme="pinyin")&&(!InStr(srf_all_Input,srf_Input_trim_left))))
+                    history_field_array[srf_Input_trim_left] := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, (tpos?1:0), ((scheme="pinyin")&&(!InStr(srf_all_Input,srf_Input_trim_left))))
                     if( history_field_array[srf_Input_trim_left, 1, 2] == "" )
                     {
                         if InStr(srf_Input_trim_left,"'") {
@@ -163,7 +171,7 @@ PinyinGetSentences(input, scheme:="pinyin")
 
     search_result:=[]
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" ){
-        save_field_array[1] := CopyObj(history_field_array[save_field_array[1,0]] := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", mhyRegExObj, 0, 0))
+        save_field_array[1] := CopyObj(history_field_array[save_field_array[1,0]] := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0))
     }
     if( (save_field_array.Length()==1) || (tfzm) ){
         search_result:=CopyObj(save_field_array[1])
@@ -178,7 +186,7 @@ PinyinGetSentences(input, scheme:="pinyin")
             }
             if( ci~="^" save_field_array[1, 0] "'[a-z;]+" ){
                 if( history_field_array[ci].Length()==2 && history_field_array[ci,2,2]=="" ) {
-                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", mhyRegExObj, 0, 0)
+                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
                 }
                 search_result:=CopyObj(history_field_array[ci])
             }
@@ -197,7 +205,7 @@ PinyinGetSentences(input, scheme:="pinyin")
     {
         While InStr(ci,"'")&&(history_field_array[ci, 1, 2]=""){
             if (!history_field_array.HasKey(ci)){
-                history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", mhyRegExObj, 0, 0)
+                history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
                 if (history_field_array[ci, 1, 2])
                     break
             }
@@ -205,7 +213,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         }
         if( InStr(ci,"'") ){
             if( history_field_array[ci].Length()=2&&history_field_array[ci,2,2]="" ){
-                history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", mhyRegExObj, 0, 0)
+                history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
             }
             loop % history_field_array[ci].Length() {
                 search_result.Push(CopyObj(history_field_array[ci, A_Index]))
@@ -215,7 +223,7 @@ PinyinGetSentences(input, scheme:="pinyin")
             {
                 ci := SubStr(ci,1,t-1)
                 if( !history_field_array.HasKey(ci) || history_field_array[ci].Length()==2 && history_field_array[ci,2,2]=="" ){
-                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", mhyRegExObj, 0, 0)
+                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
                 }
                 if( history_field_array[ci, 1, 2]!="" ){
                     loop % history_field_array[ci].Length(){
@@ -229,7 +237,7 @@ PinyinGetSentences(input, scheme:="pinyin")
     if( !(tfzm||StrLen(fzm)=1) && (imagine&&InStr(srf_all_Input_py, "'", , 1, 3)))
     {
         if( history_field_array[srf_all_Input_tip, -1]==="" ){
-            history_field_array[srf_all_Input_tip, -1] := Get_jianpin(DB, "", "'" srf_all_Input_py "'", mhyRegExObj, 1, 0)
+            history_field_array[srf_all_Input_tip, -1] := Get_jianpin(DB, "", "'" srf_all_Input_py "'", "", 1, 0)
         }
         loop % tt:=history_field_array[srf_all_Input_tip, -1].Length() {
             search_result.InsertAt(2, CopyObj(history_field_array[srf_all_Input_tip, -1, tt+1-A_Index]))
@@ -241,15 +249,16 @@ PinyinGetSentences(input, scheme:="pinyin")
         ; loop % tt:=saixuan.Length()
         ; search_result.InsertAt(inspos,saixuan[tt+1-A_Index])    ; 词组优先
     } else {
-        loop % tt:=saixuan.Length()
-            search_result.InsertAt(1,saixuan[tt+1-A_Index])    ; 辅助词条优先
-        inspos:=tt?1:2
+        ; loop % tt:=saixuan.Length()
+        ;     search_result.InsertAt(1,saixuan[tt+1-A_Index])    ; 辅助词条优先
+        ; inspos:=tt?1:2
+        inspos:=1
     }
 
     ; 插入候选字部分
     zi := SubStr(srf_all_Input_tip ,1, InStr(srf_all_Input_tip "'", "'")-1)
     if( !(history_field_array.HasKey(zi)) || (history_field_array[zi].Length()==2 && history_field_array[zi,2,2]=="") ){
-        history_field_array[zi]:= Get_jianpin(DB, scheme, "'" zi "'", mhyRegExObj, 0, 0)
+        history_field_array[zi]:= Get_jianpin(DB, scheme, "'" zi "'", "", 0, 0)
     }
     loop % history_field_array[zi].Length() {
         search_result.Push(CopyObj(history_field_array[zi, A_Index]))
@@ -280,8 +289,9 @@ PinyinGetSentences(input, scheme:="pinyin")
     }
     else
     {
+        cjjp := 0
         if( chaojijp && (srf_all_Input~="^[^']{4,8}$") && !history_field_array.HasKey(cjjp:=Trim(RegExReplace(srf_all_Input,"(.)","$1'"), "'")) ){
-            history_field_array[cjjp]:= Get_jianpin(DB, scheme, "'" cjjp "'", mhyRegExObj, 0, 8, true)
+            history_field_array[cjjp]:= Get_jianpin(DB, scheme, "'" cjjp "'", "", 0, 8, true)
         }
         if( cjjp ){
             loop % l:=history_field_array[cjjp].Length()
@@ -292,10 +302,10 @@ PinyinGetSentences(input, scheme:="pinyin")
                 jichu_for_select_Array[A_Index].Delete(-2)
         }
         ; 云输入, 2字词以上触发
-        if( CloudInput && inspos==2 && InStr(srf_all_Input_py, "'", , 1, 2)){
-            ; search_result.InsertAt(2,{0:"<Cloud>|-1",1:"",2:""})
-            SetTimer, BDCloudInput, -10
-        }
+        ; if( CloudInput && inspos==2 && InStr(srf_all_Input_py, "'", , 1, 2)){
+        ;     ; search_result.InsertAt(2,{0:"<Cloud>|-1",1:"",2:""})
+        ;     SetTimer, BDCloudInput, -10
+        ; }
     }
 
     if( Useless && search_result[1, 3]>0 ){
