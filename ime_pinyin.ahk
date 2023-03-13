@@ -103,6 +103,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                 index += 1
                 initials .= "h"
             }
+            initials := Format("{:L}", initials)
 
             ; 韵母
             vowels := ""
