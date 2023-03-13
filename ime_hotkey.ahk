@@ -21,16 +21,19 @@ ImeInputChar(key, pos := -1, try_puts := 0)
         PutCharacter(key)
         ImeClearInputString()
     }
+    ImeUpdateCandidate(ime_input_string)
     ImeTooltipUpdate()
 }
 
 ImeInputNumber(key)
 {
+    global ime_input_string
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
         start_index := Floor((GetSelectWordIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         PutCharacterByIndex(start_index + (key == 0 ? 10 : key))
         SetSelectWordIndex(1)
+        ImeUpdateCandidate(ime_input_string)
         ImeTooltipUpdate()
     }
     else {
@@ -96,6 +99,7 @@ BackSpace::
     if( ime_input_caret_pos != 0 ) {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
+        ImeUpdateCandidate(ime_input_string)
         ImeTooltipUpdate()
     }
 return

@@ -67,7 +67,6 @@ ImeTooltipUpdate()
     global ime_input_caret_pos
     global ime_tooltip_pos
     global tooltip_debug
-    static last_ime_input := ""
 
     if( !ime_input_string )
     {
@@ -75,11 +74,6 @@ ImeTooltipUpdate()
     }
     else
     {
-        if (last_ime_input != ime_input_string) {
-            last_ime_input := ime_input_string
-            ImeUpdateCandidate(ime_input_string)
-        }
-
         if( ImeIsSelectMenuOpen() ){
             ime_select_str := DisplaySelectItems()
         } else {
