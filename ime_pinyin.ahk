@@ -284,6 +284,11 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
 
     if( DB.GetTable(_SQL, result_table) )
     {
+        ; result_table.Rows = [
+        ;   ["wu'hui", "舞会", "30000"]
+        ;   ["wu'hui", "误会", "26735"]
+        ; ]
+
         if( result_table.RowCount && !lianxiang )
         {
             loop % result_table.RowCount {
@@ -293,7 +298,13 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
             }
         }
         result_table.Rows[0] := ystr
-        return result_table.Rows        ; {1:[key1,value1],2:[key2,value2]...}
+        ; result_table.Rows = [
+        ;   [0]: "wu'hui"
+        ;        ; -1     , 0         , 1
+        ;   [1]: ["wu'hui", "pinyin|1", "wu'hui", "舞会", "30000", "30000"]
+        ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
+        ; ]
+        return result_table.Rows
     } else {
         return []
     }
