@@ -7,19 +7,19 @@ Enter::
 NumpadEnter::
     PutCharacterByIndex(GetSelectWordIndex())
     SetSelectWordIndex(1)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ]::
     PutCharacterWordByWord(GetSelectWordIndex(), 0)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 [::
     PutCharacterWordByWord(GetSelectWordIndex(), 1)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Tab: Show more select items
@@ -33,7 +33,7 @@ Tab::
     } else {
         ImeOpenSelectMenu(true, false)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 +Tab::
@@ -47,7 +47,7 @@ return
                 ImeOpenSelectMenu(true, false)
             }
         }
-        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
 return
 
@@ -56,8 +56,8 @@ BackSpace::
     if( ime_input_caret_pos != 0 ) {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ImeUpdateCandidate(ime_input_string)
-        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+        ime_input_candidate := ImeGetCandidate(ime_input_string)
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
 return
 
@@ -74,7 +74,7 @@ Esc::
     } else {
         ImeClearInputString()
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ,::
@@ -83,7 +83,7 @@ return
     } else {
         OffsetSelectWordIndex(-1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 .::
@@ -92,7 +92,7 @@ return
     } else {
         OffsetSelectWordIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 左右键移动光标
@@ -102,7 +102,7 @@ Left::
     } else {
         ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 Right::
@@ -111,7 +111,7 @@ Right::
     } else {
         ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 上下选择
@@ -125,7 +125,7 @@ Up::
             OffsetSelectWordIndex(+1)
         }
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
@@ -135,7 +135,7 @@ Down::
     } else {
         OffsetSelectWordIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 更新候选框位置
@@ -146,7 +146,7 @@ return
 return
 
 ImeTooltipUpdateTimer:
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, true)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, true)
 return
 
 #if ; ime_input_string
