@@ -8,7 +8,7 @@ PinyinHasKey(pinyin)
 {
     global history_field_array
     global tooltip_debug
-    tooltip_debug[3] .= "`n[" pinyin "," history_field_array.HasKey(pinyin) "]"
+    tooltip_debug[3] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
     return history_field_array.HasKey(pinyin)
 }
 
@@ -333,13 +333,14 @@ PinyinGetSentences(input, scheme:="pinyin")
     }
     else
     {
-        cjjp := Trim(RegExReplace(srf_all_Input,"(.)","$1'"), "'")
-        if( chaojijp && (srf_all_Input~="^[^']{4,8}$") && !PinyinHasKey(cjjp) ){
-            history_field_array[cjjp]:= Get_jianpin(DB, scheme, "'" cjjp "'", "", 0, 8, true)
+        single_char_spell := Trim(RegExReplace(srf_all_Input,"(.)","$1'"), "'")
+        if( chaojijp && (srf_all_Input~="^[^']{4,8}$") && !PinyinHasKey(single_char_spell) ){
+            history_field_array[single_char_spell]:= Get_jianpin(DB, scheme, "'" single_char_spell "'", "", 0, 8, true)
         }
-        if( cjjp ){
-            loop % l:=history_field_array[cjjp].Length()
-                search_result.InsertAt(2,CopyObj(history_field_array[cjjp,l+1-A_Index]))
+        if( single_char_spell ){
+            loop % list_len := history_field_array[single_char_spell].Length() {
+                ; search_result.InsertAt(1, CopyObj(history_field_array[single_char_spell, list_len+1-A_Index]))
+            }
         }
         if( fzm=="" ){
             loop % jichu_for_select_Array.Length()
@@ -352,17 +353,25 @@ PinyinGetSentences(input, scheme:="pinyin")
         ; }
     }
 
-    if( Useless && search_result[1, 3]>0 ){
-        loop % len:=search_result.Length() {
+    if( Useless && search_result[1, 3]>0 )
+    {
+        loop % len := search_result.Length() {
             if( search_result[len+1-A_Index, 3] && search_result[len+1-A_Index, 3]<=0 )
                 search_result.RemoveAt(len+1-A_Index)
         }
     }
 
+    ; Assert(!search_result.HasKey(0))
     if (search_result.HasKey(0)) {
         search_result.Delete(0)
     }
 
+    ; [
+    ;     ; -1 , 0         , 1
+    ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
+    ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
+    ;     ...
+    ; ]
     return search_result
 
     ; 云输入

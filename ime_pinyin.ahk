@@ -273,18 +273,18 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     rstr := Trim(rstr,"'")
     zero_initials_table:="o"
     if( lianxiang ){
-        if (rstr~="[\.\*\?\|\[\]]")
+        if( rstr~="[\.\*\?\|\[\]]" )
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{' AND key REGEXP '^" rstr "' ORDER BY weight DESC LIMIT 3"
         else
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{'" (rstr?" AND key>='" rstr "''a' AND key<'" rstr "''{'":"") " ORDER BY weight DESC LIMIT 3"
     } else if (cjjp&&(scheme~="i)^(abc|wr|sg)sp"||(zero_initials_table:=customspjm[scheme, "0"])~="^[a-zA-Z]$")&&InStr(str, zero_initials_table)){
         tstr:=StrReplace(tstr, zero_initials_table, "_", nCount:=0), rstr:=StrReplace(tstr, "_", "[aoe]")
-        if (nCount>4 )
+        if( nCount>4 )
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE " Format("((jp>='{:s}a' AND jp<'{:s}b') OR (jp>='{:s}e' AND jp<'{:s}f') OR (jp>='{:s}o' AND jp<'{:s}p')) AND", SubStr(tstr, 1, InStr(tstr, "_")-1)) " jp like '" tstr "' AND jp REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
         else
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp IN " enumlsm(tstr) " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
     } else {
-        if (rstr~="[\.\*\?\|\[\]]")
+        if( rstr~="[\.\*\?\|\[\]]" )
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "' AND key REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
         else
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
@@ -315,7 +315,7 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
 
         tooltip_debug[2] :=
         ; tooltip_debug[3] .= "`n" ystr ": " result_table "`n" _SQL "`n" CallStack(1)
-        tooltip_debug[3] .= "`n" ystr ": " result_table.RowCount " (" orgin_str ")" "`n" _SQL "`n" CallStack(1)
+        tooltip_debug[3] .= "`n" ystr "," rstr ": " result_table.RowCount " (" orgin_str ")" "`n" _SQL "`n" CallStack(1)
         return result_table.Rows
     } else {
         return []
