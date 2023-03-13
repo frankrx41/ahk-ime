@@ -17,6 +17,7 @@ global history_field_array := []
 global save_field_array := []
 global ime_for_select_obj := []
 global srf_all_input_:=[]
+global tooltip_debug := []
 Gosub, ImeInitialize
 return
 

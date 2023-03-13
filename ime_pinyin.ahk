@@ -311,6 +311,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
     static vowels_max_test_len := 4
     static lsm := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]    ; 零声母
     global pinyin_table
+    global tooltip_debug
 
     index := 1
     separate_words := "'"
@@ -383,12 +384,15 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                 separate_words .= initials "'"
         }
     } until index>strlen
+
+    tooltip_debug[1] := separate_words
     return separate_words
 }
 
 Get_jianpin(DB,scheme,str,RegExObj:="",lianxiang:=1,LimitNum:=100,cjjp:=false){
     local
     Critical
+    global tooltip_debug
     global SQL_buffer, customspjm
     cpfg:=0, ystr:=Trim(str, "'")
     if (scheme)
@@ -457,6 +461,7 @@ Get_jianpin(DB,scheme,str,RegExObj:="",lianxiang:=1,LimitNum:=100,cjjp:=false){
                 ; Result.Rows[1, 0]:="pinyin|0"
             }
             SQL_buffer[ystr]:=_SQL
+            tooltip_debug[3] := _SQL
         }
         Result.Rows[0]:=ystr
         return Result.Rows        ; {1:[key1,value1],2:[key2,value2]...}
