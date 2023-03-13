@@ -109,7 +109,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
             vowels := ""
             vowels_test_len := 0
             loop {
-                if( index+vowels_test_len-A_Index>strlen ){
+                if( vowels_test_len >= 4 || index+vowels_test_len-A_Index>strlen ){
                     break
                 }
                 check_char := SubStr(str, index+vowels_test_len, 1)
@@ -121,9 +121,6 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                     break
                 }
                 vowels_test_len += 1
-                if( vowels_test_len >= 4) {
-                    break
-                }
             }
 
             vowels_len := 0
