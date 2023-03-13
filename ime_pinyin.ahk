@@ -188,6 +188,35 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
     return separate_words
 }
 
+CheckPinyinSplit(DB, str)
+{
+    local
+    static history:={0:0}
+    if( !DB ){
+        return -1
+    }
+    if( history[0]>500 ){
+        history:={0:0}
+    }
+    if( history[str]!="" ){
+        return history[str]
+    }
+    str := StrReplace(str, "'", "''")
+    tstr := RegExReplace(Trim(str, "'"), "([a-z])[a-z]+", "$1")
+    rstr := RegExReplace(str, "'([csz]h?)'", "'$1.*'")
+    _SQL := "SELECT weight FROM pinyin WHERE jp='" tstr "' AND key REGEXP '^" Trim(rstr,"'") "$' ORDER BY weight DESC LIMIT 1"
+    if( DB.GetTable(_SQL,Result) )
+    {
+        if( Result.Rows[1][1] ){
+            return Result.Rows[1][1], history[str]:=Result.Rows[1][1], history[0]++
+        } else {
+            return 0, history[str]:=0, history[0]++
+        }
+    } else {
+        return -1
+    }
+}
+
 Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=false){
     local
     Critical
@@ -268,7 +297,9 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     }
 }
 
-firstzhuju(arr){    ; 首选组词
+; 首选组词
+firstzhuju(arr)
+{
     rarr:=["",""]
     loop % arr.Length()
         if (arr[A_Index, 0]!=Chr(2))
@@ -276,65 +307,6 @@ firstzhuju(arr){    ; 首选组词
     return rarr
 }
 
-; 模糊取词
-get_word_lianxiang(DB, input, cikuname, num:=200, xz:=0){
-    local
-    Critical
-    global Imagine, Singleword, SQL_buffer, srf_all_Input
-    if (input="")
-        return []
-    if (cikuname="English"){
-        len:=StrLen(input), _SQL:="SELECT '','" input "'||substr(key," len+1 "),weight,1 FROM 'extend'.'English' WHERE key='" Input "' UNION ALL SELECT '','" input "'||substr(key," len+1 "),weight,2 FROM 'extend'.'English' WHERE key>'" Input "' AND key<'" SubStr(Input, 1, -1) Chr(Ord(SubStr(Input, 0))+1) "' " (xz?"AND length(key)<" xz+StrLen(Input):"") " ORDER by 4,weight DESC " (num?" limit " num:"")
-        ; if (Ord(input)<91)
-        ;     _SQL:="SELECT '',upper(substr(key,1,1))||substr(key,2),weight,1 FROM 'extend'.'English' WHERE key='" Input "' UNION ALL SELECT '',upper(substr(key,1,1))||substr(key,2),weight,2 FROM 'extend'.'English' WHERE key>'" Input "' AND key<'" SubStr(Input, 1, -1) Chr(Ord(SubStr(Input, 0))+1) "' " (xz?"AND length(key)<5+" StrLen(Input):"") " ORDER by 4,weight DESC " (num?" limit " num:"")
-        ; else
-        ;     _SQL:="SELECT '',key,weight,1 FROM 'extend'.'English' WHERE key='" Input "' UNION ALL SELECT '',key,weight,2 FROM 'extend'.'English' WHERE key>'" Input "' AND key<'" SubStr(Input, 1, -1) Chr(Ord(SubStr(Input, 0))+1) "' AND length(key)<5+" StrLen(Input) " ORDER by 4,weight DESC " (num?" limit " num:"")
-    } else if (cikuname="hotstrings"), Input:=Format("{:L}", Input)
-        _SQL:="SELECT value,comment,replace(replace(value,x'0a','``n'),x'09','``t') FROM 'extend'.'hotstrings' WHERE key>='" Input "' AND key<""" SubStr(Input, 1, -1) Chr(Ord(SubStr(Input, 0))+1) """ AND value <> '' ORDER by key " (num?" limit 2":"")
-    else if (cikuname="functions")
-        _SQL:="SELECT value,comment,comment FROM 'extend'.'functions' WHERE key>='" Input "' AND key<'" SubStr(Input, 1, -1) Chr(Ord(SubStr(Input, 0))+1) "' AND value <> '' ORDER by key " (num?" limit 2":"")
-    else
-        word:=Singleword||InStr(srf_all_Input,"``"), _SQL:="SELECT key,value,weight,1 FROM '" cikuname "' WHERE key='" Input "' AND value <> '' " (word?"AND length(value)=1":"") " UNION ALL SELECT key,value,weight,length(key) FROM '" cikuname "' WHERE key>'" Input "' " ("AND key<'" SubStr(Input, 1, -1) Chr(Ord(SubStr(Input, 0))+1) "'") " AND length(key)<" StrLen(Input)+3 " AND value <> '' " (word?"AND length(value)=1":"") " ORDER by 4,weight DESC " (num?"limit " num:"")
-    if DB.GetTable(_SQL, Result){
-        if (Result.RowCount){
-            if (cikuname="hotstrings"){
-                loop % Result.RowCount {
-                    if RegExMatch(Result.Rows[A_Index, 2], "\{.*\}", Match){
-                        Result.Rows[A_Index, 2]:=StrReplace(Result.Rows[A_Index, 2],Match)
-                        if InStr(Match,"{bz}")
-                            Result.Rows[A_Index, 3]:=Result.Rows[A_Index, 2], Result.Rows[A_Index, 0]:=StrReplace(Match,"{bz}")
-                        else
-                            Result.Rows[A_Index, 0]:=Match
-                    }
-                    if (!InStr(Match,"{bz}")&&StrLen(Result.Rows[A_Index, 3])>30)
-                        Result.Rows[A_Index, 3]:=SubStr(Result.Rows[A_Index, 3],1,30) "……"
-                }
-            } else if (cikuname="functions"){
-                loop % Result.RowCount
-                    if RegExMatch(Result.Rows[A_Index, 2], "\{.*\}", Match){
-                        if ((Result.Rows[A_Index, 3]:=StrReplace(Result.Rows[A_Index, 2],Match))="")
-                            Result.Rows[A_Index, 3]:=SubStr(StrReplace(Result.Rows[A_Index, 1],"`n","``n"),1,30) (StrLen(Result.Rows[A_Index, 1])>30?"……":"")
-                        Result.Rows[A_Index, 0]:=Match
-                    }
-            } else if (cikuname="English"){
-                loop % Result.RowCount
-                    Result.Rows[A_Index, 3]:=Result.Rows[A_Index, 2]
-            } else {
-                index:=0, fg:=0, SQL_buffer[input]:=_SQL
-                loop % Result.RowCount
-                    if (Result.Rows[A_Index, 4]=2){
-                        if fg=0
-                            fg:=A_Index, index:=0
-                        index++, Result.Rows[A_Index, 0]:=cikuname "|" index, Result.Rows[A_Index, 4]:=Result.Rows[fg, 3], Result.Rows[A_Index, -1]:=input
-                    } else
-                        index++, Result.Rows[A_Index, 0]:=cikuname "|" index, Result.Rows[A_Index, 4]:=Result.Rows[1, 3], Result.Rows[A_Index, -1]:=input
-                }
-            }
-        Result.Rows[0]:=input
-        return Result.Rows
-    }
-    return []
-}
 fzmfancha(str){        ; 辅助码构成规则
     local
     global srf_fzm_fancha_table
@@ -353,33 +325,15 @@ fzmfancha(str){        ; 辅助码构成规则
     return result
 }
 
-CheckPinyinSplit(DB, str){
-    local
-    static history:={0:0}
-    if !DB
-        return -1
-    if (history[0]>500)
-        history:={0:0}
-    if (history[str]!="")
-        return history[str]
-    str:=StrReplace(str, "'", "''")
-    tstr:=RegExReplace(Trim(str, "'"), "([a-z])[a-z]+", "$1")
-    rstr:=RegExReplace(str, "'([csz]h?)'", "'$1.*'")
-    _SQL:="SELECT weight FROM pinyin WHERE jp='" tstr "' AND key REGEXP '^" Trim(rstr,"'") "$' ORDER BY weight DESC LIMIT 1"
-    if DB.GetTable(_SQL,Result){
-        if (Result.Rows[1][1])
-            return Result.Rows[1][1], history[str]:=Result.Rows[1][1], history[0]++
-        else
-            return 0, history[str]:=0, history[0]++
-    } else
-        return -1
-}
-enumlsm(str){
+enumlsm( str )
+{
     local res, t
-    res:=[""], t:=""
+    res:=[""]
+    t:=""
     loop, Parse, str
     {
-        if (A_LoopField="_"){
+        if (A_LoopField="_")
+        {
             len:=res.Length()
             if (t!=""){
                 loop % len
@@ -396,8 +350,10 @@ enumlsm(str){
             continue
         }
     }
-    str:=""
-    loop % res.Length()
-        res[A_Index]:=res[A_Index] t, str .= ",'" res[A_Index] "'"
+    str := ""
+    loop % res.Length() {
+        res[A_Index] := res[A_Index] t
+        str .= ",'" res[A_Index] "'"
+    }
     return "(" LTrim(str, ",") ")"
 }
