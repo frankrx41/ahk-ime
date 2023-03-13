@@ -22,7 +22,7 @@ PinyinGetSentences(input, scheme:="pinyin")
     static save_field_array := []
     local srf_all_Input
 
-    srf_all_Input := input
+    srf_all_Input := ""
     ; Those variable should be used
     tfzm := ""
     imagine := 0    ; 逐码提示 联想
