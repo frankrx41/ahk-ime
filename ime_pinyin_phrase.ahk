@@ -14,19 +14,19 @@ PinyinHasKey(pinyin)
 PinyinGetSentences(input, scheme:="pinyin")
 {
     local
-    static save_field_array := []
     global history_field_array := []
+    global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
+
+    static save_field_array := []
     static srf_all_Input := ""
 
-    global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
-    
     ; Those variable should be used
     tfzm := ""
-    imagine := 0 ; 逐码提示
+    imagine := 0    ; 逐码提示 联想
     fuzhuma := 0
-    chaojijp := 0
+    chaojijp := 0   ; 超级简拼 显示四字及以上的简拼候选
     jichu_for_select_Array := []
-    Useless := 1 ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
+    Useless := 1    ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
 
     Loop_num        :=0
     history_cutpos  :=[0]
@@ -51,16 +51,16 @@ PinyinGetSentences(input, scheme:="pinyin")
         check_str := ""
         loop % save_field_array.Length()
         {
-            if( save_field_array[A_Index,0] == Chr(1)) {
+            if( save_field_array[A_Index,0] == Chr(1)){
                 continue
             }
-            if( save_field_array[A_Index,0] == "" ) {
+            if( save_field_array[A_Index,0] == "" ){
                 index := A_Index
                 break
             }
             
             check_str .= save_field_array[A_Index,0] "'"
-            if( InStr("^" srf_all_Input_for_trim "'", "^" check_str) ) {
+            if( InStr("^" srf_all_Input_for_trim "'", "^" check_str) ){
                 t := StrSplit(save_field_array[A_Index,0],"'").Length()
                 history_cutpos.Push(StrLen(check_str))
             } else {
@@ -76,7 +76,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         srf_all_Input_for_trim_len := StrLen(srf_all_Input_for_trim)
         if( save_field_array.Length()>0 )
         {
-            if( history_cutpos.Length()>1 && SubStr(srf_all_Input_for_trim,history_cutpos[history_cutpos.Length()],1)!="'" )
+            if( history_cutpos.Length()>1 && SubStr(srf_all_Input_for_trim, history_cutpos[history_cutpos.Length()], 1) != "'" )
             {
                 history_cutpos.Pop()
                 save_field_array.Pop()
@@ -198,7 +198,9 @@ PinyinGetSentences(input, scheme:="pinyin")
     search_result:=[]
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
     {
-        save_field_array[1] := CopyObj(history_field_array[save_field_array[1,0]] := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0))
+        sql_result := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0)
+        history_field_array[save_field_array[1,0]] := sql_result
+        save_field_array[1] := CopyObj(sql_result)
     }
 
     if( (save_field_array.Length()==1) || (tfzm) )
