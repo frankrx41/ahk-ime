@@ -98,7 +98,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
         {
             ; 声母
             index += 1
-            if (InStr("csz", initials)&&(SubStr(str, index, 1)="h")) {
+            if( InStr("csz", initials) && (SubStr(str, index, 1)=="h") ){
                 ; zcs + h
                 index += 1
                 initials .= "h"

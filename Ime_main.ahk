@@ -13,9 +13,6 @@ SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
 Menu, Tray, Tip, AHK Ime v0.02
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-global history_field_array := []
-global save_field_array := []
-global ime_for_select_obj := []
 Gosub, ImeInitialize
 return
 
