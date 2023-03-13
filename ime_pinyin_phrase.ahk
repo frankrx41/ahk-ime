@@ -94,7 +94,9 @@ PinyinGetSentences(input, scheme:="pinyin")
                             history_field_array[srf_all_Input_trim_off] := {0:srf_all_Input_trim_off, 1:[srf_all_Input_trim_off,srf_all_Input_trim_off=Chr(2)?"":srf_all_Input_trim_off]}
                         }
                         continue
-                    } else if( A_Index > 1 ){
+                    }
+                    else if( A_Index > 1 )
+                    {
                         history_field_array[srf_all_Input_trim_off].Push("")
                     }
                 }
@@ -121,8 +123,8 @@ PinyinGetSentences(input, scheme:="pinyin")
             }
         }
 
-        tpos := history_cutpos[history_cutpos.Length()]
-        if( tpos<srf_all_Input_for_trim_len )
+        test_pos := history_cutpos[history_cutpos.Length()]
+        if( test_pos<srf_all_Input_for_trim_len )
         {
             Loop_num:=0, begin := A_TickCount
             loop
@@ -132,22 +134,24 @@ PinyinGetSentences(input, scheme:="pinyin")
                     break
                 }
 
-                cutpos := InStr(srf_all_Input_for_trim "'", "'", 0, 0, Loop_num+=1)
-                srf_Input_trim_left := SubStr(srf_all_Input_for_trim,tpos+1,cutpos-1-tpos)
-                if( cutpos<tpos+1 || srf_Input_trim_left == "") {
+                cut_pos := InStr(srf_all_Input_for_trim "'", "'", 0, 0, Loop_num+=1)
+                srf_Input_trim_left := SubStr(srf_all_Input_for_trim, test_pos+1, cut_pos-1-test_pos)
+                if( cut_pos<test_pos+1 || srf_Input_trim_left == "") {
                     break
                 }
                 if( InStr(srf_Input_trim_left, "'", , 1, zisu) ){
                     continue
                 }
-                srf_Input_trim_right := SubStr(srf_all_Input_for_trim,cutpos+1)
+
+                srf_Input_trim_right := SubStr(srf_all_Input_for_trim, cut_pos+1)
+                ; Get result
                 if( srf_Input_trim_left && !history_field_array.HasKey(srf_Input_trim_left) )
                 {
-                    ; Get result
-                    LimitNum :=  (tpos?1:0)
+                    limit_num :=  (test_pos?1:0)
                     cjjp := !InStr(srf_all_Input, srf_Input_trim_left)
-                    sql_result := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, LimitNum, cjjp)
+                    sql_result := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, limit_num, cjjp)
                     history_field_array[srf_Input_trim_left] := sql_result
+
                     if( history_field_array[srf_Input_trim_left, 1, 2] == "" )
                     {
                         if InStr(srf_Input_trim_left,"'") {
@@ -155,21 +159,23 @@ PinyinGetSentences(input, scheme:="pinyin")
                         } else {
                             history_field_array[srf_Input_trim_left] := {0:srf_Input_trim_left,1:[srf_Input_trim_left,srf_Input_trim_left=Chr(2)?"":srf_Input_trim_left]}
                         }
-                    } else if (tpos) {
+                    } else if (test_pos) {
                         history_field_array[srf_Input_trim_left].Push([])
                     }
                 }
                 if( history_field_array[srf_Input_trim_left, 1, 2]=="" && InStr(srf_Input_trim_left,"'") ) {
                     continue
                 }
-                else {
+                else
+                {
                     t := StrSplit(srf_Input_trim_left,"'").Length()
                     Loop_num:=0
                     if( srf_Input_trim_left != "" ) {
                         save_field_array.Push(CopyObj(history_field_array[srf_Input_trim_left]))
+                        Assert(cut_pos == history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left))
                         history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left)
                     }
-                    tpos:=history_cutpos[history_cutpos.Length()]
+                    test_pos := history_cutpos[history_cutpos.Length()]
                 }
             }
         }
@@ -180,7 +186,9 @@ PinyinGetSentences(input, scheme:="pinyin")
     {
         save_field_array[1] := CopyObj(history_field_array[save_field_array[1,0]] := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0))
     }
-    if( (save_field_array.Length()==1) || (tfzm) ){
+
+    if( (save_field_array.Length()==1) || (tfzm) )
+    {
         search_result:=CopyObj(save_field_array[1])
     }
     else
