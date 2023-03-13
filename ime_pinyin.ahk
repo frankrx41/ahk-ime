@@ -217,7 +217,8 @@ CheckPinyinSplit(DB, str)
     }
 }
 
-Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=false){
+Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=false)
+{
     local
     Critical
     customspjm := []
@@ -281,17 +282,18 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
     }
 
-    if( DB.GetTable(_SQL,Result) )
+    if( DB.GetTable(_SQL, result_table) )
     {
-        if( Result.RowCount ){
-            if( !lianxiang ){
-                loop % Result.RowCount
-                    Result.Rows[A_Index, -1]:=ystr, Result.Rows[A_Index, 0]:="pinyin|" A_Index, Result.Rows[A_Index, 4]:=Result.Rows[1, 3]
-                ; Result.Rows[1, 0]:="pinyin|0"
+        if( result_table.RowCount && !lianxiang )
+        {
+            loop % result_table.RowCount {
+                result_table.Rows[A_Index, -1] := ystr
+                result_table.Rows[A_Index, 0] := "pinyin|" A_Index
+                result_table.Rows[A_Index, 4] := result_table.Rows[1, 3]
             }
         }
-        Result.Rows[0]:=ystr
-        return Result.Rows        ; {1:[key1,value1],2:[key2,value2]...}
+        result_table.Rows[0] := ystr
+        return result_table.Rows        ; {1:[key1,value1],2:[key2,value2]...}
     } else {
         return []
     }
@@ -307,7 +309,9 @@ firstzhuju(arr)
     return rarr
 }
 
-fzmfancha(str){        ; 辅助码构成规则
+; 辅助码构成规则
+fzmfancha(str)
+{
     local
     global srf_fzm_fancha_table
     if (len:=StrLen(str))=1

@@ -143,7 +143,11 @@ PinyinGetSentences(input, scheme:="pinyin")
                 srf_Input_trim_right := SubStr(srf_all_Input_for_trim,cutpos+1)
                 if( srf_Input_trim_left && !history_field_array.HasKey(srf_Input_trim_left) )
                 {
-                    history_field_array[srf_Input_trim_left] := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, (tpos?1:0), ((scheme="pinyin")&&(!InStr(srf_all_Input,srf_Input_trim_left))))
+                    ; Get result
+                    LimitNum :=  (tpos?1:0)
+                    cjjp := !InStr(srf_all_Input, srf_Input_trim_left)
+                    sql_result := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, LimitNum, cjjp)
+                    history_field_array[srf_Input_trim_left] := sql_result
                     if( history_field_array[srf_Input_trim_left, 1, 2] == "" )
                     {
                         if InStr(srf_Input_trim_left,"'") {
@@ -159,10 +163,12 @@ PinyinGetSentences(input, scheme:="pinyin")
                     continue
                 }
                 else {
-                    t:=StrSplit(srf_Input_trim_left,"'").Length()
+                    t := StrSplit(srf_Input_trim_left,"'").Length()
                     Loop_num:=0
-                    if (srf_Input_trim_left!="")
-                        save_field_array.Push(CopyObj(history_field_array[srf_Input_trim_left])), history_cutpos[history_cutpos.Length()+1]:=history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left)
+                    if( srf_Input_trim_left != "" ) {
+                        save_field_array.Push(CopyObj(history_field_array[srf_Input_trim_left]))
+                        history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left)
+                    }
                     tpos:=history_cutpos[history_cutpos.Length()]
                 }
             }
@@ -170,7 +176,8 @@ PinyinGetSentences(input, scheme:="pinyin")
     }
 
     search_result:=[]
-    if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" ){
+    if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
+    {
         save_field_array[1] := CopyObj(history_field_array[save_field_array[1,0]] := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0))
     }
     if( (save_field_array.Length()==1) || (tfzm) ){
@@ -203,15 +210,19 @@ PinyinGetSentences(input, scheme:="pinyin")
     ; 插入候选词部分
     if( ci:=RegExReplace(save_field_array[1,1,-1], "i)'[^']+$") )
     {
-        While InStr(ci,"'")&&(history_field_array[ci, 1, 2]=""){
-            if (!history_field_array.HasKey(ci)){
-                history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
-                if (history_field_array[ci, 1, 2])
+        While InStr(ci,"'")&&(history_field_array[ci, 1, 2]="")
+        {
+            if( !history_field_array.HasKey(ci) )
+            {
+                history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
+                if( history_field_array[ci, 1, 2] ) {
                     break
+                }
             }
             ci:=RegExReplace(ci, "i)'([^']+)?$")
         }
-        if( InStr(ci,"'") ){
+        if( InStr(ci,"'") )
+        {
             if( history_field_array[ci].Length()=2&&history_field_array[ci,2,2]="" ){
                 history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
             }
@@ -234,7 +245,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         }
     }
 
-    if( !(tfzm||StrLen(fzm)=1) && (imagine&&InStr(srf_all_Input_py, "'", , 1, 3)))
+    if( !(tfzm||StrLen(fzm)==1) && (imagine&&InStr(srf_all_Input_py, "'", , 1, 3)))
     {
         if( history_field_array[srf_all_Input_tip, -1]==="" ){
             history_field_array[srf_all_Input_tip, -1] := Get_jianpin(DB, "", "'" srf_all_Input_py "'", "", 1, 0)
@@ -257,7 +268,9 @@ PinyinGetSentences(input, scheme:="pinyin")
 
     ; 插入候选字部分
     zi := SubStr(srf_all_Input_tip ,1, InStr(srf_all_Input_tip "'", "'")-1)
-    if( !(history_field_array.HasKey(zi)) || (history_field_array[zi].Length()==2 && history_field_array[zi,2,2]=="") ){
+    if( !(history_field_array.HasKey(zi)) || (history_field_array[zi].Length()==2 && history_field_array[zi,2,2]=="") )
+    {
+        ; Get result
         history_field_array[zi]:= Get_jianpin(DB, scheme, "'" zi "'", "", 0, 0)
     }
     loop % history_field_array[zi].Length() {
