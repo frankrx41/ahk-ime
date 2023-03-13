@@ -137,7 +137,10 @@ Left::
     if( ImeIsSelectMenuOpen() ){
         OffsetSelectWordIndex(-GetSelectMenuColumn())
     } else {
-        ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
+        ime_input_caret_pos -= 1
+        if( ime_input_caret_pos < 0 ){
+            ime_input_caret_pos := StrLen(ime_input_string)
+        }
     }
     ImeTooltipUpdate()
 return
@@ -146,7 +149,10 @@ Right::
     if( ImeIsSelectMenuOpen() ){
         OffsetSelectWordIndex(+GetSelectMenuColumn())
     } else {
-        ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
+        ime_input_caret_pos += 1
+        if( ime_input_caret_pos > StrLen(ime_input_string) ){
+            ime_input_caret_pos := 0
+        }
     }
     ImeTooltipUpdate()
 return
