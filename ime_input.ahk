@@ -28,7 +28,7 @@ CallBackBeforeToggleEn()
     return
 }
 
-PutCharacterByIndex(candidate)
+PutCandidateCharacter(candidate)
 {
     global ime_input_string
 
@@ -89,7 +89,7 @@ ImeInputNumber(key)
     if( ImeIsSelectMenuOpen() ) {
         start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         ime_input_candidate.SetSelectIndex(start_index + (key == 0 ? 10 : key))
-        PutCharacterByIndex(ime_input_candidate)
+        PutCandidateCharacter(ime_input_candidate)
         ime_input_candidate.SetSelectIndex(1)
         ime_input_candidate.Initialize(ime_input_string)
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)

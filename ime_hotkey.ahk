@@ -5,7 +5,7 @@
 ; Enter 上屏文字
 Enter::
 NumpadEnter::
-    PutCharacterByIndex(ime_input_candidate)
+    PutCandidateCharacter(ime_input_candidate)
     ime_input_candidate.SetSelectIndex(1)
     ime_input_candidate.Initialize(ime_input_string)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
