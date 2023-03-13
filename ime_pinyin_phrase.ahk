@@ -7,6 +7,8 @@ PinyinHasResult(pinyin)
 PinyinHasKey(pinyin)
 {
     global history_field_array
+    global tooltip_debug
+    tooltip_debug[3] .= "`n[" pinyin "," history_field_array.HasKey(pinyin) "]"
     return history_field_array.HasKey(pinyin)
 }
 
@@ -14,7 +16,7 @@ PinyinHasKey(pinyin)
 PinyinGetSentences(input, scheme:="pinyin")
 {
     local
-    global history_field_array := []
+    global history_field_array
     global DB, fzm, fuzhuma, chaojijp, imagine, jichu_for_select_Array, tfzm, dwselect
 
     static save_field_array := []
@@ -297,7 +299,7 @@ PinyinGetSentences(input, scheme:="pinyin")
     {
         if( !PinyinHasKey(first_word) || (history_field_array[first_word].Length()==2 && history_field_array[first_word,2,2]=="") )
         {
-            history_field_array[first_word]:= Get_jianpin(DB, scheme, "'" first_word "'", "", 0, 0)
+            history_field_array[first_word] := Get_jianpin(DB, scheme, "'" first_word "'", "", 0, 0)
         }
         loop % history_field_array[first_word].Length()
         {
