@@ -148,7 +148,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                     if( InStr(test_separate_words, "'")>2 )
                     {
                         l_weight := CheckPinyinSplit(DB, separate_words . initials vowels . "'")
-                        r_weight := CheckPinyinSplit(DB, SubStr(separate_words,1,-2) . "'" . untest_str)
+                        r_weight := CheckPinyinSplit(DB, SubStr(separate_words,1,-2) . "'" . separate_words)
                         if (r_weight >= l_weight)
                         {
                             Assert(SubStr(separate_words,0) == "'")
