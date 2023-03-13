@@ -41,9 +41,9 @@ DisplaySelectItems()
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                if( in_column ) {
-                    end_str .= Floor(ime_candidate_sentences[word_index, 3]/100)
-                }
+                ; if( in_column ) {
+                ;     end_str .= Floor(ime_candidate_sentences[word_index, 3]/100)
+                ; }
                 item_str := begin_str . ime_candidate_sentences[word_index, 2] . end_str
             } else {
                 item_str := ""
@@ -94,7 +94,7 @@ ImeTooltipUpdate()
             ime_tooltip_pos := GetCaretPos()
         }
 
-        debug_tip := "`n----------------`n" "[" GetSelectWordIndex() "/" ime_candidate_sentences.Length() "]"
+        debug_tip := "`n----------------`n" "[" GetSelectWordIndex() "/" ime_candidate_sentences.Length() "] (" ime_candidate_sentences[GetSelectWordIndex(), 3] ")"
         tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
         ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
