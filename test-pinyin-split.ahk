@@ -12,6 +12,8 @@ SetWorkingDir, %A_ScriptDir%
 
 PinyinInit()
 test_pinyin := [{"1": "angan", "2": "an'gan'"}
+    ,{"1": "zh", "2": "zh'" }
+    ,{"1": "zhzh", "2": "zh'zh'" }
     ,{"1": "angeng", "2": "an'geng'"}
     ,{"1": "woaini", "2": "wo'ai'ni'"}
     ,{"1": "wo3ai4ni3", "2": "wo3ai4ni3"}
