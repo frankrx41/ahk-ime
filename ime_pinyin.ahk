@@ -72,6 +72,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
     local
     Critical
     global pinyin_table
+    global tooltip_debug
 
     index           := 1
     separate_words  := "'"
@@ -189,6 +190,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
             }
         }
     }
+    tooltip_debug[1] := separate_words
     return separate_words
 }
 
@@ -225,6 +227,7 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
 {
     local
     Critical
+    global tooltip_debug
     customspjm := []
     ystr := Trim(str, "'")
     rstr := ""
@@ -308,6 +311,8 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
         ;   [1]: ["wu'hui", "pinyin|1", "wu'hui", "舞会", "30000", "30000"]
         ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
         ; ]
+	
+	tooltip_debug[3] := _SQL
         return result_table.Rows
     } else {
         return []
