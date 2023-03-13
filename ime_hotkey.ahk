@@ -7,12 +7,12 @@ ImeInputChar(key, pos := -1, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_tooltip_pos
     global tooltip_debug
 
+    update_coord := false
     tooltip_debug := []
     if (!ime_input_string ) {
-        ime_tooltip_pos := 0
+        update_coord := true
     }
     pos := pos != -1 ? pos : ime_input_caret_pos
     ime_input_string := SubStr(ime_input_string, 1, pos) . key . SubStr(ime_input_string, pos+1)
@@ -22,7 +22,7 @@ ImeInputChar(key, pos := -1, try_puts := 0)
         ImeClearInputString()
     }
     ImeUpdateCandidate(ime_input_string)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, update_coord)
 }
 
 ImeInputNumber(key)
@@ -186,12 +186,11 @@ return
 ~WheelUp::
 ~WheelDown::
 ~LButton up::
-    ime_tooltip_pos := 0
     SetTimer, ImeTooltipUpdateTimer, -10
 return
 
 ImeTooltipUpdateTimer:
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, true)
 return
 
 #if ; ime_input_string

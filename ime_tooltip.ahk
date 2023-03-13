@@ -60,10 +60,10 @@ DisplaySelectItems()
 }
 
 ; 更新提示
-ImeTooltipUpdate(input_string, caret_pos:=0)
+ImeTooltipUpdate(input_string, caret_pos:=0, update_coord:=0)
 {
     local
-    global ime_tooltip_pos
+    static ime_tooltip_pos := ""
     global tooltip_debug
 
     if( !input_string )
@@ -78,7 +78,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0)
             ime_select_str := ImeGetCandidateWord(GetSelectWordIndex())
         }
 
-        if( !ime_tooltip_pos ){
+        if( update_coord || ime_tooltip_pos == "" ){
             ime_tooltip_pos := GetCaretPos()
         }
 
