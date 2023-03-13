@@ -4,9 +4,11 @@ ImeClearInputString()
 {
     global ime_input_string
     global ime_input_caret_pos
+    global tooltip_debug
 
     ime_input_string := ""
     ime_input_caret_pos := 0
+    tooltip_debug := []
     SetSelectWordIndex(1)
     ImeOpenSelectMenu(false)
     return

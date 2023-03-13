@@ -229,6 +229,7 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     Critical
     global tooltip_debug
     customspjm := []
+    orgin_str := str
     ystr := Trim(str, "'")
     rstr := ""
 
@@ -298,8 +299,9 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
         ;   ["wu'hui", "误会", "26735"]
         ; ]
         
-        tooltip_debug[2] := ystr ": " result_table.RowCount
-        tooltip_debug[3] := _SQL
+        tooltip_debug[2] :=
+        ; tooltip_debug[3] .= "`n" ystr ": " result_table "`n" _SQL "`n" CallStack(1)
+        tooltip_debug[3] .= "`n" ystr ": " result_table.RowCount " (" orgin_str ")" "`n" _SQL "`n" CallStack(1)
         return result_table.Rows
     } else {
         return []
