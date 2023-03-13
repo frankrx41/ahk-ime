@@ -1,7 +1,7 @@
 ; 拼音取词
 PinyinGetSentences(input, scheme:="pinyin"){
     local
-    global srf_all_Input_, DB, fzm, Inputscheme, fuzhuma, history_field_array, save_field_array, chaojijp, imagine
+    global DB, fzm, Inputscheme, fuzhuma, history_field_array, save_field_array, chaojijp, imagine
     , DebugLevel, Singleword, mhyRegExObj, CloudInput, jichu_for_select_Array, srf_all_Input, tfzm, dwselect
     , insertpos, Useless, CloudinputApi
     
@@ -15,10 +15,10 @@ PinyinGetSentences(input, scheme:="pinyin"){
     if (input~="[A-Z]"){
         input:=Trim(StrReplace(RegExReplace(input,"([A-Z])","'$1'"),"''","'"),"'")
     }
-    srf_all_Input_["tip"] := srf_all_Input_for_trim := Trim(PinyinSplit(input, scheme, 0, DB), "'")
+    srf_all_Input_tip := srf_all_Input_for_trim := Trim(PinyinSplit(input, scheme, 0, DB), "'")
     fzm := ""
     
-    srf_all_Input_["py"] := Trim(RegExReplace(PinyinSplit(srf_all_Input_for_trim, scheme, 1),"'?\\'?"," "), "'")
+    srf_all_Input_py := Trim(RegExReplace(PinyinSplit(srf_all_Input_for_trim, scheme, 1),"'?\\'?"," "), "'")
     srf_all_Input_for_trim := StrReplace(srf_all_Input_for_trim,"\",Chr(2))
 
     if( true )
@@ -174,15 +174,15 @@ PinyinGetSentences(input, scheme:="pinyin"){
         }
     }
 
-    if !(tfzm||StrLen(fzm)=1) && (imagine&&InStr(srf_all_Input_["py"], "'", , 1, 3)){
-        if (history_field_array[srf_all_Input_["tip"], -1]=""){
-            history_field_array[srf_all_Input_["tip"], -1]:=Get_jianpin(DB, "", "'" srf_all_Input_["py"] "'", mhyRegExObj, 1, 0)
+    if !(tfzm||StrLen(fzm)=1) && (imagine&&InStr(srf_all_Input_py, "'", , 1, 3)){
+        if (history_field_array[srf_all_Input_tip, -1]=""){
+            history_field_array[srf_all_Input_tip, -1]:=Get_jianpin(DB, "", "'" srf_all_Input_py "'", mhyRegExObj, 1, 0)
         }
-        loop % tt:=history_field_array[srf_all_Input_["tip"], -1].Length()
-            search_result.InsertAt(2, CopyObj(history_field_array[srf_all_Input_["tip"], -1, tt+1-A_Index]))
+        loop % tt:=history_field_array[srf_all_Input_tip, -1].Length()
+            search_result.InsertAt(2, CopyObj(history_field_array[srf_all_Input_tip, -1, tt+1-A_Index]))
     }
 
-    if (StrLen(fzm)=2&&SubStr(srf_all_Input_["tip"],-2,1)="'"){
+    if (StrLen(fzm)=2&&SubStr(srf_all_Input_tip,-2,1)="'"){
         inspos:=2    ;, inspos:=search_result.Length()+1
         ; loop % tt:=saixuan.Length()
         ; search_result.InsertAt(inspos,saixuan[tt+1-A_Index])    ; 词组优先
@@ -194,7 +194,7 @@ PinyinGetSentences(input, scheme:="pinyin"){
 
     ; 插入候选字部分
     ; if InStr(save_field_array[1, 0], "'"){
-    zi:=SubStr(srf_all_Input_["tip"] ,1, InStr(srf_all_Input_["tip"] "'", "'")-1)
+    zi:=SubStr(srf_all_Input_tip ,1, InStr(srf_all_Input_tip "'", "'")-1)
     if !(history_field_array.HasKey(zi))||(history_field_array[zi].Length()=2&&history_field_array[zi,2,2]="") {
         history_field_array[zi]:= Get_jianpin(DB, scheme, "'" zi "'", mhyRegExObj, 0, 0)
     }
@@ -233,7 +233,7 @@ PinyinGetSentences(input, scheme:="pinyin"){
                 jichu_for_select_Array[A_Index].Delete(-2)
         }
         ; 云输入, 2字词以上触发
-        if CloudInput&&inspos=2&&InStr(srf_all_Input_["py"], "'", , 1, 2){
+        if CloudInput&&inspos=2&&InStr(srf_all_Input_py, "'", , 1, 2){
             ; search_result.InsertAt(2,{0:"<Cloud>|-1",1:"",2:""})
             SetTimer, BDCloudInput, -10
         }
@@ -254,9 +254,9 @@ PinyinGetSentences(input, scheme:="pinyin"){
 
     ; 云输入
     BDCloudInput:
-        if (srf_all_Input_["py"]=""||InStr(srf_all_Input_["tip"],"\"))
+        if (srf_all_Input_py=""||InStr(srf_all_Input_tip,"\"))
             return 0
-        ; BDCloudInput(srf_all_Input_["py"])
-        CloudinputApi.get(srf_all_Input_["py"])
+        ; BDCloudInput(srf_all_Input_py)
+        CloudinputApi.get(srf_all_Input_py)
     return 0
 }
