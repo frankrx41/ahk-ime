@@ -5,19 +5,20 @@
 ; Enter 上屏文字
 Enter::
 NumpadEnter::
-    PutCharacterByIndex(GetSelectWordIndex())
-    SetSelectWordIndex(1)
+    PutCharacterByIndex(ime_input_candidate)
+    ime_input_candidate.SetSelectIndex(1)
+    ime_input_candidate.Initialize(ime_input_string)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ]::
-    PutCharacterWordByWord(GetSelectWordIndex(), 0)
+    PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 0)
     ImeOpenSelectMenu(false)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 [::
-    PutCharacterWordByWord(GetSelectWordIndex(), 1)
+    PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 1)
     ImeOpenSelectMenu(false)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
@@ -28,7 +29,7 @@ Tab::
         if( !ImeIsSelectMenuMore() ) {
             ImeOpenSelectMenu(true, true)
         } else {
-            OffsetSelectWordIndex(+GetSelectMenuColumn())
+            ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
         }
     } else {
         ImeOpenSelectMenu(true, false)
@@ -42,8 +43,8 @@ return
             ImeOpenSelectMenu(false)
         }
         else { 
-            OffsetSelectWordIndex(-GetSelectMenuColumn())
-            if( GetSelectMenuColumn() >= GetSelectWordIndex() ){
+            ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+            if( GetSelectMenuColumn() >= ime_input_candidate.GetSelectIndex() ){
                 ImeOpenSelectMenu(true, false)
             }
         }
@@ -56,7 +57,7 @@ BackSpace::
     if( ime_input_caret_pos != 0 ) {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate := ImeGetCandidate(ime_input_string)
+        ime_input_candidate.Initialize(ime_input_string)
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
 return
@@ -79,18 +80,18 @@ return
 
 ,::
     if( ImeIsSelectMenuOpen() ){
-        OffsetSelectWordIndex(-GetSelectMenuColumn())
+        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
     } else {
-        OffsetSelectWordIndex(-1)
+        ime_input_candidate.OffsetSelectIndex(-1)
     }
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 .::
     if( ImeIsSelectMenuOpen() ){
-        OffsetSelectWordIndex(+GetSelectMenuColumn())
+        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
     } else {
-        OffsetSelectWordIndex(+1)
+        ime_input_candidate.OffsetSelectIndex(+1)
     }
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
@@ -98,7 +99,7 @@ return
 ; 左右键移动光标
 Left::
     if( ImeIsSelectMenuOpen() ){
-        OffsetSelectWordIndex(-GetSelectMenuColumn())
+        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
     } else {
         ime_input_caret_pos := Max(0, ime_input_caret_pos-1)
     }
@@ -107,7 +108,7 @@ return
 
 Right::
     if( ImeIsSelectMenuOpen() ){
-        OffsetSelectWordIndex(+GetSelectMenuColumn())
+        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
     } else {
         ime_input_caret_pos := Min(StrLen(ime_input_string), ime_input_caret_pos+1)
     }
@@ -117,12 +118,12 @@ return
 ; 上下选择
 Up::
     if( ImeIsSelectMenuOpen() ) {
-        OffsetSelectWordIndex(-1)
+        ime_input_candidate.OffsetSelectIndex(-1)
     } else {
-        if( GetSelectWordIndex() >= 4 ) {
-            SetSelectWordIndex(1)
+        if( ime_input_candidate.GetSelectIndex() >= 4 ) {
+            ime_input_candidate.SetSelectIndex(1)
         } else {
-            OffsetSelectWordIndex(+1)
+            ime_input_candidate.OffsetSelectIndex(+1)
         }
     }
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
@@ -133,7 +134,7 @@ Down::
     if( !ImeIsSelectMenuOpen() ) {
         ImeOpenSelectMenu(true, false)
     } else {
-        OffsetSelectWordIndex(+1)
+        ime_input_candidate.OffsetSelectIndex(+1)
     }
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return

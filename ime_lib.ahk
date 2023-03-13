@@ -1,9 +1,9 @@
 ;*******************************************************************************
 ; 全局变量
 ImeInitialize:
-ime_input_string    := ""           ; 輸入字符
-ime_input_caret_pos := 0            ; 光标位置
-ime_input_candidate := 0            ; 候选项
+ime_input_string    := ""               ; 輸入字符
+ime_input_caret_pos := 0                ; 光标位置
+ime_input_candidate := new Candidate    ; 候选项
 
 ImeDBInitialize()
 ImeSelectInitialize()

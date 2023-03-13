@@ -9,9 +9,8 @@ ImeClearInputString()
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
-    ime_input_candidate := 0
     tooltip_debug := []
-    SetSelectWordIndex(1)
+    ime_input_candidate.SetSelectIndex(1)
     ImeOpenSelectMenu(false)
     return
 }
@@ -29,13 +28,12 @@ CallBackBeforeToggleEn()
     return
 }
 
-PutCharacterByIndex(select_index)
+PutCharacterByIndex(candidate)
 {
     global ime_input_string
-    global ime_input_candidate
 
-    string := ImeGetCandidateWord(ime_input_candidate, select_index)
-    occupied_characters := ImeGetCandidatePinyin(ime_input_candidate, select_index)
+    string := candidate.GetWord(candidate.GetSelectIndex())
+    occupied_characters := candidate.GetPinyin(candidate.GetSelectIndex())
     ime_input_string := SubStr(ime_input_string, StrLen(occupied_characters)+1-StrLen(string)+1)
     ; MsgBox, % StrLen(occupied_characters) "`n" ime_input_string
     PutCharacter( string )
@@ -48,7 +46,7 @@ PutCharacterByIndex(select_index)
 PutCharacterWordByWord(select_index, offset)
 {
     global ime_input_candidate
-    string := ImeGetCandidateWord(ime_input_candidate, select_index)
+    string := ime_input_candidate.GetWord(select_index)
     PutCharacter( SubStr(string, offset, 1) )
     ImeClearInputString()
 }
@@ -77,7 +75,7 @@ ImeInputChar(key, pos := -1, try_puts := 0)
         PutCharacter(key)
         ImeClearInputString()
     }
-    ime_input_candidate := ImeGetCandidate(ime_input_string)
+    ime_input_candidate.Initialize(ime_input_string)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, update_coord)
 }
 
@@ -89,10 +87,11 @@ ImeInputNumber(key)
 
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
-        start_index := Floor((GetSelectWordIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
-        PutCharacterByIndex(start_index + (key == 0 ? 10 : key))
-        SetSelectWordIndex(1)
-        ime_input_candidate := ImeGetCandidate(ime_input_string)
+        start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
+        ime_input_candidate.SetSelectIndex(start_index + (key == 0 ? 10 : key))
+        PutCharacterByIndex(ime_input_candidate)
+        ime_input_candidate.SetSelectIndex(1)
+        ime_input_candidate.Initialize(ime_input_string)
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
     else {

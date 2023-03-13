@@ -2,20 +2,20 @@ DisplaySelectItems(candidate)
 {
     local
     column          := GetSelectMenuColumn()
-    select_index    := GetSelectWordIndex()
+    select_index    := candidate.GetSelectIndex()
     ime_select_str  := "----------------"
     start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
-    column_loop     := ImeIsSelectMenuMore() ? Floor(candidate.Length() / column) +1 : 1
+    column_loop     := ImeIsSelectMenuMore() ? Floor(candidate.GetListLength() / column) +1 : 1
     max_item_len    := []
     max_column_loop := 6
 
     if( column_loop > max_column_loop ) {
         column_loop := max_column_loop
         start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
-        start_index := Min(start_index, (Floor((candidate.Length()-1) / column)-max_column_loop+1)*column)
+        start_index := Min(start_index, (Floor((candidate.GetListLength()-1) / column)-max_column_loop+1)*column)
     }
 
-    loop % Min(candidate.Length(), column) {
+    loop % Min(candidate.GetListLength(), column) {
         word_index      := start_index + A_Index
         ime_select_str  .= "`n"
         row_index       := A_Index
@@ -25,7 +25,7 @@ DisplaySelectItems(candidate)
             item_str := ""
             ; in_column := word_index / column >= start_index && word_index / column <= start_index + column
             in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
-            if( word_index <= candidate.Length() )
+            if( word_index <= candidate.GetListLength() )
             {
                 if( in_column ) {
                     if ( select_index == word_index ) {
@@ -39,7 +39,7 @@ DisplaySelectItems(candidate)
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                item_str := begin_str . ImeGetCandidateWord(candidate, word_index) . end_str
+                item_str := begin_str . candidate.GetWord(word_index) . end_str
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
                 item_str := ""
@@ -76,7 +76,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
             if( ImeIsSelectMenuOpen() ){
                 ime_select_str := DisplaySelectItems(candidate)
             } else {
-                ime_select_str := ImeGetCandidateWord(candidate, GetSelectWordIndex())
+                ime_select_str := candidate.GetWord(candidate.GetSelectIndex())
             }
         }
 
@@ -84,7 +84,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
             ime_tooltip_pos := GetCaretPos()
         }
 
-        debug_tip := "`n----------------`n" "[" GetSelectWordIndex() "/" candidate.Length() "] (" ImeGetCandidateWeight(candidate, GetSelectWordIndex()) ")"
+        debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
         for _, value in tooltip_debug {
             debug_tip .= "`n" value
         }

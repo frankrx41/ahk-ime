@@ -22,6 +22,7 @@ return
 #Include, ime_lib.ahk
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_phrase.ahk
+#Include, ime_candidate.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
 #Include, ime_hotkey.ahk
