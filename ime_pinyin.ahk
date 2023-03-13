@@ -65,85 +65,119 @@ PinyinInit()
 }
 
 ; 拼音音节切分
+; ' 表示自动分词
+; 12345 空格 大写 表示手动分词
 PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
 {
     local
     Critical
-    static lsmmd := ""
-    static vowels_max_test_len := 4
     global pinyin_table
 
     index := 1
-    separate_words := "'"
+    separate_words := ""
     strlen := StrLen(str)
-    lastchar := " "
+    last_char := "'"
+
     loop
     {
-        initials:=SubStr(str, index, 1)
-        ; 如果是数字
-        if (pinyin_table[initials,""] initials~="\d"){
-            ; separate_words := RTrim(separate_words,"'") . (show_full&&pinyin_table[initials,""]?pinyin_table[initials,""]:initials) . "'"
+        if( index > strlen ) {
+            break
+        }
+
+        initials := SubStr(str, index, 1)
+        ; 数字，强制分词
+        if( initials ~= "\d" || initials == " ")
+        {
+            separate_words := RTrim(separate_words,"'") . initials
             index += 1
+            last_char := "'"
             continue
-        } else if pinyin_table.HasKey(initials)
+        }
+        ; 字母，自动分词
+        else if( pinyin_table.HasKey(initials) )
         {
             ; 声母
             index += 1
             if (InStr("csz", initials)&&(SubStr(str, index, 1)="h")) {
                 ; zcs + h
-                index+=1
+                index += 1
                 initials .= "h"
             }
 
             ; 韵母
             vowels := ""
+            vowels_test_len := 0
+            loop {
+                if (index+vowels_test_len-A_Index>strlen) {
+                    break
+                }
+                check_char := SubStr(str, index+vowels_test_len, 1)
+                if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
+                    str := SubStr(str, 1, index+vowels_test_len-1) . Format("{:L}", check_char) . SubStr(str, index+vowels_test_len+1)
+                    break
+                }
+                vowels_test_len += 1
+                if( vowels_test_len >= 4 ) {
+                    break
+                }
+            }
+
             vowels_len := 0
             loop
             {
-                if (index+vowels_max_test_len-A_Index>strlen) {
+                if (index+vowels_test_len-A_Index>strlen) {
                     continue
                 }
-                vowels_len := vowels_max_test_len+1-A_Index
+                vowels_len := vowels_test_len+1-A_Index
                 vowels := SubStr(str, index, vowels_len)
                 if (pinyin_table[initials][vowels]) {
                     break
                 }
-                if (A_Index >= vowels_max_test_len+1) {
+                if (A_Index >= vowels_test_len+1) {
                     break
                 }
             }
 
             ; 词库辅助分词
-            if ((InStr("n|g", lastchar)||(lastchar="e"&&initials="r"))&&(!vowels||InStr("aeo", initials))){
-                if (pinyin_table[ttsm][SubStr(ttym,1,-1)])
+            if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
+            {
+                if (pinyin_table[last_initials][SubStr(last_vowels,1,-1)])
                 {
-                    tfc:=LTrim(PinyinSplit(SubStr(str,index-2)),"'")
-                    if (InStr(tfc, "'")>2){
-                        if (CheckPinyinSplit(DB,SubStr(separate_words,1,-2) "'" tfc)>=CheckPinyinSplit(DB,separate_words initials vowels "'"))
-                            return (SubStr(separate_words,0)="'"?SubStr(separate_words,1,-2):SubStr(separate_words,1,-1)) "'" tfc
+                    test_separate_words := LTrim(PinyinSplit(SubStr(str,index-2)), "'")
+                    if( InStr(test_separate_words, "'")>2 )
+                    {
+                        l_weight := CheckPinyinSplit(DB, separate_words . initials vowels . "'")
+                        r_weight := CheckPinyinSplit(DB, SubStr(separate_words,1,-2) . "'" . untest_str)
+                        if (r_weight >= l_weight)
+                        {
+                            Assert(SubStr(separate_words,0) == "'")
+                            return  SubStr(separate_words,1,-2) "'" test_separate_words
+                        }
                     }
                 }
             }
 
-            ; 转全拼显示
-            if (show_full)
-                ttym:=vowels,ttsm:=initials,separate_words .= pinyin_table[initials][1] . pinyin_table[initials][vowels] "'"
-            else
-                ttym:=vowels,ttsm:=initials,separate_words .= initials vowels "'"
+            last_vowels     := vowels
+            last_initials   := initials
+            separate_words  .= initials . vowels . "'"
 
             index += vowels_len
             if( pinyin_table[initials][vowels] ){
-                lastchar := SubStr(pinyin_table[initials][vowels],0)
+                last_char := SubStr(pinyin_table[initials][vowels],0)
             } else if( pinyin_table[initials][1] ) {
-                lastchar := SubStr(pinyin_table[initials][1],0)
+                last_char := SubStr(pinyin_table[initials][1],0)
             }
-        } 
-        else {
-            index+=1, lastchar:=initials
-            if (initials!="'")
-                separate_words .= initials "'"
         }
-    } until index>strlen
+        ; 忽略
+        else
+        {
+            index += 1
+            last_char := initials
+            if( initials!="'" ) {
+                separate_words .= initials "'"
+            }
+        }
+    }
     return separate_words
 }
 
