@@ -291,14 +291,15 @@ PinyinGetSentences(input, scheme:="pinyin")
     }
 
     ; 插入字部分
+    first_word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
+    if( first_word != input )
     {
-        word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
-        if( !PinyinHasKey(word) || (history_field_array[word].Length()==2 && history_field_array[word,2,2]=="") )
+        if( !PinyinHasKey(first_word) || (history_field_array[first_word].Length()==2 && history_field_array[first_word,2,2]=="") )
         {
-            history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
+            history_field_array[first_word]:= Get_jianpin(DB, scheme, "'" first_word "'", "", 0, 0)
         }
-        loop % history_field_array[word].Length() {
-            search_result.Push(CopyObj(history_field_array[word, A_Index]))
+        loop % history_field_array[first_word].Length() {
+            search_result.Push(CopyObj(history_field_array[first_word, A_Index]))
         }
     }
 
