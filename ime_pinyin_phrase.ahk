@@ -22,12 +22,12 @@ PinyinGetSentences(input, scheme:="pinyin")
     static save_field_array := []
     local srf_all_Input
 
-    srf_all_Input := ""
+    srf_all_Input := input
     ; Those variable should be used
     tfzm := ""
     imagine := 0    ; 逐码提示 联想
     fuzhuma := 0
-    chaojijp := 0   ; 超级简拼 显示 4~8 字简拼候选
+    chaojijp := 1   ; 超级简拼 显示 4~8 字简拼候选
     jichu_for_select_Array := []
     Useless := 1    ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
 
@@ -339,7 +339,7 @@ PinyinGetSentences(input, scheme:="pinyin")
         }
         if( single_char_spell ){
             loop % list_len := history_field_array[single_char_spell].Length() {
-                ; search_result.InsertAt(1, CopyObj(history_field_array[single_char_spell, list_len+1-A_Index]))
+                search_result.InsertAt(1, CopyObj(history_field_array[single_char_spell, list_len+1-A_Index]))
             }
         }
         if( fzm=="" ){
@@ -362,7 +362,7 @@ PinyinGetSentences(input, scheme:="pinyin")
     }
 
     ; Assert(!search_result.HasKey(0))
-    if (search_result.HasKey(0)) {
+    if( search_result.HasKey(0) ){
         search_result.Delete(0)
     }
 
