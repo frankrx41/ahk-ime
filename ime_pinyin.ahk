@@ -311,8 +311,8 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
         ;   [1]: ["wu'hui", "pinyin|1", "wu'hui", "舞会", "30000", "30000"]
         ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
         ; ]
-	
-	tooltip_debug[3] := _SQL
+
+        tooltip_debug[3] := _SQL
         return result_table.Rows
     } else {
         return []

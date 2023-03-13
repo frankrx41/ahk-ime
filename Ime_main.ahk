@@ -7,7 +7,7 @@ CoordMode, ToolTip, Screen
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 if not A_IsAdmin
 {
-	Run *RunAs "%A_ScriptFullPath%"
+    Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
 Menu, Tray, Tip, AHK Ime v0.02
