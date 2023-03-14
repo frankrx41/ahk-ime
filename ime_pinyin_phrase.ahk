@@ -24,7 +24,6 @@ PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 {
     local
     global history_field_array
-    scheme := "pinyin"
     ; 插入候选词部分
     ; 比如 "kaixina" 会提取出 "kaixin" 然后判断是否有词组
     if( word := RegExReplace(save_field_array[1,1,-1], "i)'[^']+$") )
@@ -66,7 +65,6 @@ PinyinProcess5(ByRef DB, ByRef search_result, srf_all_Input_tip)
 {
     local
     global history_field_array
-    scheme := "pinyin"
     first_word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
     if( first_word != srf_all_Input_tip )
     {

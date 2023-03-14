@@ -2,7 +2,6 @@ PinyinCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_i
 {
     local
     global history_field_array
-    scheme := "pinyin"
 
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
     {

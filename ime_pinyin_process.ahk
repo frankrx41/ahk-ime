@@ -3,7 +3,6 @@ PinyinProcess1(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, srf_all
     local
     global history_field_array
     history_cutpos  :=[0]
-    scheme          := "pinyin"
     index           := 0
     if( true )
     {
