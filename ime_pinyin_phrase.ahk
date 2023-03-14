@@ -113,8 +113,9 @@ PinyinGetSentences(ime_orgin_input)
 {
     local
     global DB
-    static save_field_array := []
+    ; static save_field_array := []
     search_result           := []
+    save_field_array        := []
 
     if( StrLen(ime_orgin_input) == 1 )
     {

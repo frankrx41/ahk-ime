@@ -168,9 +168,9 @@ PinyinProcess(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, zisu)
 
     ; 正向最大划分
     ; Clear saved history
-    PinyinProcess1(save_field_array, history_cutpos, srf_all_Input_for_trim)
+    ; PinyinProcess1(save_field_array, history_cutpos, srf_alwl_Input_for_trim)
     ; 
-    PinyinProcess2(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
+    ; PinyinProcess2(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
     ; 
     PinyinProcess3(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
 }
