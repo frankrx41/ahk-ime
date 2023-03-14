@@ -149,31 +149,24 @@ PinyinGetSentences(ime_orgin_input)
     global DB
     static save_field_array := []
 
-    scheme := "pinyin"
-    srf_all_Input_for_trim  := Trim(PinyinSplit(ime_orgin_input, scheme, 0, DB), "'")
-    srf_all_Input_tip       := srf_all_Input_for_trim
-    
-    full_pinyin             := PinyinSplit(srf_all_Input_for_trim, scheme, 1)
-    srf_all_Input_py        := srf_all_Input_for_trim ; Trim(RegExReplace(full_pinyin,"'?\\'?"," "), "'")
-    srf_all_Input_for_trim  := StrReplace(srf_all_Input_for_trim,"\",Chr(2))
-
-    search_result := []
-    tfzm := ""
+    srf_all_Input_for_trim  := Trim(PinyinSplit(ime_orgin_input, "pinyin", 0, DB), "'")
+    ime_auxiliary_input     := ""
+    search_result           := []
 
     ; ?
     PinyinProcess1(DB, save_field_array, srf_all_Input_for_trim, ime_orgin_input, 10)
 
     ; ?
-    PinyinProcess2(DB, save_field_array, search_result, tfzm)
+    PinyinProcess2(DB, save_field_array, search_result, ime_auxiliary_input)
     ; ?
     PinyinProcess3(DB, save_field_array, search_result)
 
     ; 逐码提示 联想
     if( false ) {
-        PinyinAssociate(DB, search_result, srf_all_Input_tip, srf_all_Input_py, tfzm)
+        PinyinAssociate(DB, search_result, srf_all_Input_for_trim, ime_auxiliary_input)
     }
     ; 插入字部分
-    PinyinProcess5(DB, search_result, srf_all_Input_tip)
+    PinyinProcess5(DB, search_result, srf_all_Input_for_trim)
 
 
     ; 显示辅助码
@@ -182,10 +175,12 @@ PinyinGetSentences(ime_orgin_input)
     ; 辅助码或超级简拼
     if( false ) {
         ; 使用任意一或二位辅助码协助筛选候选项去除重码
-        PinyinAuxiliaryCheck(search_result, tfzm)
+        PinyinAuxiliaryCheck(search_result, ime_auxiliary_input)
     } else {
         ; 超级简拼 显示 4~8 字简拼候选
-        PinyinSimpleSpell(DB, search_result, ime_orgin_input, 0)
+        if( false ) {
+            PinyinSimpleSpell(DB, search_result, ime_orgin_input, 0)
+        }
     }
 
     ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
