@@ -14,10 +14,17 @@ PinyinHasKey(pinyin)
 
 PinyinUpdateKey(DB, pinyin, associate:=false, simple_spell:=false, limit_num:=100)
 {
+    global history_field_array
     if( !PinyinHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
     {
         history_field_array[pinyin] := Get_jianpin(DB, "pinyin", "'" pinyin "'", "", associate, limit_num, simple_spell)
     }
+}
+
+PinyinKeyGetWords(pinyin)
+{
+    global history_field_array
+    return history_field_array[pinyin]
 }
 
 PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
@@ -38,9 +45,8 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
         }
         if( InStr(word,"'") )
         {
-            if( history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ){
-                PinyinUpdateKey(DB, word)
-            }
+            PinyinUpdateKey(DB, word)
+
             loop % history_field_array[word].Length() {
                 search_result.Push(CopyObj(history_field_array[word, A_Index]))
             }

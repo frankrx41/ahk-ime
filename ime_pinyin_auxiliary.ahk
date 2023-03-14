@@ -42,7 +42,7 @@ GetAuxiliaryTable(str)
 
 PinyinResultCheckAuxiliary(ByRef search_result, tfzm)
 {
-    global history_field_array
+    local
     dwselect := 1
 
     if( tfzm )

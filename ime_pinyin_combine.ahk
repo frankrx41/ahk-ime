@@ -4,7 +4,6 @@
 PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_input)
 {
     local
-    global history_field_array
 
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
     {
@@ -33,10 +32,8 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result,
                 word := RegExReplace(word, "i)'([^']+)?$")
             }
             if( word ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
-                if( history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ) {
-                    PinyinUpdateKey(DB, word)
-                }
-                search_result := CopyObj(history_field_array[word])
+                PinyinUpdateKey(DB, word)
+                search_result := PinyinKeyGetWords(word)
             }
         }
 
