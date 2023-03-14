@@ -1,4 +1,4 @@
-PinyinAssociate(ByRef DB, ByRef search_result, srf_all_Input_tip, tfzm)
+PinyinResultInsertAssociate(ByRef DB, ByRef search_result, srf_all_Input_tip, tfzm)
 {
     local
     global history_field_array

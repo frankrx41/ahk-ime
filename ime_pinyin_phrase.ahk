@@ -20,7 +20,7 @@ PinyinUpdateKey(DB, pinyin, associate:=false, simple_spell:=false, limit_num:=10
     }
 }
 
-PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
+PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 {
     local
     global history_field_array
@@ -61,7 +61,7 @@ PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
     return
 }
 
-PinyinProcess5(ByRef DB, ByRef search_result, srf_all_Input_tip)
+PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, srf_all_Input_tip)
 {
     local
     global history_field_array
@@ -77,7 +77,7 @@ PinyinProcess5(ByRef DB, ByRef search_result, srf_all_Input_tip)
     return
 }
 
-PinyinHideZeroWeight(ByRef search_result, hide_zero_weight)
+PinyinResultHideZeroWeight(ByRef search_result, hide_zero_weight)
 {
     local
     if( hide_zero_weight && search_result[1, 3]>0 )
@@ -93,7 +93,7 @@ PinyinHideZeroWeight(ByRef search_result, hide_zero_weight)
     return
 }
 
-PinyinRemoveZeroIndex(ByRef search_result)
+PinyinResultRemoveZeroIndex(ByRef search_result)
 {
     ; [0] is store "pinyin"
     if( search_result.HasKey(0) ){
@@ -117,37 +117,39 @@ PinyinGetSentences(ime_orgin_input)
     PinyinProcess1(DB, save_field_array, srf_all_Input_for_trim, ime_orgin_input, 10)
 
     ; 组词
-    PinyinCombine(DB, save_field_array, search_result, ime_auxiliary_input)
+    PinyinResultInsertCombine(DB, save_field_array, search_result, ime_auxiliary_input)
     ; 插入前面个拼音所能组成的候选词
-    PinyinAddWords(DB, save_field_array, search_result)
+    PinyinResultInsertWords(DB, save_field_array, search_result)
 
     ; 逐码提示 联想
     if( false ) {
-        PinyinAssociate(DB, search_result, srf_all_Input_for_trim, ime_auxiliary_input)
+        PinyinResultInsertAssociate(DB, search_result, srf_all_Input_for_trim, ime_auxiliary_input)
     }
     ; 插入字部分
-    PinyinProcess5(DB, search_result, srf_all_Input_for_trim)
+    PinyinResultInsertSingleWord(DB, search_result, srf_all_Input_for_trim)
 
 
     ; 显示辅助码
-    PinyinShowAuxiliary(search_result, 0)
+    if( false ) {
+        PinyinResultShowAuxiliary(search_result)
+    }
 
     ; 辅助码或超级简拼
     if( false ) {
         ; 使用任意一或二位辅助码协助筛选候选项去除重码
-        PinyinAuxiliaryCheck(search_result, ime_auxiliary_input)
+        PinyinResultCheckAuxiliary(search_result, ime_auxiliary_input)
     } else {
         ; 超级简拼 显示 4~8 字简拼候选
         if( false ) {
-            PinyinSimpleSpell(DB, search_result, ime_orgin_input)
+            PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)
         }
     }
 
     ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-    PinyinHideZeroWeight(search_result, 1)
+    PinyinResultHideZeroWeight(search_result, 1)
 
 
-    PinyinRemoveZeroIndex(search_result)
+    PinyinResultRemoveZeroIndex(search_result)
     ; [
     ;     ; -1 , 0         , 1
     ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]

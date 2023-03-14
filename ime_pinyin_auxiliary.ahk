@@ -1,13 +1,10 @@
-PinyinShowAuxiliary(ByRef search_result, display)
+PinyinResultShowAuxiliary(ByRef search_result)
 {
     local
-    if( display )
+    loop % search_result.Length()
     {
-        loop % search_result.Length()
-        {
-            if( InStr(search_result[A_Index, 0], "pinyin|") && (search_result[A_Index, 6]=="") ){
-                search_result[A_Index, 6] := GetAuxiliaryTable(search_result[A_Index, 2])
-            }
+        if( InStr(search_result[A_Index, 0], "pinyin|") && (search_result[A_Index, 6]=="") ){
+            search_result[A_Index, 6] := GetAuxiliaryTable(search_result[A_Index, 2])
         }
     }
 }
@@ -40,7 +37,7 @@ GetAuxiliaryTable(str)
     return result
 }
 
-PinyinAuxiliaryCheck(ByRef search_result, tfzm)
+PinyinResultCheckAuxiliary(ByRef search_result, tfzm)
 {
     global history_field_array
     dwselect := 1
