@@ -77,10 +77,10 @@ PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, srf_all_Input_tip)
     return
 }
 
-PinyinResultHideZeroWeight(ByRef search_result, hide_zero_weight)
+PinyinResultHideZeroWeight(ByRef search_result)
 {
     local
-    if( hide_zero_weight && search_result[1, 3]>0 )
+    if( search_result[1, 3]>0 )
     {
         loop % len := search_result.Length()
         {
@@ -146,7 +146,7 @@ PinyinGetSentences(ime_orgin_input)
     }
 
     ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-    PinyinResultHideZeroWeight(search_result, 1)
+    PinyinResultHideZeroWeight(search_result)
 
 
     PinyinResultRemoveZeroIndex(search_result)
