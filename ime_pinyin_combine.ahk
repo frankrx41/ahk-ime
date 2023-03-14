@@ -6,11 +6,12 @@ PinyinCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_i
 
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
     {
-        word := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
-        Assert(0, "Trace: I'm no sure why it go here: " . word)
-        sql_result := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0)
-        history_field_array[save_field_array[1,0]] := sql_result
-        save_field_array[1] := CopyObj(sql_result)
+        pinyin := save_field_array[1,0]
+        Assert(0, "Trace: I'm no sure why it go here: " . pinyin)
+        PinyinUpdateKey(DB, pinyin)
+        ; TODO:
+        ; sql_result := Get_jianpin(DB, scheme, "'"  "'", "", 0, 0)
+        ; save_field_array[1] := CopyObj(sql_result)
     }
 
     ; 存在组词时 "wo", "woai"
@@ -31,7 +32,7 @@ PinyinCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_i
             }
             if( word ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
                 if( history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ) {
-                    history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
+                    PinyinUpdateKey(DB, word)
                 }
                 search_result := CopyObj(history_field_array[word])
             }

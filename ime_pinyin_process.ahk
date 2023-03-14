@@ -61,7 +61,7 @@ PinyinProcess1(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, srf_all
                 }
                 if( !PinyinHasKey(srf_all_Input_trim_off) )
                 {
-                    history_field_array[srf_all_Input_trim_off] := Get_jianpin(DB, scheme, "'" srf_all_Input_trim_off "'", "", 0, A_Index=1?0:1)
+                    PinyinUpdateKey(DB, srf_all_Input_trim_off, false, A_Index!=1)
                     if( !PinyinHasResult(srf_all_Input_trim_off) )
                     {
                         if( !InStr(srf_all_Input_trim_off, "'") ){
@@ -122,9 +122,9 @@ PinyinProcess1(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, srf_all
                 ; Get result
                 if( srf_Input_trim_left && !PinyinHasKey(srf_Input_trim_left) )
                 {
-                    limit_num :=  (test_pos?1:0)
-                    cjjp := !InStr(srf_all_Input, srf_Input_trim_left)
-                    history_field_array[srf_Input_trim_left] := Get_jianpin(DB, scheme, "'" srf_Input_trim_left "'", "", 0, limit_num, cjjp)
+                    limit_num       := !!test_pos
+                    simple_spell    := !InStr(srf_all_Input, srf_Input_trim_left)
+                    PinyinUpdateKey(DB, srf_Input_trim_left, false, simple_spell, limit_num)
 
                     if( !PinyinHasResult(srf_Input_trim_left) )
                     {
