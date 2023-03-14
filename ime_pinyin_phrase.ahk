@@ -116,54 +116,57 @@ PinyinGetSentences(ime_orgin_input)
     static save_field_array := []
     search_result           := []
 
-    if( StrLen(ime_orgin_input) == 1 ){
+    if( StrLen(ime_orgin_input) == 1 )
+    {
         search_result[1] := [ime_orgin_input, ime_orgin_input, "-"]
         return search_result
     }
+    else
+    {
+        srf_all_Input_for_trim  := Trim(PinyinSplit(ime_orgin_input, "pinyin", 0, DB), "'")
+        ime_auxiliary_input     := ""   ; 辅助码
 
-    srf_all_Input_for_trim  := Trim(PinyinSplit(ime_orgin_input, "pinyin", 0, DB), "'")
-    ime_auxiliary_input     := ""
+        ; ?
+        PinyinProcess(DB, save_field_array, srf_all_Input_for_trim, 10)
 
-    ; ?
-    PinyinProcess(DB, save_field_array, srf_all_Input_for_trim, 10)
+        ; 组词
+        PinyinResultInsertCombine(DB, save_field_array, search_result, ime_auxiliary_input)
+        ; 插入前面个拼音所能组成的候选词
+        PinyinResultInsertWords(DB, save_field_array, search_result)
 
-    ; 组词
-    PinyinResultInsertCombine(DB, save_field_array, search_result, ime_auxiliary_input)
-    ; 插入前面个拼音所能组成的候选词
-    PinyinResultInsertWords(DB, save_field_array, search_result)
-
-    ; 逐码提示 联想
-    if( false ) {
-        PinyinResultInsertAssociate(DB, search_result, srf_all_Input_for_trim, ime_auxiliary_input)
-    }
-    ; 插入字部分
-    PinyinResultInsertSingleWord(DB, search_result, srf_all_Input_for_trim)
-
-
-    ; 显示辅助码
-    if( false ) {
-        PinyinResultShowAuxiliary(search_result)
-    }
-
-    ; 辅助码或超级简拼
-    if( false ) {
-        ; 使用任意一或二位辅助码协助筛选候选项去除重码
-        PinyinResultCheckAuxiliary(search_result, ime_auxiliary_input)
-    } else {
-        ; 超级简拼 显示 4~8 字简拼候选
-        ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
-        separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
-        if( ime_orgin_input~="^[^']{4,8}$" && srf_all_Input_for_trim != separate_single_char )
-        {
-            PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
+        ; 逐码提示 联想
+        if( false ) {
+            PinyinResultInsertAssociate(DB, search_result, srf_all_Input_for_trim, ime_auxiliary_input)
         }
+        ; 插入字部分
+        PinyinResultInsertSingleWord(DB, search_result, srf_all_Input_for_trim)
+
+
+        ; 显示辅助码
+        if( false ) {
+            PinyinResultShowAuxiliary(search_result)
+        }
+
+        ; 辅助码或超级简拼
+        if( false ) {
+            ; 使用任意一或二位辅助码协助筛选候选项去除重码
+            PinyinResultCheckAuxiliary(search_result, ime_auxiliary_input)
+        } else {
+            ; 超级简拼 显示 4~8 字简拼候选
+            ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
+            separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
+            if( ime_orgin_input~="^[^']{4,8}$" && srf_all_Input_for_trim != separate_single_char )
+            {
+                PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
+            }
+        }
+
+        ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
+        PinyinResultHideZeroWeight(search_result)
+
+
+        PinyinResultRemoveZeroIndex(search_result)
     }
-
-    ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-    PinyinResultHideZeroWeight(search_result)
-
-
-    PinyinResultRemoveZeroIndex(search_result)
     ; [
     ;     ; -1 , 0         , 1
     ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
