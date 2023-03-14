@@ -108,7 +108,9 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
             }
 
             cut_pos := InStr(srf_all_Input_for_trim "'", "'", 0, 0, Loop_num+=1)
-            srf_Input_trim_left := SubStr(srf_all_Input_for_trim, test_pos+1, cut_pos-1-test_pos)
+            srf_Input_trim_left  := SubStr(srf_all_Input_for_trim, test_pos+1, cut_pos-1-test_pos)
+            srf_Input_trim_right := SubStr(srf_all_Input_for_trim, cut_pos+1)
+
             if( cut_pos<test_pos+1 || srf_Input_trim_left == "") {
                 break
             }
@@ -116,11 +118,10 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
                 continue
             }
 
-            srf_Input_trim_right := SubStr(srf_all_Input_for_trim, cut_pos+1)
             ; Get result
             if( srf_Input_trim_left && !PinyinHasKey(srf_Input_trim_left) )
             {
-                limit_num       := !!test_pos
+                limit_num := !!test_pos
                 ; simple_spell    := !InStr(srf_all_Input, srf_Input_trim_left)
                 PinyinUpdateKey(DB, srf_Input_trim_left, false, false, limit_num)
 
@@ -162,13 +163,10 @@ PinyinProcess(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, zisu)
     history_cutpos  :=[0]
 
     ; 正向最大划分
-    if( true )
-    {
-        ; Clear saved history
-        PinyinProcess1(save_field_array, history_cutpos, srf_all_Input_for_trim)
-        ; 
-        PinyinProcess2(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
-        ; 
-        PinyinProcess3(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
-    }
+    ; Clear saved history
+    PinyinProcess1(save_field_array, history_cutpos, srf_all_Input_for_trim)
+    ; 
+    PinyinProcess2(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
+    ; 
+    PinyinProcess3(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
 }
