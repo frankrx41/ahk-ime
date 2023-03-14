@@ -119,6 +119,15 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
             if( cut_pos<test_pos+1 || srf_input_spilt_trim_left == "") {
                 break
             }
+            if( InStr(srf_input_spilt_trim_left, "|") )
+            {
+                if( srf_input_spilt_trim_left == "|" ){
+                    loop_num := 0
+                    history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_input_spilt_trim_left)
+                    test_pos := history_cutpos[history_cutpos.Length()]
+                }
+                continue
+            }
             if( InStr(srf_input_spilt_trim_left, "'", , 1, zisu) ){
                 continue
             }
