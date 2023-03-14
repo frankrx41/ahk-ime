@@ -99,6 +99,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
             if( initials != " " ) {
                 separate_words := RTrim(separate_words,"'") . initials
             }
+            separate_words .= "|'"
             index += 1
             last_char := "'"
             continue
@@ -240,9 +241,9 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     ystr := Trim(str, "'")
     rstr := ""
 
-    if( scheme ){
-        str:=PinyinSplit(str,scheme,1)
-    }
+    ; if( scheme ){
+    ;     str:=PinyinSplit(str,scheme,1)
+    ; }
     str := StrReplace(str, "'", "''")
     str := StrReplace(str, "on'", "ong'")
     tstr := Trim(RegExReplace(str, "([a-z]h?)[a-gi-z]+", "$1", nCount), "'")
