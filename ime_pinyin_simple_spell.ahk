@@ -1,13 +1,13 @@
 
-PinyinSimpleSpell(ByRef DB, ByRef search_result, srf_all_Input, enable)
+PinyinSimpleSpell(ByRef DB, ByRef search_result, srf_all_Input)
 {
     global history_field_array
-    scheme := "pinyin"
 
+    ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
     single_char_spell := Trim(RegExReplace(srf_all_Input,"(.)","$1'"), "'")
-    if( enable && (srf_all_Input~="^[^']{4,8}$") && !PinyinHasKey(single_char_spell) )
+    if( srf_all_Input~="^[^']{4,8}$" )
     {
-        history_field_array[single_char_spell] := Get_jianpin(DB, scheme, "'" single_char_spell "'", "", 0, 8, true)
+        PinyinUpdateKey(DB, single_char_spell, false, true, 8)
     }
 
     if( single_char_spell )

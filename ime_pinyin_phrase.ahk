@@ -141,7 +141,7 @@ PinyinGetSentences(ime_orgin_input)
     } else {
         ; 超级简拼 显示 4~8 字简拼候选
         if( false ) {
-            PinyinSimpleSpell(DB, search_result, ime_orgin_input, 0)
+            PinyinSimpleSpell(DB, search_result, ime_orgin_input)
         }
     }
 
