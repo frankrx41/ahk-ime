@@ -1,3 +1,6 @@
+;*******************************************************************************
+; 辅助码相关
+;
 PinyinResultShowAuxiliary(ByRef search_result)
 {
     local

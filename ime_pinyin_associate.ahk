@@ -1,3 +1,5 @@
+;*******************************************************************************
+; 词组联想
 PinyinResultInsertAssociate(ByRef DB, ByRef search_result, srf_all_Input_tip, tfzm)
 {
     local

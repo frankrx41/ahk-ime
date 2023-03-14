@@ -1,4 +1,4 @@
-PinyinProcess1(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, srf_all_Input, zisu)
+PinyinProcess(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, srf_all_Input, zisu)
 {
     local
     global history_field_array

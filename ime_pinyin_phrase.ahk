@@ -114,7 +114,7 @@ PinyinGetSentences(ime_orgin_input)
     search_result           := []
 
     ; ?
-    PinyinProcess1(DB, save_field_array, srf_all_Input_for_trim, ime_orgin_input, 10)
+    PinyinProcess(DB, save_field_array, srf_all_Input_for_trim, ime_orgin_input, 10)
 
     ; 组词
     PinyinResultInsertCombine(DB, save_field_array, search_result, ime_auxiliary_input)

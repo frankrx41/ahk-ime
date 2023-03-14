@@ -1,3 +1,6 @@
+;*******************************************************************************
+; 组词
+;
 PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_input)
 {
     local

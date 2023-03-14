@@ -1,4 +1,6 @@
-
+;*******************************************************************************
+; 超级简拼
+;
 PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, srf_all_Input)
 {
     global history_field_array
