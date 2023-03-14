@@ -169,7 +169,9 @@ PinyinGetSentences(ime_orgin_input)
     PinyinProcess3(DB, save_field_array, search_result)
 
     ; 逐码提示 联想
-    PinyinProcess4(DB, search_result, srf_all_Input_tip, srf_all_Input_py, tfzm, "", 0)
+    if( false ) {
+        PinyinAssociate(DB, search_result, srf_all_Input_tip, srf_all_Input_py, tfzm)
+    }
     ; 插入字部分
     PinyinProcess5(DB, search_result, srf_all_Input_tip)
 
@@ -180,7 +182,7 @@ PinyinGetSentences(ime_orgin_input)
     ; 辅助码或超级简拼
     if( false ) {
         ; 使用任意一或二位辅助码协助筛选候选项去除重码
-        PinyinAuxiliaryCheck(search_result, "")
+        PinyinAuxiliaryCheck(search_result, tfzm)
     } else {
         ; 超级简拼 显示 4~8 字简拼候选
         PinyinSimpleSpell(DB, search_result, ime_orgin_input, 0)
