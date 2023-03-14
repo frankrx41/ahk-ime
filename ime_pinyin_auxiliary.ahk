@@ -40,7 +40,7 @@ GetAuxiliaryTable(str)
     return result
 }
 
-PinyinAuxiliaryCheck(ByRef DB, ByRef search_result, tfzm)
+PinyinAuxiliaryCheck(ByRef search_result, tfzm)
 {
     global history_field_array
     dwselect := 1

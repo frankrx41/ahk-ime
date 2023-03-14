@@ -136,7 +136,7 @@ PinyinProcess5(ByRef DB, ByRef search_result, srf_all_Input_tip)
     return
 }
 
-PinyinProcess8(ByRef search_result, hide_zero_weight)
+PinyinHideZeroWeight(ByRef search_result, hide_zero_weight)
 {
     local
     if( hide_zero_weight && search_result[1, 3]>0 )
@@ -190,19 +190,21 @@ PinyinGetSentences(ime_orgin_input)
     PinyinProcess5(DB, search_result, srf_all_Input_tip)
 
 
+    ; 显示辅助码
     PinyinShowAuxiliary(search_result, 0)
 
     ; 辅助码或超级简拼
     if( false ) {
         ; 使用任意一或二位辅助码协助筛选候选项去除重码
-        PinyinAuxiliaryCheck(DB, search_result, "")
+        PinyinAuxiliaryCheck(search_result, "")
     } else {
         ; 超级简拼 显示 4~8 字简拼候选
         PinyinSimpleSpell(DB, search_result, ime_orgin_input, 0)
     }
 
-    ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
-    PinyinProcess8(search_result, 0)
+    ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
+    PinyinHideZeroWeight(search_result, 0)
+
     ; ??
     PinyinProcess9(search_result)
 
