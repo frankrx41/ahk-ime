@@ -125,9 +125,12 @@ PinyinHideZeroWeight(ByRef search_result, hide_zero_weight)
     local
     if( hide_zero_weight && search_result[1, 3]>0 )
     {
-        loop % len := search_result.Length() {
-            if( search_result[len+1-A_Index, 3] && search_result[len+1-A_Index, 3]<=0 )
+        loop % len := search_result.Length()
+        {
+            weight := search_result[len+1-A_Index, 3]
+            if( weight<=0 ) {
                 search_result.RemoveAt(len+1-A_Index)
+            }
         }
     }
     return
@@ -184,7 +187,7 @@ PinyinGetSentences(ime_orgin_input)
     }
 
     ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-    PinyinHideZeroWeight(search_result, 0)
+    PinyinHideZeroWeight(search_result, 1)
 
     ; ??
     PinyinProcess9(search_result)
