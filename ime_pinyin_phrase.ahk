@@ -140,8 +140,11 @@ PinyinGetSentences(ime_orgin_input)
         PinyinResultCheckAuxiliary(search_result, ime_auxiliary_input)
     } else {
         ; 超级简拼 显示 4~8 字简拼候选
-        if( false ) {
-            PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)
+        ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
+        separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
+        if( srf_all_Input_for_trim != separate_single_char )
+        {
+            PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
         }
     }
 
