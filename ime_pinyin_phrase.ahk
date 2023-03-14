@@ -12,6 +12,14 @@ PinyinHasKey(pinyin)
     return history_field_array.HasKey(pinyin)
 }
 
+PinyinUpdateKey(DB, pinyin)
+{
+    if( !PinyinHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
+    {
+        history_field_array[pinyin] := Get_jianpin(DB, "pinyin", "'" pinyin "'", "", 0, 0)
+    }
+}
+
 PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 {
     local
@@ -23,12 +31,9 @@ PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
     {
         While( InStr(word,"'") && !PinyinHasResult(word) )
         {
-            if( !PinyinHasKey(word) )
-            {
-                history_field_array[word] := Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
-                if( PinyinHasResult(word) ){
-                    break
-                }
+            PinyinUpdateKey(DB, first_word)
+            if( PinyinHasResult(word) ){
+                break
             }
             word := RegExReplace(word, "i)'([^']+)?$")
         }
@@ -45,9 +50,7 @@ PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
             {
                 ; Assert(0, "二字词: " . save_field_array[1, 0])
                 word := SubStr(word,1,t-1)
-                if( !PinyinHasKey(word) || history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ){
-                    history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
-                }
+                PinyinUpdateKey(DB, word)
                 if( PinyinHasResult(word) ){
                     loop % history_field_array[word].Length(){
                         search_result.Push(CopyObj(history_field_array[word, A_Index]))
@@ -67,10 +70,7 @@ PinyinProcess5(ByRef DB, ByRef search_result, srf_all_Input_tip)
     first_word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
     if( first_word != srf_all_Input_tip )
     {
-        if( !PinyinHasKey(first_word) || (history_field_array[first_word].Length()==2 && history_field_array[first_word,2,2]=="") )
-        {
-            history_field_array[first_word] := Get_jianpin(DB, scheme, "'" first_word "'", "", 0, 0)
-        }
+        PinyinUpdateKey(DB, first_word)
         loop % history_field_array[first_word].Length()
         {
             search_result.Push(CopyObj(history_field_array[first_word, A_Index]))
