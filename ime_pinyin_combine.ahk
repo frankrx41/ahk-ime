@@ -51,7 +51,7 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result,
 ; 首选组词
 CombineWord(arr)
 {
-    rarr := ["",""]
+    rarr := ["", "", "auto"]
     loop % arr.Length()
     {
         if( arr[A_Index, 0]!=Chr(2) ){
