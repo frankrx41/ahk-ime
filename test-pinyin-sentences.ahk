@@ -6,6 +6,7 @@ SetBatchLines, -1
 SetWorkingDir, %A_ScriptDir%
 
 #Include, ime_pinyin.ahk
+#Include, ime_assert.ahk
 #Include, ime_pinyin_phrase.ahk
 #Include, ime_pinyin_combine.ahk
 #Include, ime_pinyin_process.ahk
@@ -28,6 +29,10 @@ tooltip_debug := []
 
 
 ; Add your debug code here
+tooltip_debug[1] := ">>"
+result := PinyinGetSentences("buneng")
+Msgbox, % tooltip_debug[1]
+ExitApp
 result := PinyinGetSentences("wxhn")
 result := PinyinGetSentences("wxhns")
 result := PinyinGetSentences("wxhnsa") ; "wxhn" + "sa"
