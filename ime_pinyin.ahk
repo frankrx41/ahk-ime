@@ -226,6 +226,7 @@ PinyinCheckWeight(DB, origin_input)
     }
 
     input_str := StrReplace(origin_input, "'", "''")
+    input_str := StrReplace(input_str, "'|'")
     if( history[input_str] != "" ){
         tooltip_debug[7] .= " " . ": [" input_str "]->(" history[input_str] ") `n"
         return history[input_str]
