@@ -43,7 +43,7 @@ PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
             ; 存在两个 ' 在词组中，比如 "wxhn" -> "wx"
             if( t:= InStr(word, "'", , , 2) )
             {
-                Assert(0, "二字词: " . save_field_array[1, 0])
+                ; Assert(0, "二字词: " . save_field_array[1, 0])
                 word := SubStr(word,1,t-1)
                 if( !PinyinHasKey(word) || history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ){
                     history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
