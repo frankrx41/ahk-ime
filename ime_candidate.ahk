@@ -13,6 +13,7 @@ class Candidate
         ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
         ;     ...
         ; ]
+        string := LTrim(string, " ")
         if( string )
         {
             This.candidate := PinyinGetSentences(string)
@@ -41,12 +42,45 @@ class Candidate
     {
         global tooltip_debug
         ; TODO: make it work
-        occupied_str := This.GetPinyin(This.select_index)
+        sent_string := This.GetWord(This.select_index)
+        pinyin_string := This.GetPinyin(This.select_index)
 
-        sent_string := This.GetWord()
-        This.input_string := SubStr(This.input_string, StrLen(occupied_str)+1-StrLen(sent_string)+1)
+        index_pinyin    := 1
+        index_input     := 1
+        sent_string_len := 1
+        sent_pinyin_len := StrLen(pinyin_string)
+        ; "wohenxihuanni" - "wo'hen"
+        loop, Parse, % This.input_string
+        {
+            if( index_pinyin >= sent_pinyin_len ){
+                break
+            }
+            loop
+            {
+                input_char := SubStr(This.input_string, index_input, 1)
+                if( input_char == " " ){
+                    index_input += 1
+                    sent_string_len += 1
+                } else {
+                    break
+                }
+            }
+            loop
+            {
+                pinyin_char := SubStr(pinyin_string, index_pinyin, 1)
+                if( pinyin_char == input_char ) {
+                    break
+                }
+                index_pinyin += 1
+            }
+            sent_string_len += 1
+            index_pinyin    += 1
+            index_input     += 1
+        }
 
-        tooltip_debug[11] := sent_string "," occupied_str "," This.input_string
+        This.input_string := SubStr(This.input_string, sent_string_len+1)
+
+        tooltip_debug[11] := "[" sent_string "] " pinyin_string "," This.input_string "," sent_string_len
         This.SetSelectIndex(1)
         This.Initialize(This.input_string)
         return This.input_string
