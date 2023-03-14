@@ -98,8 +98,9 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
         {
             if( initials != " " ) {
                 separate_words := RTrim(separate_words,"'") . initials
+            } else {
+                separate_words .= "|'"
             }
-            separate_words .= "|'"
             index += 1
             last_char := "'"
             continue
