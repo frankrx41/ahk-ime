@@ -4,6 +4,29 @@ PutCharacter(str, mode:=""){
     SendInput, % "{Text}" str
 }
 
+; https://www.autohotkey.com/board/topic/76062-ahk-l-how-to-get-callstack-solution/
+CallStack(deepness = 5, printLines = 1)
+{
+    stack := ""
+    loop % deepness
+    {
+        lvl := -2 - deepness + A_Index
+        oEx := Exception("", lvl)
+        oExPrev := Exception("", lvl - 1)
+        FileReadLine, line, % oEx.file, % oEx.line
+        if(line = "		oEx := Exception("""", lvl)")
+            continue
+        stack .= (stack ? "`n" : "") oEx.file " (" oEx.line ") : in " oExPrev.What (printLines ? "`n" line : "") "`n"
+    }
+    return stack
+}
+
+Assert(bool, str:="") {
+    if( !bool ) {
+        MsgBox, % str "`n" CallStack()
+    }
+}
+
 ; 获取光标坐标
 GetCaretPos(Byacc:=1){
     Static init:=0
