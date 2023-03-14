@@ -57,7 +57,7 @@ ImeRegisterHotkey()
     Hotkey, if, ime_input_string
     {
         ; Space and ' to spilt word
-        func := Func("ImeInputChar").Bind("'", -1, 1)
+        func := Func("ImeInputChar").Bind(" ", -1, 1)
         Hotkey, Space, %func%
         func := Func("ImeInputChar").Bind("'")
         Hotkey, ', %func%
