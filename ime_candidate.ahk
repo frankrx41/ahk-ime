@@ -13,8 +13,11 @@ class Candidate
         ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
         ;     ...
         ; ]
-        This.candidate := PinyinGetSentences(string)
-        This.input_string := string
+        if( string )
+        {
+            This.candidate := PinyinGetSentences(string)
+            This.input_string := string
+        }
     }
 
     GetSelectIndex()
@@ -34,10 +37,19 @@ class Candidate
     {
         return This.candidate.Length()
     }
-    GetOccupiedPinyin()
+    GetRemainString()
     {
+        global tooltip_debug
         ; TODO: make it work
-        return This.GetPinyin(This.select_index)
+        occupied_str := This.GetPinyin(This.select_index)
+
+        sent_string := This.GetWord()
+        This.input_string := SubStr(This.input_string, StrLen(occupied_str)+1-StrLen(sent_string)+1)
+
+        tooltip_debug[11] := sent_string "," occupied_str "," This.input_string
+        This.SetSelectIndex(1)
+        This.Initialize(This.input_string)
+        return This.input_string
     }
 
     GetDebugInfo(index)

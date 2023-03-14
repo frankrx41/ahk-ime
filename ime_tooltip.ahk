@@ -89,6 +89,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
         debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
+        debug_tip .= "`n" tooltip_debug[11] ; Candidate
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
