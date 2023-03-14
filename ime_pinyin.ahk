@@ -157,18 +157,16 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
             ; 词库辅助分词
             if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
             {
-                if (pinyin_table[last_initials][SubStr(last_vowels,1,-1)])
+                if( pinyin_table[last_initials][SubStr(last_vowels,1,-1)] )
                 {
                     prev_separate_words := LTrim(PinyinSplit(SubStr(input_str,index-2)), "'")
                     if( InStr(prev_separate_words, "'")>2 )
                     {
                         str_left := separate_words . initials vowels . "'"
                         str_right := SubStr(separate_words,1,-2) . "'" . prev_separate_words
-                        weight_left := CheckPinyinSplit(DB, str_left)
-                        weight_right := CheckPinyinSplit(DB, str_right)
-                        tooltip_debug[5] .= str_left "(" weight_left ") "
-                        tooltip_debug[5] .= str_right "(" weight_right ")"
-                        if (weight_right >= weight_left)
+                        weight_left := PinyinCheckWeight(DB, str_left)
+                        weight_right := PinyinCheckWeight(DB, str_right)
+                        if( weight_right >= weight_left )
                         {
                             Assert(SubStr(separate_words,0) == "'")
                             separate_words := SubStr(separate_words,1,-2) "'" prev_separate_words
@@ -210,31 +208,39 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
     return separate_words
 }
 
-CheckPinyinSplit(DB, str)
+PinyinCheckWeight(DB, origin_input)
 {
     local
-    static history:={0:0}
+    static history := []
+    static check_split_cnt := 0
+    global tooltip_debug
+
     if( !DB ){
+        Assert(0, "DB error")
         return -1
     }
-    if( history[0]>500 ){
-        history:={0:0}
+    if( check_split_cnt>500 ){
+        check_split_cnt := 0
+        tooltip_debug[7] .= "[Reset]"
+        history := []
     }
-    if( history[str]!="" ){
-        return history[str]
+
+    input_str := StrReplace(origin_input, "'", "''")
+    if( history[input_str] != "" ){
+        tooltip_debug[7] .= " " . ": [" input_str "]->(" history[input_str] ") `n"
+        return history[input_str]
     }
-    str := StrReplace(str, "'", "''")
-    tstr := RegExReplace(Trim(str, "'"), "([a-z])[a-z]+", "$1")
-    rstr := RegExReplace(str, "'([csz]h?)'", "'$1.*'")
-    _SQL := "SELECT weight FROM pinyin WHERE jp='" tstr "' AND key REGEXP '^" Trim(rstr,"'") "$' ORDER BY weight DESC LIMIT 1"
+    sim_str := RegExReplace(Trim(input_str, "'"), "([a-z])[a-z]+", "$1")
+    key_str := RegExReplace(input_str, "'([csz]h?)'", "'$1.*'")
+    _SQL := "SELECT weight FROM pinyin WHERE jp='" sim_str "' AND key REGEXP '^" Trim(key_str,"'") "$' ORDER BY weight DESC LIMIT 1"
     if( DB.GetTable(_SQL,Result) )
     {
-        if( Result.Rows[1][1] ){
-            return Result.Rows[1][1], history[str]:=Result.Rows[1][1], history[0]++
-        } else {
-            return 0, history[str]:=0, history[0]++
-        }
+        check_split_cnt += 1
+        history[input_str] := Result.Rows[1][1] ? Result.Rows[1][1] : 0
+        tooltip_debug[7] .= check_split_cnt . ": [" input_str "]->(" history[input_str] ") `n"
+        return history[input_str]
     } else {
+        Assert(0, "SQL error: " . _SQL)
         return -1
     }
 }
