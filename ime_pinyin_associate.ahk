@@ -1,9 +1,11 @@
 ;*******************************************************************************
 ; 词组联想
+;
 PinyinResultInsertAssociate(ByRef DB, ByRef search_result, srf_all_Input_tip, tfzm)
 {
     local
     global history_field_array
+
     if( !tfzm && InStr(srf_all_Input_tip, "'", , 1, 3) )
     {
         if( history_field_array[srf_all_Input_tip, -1]==="" ){
