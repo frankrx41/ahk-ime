@@ -136,9 +136,9 @@ PinyinHideZeroWeight(ByRef search_result, hide_zero_weight)
     return
 }
 
-PinyinProcess9(ByRef search_result)
+PinyinRemoveZeroIndex(ByRef search_result)
 {
-    ; Assert(!search_result.HasKey(0))
+    ; [0] is store "pinyin"
     if( search_result.HasKey(0) ){
         search_result.Delete(0)
     }
@@ -189,9 +189,8 @@ PinyinGetSentences(ime_orgin_input)
     ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
     PinyinHideZeroWeight(search_result, 1)
 
-    ; ??
-    PinyinProcess9(search_result)
 
+    PinyinRemoveZeroIndex(search_result)
     ; [
     ;     ; -1 , 0         , 1
     ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
