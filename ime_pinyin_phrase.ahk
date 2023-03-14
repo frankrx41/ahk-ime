@@ -123,11 +123,12 @@ PinyinGetSentences(ime_orgin_input)
     }
     else
     {
-        srf_all_Input_for_trim  := Trim(PinyinSplit(ime_orgin_input, "pinyin", 0, DB), "'")
+        ime_input_split_trim    := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
+        ime_input_split_trim    := Trim(ime_input_split_trim, "'")
         ime_auxiliary_input     := ""   ; 辅助码
 
         ; ?
-        PinyinProcess(DB, save_field_array, srf_all_Input_for_trim, 10)
+        PinyinProcess(DB, save_field_array, ime_input_split_trim, 10)
 
         ; 组词
         PinyinResultInsertCombine(DB, save_field_array, search_result, ime_auxiliary_input)
@@ -136,10 +137,10 @@ PinyinGetSentences(ime_orgin_input)
 
         ; 逐码提示 联想
         if( false ) {
-            PinyinResultInsertAssociate(DB, search_result, srf_all_Input_for_trim, ime_auxiliary_input)
+            PinyinResultInsertAssociate(DB, search_result, ime_input_split_trim, ime_auxiliary_input)
         }
         ; 插入字部分
-        PinyinResultInsertSingleWord(DB, search_result, srf_all_Input_for_trim)
+        PinyinResultInsertSingleWord(DB, search_result, ime_input_split_trim)
 
 
         ; 显示辅助码
@@ -155,7 +156,7 @@ PinyinGetSentences(ime_orgin_input)
             ; 超级简拼 显示 4~8 字简拼候选
             ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
             separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
-            if( ime_orgin_input~="^[^']{4,8}$" && srf_all_Input_for_trim != separate_single_char )
+            if( ime_orgin_input~="^[^']{4,8}$" && ime_input_split_trim != separate_single_char )
             {
                 PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
             }
