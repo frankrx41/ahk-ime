@@ -1,35 +1,39 @@
-PinyinCombine(ByRef DB, ByRef save_field_array, ByRef search_result, tfzm)
+PinyinCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_input)
 {
     local
     global history_field_array
     scheme := "pinyin"
+
     if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
     {
+        word := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
+        Assert(0, "Trace: I'm no sure why it go here: " . word)
         sql_result := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0)
         history_field_array[save_field_array[1,0]] := sql_result
         save_field_array[1] := CopyObj(sql_result)
     }
 
-    ; 只有一种结果时，比如输入 "wo"
-    if( (save_field_array.Length()==1) || (tfzm) )
+    ; 存在组词时 "wo", "woai"
+    if( (save_field_array.Length()==1) || auxiliary_input )
     {
         search_result := CopyObj(save_field_array[1])
     }
-    ; 处理多种结果 "woshei" -> "wo" + "shei"
-    ; 但是有单独词语的不会 "woxihuan" -> "woxihuan"
+    ; 不能组词时
+    ; "woshei" -> "wo" + "shei"
+    ; "hhhhhhhh" -> "hhhh" + "hhhh" + "h"
     else
     {
         if( save_field_array[2,1,1]!=Chr(2) )
         {
-            ci := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
-            While( InStr(ci,"'") && !PinyinHasResult(ci) ) {
-                ci := RegExReplace(ci, "i)'([^']+)?$")
+            word := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
+            While( InStr(word,"'") && !PinyinHasResult(word) ) {
+                word := RegExReplace(word, "i)'([^']+)?$")
             }
-            if( ci ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
-                if( history_field_array[ci].Length()==2 && history_field_array[ci,2,2]=="" ) {
-                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
+            if( word ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
+                if( history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ) {
+                    history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
                 }
-                search_result := CopyObj(history_field_array[ci])
+                search_result := CopyObj(history_field_array[word])
             }
         }
 
