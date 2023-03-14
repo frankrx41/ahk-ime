@@ -64,6 +64,11 @@ PinyinInit()
     }
 }
 
+IsSplitMark(character)
+{
+    return character ~= "\d" || character == " " || character == "'"
+}
+
 ; 拼音音节切分
 ; ' 表示自动分词
 ; 12345 空格 大写 表示手动分词
@@ -88,10 +93,12 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
         }
 
         initials := SubStr(str, index, 1)
-        ; 数字，强制分词
-        if( initials ~= "\d" || initials == " ")
+        ; 数字 空格 强制分词
+        if( IsSplitMark(initials) )
         {
-            separate_words := RTrim(separate_words,"'") . initials
+            if( initials != " " ) {
+                separate_words := RTrim(separate_words,"'") . initials
+            }
             index += 1
             last_char := "'"
             continue
@@ -116,7 +123,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                     break
                 }
                 check_char := SubStr(str, index+vowels_test_len, 1)
-                if( check_char ~= "\d" ){
+                if( IsSplitMark(check_char) ){
                     break
                 }
                 if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
@@ -163,8 +170,8 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                 }
             }
 
-            last_vowels     := vowels
             last_initials   := initials
+            last_vowels     := vowels
             ; 转全拼显示
             if (show_full) {
                 separate_words .= pinyin_table[initials][1] . pinyin_table[initials][vowels] "'"
