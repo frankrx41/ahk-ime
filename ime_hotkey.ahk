@@ -121,6 +121,23 @@ Right::
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
+; Shift + 左右键移动光标，不论是否打开候选框
++Left::
+    ime_input_caret_pos -= 1
+    if( ime_input_caret_pos < 0 ){
+        ime_input_caret_pos := StrLen(ime_input_string)
+    }
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+return
+
++Right::
+    ime_input_caret_pos += 1
+    if( ime_input_caret_pos > StrLen(ime_input_string) ){
+        ime_input_caret_pos := 0
+    }
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+return
+
 ; 上下选择
 Up::
     if( ImeIsSelectMenuOpen() ) {
