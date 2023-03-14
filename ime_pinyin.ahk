@@ -72,7 +72,7 @@ IsSplitMark(character)
 ; 拼音音节切分
 ; ' 表示自动分词
 ; 12345 空格 大写 表示手动分词
-PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
+PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
 {
     local
     Critical
@@ -81,7 +81,8 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
 
     index           := 1
     separate_words  := "'"
-    strlen          := StrLen(str)
+    input_str       := origin_input
+    strlen          := StrLen(input_str)
     last_char       := ""
     last_vowels     := ""
     last_initials   := ""
@@ -92,7 +93,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
             break
         }
 
-        initials := SubStr(str, index, 1)
+        initials := SubStr(input_str, index, 1)
         ; 数字 空格 强制分词
         if( IsSplitMark(initials) )
         {
@@ -110,7 +111,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
         {
             ; 声母
             index += 1
-            if( InStr("csz", initials) && (SubStr(str, index, 1)=="h") ){
+            if( InStr("csz", initials) && (SubStr(input_str, index, 1)=="h") ){
                 ; zcs + h
                 index += 1
                 initials .= "h"
@@ -124,12 +125,12 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                 if( vowels_test_len >= 4 || index+vowels_test_len-A_Index>=strlen ){
                     break
                 }
-                check_char := SubStr(str, index+vowels_test_len, 1)
+                check_char := SubStr(input_str, index+vowels_test_len, 1)
                 if( IsSplitMark(check_char) ){
                     break
                 }
                 if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
-                    str := SubStr(str, 1, index+vowels_test_len-1) . Format("{:L}", check_char) . SubStr(str, index+vowels_test_len+1)
+                    input_str := SubStr(input_str, 1, index+vowels_test_len-1) . Format("{:L}", check_char) . SubStr(input_str, index+vowels_test_len+1)
                     break
                 }
                 vowels_test_len += 1
@@ -143,7 +144,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
                         continue
                     }
                     vowels_len := vowels_test_len+1-A_Index
-                    vowels := SubStr(str, index, vowels_len)
+                    vowels := SubStr(input_str, index, vowels_len)
                     if( pinyin_table[initials][vowels] ){
                         break
                     }
@@ -158,15 +159,21 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
             {
                 if (pinyin_table[last_initials][SubStr(last_vowels,1,-1)])
                 {
-                    test_separate_words := LTrim(PinyinSplit(SubStr(str,index-2)), "'")
-                    if( InStr(test_separate_words, "'")>2 )
+                    prev_separate_words := LTrim(PinyinSplit(SubStr(input_str,index-2)), "'")
+                    if( InStr(prev_separate_words, "'")>2 )
                     {
-                        l_weight := CheckPinyinSplit(DB, separate_words . initials vowels . "'")
-                        r_weight := CheckPinyinSplit(DB, SubStr(separate_words,1,-2) . "'" . separate_words)
-                        if (r_weight >= l_weight)
+                        str_left := separate_words . initials vowels . "'"
+                        str_right := SubStr(separate_words,1,-2) . "'" . prev_separate_words
+                        weight_left := CheckPinyinSplit(DB, str_left)
+                        weight_right := CheckPinyinSplit(DB, str_right)
+                        tooltip_debug[5] .= str_left "(" weight_left ") "
+                        tooltip_debug[5] .= str_right "(" weight_right ")"
+                        if (weight_right >= weight_left)
                         {
                             Assert(SubStr(separate_words,0) == "'")
-                            return  SubStr(separate_words,1,-2) "'" test_separate_words
+                            separate_words := SubStr(separate_words,1,-2) "'" prev_separate_words
+                            tooltip_debug[1] .= origin_input "->[" separate_words "] "
+                            return separate_words
                         }
                     }
                 }
@@ -199,7 +206,7 @@ PinyinSplit(str, pinyintype:="pinyin", show_full:=0, DB:="")
             }
         }
     }
-    tooltip_debug[1] := separate_words
+    tooltip_debug[1] .= origin_input "->[" separate_words "] "
     return separate_words
 }
 

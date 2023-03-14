@@ -55,6 +55,8 @@ return
 ; BackSpace 删除光标前面的空格
 BackSpace::
     if( ime_input_caret_pos != 0 ) {
+        tooltip_debug[1] := ""
+        tooltip_debug[5] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
         ime_input_candidate.Initialize(ime_input_string)
