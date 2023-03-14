@@ -86,11 +86,10 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
         }
 
         debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
-        if( opt_show_debug_tooltip ){
-            for _, value in tooltip_debug {
-                debug_tip .= "`n" value
-            }
-        }
+        debug_tip .= "`n" tooltip_debug[1]  ; Spilt Word
+        ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
+        debug_tip .= "`n" tooltip_debug[18] ; Assert info
+
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
         ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }

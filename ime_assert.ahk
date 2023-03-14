@@ -18,13 +18,15 @@ CallStack(deepness = 5, printLines = 0)
 Assert(bool, str:="", deepness:=5, show_msg:=false)
 {
     local
+    global tooltip_debug
     if( !bool )
     {
         git_hash := RTrim(CmdRet("git rev-parse --short HEAD"), "`n")
         time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
-        
+        deepness := Max(1, deepness)
+
         debug_info := time_string " [" git_hash "]"
-        debug_info .= (deepness <= 1) ? " " : "`n"
+        debug_info .= (deepness == 1) ? " " : "`n"
         debug_info .= CallStack(deepness)
         debug_info .= " """ str """`n"
 
@@ -32,5 +34,6 @@ Assert(bool, str:="", deepness:=5, show_msg:=false)
         if( show_msg ){
             Msgbox, % debug_info
         }
+        tooltip_debug[18] := "Assert: " CallStack(1) ": """ str """"
     }
 }
