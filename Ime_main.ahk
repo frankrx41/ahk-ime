@@ -24,6 +24,7 @@ return
 #Include, ime_pinyin_phrase.ahk
 #Include, ime_pinyin_process.ahk
 #Include, ime_pinyin_auxiliary.ahk
+#Include, ime_pinyin_simple_spell.ahk
 #Include, ime_candidate.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk

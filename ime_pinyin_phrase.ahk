@@ -136,60 +136,6 @@ PinyinProcess5(ByRef DB, ByRef search_result, srf_all_Input_tip)
     return
 }
 
-PinyinProcess7(ByRef DB, ByRef search_result, srf_all_Input, dwselect, tfzm, fzm, chaojijp)
-{
-    global history_field_array
-    jichu_for_select_Array := []
-    scheme := "pinyin"
-
-    if( tfzm )
-    {
-        saixuan:=[]
-        loop % search_result.Length() {
-            if (StrLen(search_result[A_Index,2])>1&&search_result[A_Index,6]~="i)" RegExReplace(tfzm,"(.)","$1(.*)?"))||(search_result[A_Index,6]~="i)^" tfzm)
-                search_result[A_Index, -2]:=dwselect?tfzm:search_result[A_Index,6], saixuan.Push(search_result[A_Index])
-            else
-                search_result[A_Index].Delete(-2)
-        }
-        if( saixuan.Length() ){
-            search_result:=saixuan
-        } else {
-            tfzm:=""
-        }
-    }
-    else
-    {
-        single_char_spell := Trim(RegExReplace(srf_all_Input,"(.)","$1'"), "'")
-        if( chaojijp && (srf_all_Input~="^[^']{4,8}$") && !PinyinHasKey(single_char_spell) ){
-            history_field_array[single_char_spell] := Get_jianpin(DB, scheme, "'" single_char_spell "'", "", 0, 8, true)
-        }
-        if( single_char_spell ){
-            loop % list_len := history_field_array[single_char_spell].Length() {
-                search_result.InsertAt(1, CopyObj(history_field_array[single_char_spell, list_len+1-A_Index]))
-            }
-        }
-        if( fzm=="" ){
-            loop % jichu_for_select_Array.Length()
-                jichu_for_select_Array[A_Index].Delete(-2)
-        }
-        ; 云输入, 2字词以上触发
-        ; if( CloudInput && inspos==2 && InStr(srf_all_Input_py, "'", , 1, 2)){
-        ;     ; search_result.InsertAt(2,{0:"<Cloud>|-1",1:"",2:""})
-        ;     SetTimer, BDCloudInput, -10
-        ; }
-    }
-    return
-
-    ; 云输入
-    BDCloudInput:
-        if( srf_all_Input_py=""||InStr(srf_all_Input_tip,"\") ){
-            return 0
-        }
-        ; BDCloudInput(srf_all_Input_py)
-        CloudinputApi.get(srf_all_Input_py)
-    return 0
-}
-
 PinyinProcess8(ByRef search_result, hide_zero_weight)
 {
     local
@@ -244,10 +190,17 @@ PinyinGetSentences(ime_orgin_input)
     PinyinProcess5(DB, search_result, srf_all_Input_tip)
 
 
-    ; 使用任意一或二位辅助码协助筛选候选项去除重码
-    PinyinProcess6(search_result, 0)
-    ; 超级简拼 显示 4~8 字简拼候选
-    PinyinProcess7(DB, search_result, ime_orgin_input, 0, tfzm, "", 1)
+    PinyinShowAuxiliary(search_result, 0)
+
+    ; 辅助码或超级简拼
+    if( false ) {
+        ; 使用任意一或二位辅助码协助筛选候选项去除重码
+        PinyinAuxiliaryCheck(DB, search_result, "")
+    } else {
+        ; 超级简拼 显示 4~8 字简拼候选
+        PinyinSimpleSpell(DB, search_result, ime_orgin_input, 0)
+    }
+
     ; 隐藏词频低于0的词条，仅在无其他候选项的时候出现
     PinyinProcess8(search_result, 0)
     ; ??
