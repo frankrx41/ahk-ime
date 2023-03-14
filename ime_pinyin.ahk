@@ -211,7 +211,7 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
 PinyinCheckWeight(DB, origin_input)
 {
     local
-    static history := []
+    static weight_data := []
     static check_split_cnt := 0
     global tooltip_debug
 
@@ -219,29 +219,28 @@ PinyinCheckWeight(DB, origin_input)
         Assert(0, "DB error")
         return -1
     }
-    if( check_split_cnt>500 ){
-        check_split_cnt := 0
-        tooltip_debug[7] .= "[Reset]"
-        history := []
+
+    input_str := origin_input
+    input_str := StrReplace(input_str, "'", "''")
+    input_str := StrReplace(input_str, "'|'")
+    if( weight_data[input_str] != "" ){
+        tooltip_debug[7] .= ": [" input_str "]->(" weight_data[input_str] ") `n"
+        return weight_data[input_str]
     }
 
-    input_str := StrReplace(origin_input, "'", "''")
-    input_str := StrReplace(input_str, "'|'")
-    if( history[input_str] != "" ){
-        tooltip_debug[7] .= " " . ": [" input_str "]->(" history[input_str] ") `n"
-        return history[input_str]
-    }
     sim_str := RegExReplace(Trim(input_str, "'"), "([a-z])[a-z]+", "$1")
     key_str := RegExReplace(input_str, "'([csz]h?)'", "'$1.*'")
-    _SQL := "SELECT weight FROM pinyin WHERE jp='" sim_str "' AND key REGEXP '^" Trim(key_str,"'") "$' ORDER BY weight DESC LIMIT 1"
-    if( DB.GetTable(_SQL,Result) )
+    sql_cmd := "SELECT weight FROM pinyin WHERE jp='" sim_str "' AND key REGEXP '^" Trim(key_str,"'") "$' ORDER BY weight DESC LIMIT 1"
+    if( DB.GetTable(sql_cmd,Result) )
     {
         check_split_cnt += 1
-        history[input_str] := Result.Rows[1][1] ? Result.Rows[1][1] : 0
-        tooltip_debug[7] .= check_split_cnt . ": [" input_str "]->(" history[input_str] ") `n"
-        return history[input_str]
-    } else {
-        Assert(0, "SQL error: " . _SQL)
+        weight_data[input_str] := Result.Rows[1][1] ? Result.Rows[1][1] : 0
+        tooltip_debug[7] .= check_split_cnt . ": [" input_str "]->(" weight_data[input_str] ") `n"
+        return weight_data[input_str]
+    }
+    else
+    {
+        Assert(0, "SQL error: " . sql_cmd)
         return -1
     }
 }
