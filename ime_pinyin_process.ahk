@@ -1,22 +1,22 @@
+; HistoryCheckPosUpdateSaved
 PinyinProcess1(ByRef save_field_array, ByRef history_cutpos, srf_all_Input_for_trim)
 {
     check_str := ""
     index     := 0
-    loop % save_field_array.Length()
+    loop % save_field_array.Length() ; "wxhns", then "wxhnsa"
     {
-        if( save_field_array[A_Index,0] == Chr(1)){
-            continue
-        }
-        if( save_field_array[A_Index,0] == "" ){
+        if( save_field_array[A_Index,0] == Chr(1) || save_field_array[A_Index,0] == "" ){
+            Assert(0, "Unknow error with: " . srf_all_Input_for_trim)
             index := A_Index
             break
         }
         
         check_str .= save_field_array[A_Index,0] "'"
-        if( InStr("^" srf_all_Input_for_trim "'", "^" check_str) ){
-            t := StrSplit(save_field_array[A_Index,0],"'").Length()
+        if( InStr("^" . srf_all_Input_for_trim "'", "^" . check_str) ){
+            ; 已经被记录过，标记可以跳过
             history_cutpos.Push(StrLen(check_str))
         } else {
+            ; 没有被记录，标记删除数据
             index := A_Index
             break
         }
@@ -28,13 +28,17 @@ PinyinProcess1(ByRef save_field_array, ByRef history_cutpos, srf_all_Input_for_t
 
 PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_Input_for_trim, zisu)
 {
+    local
     global history_field_array
     if( save_field_array.Length()>0 )
     {
-        if( history_cutpos.Length()>1 && SubStr(srf_all_Input_for_trim, history_cutpos[history_cutpos.Length()], 1) != "'" )
+        if( history_cutpos.Length()>1 )
         {
-            history_cutpos.Pop()
-            save_field_array.Pop()
+            word := SubStr(srf_all_Input_for_trim, history_cutpos[history_cutpos.Length()], 1)
+            if( word != "'" ) {
+                history_cutpos.Pop()
+                save_field_array.Pop()
+            }
         }
 
         begin := A_TickCount
@@ -70,21 +74,21 @@ PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
             ; Save into history_cutpos
             if( PinyinHasResult(srf_all_Input_trim_off) )
             {
-                tarr := {}
-                Ln  := A_Index-1
-                loop % Ln
+                temp_result := {}
+                loop_cnt := A_Index-1
+                loop % loop_cnt
                 {
                     if( save_field_array[A_Index, 0] ){
-                        tarr.Push(save_field_array[A_Index])
+                        temp_result.Push(save_field_array[A_Index])
                     }
                 }
-                tarr.Push(CopyObj(history_field_array[srf_all_Input_trim_off]))
-                save_field_array := tarr
-                tarr := ""
+                temp_result.Push(CopyObj(history_field_array[srf_all_Input_trim_off]))
+                save_field_array := temp_result
+
                 history_cutpos := [0]
                 loop % save_field_array.Length()
                 {
-                    history_cutpos[A_Index+1] := history_cutpos[A_Index]+StrLen(save_field_array[A_Index,0])+1
+                    history_cutpos[A_Index+1] := history_cutpos[A_Index] + StrLen(save_field_array[A_Index,0]) + 1
                 }
             }
         }
