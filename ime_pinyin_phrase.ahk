@@ -30,7 +30,7 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
     {
         While( InStr(word,"'") && !PinyinHasResult(word) )
         {
-            PinyinUpdateKey(DB, first_word)
+            PinyinUpdateKey(DB, word)
             if( PinyinHasResult(word) ){
                 break
             }
