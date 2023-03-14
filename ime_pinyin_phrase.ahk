@@ -12,43 +12,45 @@ PinyinHasKey(pinyin)
     return history_field_array.HasKey(pinyin)
 }
 
-PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef search_result)
+PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 {
     local
     global history_field_array
     scheme := "pinyin"
     ; 插入候选词部分
-    if( ci:=RegExReplace(save_field_array[1,1,-1], "i)'[^']+$") )
+    ; 比如 "kaixina" 会提取出 "kaixin" 然后判断是否有词组
+    if( word := RegExReplace(save_field_array[1,1,-1], "i)'[^']+$") )
     {
-        While( InStr(ci,"'") && !PinyinHasResult(ci) )
+        While( InStr(word,"'") && !PinyinHasResult(word) )
         {
-            if( !PinyinHasKey(ci) )
+            if( !PinyinHasKey(word) )
             {
-                history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
-                if( PinyinHasResult(ci) ){
+                history_field_array[word] := Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
+                if( PinyinHasResult(word) ){
                     break
                 }
             }
-            ci:=RegExReplace(ci, "i)'([^']+)?$")
+            word := RegExReplace(word, "i)'([^']+)?$")
         }
-        if( InStr(ci,"'") )
+        if( InStr(word,"'") )
         {
-            if( history_field_array[ci].Length()=2&&history_field_array[ci,2,2]="" ){
-                history_field_array[ci] := Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
+            if( history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ){
+                history_field_array[word] := Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
             }
-            loop % history_field_array[ci].Length() {
-                search_result.Push(CopyObj(history_field_array[ci, A_Index]))
+            loop % history_field_array[word].Length() {
+                search_result.Push(CopyObj(history_field_array[word, A_Index]))
             }
             ; 二字词
-            if( t:= InStr(ci, "'", , , 2) )
+            if( t:= InStr(word, "'", , , 2) )
             {
-                ci := SubStr(ci,1,t-1)
-                if( !PinyinHasKey(ci) || history_field_array[ci].Length()==2 && history_field_array[ci,2,2]=="" ){
-                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
+                Assert(0, "二字词: " . save_field_array[1, 0])
+                word := SubStr(word,1,t-1)
+                if( !PinyinHasKey(word) || history_field_array[word].Length()==2 && history_field_array[word,2,2]=="" ){
+                    history_field_array[word]:= Get_jianpin(DB, scheme, "'" word "'", "", 0, 0)
                 }
-                if( PinyinHasResult(ci) ){
-                    loop % history_field_array[ci].Length(){
-                        search_result.Push(CopyObj(history_field_array[ci, A_Index]))
+                if( PinyinHasResult(word) ){
+                    loop % history_field_array[word].Length(){
+                        search_result.Push(CopyObj(history_field_array[word, A_Index]))
                     }
                 }
             }
@@ -118,8 +120,8 @@ PinyinGetSentences(ime_orgin_input)
 
     ; 组词
     PinyinCombine(DB, save_field_array, search_result, ime_auxiliary_input)
-    ; ?
-    PinyinProcess3(DB, save_field_array, search_result)
+    ; 插入前面个拼音所能组成的候选词
+    PinyinAddWords(DB, save_field_array, search_result)
 
     ; 逐码提示 联想
     if( false ) {
