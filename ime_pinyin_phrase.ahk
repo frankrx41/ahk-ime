@@ -40,7 +40,7 @@ PinyinAddWords(ByRef DB, ByRef save_field_array, ByRef search_result)
             loop % history_field_array[word].Length() {
                 search_result.Push(CopyObj(history_field_array[word, A_Index]))
             }
-            ; 二字词
+            ; 存在两个 ' 在词组中，比如 "wxhn" -> "wx"
             if( t:= InStr(word, "'", , , 2) )
             {
                 Assert(0, "二字词: " . save_field_array[1, 0])
