@@ -20,6 +20,7 @@ global tooltip_debug := []
 Gosub, ImeInitialize
 return
 
+#Include, ime_assert.ahk
 #Include, ime_func.ahk
 #Include, ime_lib.ahk
 #Include, ime_pinyin.ahk

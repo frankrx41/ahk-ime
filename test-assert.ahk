@@ -1,4 +1,5 @@
 #Include, ime_func.ahk
+#Include, ime_assert.ahk
 
 foo1()
 return
@@ -30,5 +31,6 @@ foo6()
 
 foo7()
 {
-    Assert(0)
+    Assert(0, "Some debug info")
+    Assert(0, "Another debug info", 1, 1)
 }
