@@ -332,26 +332,6 @@ firstzhuju(arr)
     return rarr
 }
 
-; 辅助码构成规则
-fzmfancha(str)
-{
-    local
-    global srf_fzm_fancha_table
-    if (len:=StrLen(str))=1
-        return srf_fzm_fancha_table[str]
-    else if len>4
-        return
-    result:=""
-    ; 每字第一码
-    loop, Parse, str
-        result .= SubStr(srf_fzm_fancha_table[A_LoopField], 1, 1)
-    ; 词末字辅助
-    ; result := srf_fzm_fancha_table[SubStr(str,0,1)]
-    ; 首字辅助
-    ; result := srf_fzm_fancha_table[SubStr(str,1,1)]
-    return result
-}
-
 enumlsm( str )
 {
     local res, t
