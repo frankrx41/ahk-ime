@@ -21,9 +21,9 @@ CallStack(deepness = 5, printLines = 1)
     return stack
 }
 
-Assert(bool) {
+Assert(bool, str:="") {
     if( !bool ) {
-        MsgBox, % CallStack()
+        MsgBox, % str "`n" CallStack()
     }
 }
 
