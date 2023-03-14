@@ -102,58 +102,59 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
     test_pos := history_cutpos[history_cutpos.Length()]
     if( test_pos<srf_all_Input_for_trim_len )
     {
-        Loop_num := 0
+        loop_num := 0
         begin := A_TickCount
         loop
         {
+            loop_num += 1
             if (A_TickCount - begin > 50 && !Mod(A_Index, 20)){
                 Msgbox, % "Forward timeout"
                 break
             }
 
-            cut_pos := InStr(srf_all_Input_for_trim "'", "'", 0, 0, Loop_num+=1)
-            srf_Input_trim_left  := SubStr(srf_all_Input_for_trim, test_pos+1, cut_pos-1-test_pos)
-            srf_Input_trim_right := SubStr(srf_all_Input_for_trim, cut_pos+1)
+            cut_pos := InStr(srf_all_Input_for_trim "'", "'", 0, 0, loop_num)
+            srf_input_spilt_trim_left  := SubStr(srf_all_Input_for_trim, test_pos+1, cut_pos-1-test_pos)
+            srf_input_spilt_trim_right := SubStr(srf_all_Input_for_trim, cut_pos+1)
 
-            if( cut_pos<test_pos+1 || srf_Input_trim_left == "") {
+            if( cut_pos<test_pos+1 || srf_input_spilt_trim_left == "") {
                 break
             }
-            if( InStr(srf_Input_trim_left, "'", , 1, zisu) ){
+            if( InStr(srf_input_spilt_trim_left, "'", , 1, zisu) ){
                 continue
             }
 
             ; Get result
-            if( srf_Input_trim_left && !PinyinHasKey(srf_Input_trim_left) )
+            if( srf_input_spilt_trim_left && !PinyinHasKey(srf_input_spilt_trim_left) )
             {
                 limit_num := !!test_pos
-                ; simple_spell    := !InStr(srf_all_Input, srf_Input_trim_left)
-                PinyinUpdateKey(DB, srf_Input_trim_left, false, false, limit_num)
+                ; simple_spell    := !InStr(srf_all_Input, srf_input_spilt_trim_left)
+                PinyinUpdateKey(DB, srf_input_spilt_trim_left, false, false, limit_num)
 
-                if( !PinyinHasResult(srf_Input_trim_left) )
+                if( !PinyinHasResult(srf_input_spilt_trim_left) )
                 {
-                    if( InStr(srf_Input_trim_left,"'") ){
-                        history_field_array[srf_Input_trim_left] := {0:srf_Input_trim_left}
+                    if( InStr(srf_input_spilt_trim_left,"'") ){
+                        history_field_array[srf_input_spilt_trim_left] := {0:srf_input_spilt_trim_left}
                     } else {
                         CallStack()
-                        history_field_array[srf_Input_trim_left] := {0:srf_Input_trim_left,1:[srf_Input_trim_left, srf_Input_trim_left=Chr(2)?"":srf_Input_trim_left]}
+                        history_field_array[srf_input_spilt_trim_left] := {0:srf_input_spilt_trim_left,1:[srf_input_spilt_trim_left, srf_input_spilt_trim_left=Chr(2)?"":srf_input_spilt_trim_left]}
                     }
                 } else if (test_pos) {
-                    history_field_array[srf_Input_trim_left].Push([])
+                    history_field_array[srf_input_spilt_trim_left].Push([])
                 }
             }
 
-            if( !PinyinHasResult(srf_Input_trim_left) && InStr(srf_Input_trim_left,"'") )
+            if( !PinyinHasResult(srf_input_spilt_trim_left) && InStr(srf_input_spilt_trim_left,"'") )
             {
                 continue
             }
             else
             {
-                t := StrSplit(srf_Input_trim_left,"'").Length()
-                Loop_num := 0
-                if( srf_Input_trim_left != "" ) {
-                    save_field_array.Push(CopyObj(history_field_array[srf_Input_trim_left]))
-                    Assert(cut_pos == history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left))
-                    history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_Input_trim_left)
+                t := StrSplit(srf_input_spilt_trim_left,"'").Length()
+                loop_num := 0
+                if( srf_input_spilt_trim_left != "" ) {
+                    save_field_array.Push(CopyObj(history_field_array[srf_input_spilt_trim_left]))
+                    Assert(cut_pos == history_cutpos[history_cutpos.Length()]+1+StrLen(srf_input_spilt_trim_left))
+                    history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_input_spilt_trim_left)
                 }
                 test_pos := history_cutpos[history_cutpos.Length()]
             }
