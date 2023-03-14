@@ -148,7 +148,7 @@ PinyinGetSentences(ime_orgin_input)
         ; 超级简拼 显示 4~8 字简拼候选
         ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
         separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
-        if( srf_all_Input_for_trim != separate_single_char )
+        if( ime_orgin_input~="^[^']{4,8}$" && srf_all_Input_for_trim != separate_single_char )
         {
             PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
         }
