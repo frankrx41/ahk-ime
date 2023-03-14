@@ -114,10 +114,15 @@ PinyinGetSentences(ime_orgin_input)
     local
     global DB
     static save_field_array := []
+    search_result           := []
+
+    if( StrLen(ime_orgin_input) == 1 ){
+        search_result[1] := [ime_orgin_input, ime_orgin_input, "-"]
+        return search_result
+    }
 
     srf_all_Input_for_trim  := Trim(PinyinSplit(ime_orgin_input, "pinyin", 0, DB), "'")
     ime_auxiliary_input     := ""
-    search_result           := []
 
     ; ?
     PinyinProcess(DB, save_field_array, srf_all_Input_for_trim, 10)
