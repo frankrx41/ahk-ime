@@ -144,7 +144,7 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
                     if( InStr(srf_input_spilt_trim_left,"'") ){
                         history_field_array[srf_input_spilt_trim_left] := {0:srf_input_spilt_trim_left}
                     } else {
-                        CallStack()
+                        ; e.g. "io"
                         history_field_array[srf_input_spilt_trim_left] := {0:srf_input_spilt_trim_left,1:[srf_input_spilt_trim_left, srf_input_spilt_trim_left=Chr(2)?"":srf_input_spilt_trim_left]}
                     }
                 } else if (test_pos) {
@@ -158,7 +158,6 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
             }
             else
             {
-                t := StrSplit(srf_input_spilt_trim_left,"'").Length()
                 loop_num := 0
                 if( srf_input_spilt_trim_left != "" ) {
                     save_field_array.Push(CopyObj(history_field_array[srf_input_spilt_trim_left]))
