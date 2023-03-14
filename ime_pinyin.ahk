@@ -322,16 +322,6 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     }
 }
 
-; 首选组词
-firstzhuju(arr)
-{
-    rarr:=["",""]
-    loop % arr.Length()
-        if (arr[A_Index, 0]!=Chr(2))
-            rarr[1] .= (rarr[1]?"'":"") arr[A_Index, 1, 1], rarr[2] .= arr[A_Index, 1, 2]
-    return rarr
-}
-
 enumlsm( str )
 {
     local res, t

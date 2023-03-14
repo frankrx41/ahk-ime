@@ -12,49 +12,6 @@ PinyinHasKey(pinyin)
     return history_field_array.HasKey(pinyin)
 }
 
-PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef search_result, tfzm)
-{
-    local
-    global history_field_array
-    scheme := "pinyin"
-    if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
-    {
-        sql_result := Get_jianpin(DB, scheme, "'" save_field_array[1,0] "'", "", 0, 0)
-        history_field_array[save_field_array[1,0]] := sql_result
-        save_field_array[1] := CopyObj(sql_result)
-    }
-
-    if( (save_field_array.Length()==1) || (tfzm) )
-    {
-        search_result := CopyObj(save_field_array[1])
-    }
-    else
-    {
-        if( save_field_array[2,1,1]!=Chr(2) )
-        {
-            ci := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
-            While( InStr(ci,"'") && !PinyinHasResult(ci) ) {
-                ci:=RegExReplace(ci, "i)'([^']+)?$")
-            }
-            if( ci~="^" save_field_array[1, 0] "'[a-z;]+" ){
-                if( history_field_array[ci].Length()==2 && history_field_array[ci,2,2]=="" ) {
-                    history_field_array[ci]:= Get_jianpin(DB, scheme, "'" ci "'", "", 0, 0)
-                }
-                search_result := CopyObj(history_field_array[ci])
-            }
-        }
-
-        if( InStr(save_field_array[1, 0], "'") ){
-            loop % save_field_array[1].Length() {
-                search_result.Push(CopyObj(save_field_array[1, A_Index]))
-            }
-        }
-        search_result.InsertAt(1, firstzhuju(save_field_array))
-        search_result[1, 0] := "pinyin"
-    }
-    return
-}
-
 PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef search_result)
 {
     local
@@ -159,8 +116,8 @@ PinyinGetSentences(ime_orgin_input)
     ; ?
     PinyinProcess1(DB, save_field_array, srf_all_Input_for_trim, ime_orgin_input, 10)
 
-    ; ?
-    PinyinProcess2(DB, save_field_array, search_result, ime_auxiliary_input)
+    ; 组词
+    PinyinCombine(DB, save_field_array, search_result, ime_auxiliary_input)
     ; ?
     PinyinProcess3(DB, save_field_array, search_result)
 

@@ -22,6 +22,7 @@ return
 #Include, ime_lib.ahk
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_phrase.ahk
+#Include, ime_pinyin_combine.ahk
 #Include, ime_pinyin_process.ahk
 #Include, ime_pinyin_auxiliary.ahk
 #Include, ime_pinyin_simple_spell.ahk
