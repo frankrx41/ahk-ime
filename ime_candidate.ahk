@@ -21,13 +21,11 @@ class Candidate
         }
     }
 
-    SendSelectWord()
+    GetSendSelectWord()
     {
         global tooltip_debug
 
         send_word := This.GetWord(This.select_index)
-        PutCharacter( send_word )
-
         pinyin_string := This.GetPinyin(This.select_index)
 
         index_pinyin    := 1
@@ -68,6 +66,7 @@ class Candidate
         tooltip_debug[11] := "[" send_word "] " pinyin_string "," This.input_string "," sent_string_len
         This.SetSelectIndex(1)
         This.Initialize(This.input_string)
+        return send_word
     }
 
     GetSelectIndex()
