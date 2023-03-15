@@ -30,6 +30,10 @@ tooltip_debug := []
 
 ; Add your debug code here
 tooltip_debug[1] := ">>"
+result := PinyinGetSentences("wokaixin")
+result := PinyinGetSentences("wo kaixin")
+result := PinyinGetSentences("wo kaixin")
+result := PinyinGetSentences("wo kaixin")
 result := PinyinGetSentences("buneng")
 Msgbox, % tooltip_debug[1]
 ExitApp
