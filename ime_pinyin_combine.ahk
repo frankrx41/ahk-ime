@@ -31,10 +31,10 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result,
             While( InStr(word,"'") && !PinyinHasResult(word) ) {
                 word := RegExReplace(word, "i)'([^']+)?$")
             }
-            if( word ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
-                PinyinUpdateKey(DB, word)
-                search_result := PinyinKeyGetWords(word)
-            }
+            ; if( word ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
+            ;     PinyinUpdateKey(DB, word)
+            ;     search_result := PinyinKeyGetWords(word)
+            ; }
         }
 
         if( InStr(save_field_array[1, 0], "'") ){
