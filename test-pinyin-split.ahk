@@ -6,12 +6,22 @@ SetBatchLines, -1
 SetWorkingDir, %A_ScriptDir%
 
 #Include, ime_pinyin.ahk
+#Include, ime_assert.ahk
+#Include, ime_pinyin_phrase.ahk
+#Include, ime_pinyin_combine.ahk
+#Include, ime_pinyin_process.ahk
+#Include, ime_pinyin_assistant.ahk
+#Include, ime_pinyin_simple_spell.ahk
+#Include, ime_pinyin_associate.ahk
+#Include, ime_db.ahk
 #Include, lib\JSON.ahk
 #Include, ime_func.ahk
+#Include, lib\SQLiteDB.ahk
 global tooltip_debug := []
 PinyinInit()
 
 ; Add your debug code here
+result := PinyinSplit("gan3jue2")
 result := PinyinSplit("wo ai ni")
 
 
