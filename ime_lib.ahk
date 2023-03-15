@@ -48,9 +48,6 @@ ImeRegisterHotkey()
             ; a-z
             func := Func("ImeInputChar").Bind(Chr(96+A_Index))
             Hotkey, % Chr(96+A_Index), %func%
-            ; A-Z
-            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
-            Hotkey, % "+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
@@ -67,6 +64,12 @@ ImeRegisterHotkey()
             func := Func("ImeInputNumber").Bind(A_Index-1)
             Hotkey, % A_Index-1, %func%
             Hotkey, % "Numpad" A_Index-1, %func%
+        }
+        loop 26
+        {
+            ; A-Z
+            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
+            Hotkey, % "+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
