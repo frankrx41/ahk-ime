@@ -1,6 +1,7 @@
 ; HistoryCheckPosUpdateSaved
 PinyinProcess1(ByRef save_field_array, ByRef history_cutpos, srf_all_Input_for_trim)
 {
+    local
     check_str := ""
     index     := 0
     loop % save_field_array.Length() ; "wxhns", then "wxhnsa"
@@ -97,6 +98,7 @@ PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
 
 PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_Input_for_trim, zisu)
 {
+    local
     global history_field_array
     srf_all_Input_for_trim_len := StrLen(srf_all_Input_for_trim)
     test_pos := history_cutpos[history_cutpos.Length()]
