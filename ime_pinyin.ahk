@@ -260,7 +260,8 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     ; if( scheme ){
     ;     str:=PinyinSplit(str,scheme,1)
     ; }
-    str := StrReplace(str, "'", "''")
+    str := Trim(str, "'")
+    str := StrReplace(str, "'", "_")
     str := StrReplace(str, "on'", "ong'")
     tstr := Trim(RegExReplace(str, "([a-z]h?)[a-gi-z]+", "$1", nCount), "'")
     tstr := RegExReplace(tstr, "([csz])h", "$1")
@@ -294,6 +295,13 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
         }
     }
 
+    if( !InStr("_12345", SubStr(rstr, 0, 1)) ){
+        rstr .= "%"
+    }
+    if( !InStr("_12345", SubStr(tstr, 0, 1)) ){
+        tstr .= "_"
+    }
+
     rstr := Trim(rstr,"'")
     zero_initials_table:="o"
     if( lianxiang ){
@@ -311,9 +319,11 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
         if( rstr~="[\.\*\?\|\[\]]" )
             _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "' AND key REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
         else
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp LIKE '" tstr "'" (rstr?" AND key LIKE '" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            ; _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
     }
 
+    tooltip_debug[3] .= "`n[" ystr "]: """ _SQL
     if( DB.GetTable(_SQL, result_table) )
     {
         ; result_table.Rows = [
@@ -337,9 +347,8 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
         ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
         ; ]
 
-        tooltip_debug[2] :=
-        ; tooltip_debug[3] .= "`n" ystr ": " result_table "`n" _SQL "`n" CallStack(1)
-        tooltip_debug[3] .= "`n" ystr "," rstr ": " result_table.RowCount " (" orgin_str ")" "`n" _SQL "`n" CallStack(1)
+        tooltip_debug[3] .= """->(" result_table.RowCount ")"
+        ; tooltip_debug[3] .= "`n" ystr "," rstr ": " result_table.RowCount " (" orgin_str ")" "`n" _SQL "`n" CallStack(1)
         return result_table.Rows
     } else {
         return []

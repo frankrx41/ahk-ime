@@ -8,7 +8,7 @@ PinyinHasKey(pinyin)
 {
     global history_field_array
     global tooltip_debug
-    tooltip_debug[3] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
+    tooltip_debug[5] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
     return history_field_array.HasKey(pinyin)
 }
 
