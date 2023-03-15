@@ -30,12 +30,13 @@ class Candidate
 
         index_pinyin    := 1
         index_input     := 1
-        sent_string_len := 1
+        sent_string_len := 0
         sent_pinyin_len := StrLen(pinyin_string)
         ; "wohenxihuanni" - "wo'hen" = "xihuanni"
         loop, Parse, % This.input_string
         {
-            if( index_pinyin >= sent_pinyin_len ){
+            match := false
+            if( index_pinyin > sent_pinyin_len ){
                 break
             }
             loop
@@ -51,12 +52,16 @@ class Candidate
             loop
             {
                 pinyin_char := SubStr(pinyin_string, index_pinyin, 1)
-                if( pinyin_char == input_char || pinyin_char == "" ) {
+                if( pinyin_char == input_char ){
+                    match := true
+                    break
+                }
+                if( pinyin_char == "" ) {
                     break
                 }
                 index_pinyin += 1
             }
-            sent_string_len += 1
+            sent_string_len += match ? 1 : 0
             index_pinyin    += 1
             index_input     += 1
         }
