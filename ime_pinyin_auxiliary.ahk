@@ -3,23 +3,13 @@
 ;
 PinyinAuxiliaryInitialize()
 {
-    global auxiliary_table := []
-
-    ; This code is too slow, I commented it out just for future reference
-    ; Loop
-    ; {
-    ;     FileReadLine, line_content, test-spilt-character.txt, %A_Index%
-    ;     if ErrorLevel
-    ;         break
-    ;     StringSplit, arr, line_content, `t
-    ;     auxiliary_table[arr1] := arr2
-    ; }
+    local
+    global auxiliary_table := {}
+    global auxiliary_pinyin := {}
 
     FileRead, file_content, data\character-spilt.txt
-    index := 0
     Loop, Parse, file_content, `n
     {
-        index += 1
         ; Split each line by the tab character
         arr := StrSplit(A_LoopField, A_Tab,, 2)
         
@@ -28,7 +18,16 @@ PinyinAuxiliaryInitialize()
         data := StrSplit(data, A_Tab)
         auxiliary_table[arr[1]] := data
     }
-    ; MsgBox, % index
+    Assert(auxiliary_table.Count() != 0)
+
+    FileRead, file_content, data\character-split-pinyin.txt
+    index := 0
+    Loop, Parse, file_content, `n
+    {
+        arr := StrSplit(A_LoopField)
+        auxiliary_pinyin[arr[1]] := arr[2]
+    }
+    Assert(auxiliary_pinyin.Count() != 0)
 }
 
 PinyinResultShowAuxiliary(ByRef search_result)
@@ -73,10 +72,27 @@ GetAuxiliaryTable(str, max_cnt:=1)
     return result
 }
 
+PinyinAuxiliaryGetPinyin(auxiliary)
+{
+    local
+    global auxiliary_pinyin
+    result_pinyin := ""
+    loop, Parse, % auxiliary
+    {
+        pinyin := auxiliary_pinyin[A_LoopField]
+        Assert(pinyin)
+        result_pinyin .= pinyin
+    }
+    return result_pinyin
+}
+
 PinyinResultCheckAuxiliary(ByRef search_result, auxiliary_code)
 {
     local
     global tooltip_debug
+    ; static auxiliary_table := [
+        
+    ; ,]
 
     if( auxiliary_code )
     {
@@ -84,7 +100,8 @@ PinyinResultCheckAuxiliary(ByRef search_result, auxiliary_code)
         found_result := []
         loop % search_result.Length()
         {
-            content_auxiliary := InStr(search_result[A_Index,6], auxiliary_code)
+            test_pinyin := PinyinAuxiliaryGetPinyin(search_result[A_Index,6])
+            content_auxiliary := InStr(test_pinyin, auxiliary_code)
             same_as_auxiliary := auxiliary_code == search_result[A_Index, 2]
             if( content_auxiliary || same_as_auxiliary )
             {
