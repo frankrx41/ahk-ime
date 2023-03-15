@@ -114,5 +114,10 @@ class Candidate
     {
         return This.candidate[index, 3]
     }
+
+    GetAuxiliary(index)
+    {
+        return This.candidate[index, 6]
+    }
 }
 

@@ -145,7 +145,7 @@ PinyinGetSentences(ime_orgin_input)
 
 
         ; 显示辅助码
-        if( false ) {
+        if( true ) {
             PinyinResultShowAuxiliary(search_result)
         }
 

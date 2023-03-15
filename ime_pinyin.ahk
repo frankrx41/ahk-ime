@@ -62,6 +62,8 @@ PinyinInit()
             pinyin_table[t1][t2:=SubStr(value, 2)]:=t2
         }
     }
+
+    PinyinAuxiliaryInitialize()
 }
 
 IsSplitMark(character)

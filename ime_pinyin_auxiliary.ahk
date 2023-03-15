@@ -1,42 +1,75 @@
 ;*******************************************************************************
 ; 辅助码相关
 ;
+PinyinAuxiliaryInitialize()
+{
+    global auxiliary_table := []
+
+    ; This code is too slow, I commented it out just for future reference
+    ; Loop
+    ; {
+    ;     FileReadLine, line_content, test-spilt-character.txt, %A_Index%
+    ;     if ErrorLevel
+    ;         break
+    ;     StringSplit, arr, line_content, `t
+    ;     auxiliary_table[arr1] := arr2
+    ; }
+
+    FileRead, file_content, test-spilt-character.txt
+    index := 0
+    Loop, Parse, file_content, `n
+    {
+        index += 1
+        ; Split each line by the tab character
+        arr := StrSplit(A_LoopField, A_Tab,, 2)
+        
+        ; Store the first word as the key and the rest as the value
+        data := RegExReplace(arr[2], "[ `n`r]")
+        data := StrSplit(data, A_Tab)
+        auxiliary_table[arr[1]] := data
+    }
+    ; MsgBox, % index
+}
+
 PinyinResultShowAuxiliary(ByRef search_result)
 {
     local
     loop % search_result.Length()
     {
-        if( InStr(search_result[A_Index, 0], "pinyin|") && (search_result[A_Index, 6]=="") ){
+        if( search_result[A_Index, 6] == "" && StrLen(search_result[A_Index, 2]) == 1)
+        {
             search_result[A_Index, 6] := GetAuxiliaryTable(search_result[A_Index, 2])
         }
     }
 }
 
 ; 辅助码构成反查
-GetAuxiliaryTable(str)
+GetAuxiliaryTable(str, max_cnt:=1)
 {
     local
-    global srf_fzm_fancha_table ; TODO
+    global auxiliary_table
     len := StrLen(str)
-    if( len==1 )
-    {
-        return srf_fzm_fancha_table[str]
-    }
-    else if( len>4 )
-    {
-        return
-    }
-
     result := ""
-    ; 每字第一码
-    loop, Parse, str
+    if( len == 1 )
     {
-        result .= SubStr(srf_fzm_fancha_table[A_LoopField], 1, 1)
+        loop, % max_cnt
+        {
+            code := auxiliary_table[str, A_Index]
+            if( code ){
+                result .= result ? "," : ""
+                result .= SubStr(code, 1, 1) . SubStr(code, 0, 1)
+            }
+        }
     }
-    ; 词末字辅助
-    ; result := srf_fzm_fancha_table[SubStr(str,0,1)]
-    ; 首字辅助
-    ; result := srf_fzm_fancha_table[SubStr(str,1,1)]
+    else
+    {
+        ; 每字第一码
+        loop, Parse, str
+        {
+            code := auxiliary_table[A_LoopField, 1]
+            result .= SubStr(code, 1, 1)
+        }
+    }
     return result
 }
 

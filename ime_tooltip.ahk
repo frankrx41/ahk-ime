@@ -39,7 +39,11 @@ DisplaySelectItems(candidate)
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                item_str := begin_str . candidate.GetWord(word_index) . end_str
+                auxiliary_code := candidate.GetAuxiliary(word_index)
+                if( auxiliary_code ){
+                    auxiliary_code := "{" auxiliary_code "}"
+                }
+                item_str := begin_str . candidate.GetWord(word_index) . auxiliary_code . end_str
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
                 item_str := ""
@@ -48,7 +52,7 @@ DisplaySelectItems(candidate)
             if( row_index == 1 ) {
                 max_item_len[A_Index] := len + 1
             }
-            loop, % Max(8, max_item_len[A_Index]) - len {
+            loop, % Max(12, max_item_len[A_Index]) - len {
                 item_str .= " "
             }
             ; item_str .= "(" len ")"
@@ -85,7 +89,8 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
             ime_tooltip_pos := GetCaretPos()
         }
 
-        debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
+        debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ") "
+        debug_tip .= "{" GetAuxiliaryTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
         debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
