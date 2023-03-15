@@ -67,11 +67,26 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
     return
 }
 
+GetFirstWord(input_str)
+{
+    index := 0
+    loop, Parse, input_str
+    {
+        if( InStr("12345'", A_LoopField) ){
+            index := A_Index
+            break
+        }
+    }
+
+    return SubStr(input_str, 1, index)
+}
+
 PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, srf_all_Input_tip)
 {
     local
     global history_field_array
-    first_word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
+
+    first_word := GetFirstWord(srf_all_Input_tip)
     if( first_word != srf_all_Input_tip )
     {
         PinyinUpdateKey(DB, first_word)
