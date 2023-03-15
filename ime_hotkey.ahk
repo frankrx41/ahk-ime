@@ -57,7 +57,7 @@ BackSpace::
         tooltip_debug[7] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate.Initialize(ime_input_string)
+        ime_input_candidate.Initialize(ime_input_string, ime_auxiliary_code)
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
 return

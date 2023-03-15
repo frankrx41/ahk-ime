@@ -66,6 +66,7 @@ ImeInputChar(key, pos := -1, try_puts := 0)
     global ime_input_string
     global ime_input_candidate
     global tooltip_debug
+    global ime_auxiliary_code
 
     update_coord := false
     tooltip_debug := []
@@ -79,7 +80,7 @@ ImeInputChar(key, pos := -1, try_puts := 0)
         PutCharacter(key)
         ImeClearInputString()
     }
-    ime_input_candidate.Initialize(ime_input_string)
+    ime_input_candidate.Initialize(ime_input_string, ime_auxiliary_code)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, update_coord)
 }
 
@@ -88,6 +89,7 @@ ImeInputNumber(key)
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_candidate
+    global ime_auxiliary_code
 
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
@@ -95,7 +97,7 @@ ImeInputNumber(key)
         ime_input_candidate.SetSelectIndex(start_index + (key == 0 ? 10 : key))
         PutCandidateCharacter(ime_input_candidate)
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.Initialize(ime_input_string)
+        ime_input_candidate.Initialize(ime_input_string, ime_auxiliary_code)
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
     else {
