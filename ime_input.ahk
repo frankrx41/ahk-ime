@@ -32,8 +32,7 @@ PutCandidateCharacter(candidate)
 {
     global ime_input_string
 
-    string := candidate.GetWord(candidate.GetSelectIndex())
-    PutCharacter( string )
+    candidate.SendSelectWord()
 
     ime_input_string := candidate.GetRemainString()
     if( !ime_input_string )

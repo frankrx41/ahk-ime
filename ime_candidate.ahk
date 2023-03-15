@@ -21,35 +21,20 @@ class Candidate
         }
     }
 
-    GetSelectIndex()
-    {
-        return This.select_index
-    }
-    SetSelectIndex(index)
-    {
-        This.select_index := Max(1, Min(This.GetListLength(), index))
-    }
-    OffsetSelectIndex(offset)
-    {
-        This.SetSelectIndex(This.select_index + offset)
-    }
-
-    GetListLength()
-    {
-        return This.candidate.Length()
-    }
-    GetRemainString()
+    SendSelectWord()
     {
         global tooltip_debug
-        ; TODO: make it work
-        sent_string := This.GetWord(This.select_index)
+
+        send_word := This.GetWord(This.select_index)
+        PutCharacter( send_word )
+
         pinyin_string := This.GetPinyin(This.select_index)
 
         index_pinyin    := 1
         index_input     := 1
         sent_string_len := 1
         sent_pinyin_len := StrLen(pinyin_string)
-        ; "wohenxihuanni" - "wo'hen"
+        ; "wohenxihuanni" - "wo'hen" = "xihuanni"
         loop, Parse, % This.input_string
         {
             if( index_pinyin >= sent_pinyin_len ){
@@ -80,9 +65,30 @@ class Candidate
 
         This.input_string := SubStr(This.input_string, sent_string_len+1)
 
-        tooltip_debug[11] := "[" sent_string "] " pinyin_string "," This.input_string "," sent_string_len
+        tooltip_debug[11] := "[" send_word "] " pinyin_string "," This.input_string "," sent_string_len
         This.SetSelectIndex(1)
         This.Initialize(This.input_string)
+    }
+
+    GetSelectIndex()
+    {
+        return This.select_index
+    }
+    SetSelectIndex(index)
+    {
+        This.select_index := Max(1, Min(This.GetListLength(), index))
+    }
+    OffsetSelectIndex(offset)
+    {
+        This.SetSelectIndex(This.select_index + offset)
+    }
+
+    GetListLength()
+    {
+        return This.candidate.Length()
+    }
+    GetRemainString()
+    {
         return This.input_string
     }
 
