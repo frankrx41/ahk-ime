@@ -84,11 +84,6 @@ PinyinResultCheckAuxiliary(ByRef search_result, auxiliary_code)
         found_result := []
         loop % search_result.Length()
         {
-            ; Assert(StrLen(search_result[A_Index,2])>1, search_result[A_Index,2] "," search_result[A_Index,1])
-            ; "i)" before the regular expression means that the match is case-insensitive
-            ; a := search_result[A_Index,6] ~= "i)^" . auxiliary_code
-            ; b := StrLen(search_result[A_Index,2])>=1
-            ; c := search_result[A_Index,6] ~= "i)" . RegExReplace(auxiliary_code,"(.)","$1(.*)?")
             content_auxiliary := InStr(search_result[A_Index,6], auxiliary_code)
             same_as_auxiliary := auxiliary_code == search_result[A_Index, 2]
             if( content_auxiliary || same_as_auxiliary )
