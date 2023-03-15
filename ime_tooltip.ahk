@@ -93,7 +93,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
-        ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
+        ToolTip(1, tooltip_string "(" caret_pos ")" "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
 }

@@ -31,11 +31,15 @@ CallBackBeforeToggleEn()
 PutCandidateCharacter(candidate)
 {
     global ime_input_string
+    global ime_input_caret_pos
 
     send_word := candidate.GetSendSelectWord()
     PutCharacter( send_word )
 
+    before_input_string := ime_input_string
     ime_input_string := candidate.GetRemainString()
+    ime_input_caret_pos -= StrLen(before_input_string) - StrLen(ime_input_string)
+
     if( !ime_input_string )
     {
         ImeClearInputString()
