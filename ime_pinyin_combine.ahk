@@ -1,7 +1,7 @@
 ;*******************************************************************************
 ; 组词
 ;
-PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, auxiliary_input)
+PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, assistant_input)
 {
     local
 
@@ -16,7 +16,7 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result,
     }
 
     ; 存在组词时 "wo", "woai"
-    if( (save_field_array.Length()==1) || auxiliary_input )
+    if( (save_field_array.Length()==1) || assistant_input )
     {
         search_result := CopyObj(save_field_array[1])
     }

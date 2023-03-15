@@ -1,11 +1,11 @@
 ;*******************************************************************************
 ; 辅助码相关
 ;
-PinyinAuxiliaryInitialize()
+PinyinAssistantInitialize()
 {
     local
-    global auxiliary_table := {}
-    global auxiliary_pinyin := {}
+    global assistant_table := {}
+    global assistant_pinyin := {}
 
     FileRead, file_content, data\character-spilt.txt
     Loop, Parse, file_content, `n
@@ -16,44 +16,44 @@ PinyinAuxiliaryInitialize()
         ; Store the first word as the key and the rest as the value
         data := RegExReplace(arr[2], "[ `n`r]")
         data := StrSplit(data, A_Tab)
-        auxiliary_table[arr[1]] := data
+        assistant_table[arr[1]] := data
     }
-    Assert(auxiliary_table.Count() != 0)
+    Assert(assistant_table.Count() != 0)
 
     FileRead, file_content, data\character-split-pinyin.txt
     index := 0
     Loop, Parse, file_content, `n
     {
         arr := StrSplit(A_LoopField)
-        auxiliary_pinyin[arr[1]] := arr[2]
+        assistant_pinyin[arr[1]] := arr[2]
     }
-    Assert(auxiliary_pinyin.Count() != 0)
+    Assert(assistant_pinyin.Count() != 0)
 }
 
-PinyinResultShowAuxiliary(ByRef search_result)
+PinyinResultShowAssistant(ByRef search_result)
 {
     local
     loop % search_result.Length()
     {
         if( search_result[A_Index, 6] == "" )
         {
-            search_result[A_Index, 6] := GetAuxiliaryTable(search_result[A_Index, 2])
+            search_result[A_Index, 6] := GetAssistantTable(search_result[A_Index, 2])
         }
     }
 }
 
 ; 辅助码构成反查
-GetAuxiliaryTable(str, max_cnt:=1)
+GetAssistantTable(str, max_cnt:=1)
 {
     local
-    global auxiliary_table
+    global assistant_table
     len := StrLen(str)
     result := ""
     if( len == 1 )
     {
         loop, % max_cnt
         {
-            code := auxiliary_table[str, A_Index]
+            code := assistant_table[str, A_Index]
             if( code ){
                 result .= result ? "," : ""
                 result .= SubStr(code, 1, 1) . SubStr(code, 0, 1)
@@ -65,45 +65,45 @@ GetAuxiliaryTable(str, max_cnt:=1)
         ; 每字第一码
         loop, Parse, str
         {
-            code := auxiliary_table[A_LoopField, 1]
+            code := assistant_table[A_LoopField, 1]
             result .= SubStr(code, 1, 1)
         }
     }
     return result
 }
 
-PinyinAuxiliaryGetPinyin(auxiliary)
+PinyinAssistantGetPinyin(assistant)
 {
     local
-    global auxiliary_pinyin
+    global assistant_pinyin
     result_pinyin := ""
-    loop, Parse, % auxiliary
+    loop, Parse, % assistant
     {
-        pinyin := auxiliary_pinyin[A_LoopField]
+        pinyin := assistant_pinyin[A_LoopField]
         Assert(pinyin)
         result_pinyin .= pinyin
     }
     return result_pinyin
 }
 
-PinyinResultCheckAuxiliary(ByRef search_result, auxiliary_code)
+PinyinResultCheckAssistant(ByRef search_result, assistant_code)
 {
     local
     global tooltip_debug
-    ; static auxiliary_table := [
+    ; static assistant_table := [
         
     ; ,]
 
-    if( auxiliary_code )
+    if( assistant_code )
     {
         begin_tick := A_TickCount
         found_result := []
         loop % search_result.Length()
         {
-            test_pinyin := PinyinAuxiliaryGetPinyin(search_result[A_Index,6])
-            content_auxiliary := InStr(test_pinyin, auxiliary_code)
-            same_as_auxiliary := auxiliary_code == search_result[A_Index, 2]
-            if( content_auxiliary || same_as_auxiliary )
+            test_pinyin := PinyinAssistantGetPinyin(search_result[A_Index,6])
+            content_assistant := InStr(test_pinyin, assistant_code)
+            same_as_assistant := assistant_code == search_result[A_Index, 2]
+            if( content_assistant || same_as_assistant )
             {
                 found_result.Push(search_result[A_Index])
             }
@@ -114,6 +114,6 @@ PinyinResultCheckAuxiliary(ByRef search_result, auxiliary_code)
             search_result := found_result
         }
         
-        tooltip_debug[6] := "Auxiliary tick: " A_TickCount - begin_tick ", " found_result.Length() " [" auxiliary_code "]"
+        tooltip_debug[6] := "Assistant tick: " A_TickCount - begin_tick ", " found_result.Length() " [" assistant_code "]"
     }
 }

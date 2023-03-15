@@ -63,7 +63,7 @@ PinyinInit()
         }
     }
 
-    PinyinAuxiliaryInitialize()
+    PinyinAssistantInitialize()
 }
 
 IsSplitMark(character)

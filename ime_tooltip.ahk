@@ -28,7 +28,7 @@ DisplaySelectItems(candidate)
             if( word_index <= candidate.GetListLength() )
             {
                 begin_str := "  "
-                auxiliary_code := ""
+                assistant_code := ""
                 if( in_column ) {
                     if ( select_index == word_index ) {
                         begin_str := ">["
@@ -36,14 +36,14 @@ DisplaySelectItems(candidate)
                         begin_str := Mod(word_index, 10) "."
                         ; begin_str :=  word_index "."
                     }
-                    ; auxiliary_code := candidate.GetAuxiliary(word_index)
-                    ; if( auxiliary_code ){
-                    ;     auxiliary_code := "{" auxiliary_code "}"
+                    ; assistant_code := candidate.GetAssistant(word_index)
+                    ; if( assistant_code ){
+                    ;     assistant_code := "{" assistant_code "}"
                     ; }
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                item_str := begin_str . candidate.GetWord(word_index) . auxiliary_code . end_str
+                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
                 item_str := ""
@@ -64,7 +64,7 @@ DisplaySelectItems(candidate)
 }
 
 ; 更新提示
-ImeTooltipUpdate(input_string, auxiliary_code:="", caret_pos:=0, candidate:=0, update_coord:=0)
+ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, update_coord:=0)
 {
     local
     static ime_tooltip_pos := ""
@@ -90,17 +90,17 @@ ImeTooltipUpdate(input_string, auxiliary_code:="", caret_pos:=0, candidate:=0, u
         }
 
         debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ") "
-        debug_tip .= "{" GetAuxiliaryTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
+        debug_tip .= "{" GetAssistantTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
-        debug_tip .= "`n" tooltip_debug[6]  ; Auxiliary
+        debug_tip .= "`n" tooltip_debug[6]  ; Assistant
         debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
         debug_tip .= "`n" tooltip_debug[11] ; Candidate
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
-        if( auxiliary_code ){
+        if( assistant_code ){
             tooltip_string := input_string
-            tooltip_string .= " {" auxiliary_code "|}"
+            tooltip_string .= " {" assistant_code "|}"
         } else {
             tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
             tooltip_string .= "(" caret_pos ")"

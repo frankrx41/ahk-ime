@@ -10,7 +10,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include, ime_pinyin_phrase.ahk
 #Include, ime_pinyin_combine.ahk
 #Include, ime_pinyin_process.ahk
-#Include, ime_pinyin_auxiliary.ahk
+#Include, ime_pinyin_assistant.ahk
 #Include, ime_pinyin_simple_spell.ahk
 #Include, ime_pinyin_associate.ahk
 #Include, ime_db.ahk

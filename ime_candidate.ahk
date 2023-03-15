@@ -6,7 +6,7 @@ class Candidate
         This.input_string   := ""
     }
 
-    Initialize(input_string, auxiliary_code) {
+    Initialize(input_string, assistant_code) {
         ; [
         ;     ; -1 , 0         , 1
         ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
@@ -16,12 +16,12 @@ class Candidate
         input_string := LTrim(input_string, " ")
         if( input_string )
         {
-            This.candidate := PinyinGetSentences(input_string, auxiliary_code)
+            This.candidate := PinyinGetSentences(input_string, assistant_code)
             This.input_string := input_string
-            This.auxiliary_code := auxiliary_code
+            This.assistant_code := assistant_code
         } else {
             This.input_string := ""
-            This.auxiliary_code := ""
+            This.assistant_code := ""
         }
     }
 
@@ -119,7 +119,7 @@ class Candidate
         return This.candidate[index, 3]
     }
 
-    GetAuxiliary(index)
+    GetAssistant(index)
     {
         return This.candidate[index, 6]
     }
