@@ -124,8 +124,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
     }
     else
     {
-        ime_input_split_trim    := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
-        ime_input_split_trim    := Trim(ime_input_split_trim, "'")
+        ime_input_split_trim := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
 
         ; ?
         PinyinProcess(DB, save_field_array, ime_input_split_trim, 10)

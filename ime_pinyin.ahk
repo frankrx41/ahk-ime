@@ -82,7 +82,7 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
     global tooltip_debug
 
     index           := 1
-    separate_words  := "'"
+    separate_words  := ""
     input_str       := origin_input
     strlen          := StrLen(input_str)
     last_char       := ""
@@ -161,7 +161,7 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
             {
                 if( pinyin_table[last_initials][SubStr(last_vowels,1,-1)] )
                 {
-                    prev_separate_words := LTrim(PinyinSplit(SubStr(input_str,index-2)), "'")
+                    prev_separate_words := PinyinSplit(SubStr(input_str,index-2))
                     if( InStr(prev_separate_words, "'")>2 )
                     {
                         str_left := separate_words . initials vowels . "'"
