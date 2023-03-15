@@ -15,7 +15,7 @@ PinyinAuxiliaryInitialize()
     ;     auxiliary_table[arr1] := arr2
     ; }
 
-    FileRead, file_content, test-spilt-character.txt
+    FileRead, file_content, data\character-spilt.txt
     index := 0
     Loop, Parse, file_content, `n
     {
