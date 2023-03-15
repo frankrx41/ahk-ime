@@ -10,7 +10,7 @@ if not A_IsAdmin
     Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
-Menu, Tray, Tip, AHK IME `nv0.04 (dev)
+Menu, Tray, Tip, AHK IME `nv0.05 (dev)
 
 #Include, ime_config.ahk
 
