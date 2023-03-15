@@ -51,7 +51,7 @@ class Candidate
             loop
             {
                 pinyin_char := SubStr(pinyin_string, index_pinyin, 1)
-                if( pinyin_char == input_char ) {
+                if( pinyin_char == input_char || pinyin_char == "" ) {
                     break
                 }
                 index_pinyin += 1
