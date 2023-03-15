@@ -92,6 +92,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
         debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ") "
         debug_tip .= "{" GetAuxiliaryTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
+        debug_tip .= "`n" tooltip_debug[6]  ; Auxiliary
         debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
         debug_tip .= "`n" tooltip_debug[11] ; Candidate

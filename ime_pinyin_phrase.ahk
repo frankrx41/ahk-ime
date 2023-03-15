@@ -149,18 +149,18 @@ PinyinGetSentences(ime_orgin_input)
             PinyinResultShowAuxiliary(search_result)
         }
 
-        ; 辅助码或超级简拼
-        if( false ) {
-            ; 使用任意一或二位辅助码协助筛选候选项去除重码
+        ; 使用任意一或二位辅助码协助筛选候选项去除重码
+        if( ime_auxiliary_input )
+        {
             PinyinResultCheckAuxiliary(search_result, ime_auxiliary_input)
-        } else {
-            ; 超级简拼 显示 4~8 字简拼候选
-            ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
-            separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
-            if( ime_orgin_input~="^[^']{4,8}$" && ime_input_split_trim != separate_single_char )
-            {
-                PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
-            }
+        }
+
+        ; 超级简拼 显示 4~8 字简拼候选
+        ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
+        separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
+        if( ime_orgin_input~="^[^']{4,8}$" && ime_input_split_trim != separate_single_char )
+        {
+            PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
         }
 
         ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现

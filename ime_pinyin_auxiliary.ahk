@@ -36,7 +36,7 @@ PinyinResultShowAuxiliary(ByRef search_result)
     local
     loop % search_result.Length()
     {
-        if( search_result[A_Index, 6] == "" && StrLen(search_result[A_Index, 2]) == 1)
+        if( search_result[A_Index, 6] == "" )
         {
             search_result[A_Index, 6] := GetAuxiliaryTable(search_result[A_Index, 2])
         }
@@ -73,25 +73,27 @@ GetAuxiliaryTable(str, max_cnt:=1)
     return result
 }
 
-PinyinResultCheckAuxiliary(ByRef search_result, tfzm)
+PinyinResultCheckAuxiliary(ByRef search_result, auxiliary_code)
 {
     local
-    dwselect := 1
+    global tooltip_debug
 
-    if( tfzm )
+    if( auxiliary_code )
     {
+        begin_tick := A_TickCount
         found_result := []
         loop % search_result.Length()
         {
+            ; Assert(StrLen(search_result[A_Index,2])>1, search_result[A_Index,2] "," search_result[A_Index,1])
             ; "i)" before the regular expression means that the match is case-insensitive
-            if( (search_result[A_Index,6] ~= "i)^" . tfzm) || (StrLen(search_result[A_Index,2])>1 && search_result[A_Index,6]~="i)" . RegExReplace(tfzm,"(.)","$1(.*)?")) )
+            ; a := search_result[A_Index,6] ~= "i)^" . auxiliary_code
+            ; b := StrLen(search_result[A_Index,2])>=1
+            ; c := search_result[A_Index,6] ~= "i)" . RegExReplace(auxiliary_code,"(.)","$1(.*)?")
+            content_auxiliary := InStr(search_result[A_Index,6], auxiliary_code)
+            same_as_auxiliary := auxiliary_code == search_result[A_Index, 2]
+            if( content_auxiliary || same_as_auxiliary )
             {
-                search_result[A_Index, -2] := dwselect ? tfzm : search_result[A_Index,6]
                 found_result.Push(search_result[A_Index])
-            }
-            else
-            {
-                search_result[A_Index].Delete(-2)
             }
         }
 
@@ -99,5 +101,7 @@ PinyinResultCheckAuxiliary(ByRef search_result, tfzm)
         {
             search_result := found_result
         }
+        
+        tooltip_debug[6] := "Auxiliary tick: " A_TickCount - begin_tick ", " found_result.Length() " [" auxiliary_code "]"
     }
 }
