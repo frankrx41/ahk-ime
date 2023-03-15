@@ -19,6 +19,9 @@ class Candidate
             This.candidate := PinyinGetSentences(input_string, auxiliary_code)
             This.input_string := input_string
             This.auxiliary_code := auxiliary_code
+        } else {
+            This.input_string := ""
+            This.auxiliary_code := ""
         }
     }
 
