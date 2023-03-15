@@ -27,6 +27,8 @@ DisplaySelectItems(candidate)
             in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
             if( word_index <= candidate.GetListLength() )
             {
+                begin_str := "  "
+                auxiliary_code := ""
                 if( in_column ) {
                     if ( select_index == word_index ) {
                         begin_str := ">["
@@ -34,15 +36,13 @@ DisplaySelectItems(candidate)
                         begin_str := Mod(word_index, 10) "."
                         ; begin_str :=  word_index "."
                     }
-                } else {
-                    begin_str := "  "
+                    ; auxiliary_code := candidate.GetAuxiliary(word_index)
+                    ; if( auxiliary_code ){
+                    ;     auxiliary_code := "{" auxiliary_code "}"
+                    ; }
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                auxiliary_code := candidate.GetAuxiliary(word_index)
-                if( auxiliary_code ){
-                    auxiliary_code := "{" auxiliary_code "}"
-                }
                 item_str := begin_str . candidate.GetWord(word_index) . auxiliary_code . end_str
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
@@ -52,7 +52,7 @@ DisplaySelectItems(candidate)
             if( row_index == 1 ) {
                 max_item_len[A_Index] := len + 1
             }
-            loop, % Max(12, max_item_len[A_Index]) - len {
+            loop, % Max(10, max_item_len[A_Index]) - len {
                 item_str .= " "
             }
             ; item_str .= "(" len ")"
