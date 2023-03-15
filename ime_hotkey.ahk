@@ -54,6 +54,10 @@ return
 BackSpace::
     if( ime_auxiliary_code ){
         ime_auxiliary_code := SubStr(ime_auxiliary_code, 1, StrLen(ime_auxiliary_code)-1)
+        if( StrLen(ime_auxiliary_code) == 0 ){
+            ime_input_candidate.SetSelectIndex(1)
+        }
+        ime_input_candidate.Initialize(ime_input_string, ime_auxiliary_code)
         ImeTooltipUpdate(ime_input_string, ime_auxiliary_code, ime_input_caret_pos, ime_input_candidate)
     }
     else if( ime_input_caret_pos != 0 ){
