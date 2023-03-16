@@ -1,3 +1,29 @@
+IsFullPinyin(initials, vowels)
+{
+    global zero_initials_table
+    global pinyin_table
+
+    return (zero_initials_table.HasKey(initials) && vowels == "") || (pinyin_table[initials, vowels])
+}
+
+GetFullVowels(initials, vowels)
+{
+    global pinyin_table
+    return pinyin_table[initials][vowels]
+}
+
+GetFullInitials(initials)
+{
+    global pinyin_table
+    return pinyin_table[initials][1]
+}
+
+IsInitials(initials)
+{
+    global pinyin_table
+    return pinyin_table.HasKey(initials)
+}
+
 PinyinInit()
 {
     local
@@ -5,7 +31,7 @@ PinyinInit()
     global pinyin_table
 
     ; 零声母
-    global zero_initials_table := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]
+    global zero_initials_table := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou","n"]
 
     ; 全拼声母韵母表
     full_spelling_json =
