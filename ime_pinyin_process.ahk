@@ -96,12 +96,17 @@ PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
     }
 }
 
-; index == 1, return itself
+; index == 1, return itself "a" -> "a" "a1" -> "a1"
 ; index == 2, "a1b1c1" -> "a1b1", "a1" -> ""
 GetLeftString(input_str, index, max_length:=8)
 {
     ; pos := InStr(input_str, "|")
+    is_last_char := false
     test_string := RegExReplace(input_str, "(\d)", "'")
+    if( SubStr(test_string, 0, 1) != "'" ){
+        test_string .= "'"
+        is_last_char := true
+    }
     max_pos := InStr(test_string, "'",, 1, max_length)
     max_pos := max_pos ? max_pos - StrLen(test_string) : 0
     cut_pos := InStr(test_string, "'",, max_pos, index) ; negative
@@ -131,6 +136,7 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, origin_input_string)
             ; "wo'xi'huan'ni" -> ["wo'xi'huan'ni"] -> ["wo'xi'huan" + "ni"] -> ["wo'xi" + "huan'ni"] -> ["wo" + "xi'huan'ni"]
             input_left := GetLeftString(input_string, A_Index)
             if( !input_left ){
+                input_string := ""
                 break
             }
             if( input_left ){
