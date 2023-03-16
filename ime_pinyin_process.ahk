@@ -59,7 +59,7 @@ PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
             }
             if( !PinyinHasKey(srf_all_Input_trim_off) )
             {
-                PinyinUpdateKey(DB, srf_all_Input_trim_off, false, A_Index!=1)
+                PinyinUpdateKey(DB, srf_all_Input_trim_off)
                 if( !PinyinHasResult(srf_all_Input_trim_off) )
                 {
                     if( !InStr(srf_all_Input_trim_off, "'") ){
@@ -139,7 +139,7 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
             {
                 limit_num := !!test_pos
                 ; simple_spell    := !InStr(srf_all_Input, srf_input_spilt_trim_left)
-                PinyinUpdateKey(DB, srf_input_spilt_trim_left, false, false, limit_num)
+                PinyinUpdateKey(DB, srf_input_spilt_trim_left, limit_num)
 
                 if( !PinyinHasResult(srf_input_spilt_trim_left) )
                 {

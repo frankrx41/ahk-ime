@@ -30,6 +30,8 @@ return
 #Include, ime_pinyin_assistant.ahk
 #Include, ime_pinyin_simple_spell.ahk
 #Include, ime_pinyin_associate.ahk
+#Include, ime_pinyin_get_result.ahk
+#Include, ime_pinyin_split.ahk
 #Include, ime_candidate.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk

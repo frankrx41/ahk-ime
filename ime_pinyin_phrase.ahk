@@ -12,12 +12,12 @@ PinyinHasKey(pinyin)
     return history_field_array.HasKey(pinyin)
 }
 
-PinyinUpdateKey(DB, pinyin, associate:=false, simple_spell:=false, limit_num:=100)
+PinyinUpdateKey(DB, pinyin, limit_num:=100)
 {
     global history_field_array
     if( !PinyinHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
     {
-        history_field_array[pinyin] := Get_jianpin(DB, "pinyin", "'" pinyin "'", "", associate, limit_num, simple_spell)
+        history_field_array[pinyin] := PinyinSqlGetResult(DB, pinyin, limit_num)
     }
 }
 

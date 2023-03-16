@@ -20,7 +20,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, ime_input_split_tri
     separate_single_char := GetSimpleSpellString(ime_input_split_trim)
     if( StrLen(separate_single_char)/2 >= 4 && ime_input_split_trim != separate_single_char )
     {
-        PinyinUpdateKey(DB, separate_single_char, false, true, 8)
+        PinyinUpdateKey(DB, separate_single_char, 8)
         list_len := history_field_array[separate_single_char].Length()
         loop % list_len
         {
