@@ -59,7 +59,10 @@ GetVowels(input_str, initials, ByRef index)
             vowels_len := vowels_test_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
             if( IsFullPinyin(initials, vowels) ){
-                break
+                next_char := SubStr(input_str, vowels_len+2, 1)
+                if( next_char == "" || IsInitials(next_char) ){
+                    break
+                }
             }
             if( A_Index >= vowels_test_len+1 ){
                 break

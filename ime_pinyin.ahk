@@ -41,9 +41,6 @@ PinyinInit()
             "a" :{"1":"a","ai":"i","an":"n","ang":"ng","ao":"o"},
             "e" :{"1":"e","ei":"i","en":"n","eng":"ng","er":"r"},
             "o" :{"1":"o","ou":"u"},
-            "i" :{"1":"i"},
-            "u" :{"1":"u"},
-            "v" :{"1":"v"},
 
             "b" :{"1":"b","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","o":"o","u":"u","un":"un"},
             "p" :{"1":"p","a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao","ei":"ei","en":"en","eng":"eng","i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","o":"o","ou":"ou","u":"u"},
