@@ -36,5 +36,5 @@ foo7()
     Assert(0, "Some debug info", 0)
     Assert(0, "Some debug info", 0)
     Assert(0, "Some debug info", 0)
-    Assert(0, "Another debug info", 1, 0)
+    Assert(0, "Another debug info", 1, 1)
 }

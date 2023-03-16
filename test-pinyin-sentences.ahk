@@ -13,6 +13,8 @@ SetWorkingDir, %A_ScriptDir%
 #Include, ime_pinyin_assistant.ahk
 #Include, ime_pinyin_simple_spell.ahk
 #Include, ime_pinyin_associate.ahk
+#Include, ime_pinyin_get_result.ahk
+#Include, ime_pinyin_split.ahk
 #Include, ime_db.ahk
 #Include, lib\JSON.ahk
 #Include, ime_func.ahk
@@ -30,6 +32,13 @@ tooltip_debug := []
 
 ; Add your debug code here
 tooltip_debug[1] := ">>"
+result := PinyinGetSentences("dea", "")
+result := PinyinGetSentences("yu2s", "")
+result := PinyinGetSentences("wxhn", "")
+result := PinyinGetSentences("wxhn", "")
+result := PinyinGetSentences("w'x'h'n'", "")
+result := PinyinGetSentences("w'x'h'n", "")
+result := PinyinGetSentences("w3x3h1n3", "")
 result := PinyinGetSentences("wokaixin", "")
 result := PinyinGetSentences("wo kaixin", "")
 result := PinyinGetSentences("wo kaixin", "")

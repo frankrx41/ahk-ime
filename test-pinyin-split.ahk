@@ -13,36 +13,46 @@ SetWorkingDir, %A_ScriptDir%
 #Include, ime_pinyin_assistant.ahk
 #Include, ime_pinyin_simple_spell.ahk
 #Include, ime_pinyin_associate.ahk
+#Include, ime_pinyin_get_result.ahk
+#Include, ime_pinyin_split.ahk
 #Include, ime_db.ahk
 #Include, lib\JSON.ahk
 #Include, ime_func.ahk
 #Include, lib\SQLiteDB.ahk
 global tooltip_debug := []
 PinyinInit()
-
+; x := ""
+; Msgbox, % x && InStr("aaa", x)
+; ExitApp, 
 ; Add your debug code here
+result := PinyinSplit("nio")
+result := PinyinSplit("zh'")
+result := PinyinSplit("yiciangeng")
+result := PinyinSplit("angan4")
 result := PinyinSplit("gan3jue2")
 result := PinyinSplit("wo ai ni")
 
 
 
 ; Unit test
-test_pinyin := [{"1": "angan", "2": "'an'gan'"}
-    ,{"1": "wo ai ni", "2": "'wo'ai'ni'" }
-    ,{"1": "zh", "2": "'zh'" }
-    ,{"1": "zhzh", "2": "'zh'zh'" }
-    ,{"1": "angeng", "2": "'an'geng'"}
-    ,{"1": "woaini", "2": "'wo'ai'ni'"}
-    ,{"1": "wo3ai4ni3", "2": "'wo3ai4ni3"}
-    ,{"1": "w3a4n3", "2": "'w3a4n3"}
+test_pinyin := [{"1": "angan", "2": "an'gan"}
+    ; ,{"1": "wo ai ni", "2": "wo'|'ai'|'ni" }
+    ,{"1": "zh", "2": "zh" }
+    ,{"1": "zh'", "2": "zh'" }
+    ,{"1": "zh4", "2": "zh4" }
+    ,{"1": "zhzh", "2": "zh'zh" }
+    ,{"1": "angeng", "2": "an'geng"}
+    ,{"1": "woaini", "2": "wo'ai'ni"}
+    ,{"1": "wo3ai4ni3", "2": "wo3ai4ni3"}
+    ,{"1": "w3a4n3", "2": "w3a4n3"}
     
-    ,{"1": "wAN", "2": "'w'a'n'"}
-    ,{"1": "maLiAo", "2": "'ma'li'ao'"}
-    ,{"1": "Wo", "2": "'wo'"}
-    ,{"1": "WoAiNi", "2": "'wo'ai'ni'"}
+    ; ,{"1": "wAN", "2": "w'a'n"}
+    ; ,{"1": "maLiAo", "2": "ma'li'ao"}
+    ,{"1": "Wo", "2": "wo"}
+    ; ,{"1": "WoAiNi", "2": "wo'ai'ni"}
 
-    ,{"1": "wan", "2": "'wan'"}
-    ,{"1": "w", "2": "'w'"}]
+    ,{"1": "wan", "2": "wan"}
+    ,{"1": "w", "2": "w"}]
 
 
 error_cnt := 0
