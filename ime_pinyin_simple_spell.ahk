@@ -7,7 +7,6 @@ GetSimpleSpellString(input_string)
     input_string := RegExReplace(input_string,"([^'\d])","$1'")
     input_string := StrReplace(input_string,"''","'")
     input_string := RegExReplace(input_string,"'(\d)","$1")
-    input_string := RTrim(input_string, "'")
     return input_string
 }
 
