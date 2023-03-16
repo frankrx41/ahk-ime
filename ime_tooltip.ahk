@@ -89,7 +89,7 @@ ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, u
             ime_tooltip_pos := GetCaretPos()
         }
 
-        debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ") "
+        debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
         debug_tip .= " {" GetAssistantTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= " (" candidate.GetPinyin(candidate.GetSelectIndex()) ")"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
