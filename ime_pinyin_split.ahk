@@ -22,12 +22,13 @@ GetTone(input_str, initials, vowels, ByRef index)
     return tone
 }
 
-GetVowelsLength(input_str, index)
+CalcMaxVowelsLength(input_str, index)
 {
     local
     strlen := StrLen(input_str)
     vowels_test_len := 0
     loop {
+        ; Max len is 4
         if( vowels_test_len >= 4 || index+vowels_test_len-A_Index>=strlen ){
             break
         }
@@ -47,22 +48,17 @@ GetVowels(input_str, initials, ByRef index)
 {
     local
     ; 最长是4个
-    vowels_test_len := GetVowelsLength(input_str, index)
+    vowels_test_len := CalcMaxVowelsLength(input_str, index)
     strlen      := StrLen(input_str)
     vowels      := ""
     vowels_len  := 0
-    found       := false
     if( vowels_test_len > 0 )
     {
         loop
         {
-            if( index+vowels_test_len-A_Index > strlen ){
-                continue
-            }
             vowels_len := vowels_test_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
-            if( GetFullVowels(initials, vowels) ){
-                found := true
+            if( IsFullPinyin(initials, vowels) ){
                 break
             }
             if( A_Index >= vowels_test_len+1 ){
@@ -72,10 +68,9 @@ GetVowels(input_str, initials, ByRef index)
     }
     index += vowels_len
 
-    if( !found ){
+    if( !IsFullPinyin(initials, vowels) ){
         vowels .= "%"
     }
-    vowels := vowels ? vowels : "%"
     return vowels
 }
 
