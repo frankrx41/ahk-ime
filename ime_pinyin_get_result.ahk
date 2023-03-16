@@ -1,3 +1,39 @@
+; abc_def -> a_f_
+; zhong_hua -> z_h_
+GetSimpleKey(input_str)
+{
+    sim_key := Trim(RegExReplace(input_str, "([a-z])[a-z%]+", "$1"), "'")
+    if( !InStr("_12345", SubStr(sim_key, 0, 1)) ){
+        sim_key .= "_"
+    }
+    return sim_key
+}
+
+GetSimpleKeyLength(sim_key)
+{
+    ; Replace all digits in the string with an empty string and store the length difference
+    length := StrLen(str) - StrLen(RegExReplace(str, "[\d_]"))
+    return length
+}
+
+GetFullKey(input_str, sim_key)
+{
+    full_key := RegExReplace(input_str, "_([^aoe]h?)_", "_$1%_")
+    last_char := SubStr(full_key, 0, 1)
+    if( last_char == "%" ){
+        full_key .= "_"
+    }
+    else
+    if( !InStr("%_12345", last_char) ){
+        full_key .= "%_"
+    }
+
+    if( StrReplace(full_key, "%") == sim_key ){
+        full_key := ""
+    }
+    return full_key
+}
+
 ; Get the reseult from database
 ; Input string origin_input must not content "|"
 ; Please spilt raw input by space then use this to get result
@@ -7,51 +43,15 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
     Critical
     global tooltip_debug
 
-    origin_input   := LTrim(origin_input, "'")
-    input_str   := origin_input
-
+    origin_input := LTrim(origin_input, "'")
     Assert(!InStr(origin_input, "|"))
 
-    full_key    := ""
-
+    input_str   := origin_input
     input_str   := StrReplace(input_str, "'", "_")
 
-    input_str   := StrReplace(input_str, "on'", "ong'")
-    sim_key     := Trim(RegExReplace(input_str, "([a-z]h?)[a-gi-z]+", "$1", word_count), "'")
-    sim_key     := RegExReplace(sim_key, "([csz])h", "$1")
-    if( !InStr("_12345", SubStr(sim_key, 0, 1)) ){
-        sim_key .= "_"
-    }
-
-    if( word_count ){
-        full_key := RegExReplace(input_str, "'([^aoe]h?)'", "'$1[a-z]*'")
-    }
-    else
-    {
-        tRegEx := ""
-        for _,key in ["c","s","z"] {
-            if InStr(input_str,key "h") {
-                tRegEx .= key
-            }
-        }
-        if( tRegEx ){
-            full_key := RegExReplace(input_str, "'([^aoe]h?)'", "'$1[a-z]*'")
-            if( StrLen(sim_key)==1 )
-                limit_num:=100
-        }
-    }
-
-    if( full_key=="" ){
-        if (input_str~="^''[aoe](''[aoe])*''$") {
-            full_key:=input_str
-        } else {
-            limit_num:=100
-        }
-    }
-
-    if( !InStr("_12345", SubStr(full_key, 0, 1)) ){
-        full_key .= "%"
-    }
+    ; Get first char
+    sim_key     := GetSimpleKey(input_str)
+    full_key    := GetFullKey(input_str, sim_key)
 
     if( InStr(input_str, "1") ){
         full_key := StrReplace(full_key, "1", "_")
@@ -63,7 +63,7 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
     }
     else
     {
-        sql_cmd := "jp LIKE '" sim_key "'" (full_key?" AND key LIKE '" full_key "'":"") " "
+        sql_cmd := "jp LIKE '" sim_key "'" (full_key ? " AND key LIKE '" full_key "'" : "") " "
     }
 
     tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd
