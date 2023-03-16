@@ -27,7 +27,7 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result,
     {
         if( save_field_array[2,1,1]!=Chr(2) )
         {
-            word := save_field_array[1,1,-1] "'" save_field_array[2,1,-1]
+            word := save_field_array[1,1,-1] . save_field_array[2,1,-1]
             While( InStr(word,"'") && !PinyinHasResult(word) ) {
                 word := RegExReplace(word, "i)'([^']+)?$")
             }
@@ -55,7 +55,7 @@ CombineWord(arr)
     loop % arr.Length()
     {
         if( arr[A_Index, 0]!=Chr(2) ){
-            rarr[1] .= (rarr[1]?"'":"") . arr[A_Index, 1, 1]
+            rarr[1] .= arr[A_Index, 1, 1]
             rarr[2] .= arr[A_Index, 1, 2]
         }
     }
