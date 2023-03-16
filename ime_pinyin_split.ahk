@@ -3,9 +3,10 @@ IsTone(tone)
     return tone && InStr("12345' ", tone)
 }
 
-GetTone(input_str, ByRef index)
+GetTone(input_str, initials, vowels, ByRef index)
 {
     local
+    global pinyin_table
     strlen := StrLen(input_str)
     tone := SubStr(input_str, index, 1)
     if( IsTone(tone) ) {
@@ -13,7 +14,11 @@ GetTone(input_str, ByRef index)
         ; TODO: make space work to split words
         tone := tone == " " ? "'" : tone
     } else {
-        tone := ( index < strlen+1 ) ? "-" : ""
+        if( index < strlen+1 ){
+            tone := "-"
+        } else {
+            tone := pinyin_table[initials][vowels] ? "'" : ""
+        }
     }
     return tone
 }
@@ -66,6 +71,10 @@ GetVowels(input_str, initials, ByRef index)
         }
     }
     index += vowels_len
+    if( !pinyin_table[initials][vowels] ){
+        vowels .= "%"
+    }
+    vowels := vowels ? vowels : "%"
     return vowels
 }
 
@@ -119,7 +128,7 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
             vowels := GetVowels(input_str, initials, index)
 
             ; 声调
-            tone := GetTone(input_str, index)
+            tone := GetTone(input_str, initials, vowels, index)
 
             ; 词库辅助分词
             if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
