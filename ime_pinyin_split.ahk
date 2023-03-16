@@ -6,7 +6,6 @@ IsTone(tone)
 GetTone(input_str, initials, vowels, ByRef index)
 {
     local
-    global pinyin_table
     strlen := StrLen(input_str)
     tone := SubStr(input_str, index, 1)
     if( IsTone(tone) ) {
@@ -17,7 +16,7 @@ GetTone(input_str, initials, vowels, ByRef index)
         if( index < strlen+1 ){
             tone := "-"
         } else {
-            tone := pinyin_table[initials][vowels] ? "'" : ""
+            tone := IsFullPinyin(initials, vowels) ? "'" : ""
         }
     }
     return tone
@@ -47,12 +46,12 @@ GetVowelsLength(input_str, index)
 GetVowels(input_str, initials, ByRef index)
 {
     local
-    global pinyin_table
     ; 最长是4个
     vowels_test_len := GetVowelsLength(input_str, index)
     strlen      := StrLen(input_str)
     vowels      := ""
     vowels_len  := 0
+    found       := false
     if( vowels_test_len > 0 )
     {
         loop
@@ -62,7 +61,8 @@ GetVowels(input_str, initials, ByRef index)
             }
             vowels_len := vowels_test_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
-            if( pinyin_table[initials][vowels] ){
+            if( GetFullVowels(initials, vowels) ){
+                found := true
                 break
             }
             if( A_Index >= vowels_test_len+1 ){
@@ -71,7 +71,8 @@ GetVowels(input_str, initials, ByRef index)
         }
     }
     index += vowels_len
-    if( !pinyin_table[initials][vowels] ){
+
+    if( !found ){
         vowels .= "%"
     }
     vowels := vowels ? vowels : "%"
@@ -94,11 +95,10 @@ GetInitials(input_str, initials, ByRef index)
 ; 拼音音节切分
 ; ' 表示自动分词
 ; 12345 空格 大写 表示手动分词
-PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
+PinyinSplit(origin_input, show_full:=0, DB:="")
 {
     local
     Critical
-    global pinyin_table
     global tooltip_debug
 
     index           := 1
@@ -117,7 +117,7 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
 
         initials := SubStr(input_str, index, 1)
         ; 字母，自动分词
-        if( pinyin_table.HasKey(initials) )
+        if( IsInitials(initials) )
         {
             start_index := index
 
@@ -126,6 +126,7 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
 
             ; 韵母
             vowels := GetVowels(input_str, initials, index)
+            full_vowels := GetFullVowels(initials, vowels)
 
             ; 声调
             tone := GetTone(input_str, initials, vowels, index)
@@ -133,7 +134,8 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
             ; 词库辅助分词
             if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
             {
-                if( pinyin_table[last_initials][SubStr(last_vowels,1,-1)] )
+                cutted_last_vowels := SubStr(last_vowels,1,-1)
+                if( IsFullPinyin(last_initials, cutted_last_vowels) )
                 {
                     prev_separate_words := PinyinSplit(SubStr(input_str, start_index-1))
                     str_left := separate_words . initials . vowels . tone
@@ -154,10 +156,10 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
             last_vowels     := vowels
 
             if( !IsTone(tone) ){
-                if( pinyin_table[initials][vowels] ){
-                    last_char := SubStr(pinyin_table[initials][vowels],0)
-                } else if( pinyin_table[initials][1] ) {
-                    last_char := SubStr(pinyin_table[initials][1],0)
+                if( full_vowels ){
+                    last_char := SubStr(full_vowels,0)
+                } else if( initials ) {
+                    last_char := SubStr(initials,0)
                 }
             } else {
                 last_char := "'"
@@ -166,12 +168,12 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
             ; 更新音调
             tone := tone != "" ? IsTone(tone) ? tone : "'" : ""
             ; 转全拼显示
-            if (show_full) {
-                separate_words .= pinyin_table[initials][1] . pinyin_table[initials][vowels] . tone
+            if( show_full ){
+                Assert(initials == GetFullInitials(initials))
+                
+                vowels := full_vowels ? full_vowels : vowels
             }
-            else {
-                separate_words .= initials . vowels . tone
-            }
+            separate_words .= initials . vowels . tone
         }
         ; 忽略
         else

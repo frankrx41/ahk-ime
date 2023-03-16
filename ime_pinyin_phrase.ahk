@@ -140,7 +140,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
     }
     else
     {
-        ime_input_split_trim := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
+        ime_input_split_trim := PinyinSplit(ime_orgin_input, true, DB)
 
         ; ?
         PinyinProcess(DB, save_field_array, ime_input_split_trim)
@@ -164,7 +164,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
         PinyinResultCheckAssistant(search_result, assistant_code)
 
         ; 超级简拼 显示 4 字及以上简拼候选
-        PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split_trim)
+        PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)
 
         ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
         PinyinResultHideZeroWeight(search_result)
