@@ -11,7 +11,7 @@ GetTone(input_str, ByRef index)
     if( IsTone(tone) ) {
         index += 1
     } else {
-        tone := ( index < strlen ) ? "-" : ""
+        tone := ( index < strlen+1 ) ? "-" : ""
     }
     return tone
 }
