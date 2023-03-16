@@ -25,7 +25,7 @@ relative_path = "../data/dictionary_error_heteronym_words.csv"
 full_path = os.path.join(absolute_path, relative_path)
 f3 = open(full_path, "w")
 
-relative_path = "../data/dictionary_error_single_word.csv"
+relative_path = "../data/dictionary_error_single_word.json"
 full_path = os.path.join(absolute_path, relative_path)
 f4 = open(full_path, "w")
 
