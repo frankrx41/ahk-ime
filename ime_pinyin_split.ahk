@@ -10,6 +10,8 @@ GetTone(input_str, ByRef index)
     tone := SubStr(input_str, index, 1)
     if( IsTone(tone) ) {
         index += 1
+        ; TODO: make space work to split words
+        tone := tone == " " ? "'" : tone
     } else {
         tone := ( index < strlen+1 ) ? "-" : ""
     }
