@@ -18,7 +18,7 @@ GetSimpleKeyLength(sim_key)
 
 GetFullKey(input_str, sim_key)
 {
-    full_key := RegExReplace(input_str, "_([^aoe]h?)_", "_$1%_")
+    full_key := input_str
     last_char := SubStr(full_key, 0, 1)
     if( last_char == "%" ){
         full_key .= "_"
