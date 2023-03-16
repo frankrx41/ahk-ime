@@ -110,7 +110,7 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
         {
             loop_num += 1
             if (A_TickCount - begin > 50 && !Mod(A_Index, 20)){
-                Msgbox, % "Forward timeout"
+                Assert(0, "Forward timeout")
                 break
             }
 
