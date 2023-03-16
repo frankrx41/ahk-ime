@@ -130,22 +130,25 @@ PinyinSplit(origin_input, show_full:=0, DB:="")
             tone := GetTone(input_str, initials, vowels, index)
 
             ; 词库辅助分词
-            if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
+            if( last_char && last_char != "'" && last_initials )
             {
-                cutted_last_vowels := SubStr(last_vowels,1,-1)
-                if( IsFullPinyin(last_initials, cutted_last_vowels) )
+                if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
                 {
-                    prev_separate_words := PinyinSplit(SubStr(input_str, start_index-1))
-                    str_left := separate_words . initials . vowels . tone
-                    str_right := SubStr(separate_words,1,-2) . "'" . prev_separate_words
-                    weight_left := PinyinCheckWeight(DB, str_left)
-                    weight_right := PinyinCheckWeight(DB, str_right)
-                    if( weight_right >= weight_left )
+                    cutted_last_vowels := SubStr(last_vowels,1,-1)
+                    if( IsFullPinyin(last_initials, cutted_last_vowels) )
                     {
-                        Assert(SubStr(separate_words,0) == "'")
-                        separate_words := SubStr(separate_words,1,-2) "'" prev_separate_words
-                        tooltip_debug[1] .= origin_input "->[" separate_words "] "
-                        return separate_words
+                        prev_separate_words := PinyinSplit(SubStr(input_str, start_index-1), show_full, DB)
+                        str_left := separate_words . initials . vowels . tone
+                        str_right := SubStr(separate_words,1,-2) . "'" . prev_separate_words
+                        weight_left := PinyinCheckWeight(DB, str_left)
+                        weight_right := PinyinCheckWeight(DB, str_right)
+                        if( weight_right >= weight_left )
+                        {
+                            Assert(SubStr(separate_words,0) == "'")
+                            separate_words := SubStr(separate_words,1,-2) "'" prev_separate_words
+                            tooltip_debug[1] .= origin_input "->[" separate_words "] "
+                            return separate_words
+                        }
                     }
                 }
             }
@@ -201,16 +204,17 @@ PinyinCheckWeight(DB, origin_input)
     }
 
     input_str := origin_input
-    input_str := StrReplace(input_str, "'", "''")
-    input_str := StrReplace(input_str, "'|'")
+    input_str := StrReplace(input_str, "'", "_")
+
+    ; input_str := StrReplace(input_str, "'|'")
     if( weight_data[input_str] != "" ){
         tooltip_debug[7] .= ": [" input_str "]->(" weight_data[input_str] ") `n"
         return weight_data[input_str]
     }
 
-    sim_str := RegExReplace(Trim(input_str, "'"), "([a-z])[a-z]+", "$1")
-    key_str := RegExReplace(input_str, "'([csz]h?)'", "'$1.*'")
-    sql_cmd := "SELECT weight FROM pinyin WHERE jp='" sim_str "' AND key REGEXP '^" Trim(key_str,"'") "$' ORDER BY weight DESC LIMIT 1"
+    sim_key := GetSimpleKey(input_str)
+    full_key := GetFullKey(input_str, sim_key)
+    sql_cmd := "SELECT weight FROM pinyin WHERE jp LIKE '" sim_key "' AND key LIKE '" full_key "' ORDER BY weight DESC LIMIT 1"
     if( DB.GetTable(sql_cmd,Result) )
     {
         check_split_cnt += 1
