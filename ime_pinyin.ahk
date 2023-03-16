@@ -306,25 +306,25 @@ Get_jianpin(DB, scheme, str, RegExObj:="", lianxiang:=1, LimitNum:=100, cjjp:=fa
     zero_initials_table:="o"
     if( lianxiang ){
         if( rstr~="[\.\*\?\|\[\]]" )
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{' AND key REGEXP '^" rstr "' ORDER BY weight DESC LIMIT 3"
+            _SQL:="jp>='" tstr "''a' AND jp<'" tstr "''{' AND key REGEXP '^" rstr "' ORDER BY weight DESC LIMIT 3"
         else
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp>='" tstr "''a' AND jp<'" tstr "''{'" (rstr?" AND key>='" rstr "''a' AND key<'" rstr "''{'":"") " ORDER BY weight DESC LIMIT 3"
+            _SQL:="jp>='" tstr "''a' AND jp<'" tstr "''{'" (rstr?" AND key>='" rstr "''a' AND key<'" rstr "''{'":"") " ORDER BY weight DESC LIMIT 3"
     } else if (cjjp&&(scheme~="i)^(abc|wr|sg)sp"||(zero_initials_table:=customspjm[scheme, "0"])~="^[a-zA-Z]$")&&InStr(str, zero_initials_table)){
         tstr:=StrReplace(tstr, zero_initials_table, "_", nCount:=0), rstr:=StrReplace(tstr, "_", "[aoe]")
         if( nCount>4 )
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE " Format("((jp>='{:s}a' AND jp<'{:s}b') OR (jp>='{:s}e' AND jp<'{:s}f') OR (jp>='{:s}o' AND jp<'{:s}p')) AND", SubStr(tstr, 1, InStr(tstr, "_")-1)) " jp like '" tstr "' AND jp REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            _SQL:="" Format("((jp>='{:s}a' AND jp<'{:s}b') OR (jp>='{:s}e' AND jp<'{:s}f') OR (jp>='{:s}o' AND jp<'{:s}p')) AND", SubStr(tstr, 1, InStr(tstr, "_")-1)) " jp like '" tstr "' AND jp REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
         else
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp IN " enumlsm(tstr) " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            _SQL:="jp IN " enumlsm(tstr) " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
     } else {
         if( rstr~="[\.\*\?\|\[\]]" )
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "' AND key REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            _SQL:="jp='" tstr "' AND key REGEXP '^" rstr "$' ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
         else
-            _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp LIKE '" tstr "'" (rstr?" AND key LIKE '" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
-            ; _SQL:="SELECT key,value,weight FROM 'pinyin' WHERE jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            _SQL:="jp LIKE '" tstr "'" (rstr?" AND key LIKE '" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
+            ; _SQL:="jp='" tstr "'" (rstr?" AND key='" rstr "'":"") " ORDER BY weight DESC" (LimitNum?" LIMIT " LimitNum:"")
     }
 
     tooltip_debug[3] .= "`n[" ystr "]: """ _SQL
-    if( DB.GetTable(_SQL, result_table) )
+    if( DB.GetTable("SELECT key,value,weight FROM 'pinyin' WHERE " _SQL, result_table) )
     {
         ; result_table.Rows = [
         ;   ["wu'hui", "舞会", "30000"]
