@@ -29,9 +29,10 @@ PinyinInit()
     local
     global JSON
     global pinyin_table
+    global zero_initials_table := {}
 
     ; 零声母
-    global zero_initials_table := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou","n"]
+    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou","n"]
 
     ; 全拼声母韵母表
     full_spelling_json =
@@ -80,8 +81,9 @@ PinyinInit()
     pinyin_table["l","ue"] := "ue"
     pinyin_table["n","ue"] := "ue"
 
-    for key,value In zero_initials_table
+    for key,value In zero_initials
     {
+        zero_initials_table[value] := value
         if (StrLen(value)>1)
         {
             pinyin_table[t1:=SubStr(value, 1, 1)].Delete(value)
