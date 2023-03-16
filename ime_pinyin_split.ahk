@@ -58,8 +58,9 @@ GetVowels(input_str, initials, ByRef index)
             vowels_len := vowels_max_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
             if( IsFullPinyin(initials, vowels) ){
-                next_char := SubStr(input_str, vowels_len+2, 1)
-                if( next_char == "" || IsInitials(next_char) ){
+                next_char := SubStr(input_str, index+vowels_len, 1)
+                ; tooltip_debug[1] .= "(" next_char ")"
+                if( next_char == "" || IsInitials(next_char) || IsTone(next_char) ){
                     break
                 }
             }
