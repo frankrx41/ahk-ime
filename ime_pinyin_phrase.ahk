@@ -143,7 +143,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
         ime_input_split_trim := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
 
         ; ?
-        PinyinProcess(DB, save_field_array, ime_input_split_trim, 10)
+        PinyinProcess(DB, save_field_array, ime_input_split_trim)
 
         ; 组词
         PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)

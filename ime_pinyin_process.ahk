@@ -96,83 +96,58 @@ PinyinProcess2(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_I
     }
 }
 
-PinyinProcess3(ByRef DB, ByRef save_field_array, ByRef history_cutpos, srf_all_Input_for_trim, zisu)
+; index == 1, return itself
+; index == 2, "a1b1c1" -> "a1b1", "a1" -> ""
+GetLeftString(input_str, index, max_length:=8)
+{
+    ; pos := InStr(input_str, "|")
+    test_string := RegExReplace(input_str, "(\d)", "'")
+    max_pos := InStr(test_string, "'",, 1, max_length)
+    max_pos := max_pos ? max_pos - StrLen(test_string) : 0
+    cut_pos := InStr(test_string, "'",, max_pos, index) ; negative
+    left_string := SubStr(input_str, 1, cut_pos)
+    return left_string
+}
+
+PinyinProcess3(ByRef DB, ByRef save_field_array, origin_input_string)
 {
     local
     global history_field_array
-    srf_all_Input_for_trim_len := StrLen(srf_all_Input_for_trim)
-    test_pos := history_cutpos[history_cutpos.Length()]
-    if( test_pos<srf_all_Input_for_trim_len )
+    input_string := origin_input_string
+    begin := A_TickCount
+
+    loop
     {
-        loop_num := 0
-        begin := A_TickCount
+        if( !input_string ){
+            break
+        }
+        if (A_TickCount - begin > 50 && !Mod(A_Index, 20)){
+            Assert(0, "Forward timeout")
+            break
+        }
+        
+        last_clip := ""
         loop
         {
-            loop_num += 1
-            if (A_TickCount - begin > 50 && !Mod(A_Index, 20)){
-                Assert(0, "Forward timeout")
+            ; "wo'xi'huan'ni" -> ["wo'xi'huan'ni"] -> ["wo'xi'huan" + "ni"] -> ["wo'xi" + "huan'ni"] -> ["wo" + "xi'huan'ni"]
+            input_left := GetLeftString(input_string, A_Index)
+            if( last_clip == input_left || !input_left ){
                 break
             }
-
-            cut_pos := InStr(srf_all_Input_for_trim "'", "'", 0, 0, loop_num)
-            srf_input_spilt_trim_left  := SubStr(srf_all_Input_for_trim, test_pos+1, cut_pos-1-test_pos)
-            srf_input_spilt_trim_right := SubStr(srf_all_Input_for_trim, cut_pos+1)
-
-            if( cut_pos<test_pos+1 || srf_input_spilt_trim_left == "") {
-                break
-            }
-            if( InStr(srf_input_spilt_trim_left, "|") )
-            {
-                if( srf_input_spilt_trim_left == "|" ){
-                    loop_num := 0
-                    history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_input_spilt_trim_left)
-                    test_pos := history_cutpos[history_cutpos.Length()]
+            last_clip := input_left
+            if( input_left ){
+                PinyinUpdateKey(DB, input_left)
+                if( PinyinHasKey(input_left) && PinyinHasResult(input_left) ){
+                    save_field_array.Push(CopyObj(history_field_array[input_left]))
+                    input_string := SubStr(input_string, StrLen(input_left)+1)
+                    break
                 }
-                continue
-            }
-            if( InStr(srf_input_spilt_trim_left, "'", , 1, zisu) ){
-                continue
-            }
-
-            ; Get result
-            if( srf_input_spilt_trim_left && !PinyinHasKey(srf_input_spilt_trim_left) )
-            {
-                limit_num := !!test_pos
-                ; simple_spell    := !InStr(srf_all_Input, srf_input_spilt_trim_left)
-                PinyinUpdateKey(DB, srf_input_spilt_trim_left, limit_num)
-
-                if( !PinyinHasResult(srf_input_spilt_trim_left) )
-                {
-                    if( InStr(srf_input_spilt_trim_left,"'") ){
-                        history_field_array[srf_input_spilt_trim_left] := {0:srf_input_spilt_trim_left}
-                    } else {
-                        ; e.g. "io"
-                        history_field_array[srf_input_spilt_trim_left] := {0:srf_input_spilt_trim_left,1:[srf_input_spilt_trim_left, srf_input_spilt_trim_left=Chr(2)?"":srf_input_spilt_trim_left]}
-                    }
-                } else if (test_pos) {
-                    history_field_array[srf_input_spilt_trim_left].Push([])
-                }
-            }
-
-            if( !PinyinHasResult(srf_input_spilt_trim_left) && InStr(srf_input_spilt_trim_left,"'") )
-            {
-                continue
-            }
-            else
-            {
-                loop_num := 0
-                if( srf_input_spilt_trim_left != "" ) {
-                    save_field_array.Push(CopyObj(history_field_array[srf_input_spilt_trim_left]))
-                    Assert(cut_pos == history_cutpos[history_cutpos.Length()]+1+StrLen(srf_input_spilt_trim_left))
-                    history_cutpos[history_cutpos.Length()+1] := history_cutpos[history_cutpos.Length()]+1+StrLen(srf_input_spilt_trim_left)
-                }
-                test_pos := history_cutpos[history_cutpos.Length()]
             }
         }
     }
 }
 
-PinyinProcess(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, zisu)
+PinyinProcess(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim)
 {
     local
     history_cutpos  :=[0]
@@ -183,5 +158,5 @@ PinyinProcess(ByRef DB, ByRef save_field_array, srf_all_Input_for_trim, zisu)
     ; 
     ; PinyinProcess2(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
     ; 
-    PinyinProcess3(DB, save_field_array, history_cutpos, srf_all_Input_for_trim, zisu)
+    PinyinProcess3(DB, save_field_array, srf_all_Input_for_trim)
 }
