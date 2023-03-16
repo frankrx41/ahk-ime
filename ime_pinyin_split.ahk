@@ -26,37 +26,36 @@ CalcMaxVowelsLength(input_str, index)
 {
     local
     strlen := StrLen(input_str)
-    vowels_test_len := 0
+    vowels_max_len := 0
     loop {
         ; Max len is 4
-        if( vowels_test_len >= 4 || index+vowels_test_len-A_Index>=strlen ){
+        if( vowels_max_len >= 4 || index+vowels_max_len-A_Index>=strlen ){
             break
         }
-        check_char := SubStr(input_str, index+vowels_test_len, 1)
+        check_char := SubStr(input_str, index+vowels_max_len, 1)
         if( IsTone(check_char) ){
             break
         }
         if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
             break
         }
-        vowels_test_len += 1
+        vowels_max_len += 1
     }
-    return vowels_test_len
+    return vowels_max_len
 }
 
 GetVowels(input_str, initials, ByRef index)
 {
     local
     ; 最长是4个
-    vowels_test_len := CalcMaxVowelsLength(input_str, index)
-    strlen      := StrLen(input_str)
+    vowels_max_len := CalcMaxVowelsLength(input_str, index)
     vowels      := ""
     vowels_len  := 0
-    if( vowels_test_len > 0 )
+    if( vowels_max_len > 0 )
     {
         loop
         {
-            vowels_len := vowels_test_len+1-A_Index
+            vowels_len := vowels_max_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
             if( IsFullPinyin(initials, vowels) ){
                 next_char := SubStr(input_str, vowels_len+2, 1)
@@ -64,7 +63,7 @@ GetVowels(input_str, initials, ByRef index)
                     break
                 }
             }
-            if( A_Index >= vowels_test_len+1 ){
+            if( A_Index >= vowels_max_len+1 ){
                 break
             }
         }
