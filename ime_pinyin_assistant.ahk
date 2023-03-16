@@ -90,9 +90,6 @@ PinyinResultCheckAssistant(ByRef search_result, assistant_code)
 {
     local
     global tooltip_debug
-    ; static assistant_table := [
-        
-    ; ,]
 
     if( assistant_code )
     {
