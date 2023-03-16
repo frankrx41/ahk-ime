@@ -53,9 +53,10 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
         full_key .= "%"
     }
 
-    full_key := Trim(full_key,"'")
-    zero_initials_table:="o"
-
+    if( InStr(input_str, "1") ){
+        full_key := StrReplace(full_key, "1", "_")
+        sim_key := StrReplace(sim_key, "1", "_")
+    }
     if( full_key~="[\.\*\?\|\[\]]" )
     {
         sql_cmd := "jp='" sim_key "' AND key REGEXP '^" full_key "$' "
@@ -66,7 +67,7 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
     }
 
     tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd
-    tooltip_debug[3] .= "`n" CallStack(4)
+    ; tooltip_debug[3] .= "`n" CallStack(4)
     sql_cmd := "SELECT key,value,weight FROM 'pinyin' WHERE " . sql_cmd . " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
     if( DB.GetTable(sql_cmd, result_table) )
     {
