@@ -69,6 +69,7 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 
 GetFirstWord(input_str)
 {
+    local
     index := 0
     loop, Parse, input_str
     {
