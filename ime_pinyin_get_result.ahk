@@ -1,11 +1,16 @@
-PinyinSqlGetResult(DB, orgin_str, limit_num:=100)
+; Get the reseult from database
+; Input string origin_input must not content "|"
+; Please spilt raw input by space then use this to get result
+PinyinSqlGetResult(DB, origin_input, limit_num:=100)
 {
     local
     Critical
     global tooltip_debug
 
-    orgin_str   := LTrim(orgin_str, "'")
-    input_str   := orgin_str
+    origin_input   := LTrim(origin_input, "'")
+    input_str   := origin_input
+
+    Assert(!InStr(origin_input, "|"))
 
     full_key    := ""
 
@@ -14,7 +19,9 @@ PinyinSqlGetResult(DB, orgin_str, limit_num:=100)
     input_str   := StrReplace(input_str, "on'", "ong'")
     sim_key     := Trim(RegExReplace(input_str, "([a-z]h?)[a-gi-z]+", "$1", word_count), "'")
     sim_key     := RegExReplace(sim_key, "([csz])h", "$1")
-    Assert( InStr("_12345", SubStr(sim_key, 0, 1)), orgin_str "->" sim_key )
+    if( !InStr("_12345", SubStr(sim_key, 0, 1)) ){
+        sim_key .= "_"
+    }
 
     if( word_count ){
         full_key := RegExReplace(input_str, "'([^aoe]h?)'", "'$1[a-z]*'")
@@ -46,7 +53,6 @@ PinyinSqlGetResult(DB, orgin_str, limit_num:=100)
         full_key .= "%"
     }
 
-
     full_key := Trim(full_key,"'")
     zero_initials_table:="o"
 
@@ -60,7 +66,7 @@ PinyinSqlGetResult(DB, orgin_str, limit_num:=100)
         ; sql_cmd:="jp='" sim_key "'" (full_key?" AND key='" full_key "'":"") " ORDER BY weight DESC" (limit_num?" LIMIT " limit_num:"")
     }
 
-    tooltip_debug[3] .= "`n[" orgin_str "]: """ sql_cmd
+    tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd
     if( DB.GetTable("SELECT key,value,weight FROM 'pinyin' WHERE " sql_cmd, result_table) )
     {
         ; result_table.Rows = [
@@ -71,12 +77,12 @@ PinyinSqlGetResult(DB, orgin_str, limit_num:=100)
         if( result_table.RowCount )
         {
             loop % result_table.RowCount {
-                result_table.Rows[A_Index, -1] := orgin_str
+                result_table.Rows[A_Index, -1] := origin_input
                 result_table.Rows[A_Index, 0] := "pinyin|" A_Index
                 result_table.Rows[A_Index, 4] := result_table.Rows[1, 3]
             }
         }
-        result_table.Rows[0] := orgin_str
+        result_table.Rows[0] := origin_input
         ; result_table.Rows = [
         ;   [0]: "wu'hui"
         ;        ; -1     , 0         , 1
@@ -84,7 +90,7 @@ PinyinSqlGetResult(DB, orgin_str, limit_num:=100)
         ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
         ; ]
         tooltip_debug[3] .= """->(" result_table.RowCount ")"
-        ; tooltip_debug[3] .= "`n" orgin_str "," full_key ": " result_table.RowCount " (" orgin_str ")" "`n" sql_cmd "`n" CallStack(1)
+        ; tooltip_debug[3] .= "`n" origin_input "," full_key ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
         return result_table.Rows
     } else {
         return []
