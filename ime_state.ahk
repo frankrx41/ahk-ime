@@ -52,7 +52,7 @@ ImeUpdateActiveState(mode := "")
         ImeUpdateModeHotkey()
     }
 
-    ImeTooltipUpdate()
+    ImeTooltipUpdate("")
     ImeSetIconState(mode)
 }
 
@@ -114,7 +114,7 @@ ImeSetModeLanguageByHotkey(mode)
     }
     ImeSetModeLanguage(mode)
     ImeUpdateModeHotkey()
-    ImeTooltipUpdate()
+    ImeTooltipUpdate("")
     ImeSetIconState(mode)
     return
 }

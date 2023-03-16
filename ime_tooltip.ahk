@@ -1,53 +1,114 @@
-
-; 更新提示
-ImeTooltipUpdate()
+DisplaySelectItems(candidate)
 {
     local
-    global ime_input_string
-    global ime_candidate_sentences
-    global ime_input_caret_pos
-    global ime_tooltip_pos
-    static last_ime_input := ""
+    column          := GetSelectMenuColumn()
+    select_index    := candidate.GetSelectIndex()
+    ime_select_str  := "----------------"
+    start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
+    column_loop     := ImeIsSelectMenuMore() ? Floor(candidate.GetListLength() / column) +1 : 1
+    max_item_len    := []
+    max_column_loop := 6
 
-    if(ime_input_string){
-        if (!ime_tooltip_pos) {
+    if( column_loop > max_column_loop ) {
+        column_loop := max_column_loop
+        start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
+        start_index := Min(start_index, (Floor((candidate.GetListLength()-1) / column)-max_column_loop+1)*column)
+    }
+
+    loop % Min(candidate.GetListLength(), column) {
+        word_index      := start_index + A_Index
+        ime_select_str  .= "`n"
+        row_index       := A_Index
+
+        loop % column_loop
+        {
+            item_str := ""
+            ; in_column := word_index / column >= start_index && word_index / column <= start_index + column
+            in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
+            if( word_index <= candidate.GetListLength() )
+            {
+                begin_str := "  "
+                assistant_code := ""
+                if( in_column ) {
+                    if ( select_index == word_index ) {
+                        begin_str := ">["
+                    } else {
+                        begin_str := Mod(word_index, 10) "."
+                        ; begin_str :=  word_index "."
+                    }
+                    ; assistant_code := candidate.GetAssistant(word_index)
+                    ; if( assistant_code ){
+                    ;     assistant_code := "{" assistant_code "}"
+                    ; }
+                }
+
+                end_str := select_index == word_index ? "]" : " "
+                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str
+                ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
+            } else {
+                item_str := ""
+            }
+            len := StrPut(item_str, "CP936")
+            if( row_index == 1 ) {
+                max_item_len[A_Index] := len + 1
+            }
+            loop, % Max(10, max_item_len[A_Index]) - len {
+                item_str .= " "
+            }
+            ; item_str .= "(" len ")"
+            ime_select_str .= item_str
+            word_index += column
+        }
+    }
+    return ime_select_str
+}
+
+; 更新提示
+ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, update_coord:=0)
+{
+    local
+    static ime_tooltip_pos := ""
+    global tooltip_debug
+    global opt_show_debug_tooltip
+
+    if( !input_string )
+    {
+        ToolTip(1, "")
+    }
+    else
+    {
+        if( candidate ) {
+            if( ImeIsSelectMenuOpen() ){
+                ime_select_str := DisplaySelectItems(candidate)
+            } else {
+                ime_select_str := candidate.GetWord(candidate.GetSelectIndex())
+            }
+        }
+
+        if( update_coord || ime_tooltip_pos == "" ){
             ime_tooltip_pos := GetCaretPos()
         }
-        tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
-        ; ToolTip, % ime_input_string "`n" tooltip_string "`n" ime_input_caret_pos
 
-        if (last_ime_input != ime_input_string) {
-            last_ime_input := ime_input_string
-            ime_candidate_sentences := PinyinGetSentences(ime_input_string)
-        }
+        debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
+        debug_tip .= " {" GetAssistantTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
+        debug_tip .= " (" candidate.GetPinyin(candidate.GetSelectIndex()) ")"
+        debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
+        ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
+        ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHasKey
+        ; debug_tip .= "`n" tooltip_debug[6]  ; Assistant
+        ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
+        ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
+        ; debug_tip .= "`n" tooltip_debug[11] ; Candidate
+        debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
-        ime_select_tip := ""
-        if( ImeIsSelectMenuOpen() ) {
-            start_index := Floor(GetSelectWordIndex() / GetSelectMenuColumn()) * GetSelectMenuColumn()
-            Loop % Min(ime_candidate_sentences.Length(), GetSelectMenuColumn()) {
-                word_index := start_index + A_Index
-
-                Index := ime_for_select_obj.Push(str)
-                begin_str :=
-                ime_select_tip .= "`n"
-                if ( GetSelectWordIndex() == word_index ) {
-                    begin_str .= ">["
-                } else {
-                    begin_str .=  Mod(word_index, 10) "."
-                    ; begin_str .=  word_index "."
-                }
-                end_str := GetSelectWordIndex() == word_index ? "]" : " "
-
-                ime_select_tip .= begin_str . ime_candidate_sentences[word_index, 2] . end_str . ime_candidate_sentences[A_Index, 1] 
-            }
+        if( assistant_code ){
+            tooltip_string := input_string
+            tooltip_string .= " {" assistant_code "|}"
         } else {
-            ime_select_tip .= ime_candidate_sentences[GetSelectWordIndex(), 2]
+            tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
+            tooltip_string .= "(" caret_pos ")"
         }
-        debug_tip := "`n----------------`n" ime_candidate_sentences.Length() "`n" GetSelectWordIndex()
-        ; ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_input_caret_pos "`n" ime_candidate_sentences.Length(), "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
-        ToolTip(1, ime_input_string "`n" tooltip_string "`n" ime_select_tip debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
-    }else{
-        ToolTip(1, "")
+        ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
 }

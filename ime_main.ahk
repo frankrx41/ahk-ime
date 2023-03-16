@@ -1,5 +1,5 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
+#Warn  ; Enable warnings to assist with detecting common errors.
 #SingleInstance, force
 
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
@@ -7,24 +7,32 @@ CoordMode, ToolTip, Screen
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 if not A_IsAdmin
 {
-	Run *RunAs "%A_ScriptFullPath%"
+    Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
-Menu, Tray, Tip, AHK Ime v0.01
+Menu, Tray, Tip, AHK IME `nv0.06 (dev)
+
+#Include, ime_config.ahk
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 global history_field_array := []
-global save_field_array := []
-global ime_for_select_obj := []
-global srf_all_input_:=[]
-global DB:=""
-Gosub, LoadDB
+global tooltip_debug := []
 Gosub, ImeInitialize
 return
 
+#Include, ime_assert.ahk
 #Include, ime_func.ahk
 #Include, ime_lib.ahk
 #Include, ime_pinyin.ahk
+#Include, ime_pinyin_phrase.ahk
+#Include, ime_pinyin_combine.ahk
+#Include, ime_pinyin_process.ahk
+#Include, ime_pinyin_assistant.ahk
+#Include, ime_pinyin_simple_spell.ahk
+#Include, ime_pinyin_associate.ahk
+#Include, ime_pinyin_get_result.ahk
+#Include, ime_pinyin_split.ahk
+#Include, ime_candidate.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
 #Include, ime_hotkey.ahk

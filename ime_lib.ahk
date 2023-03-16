@@ -1,12 +1,16 @@
 ;*******************************************************************************
 ; 全局变量
 ImeInitialize:
-ime_input_string := ""          ; 輸入字符
-ime_input_caret_pos := 0        ; 光标位置
-ime_tooltip_pos := ""           ; 输入法提示框光标位置 {x:0,y:0,h:0,t:"",Hwnd:Hwnd}
+ime_input_string    := ""               ; 輸入字符
+ime_input_caret_pos := 0                ; 光标位置
+ime_assistant_code  := ""               ; 辅助码
+ime_input_candidate := new Candidate    ; 候选项
 
+ImeDBInitialize()
 ImeSelectInitialize()
 ImeStateInitialize()
+PinyinInit()
+ImeUpdateActiveState()
 
 ; tooltip
 ime_tooltip_font_size           := 13
@@ -23,9 +27,6 @@ symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠",
 , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" }
 
 ImeRegisterHotkey()
-ImeUpdateActiveState()
-
-PinyinInit()
 return
 
 ;*******************************************************************************
@@ -47,9 +48,6 @@ ImeRegisterHotkey()
             ; a-z
             func := Func("ImeInputChar").Bind(Chr(96+A_Index))
             Hotkey, % Chr(96+A_Index), %func%
-            ; A-Z
-            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
-            Hotkey, % "+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
@@ -57,7 +55,7 @@ ImeRegisterHotkey()
     Hotkey, if, ime_input_string
     {
         ; Space and ' to spilt word
-        func := Func("ImeInputChar").Bind("'", -1, 1)
+        func := Func("ImeInputChar").Bind(" ", -1, 1)
         Hotkey, Space, %func%
         func := Func("ImeInputChar").Bind("'")
         Hotkey, ', %func%
@@ -66,6 +64,12 @@ ImeRegisterHotkey()
             func := Func("ImeInputNumber").Bind(A_Index-1)
             Hotkey, % A_Index-1, %func%
             Hotkey, % "Numpad" A_Index-1, %func%
+        }
+        loop 26
+        {
+            ; A-Z
+            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
+            Hotkey, % "+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
