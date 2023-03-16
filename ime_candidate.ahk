@@ -6,7 +6,7 @@ class Candidate
         This.input_string   := ""
     }
 
-    Initialize(input_string, assistant_code) {
+    Initialize(input_string, assistant_code:="") {
         ; [
         ;     ; -1 , 0         , 1
         ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
@@ -57,6 +57,10 @@ class Candidate
             {
                 pinyin_char := SubStr(pinyin_string, index_pinyin, 1)
                 if( pinyin_char == input_char ){
+                    match := true
+                    break
+                }
+                if( input_char == "1" && pinyin_char == "5" ){
                     match := true
                     break
                 }
