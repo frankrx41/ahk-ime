@@ -92,10 +92,11 @@ ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, u
         debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ") "
         debug_tip .= "{" GetAssistantTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
+        debug_tip .= "`n" tooltip_debug[3]  ; SQL
+        ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHasKey
         ; debug_tip .= "`n" tooltip_debug[6]  ; Assistant
         ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
-        debug_tip .= "`n" tooltip_debug[3]  ; SQL
-        debug_tip .= "`n" tooltip_debug[5]  ; PinyinHasKey
+        debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
         ; debug_tip .= "`n" tooltip_debug[11] ; Candidate
         ; debug_tip .= "`n" tooltip_debug[18] ; Assert info
 

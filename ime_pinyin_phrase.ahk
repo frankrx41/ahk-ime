@@ -168,13 +168,8 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
             PinyinResultCheckAssistant(search_result, assistant_code)
         }
 
-        ; 超级简拼 显示 4~8 字简拼候选
-        ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
-        separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
-        if( ime_orgin_input~="^[^']{4,8}$" && ime_input_split_trim != separate_single_char )
-        {
-            PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
-        }
+        ; 超级简拼 显示 4 字及以上简拼候选
+        PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split_trim)
 
         ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
         PinyinResultHideZeroWeight(search_result)
