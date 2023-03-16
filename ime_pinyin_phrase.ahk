@@ -8,16 +8,16 @@ PinyinHasKey(pinyin)
 {
     global history_field_array
     global tooltip_debug
-    tooltip_debug[3] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
+    tooltip_debug[5] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
     return history_field_array.HasKey(pinyin)
 }
 
-PinyinUpdateKey(DB, pinyin, associate:=false, simple_spell:=false, limit_num:=100)
+PinyinUpdateKey(DB, pinyin, limit_num:=100)
 {
     global history_field_array
     if( !PinyinHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
     {
-        history_field_array[pinyin] := Get_jianpin(DB, "pinyin", "'" pinyin "'", "", associate, limit_num, simple_spell)
+        history_field_array[pinyin] := PinyinSqlGetResult(DB, pinyin, limit_num)
     }
 }
 
@@ -67,11 +67,27 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
     return
 }
 
+GetFirstWord(input_str)
+{
+    local
+    index := 0
+    loop, Parse, input_str
+    {
+        if( InStr("12345'", A_LoopField) ){
+            index := A_Index
+            break
+        }
+    }
+
+    return SubStr(input_str, 1, index)
+}
+
 PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, srf_all_Input_tip)
 {
     local
     global history_field_array
-    first_word := SubStr(srf_all_Input_tip, 1, InStr(srf_all_Input_tip "'", "'")-1)
+
+    first_word := GetFirstWord(srf_all_Input_tip)
     if( first_word != srf_all_Input_tip )
     {
         PinyinUpdateKey(DB, first_word)
@@ -109,7 +125,7 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 }
 
 ; 拼音取词
-PinyinGetSentences(ime_orgin_input)
+PinyinGetSentences(ime_orgin_input, assistant_code)
 {
     local
     global DB
@@ -124,44 +140,31 @@ PinyinGetSentences(ime_orgin_input)
     }
     else
     {
-        ime_input_split_trim    := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
-        ime_input_split_trim    := Trim(ime_input_split_trim, "'")
-        ime_auxiliary_input     := ""   ; 辅助码
+        ime_input_split_trim := PinyinSplit(ime_orgin_input, "pinyin", 0, DB)
 
         ; ?
-        PinyinProcess(DB, save_field_array, ime_input_split_trim, 10)
+        PinyinProcess(DB, save_field_array, ime_input_split_trim)
 
         ; 组词
-        PinyinResultInsertCombine(DB, save_field_array, search_result, ime_auxiliary_input)
+        PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
+
         ; 插入前面个拼音所能组成的候选词
         PinyinResultInsertWords(DB, save_field_array, search_result)
 
         ; 逐码提示 联想
-        if( false ) {
-            PinyinResultInsertAssociate(DB, search_result, ime_input_split_trim, ime_auxiliary_input)
-        }
+        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split_trim, assistant_code)
+
         ; 插入字部分
         PinyinResultInsertSingleWord(DB, search_result, ime_input_split_trim)
 
-
         ; 显示辅助码
-        if( false ) {
-            PinyinResultShowAuxiliary(search_result)
-        }
+        PinyinResultShowAssistant(search_result)
 
-        ; 辅助码或超级简拼
-        if( false ) {
-            ; 使用任意一或二位辅助码协助筛选候选项去除重码
-            PinyinResultCheckAuxiliary(search_result, ime_auxiliary_input)
-        } else {
-            ; 超级简拼 显示 4~8 字简拼候选
-            ; "woxihuanni" -> "w'o'x'i'h'u'a'n'n'i"
-            separate_single_char := Trim(RegExReplace(ime_orgin_input,"(.)","$1'"), "'")
-            if( ime_orgin_input~="^[^']{4,8}$" && ime_input_split_trim != separate_single_char )
-            {
-                PinyinResultInsertSimpleSpell(DB, search_result, separate_single_char)
-            }
-        }
+        ; 辅助码筛去除重
+        PinyinResultCheckAssistant(search_result, assistant_code)
+
+        ; 超级简拼 显示 4 字及以上简拼候选
+        PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split_trim)
 
         ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
         PinyinResultHideZeroWeight(search_result)

@@ -3,6 +3,7 @@
 ImeInitialize:
 ime_input_string    := ""               ; 輸入字符
 ime_input_caret_pos := 0                ; 光标位置
+ime_assistant_code  := ""               ; 辅助码
 ime_input_candidate := new Candidate    ; 候选项
 
 ImeDBInitialize()
@@ -47,9 +48,6 @@ ImeRegisterHotkey()
             ; a-z
             func := Func("ImeInputChar").Bind(Chr(96+A_Index))
             Hotkey, % Chr(96+A_Index), %func%
-            ; A-Z
-            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
-            Hotkey, % "+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
@@ -66,6 +64,12 @@ ImeRegisterHotkey()
             func := Func("ImeInputNumber").Bind(A_Index-1)
             Hotkey, % A_Index-1, %func%
             Hotkey, % "Numpad" A_Index-1, %func%
+        }
+        loop 26
+        {
+            ; A-Z
+            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
+            Hotkey, % "+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,

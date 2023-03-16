@@ -6,18 +6,22 @@ class Candidate
         This.input_string   := ""
     }
 
-    Initialize(string) {
+    Initialize(input_string, assistant_code:="") {
         ; [
         ;     ; -1 , 0         , 1
         ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
         ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
         ;     ...
         ; ]
-        string := LTrim(string, " ")
-        if( string )
+        input_string := LTrim(input_string, " ")
+        if( input_string )
         {
-            This.candidate := PinyinGetSentences(string)
-            This.input_string := string
+            This.candidate := PinyinGetSentences(input_string, assistant_code)
+            This.input_string := input_string
+            This.assistant_code := assistant_code
+        } else {
+            This.input_string := ""
+            This.assistant_code := ""
         }
     }
 
@@ -56,6 +60,10 @@ class Candidate
                     match := true
                     break
                 }
+                if( input_char == "1" && pinyin_char == "5" ){
+                    match := true
+                    break
+                }
                 if( pinyin_char == "" ) {
                     break
                 }
@@ -70,7 +78,7 @@ class Candidate
 
         tooltip_debug[11] := "[" send_word "] " pinyin_string "," This.input_string "," sent_string_len
         This.SetSelectIndex(1)
-        This.Initialize(This.input_string)
+        This.Initialize(This.input_string, "")
         return send_word
     }
 
@@ -113,6 +121,11 @@ class Candidate
     GetWeight(index)
     {
         return This.candidate[index, 3]
+    }
+
+    GetAssistant(index)
+    {
+        return This.candidate[index, 6]
     }
 }
 
