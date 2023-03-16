@@ -126,15 +126,13 @@ PinyinProcess3(ByRef DB, ByRef save_field_array, origin_input_string)
             break
         }
         
-        last_clip := ""
         loop
         {
             ; "wo'xi'huan'ni" -> ["wo'xi'huan'ni"] -> ["wo'xi'huan" + "ni"] -> ["wo'xi" + "huan'ni"] -> ["wo" + "xi'huan'ni"]
             input_left := GetLeftString(input_string, A_Index)
-            if( last_clip == input_left || !input_left ){
+            if( !input_left ){
                 break
             }
-            last_clip := input_left
             if( input_left ){
                 PinyinUpdateKey(DB, input_left)
                 if( PinyinHasKey(input_left) && PinyinHasResult(input_left) ){

@@ -58,16 +58,17 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
 
     if( full_key~="[\.\*\?\|\[\]]" )
     {
-        sql_cmd:="jp='" sim_key "' AND key REGEXP '^" full_key "$' ORDER BY weight DESC" (limit_num?" LIMIT " limit_num:"")
+        sql_cmd := "jp='" sim_key "' AND key REGEXP '^" full_key "$' "
     }
     else
     {
-        sql_cmd:="jp LIKE '" sim_key "'" (full_key?" AND key LIKE '" full_key "'":"") " ORDER BY weight DESC" (limit_num?" LIMIT " limit_num:"")
-        ; sql_cmd:="jp='" sim_key "'" (full_key?" AND key='" full_key "'":"") " ORDER BY weight DESC" (limit_num?" LIMIT " limit_num:"")
+        sql_cmd := "jp LIKE '" sim_key "'" (full_key?" AND key LIKE '" full_key "'":"") " "
     }
 
     tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd
-    if( DB.GetTable("SELECT key,value,weight FROM 'pinyin' WHERE " sql_cmd, result_table) )
+    tooltip_debug[3] .= "`n" CallStack(4)
+    sql_cmd := "SELECT key,value,weight FROM 'pinyin' WHERE " . sql_cmd . " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+    if( DB.GetTable(sql_cmd, result_table) )
     {
         ; result_table.Rows = [
         ;   ["wu'hui", "舞会", "30000"]
