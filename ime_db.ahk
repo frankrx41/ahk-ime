@@ -10,7 +10,7 @@ LoadDB()
     global DB
     global SQLiteDB
 
-    path := "data\ciku.db"
+    path := "data\dictionary_tone.db"
     if( DB._Handle ){
         DB.CloseDB()
     }
