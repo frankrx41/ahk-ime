@@ -61,7 +61,7 @@ GetVowels(input_str, initials, ByRef index)
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
                 ; tooltip_debug[1] .= "(" next_char ")"
-                if( CheckSplitAble(initials, vowels, next_char) && CheckSplitWeight(initials, vowels, next_char) )
+                if( IsSplitAbleAt(next_char) && CheckSplitWeight(initials, vowels, SubStr(input_str, index+vowels_len)) )
                 {
                     break
                 }
@@ -147,20 +147,29 @@ PinyinSplit(origin_input, show_full:=0, DB:="")
     return separate_words
 }
 
-CheckSplitAble(left_initials, left_vowels, next_char)
+IsSplitAbleAt(next_char)
 {
     return next_char == "" || IsInitials(next_char) || IsTone(next_char)
 }
 
-CheckSplitWeight(left_initials, left_vowels, next_char)
+CheckSplitWeight(left_initials, left_vowels, right_string)
 {
-    if( !next_char ){
+    if( !right_string ){
         return true
     }
-
-    last_char := SubStr(left_vowels, 0, 1)
-    if( IsCompletePinyin(last_char, next_char) )
+    ; angan -> a + ng + an
+    ; enen -> e + n + en
+    right_initials := SubStr(left_vowels, 0, 1)
+    next_char := SubStr(right_string, 1, 1)
+    if( IsCompletePinyin(right_initials, next_char) )
     {
+        test_right_initials := SubStr(right_string, 1, 1)
+        if( test_right_initials == left_initials ){
+            test_right_vowels := SubStr(right_string, 2, StrLen(left_vowels))
+            if( test_right_vowels == left_vowels ) {
+                return true
+            }
+        }
         return false
     }
 
