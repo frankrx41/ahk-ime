@@ -34,6 +34,30 @@ GetFullKey(input_str, sim_key)
     return full_key
 }
 
+StrReplaceLast1To5(input_str)
+{
+    pos := InStr(input_str, "1",,0,1)
+    if( pos != 0 ){
+        new_str := SubStr(input_str, 1, pos-1) "5" SubStr(input_str, pos+1)
+        return new_str
+    }else{
+        return input_str
+    }
+}
+
+GetSqlCommand(sim_key, full_key)
+{
+    if( full_key~="[\.\*\?\|\[\]]" )
+    {
+        sql_cmd := "sim LIKE '" sim_key "' AND key REGEXP '^" full_key "$' "
+    }
+    else
+    {
+        sql_cmd := "sim LIKE '" sim_key "'" (full_key ? " AND key LIKE '" full_key "'" : "") " "
+    }
+    return sql_cmd
+}
+
 ; Get the reseult from database
 ; Input string origin_input must not content "|"
 ; Please spilt raw input by space then use this to get result
@@ -50,25 +74,28 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
     input_str   := StrReplace(input_str, "'", "_")
 
     ; Get first char
-    sim_key     := GetSimpleKey(input_str)
-    full_key    := GetFullKey(input_str, sim_key)
-
-    if( InStr(input_str, "1") ){
-        full_key := StrReplace(full_key, "1", "_")
-        sim_key := StrReplace(sim_key, "1", "_")
-    }
-    if( full_key~="[\.\*\?\|\[\]]" )
-    {
-        sql_cmd := "sim LIKE '" sim_key "' AND key REGEXP '^" full_key "$' "
-    }
-    else
-    {
-        sql_cmd := "sim LIKE '" sim_key "'" (full_key ? " AND key LIKE '" full_key "'" : "") " "
-    }
-
-    tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd
+    sim_key_1   := GetSimpleKey(input_str)
+    full_key_1  := GetFullKey(input_str, sim_key_1)
+    sql_cmd_1   := GetSqlCommand(sim_key_1, full_key_1)
+    tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd_1
     ; tooltip_debug[3] .= "`n" CallStack(4)
-    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd . " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+
+    ; tone 1 -> 5
+    full_key_5  := StrReplaceLast1To5(full_key_1)
+    if( full_key_5 != full_key_1 ){
+        sim_key_5 := StrReplaceLast1To5(sim_key_1)
+        sql_cmd_5 := GetSqlCommand(sim_key_5, full_key_5)
+    } else {
+        sql_cmd_5 := ""
+    }
+
+    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd_1
+    if( sql_cmd_5 ){
+        sql_cmd .= "UNION "
+        sql_cmd .= "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd_5
+    }
+    sql_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+
     if( DB.GetTable(sql_cmd, result_table) )
     {
         ; result_table.Rows = [
@@ -92,7 +119,7 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
         ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
         ; ]
         tooltip_debug[3] .= """->(" result_table.RowCount ")"
-        ; tooltip_debug[3] .= "`n" origin_input "," full_key ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
+        ; tooltip_debug[3] .= "`n" origin_input "," full_key_1 ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
         return result_table.Rows
     } else {
         return []
