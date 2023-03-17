@@ -81,8 +81,13 @@ Esc::
             ImeOpenSelectMenu(false)
         }
     } else {
-        ImeClearInputString()
+        if( A_TickCount - last_esc_tick < 1000 ){
+            ImeClearInputString()
+        } else {
+            ImeClearLastSplitedInput()
+        }
     }
+    last_esc_tick := A_TickCount
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 

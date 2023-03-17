@@ -16,6 +16,12 @@ ImeClearInputString()
     return
 }
 
+ImeClearLastSplitedInput()
+{
+    global ime_input_string
+    ime_input_string := SubStr(ime_input_string, 1, StrLen(ime_input_string) - 1)
+}
+
 ImeClearAssistantCode()
 {
     global ime_assistant_code
