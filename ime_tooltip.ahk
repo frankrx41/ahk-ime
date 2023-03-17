@@ -43,7 +43,9 @@ DisplaySelectItems(candidate)
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str
+                comment := candidate.GetCommentDisplayText(word_index)
+
+                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str . comment
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
                 item_str := ""

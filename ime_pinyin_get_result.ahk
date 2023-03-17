@@ -59,29 +59,29 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
     }
     if( full_key~="[\.\*\?\|\[\]]" )
     {
-        sql_cmd := "jp='" sim_key "' AND key REGEXP '^" full_key "$' "
+        sql_cmd := "sim LIKE '" sim_key "' AND key REGEXP '^" full_key "$' "
     }
     else
     {
-        sql_cmd := "jp LIKE '" sim_key "'" (full_key ? " AND key LIKE '" full_key "'" : "") " "
+        sql_cmd := "sim LIKE '" sim_key "'" (full_key ? " AND key LIKE '" full_key "'" : "") " "
     }
 
     tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd
     ; tooltip_debug[3] .= "`n" CallStack(4)
-    sql_cmd := "SELECT key,value,weight FROM 'pinyin' WHERE " . sql_cmd . " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd . " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
     if( DB.GetTable(sql_cmd, result_table) )
     {
         ; result_table.Rows = [
-        ;   ["wu'hui", "舞会", "30000"]
-        ;   ["wu'hui", "误会", "26735"]
+        ;   ["wu'hui", "舞会", "30000", "备注"]
+        ;   ["wu'hui", "误会", "26735", ""]
         ; ]
 
         if( result_table.RowCount )
         {
             loop % result_table.RowCount {
-                result_table.Rows[A_Index, -1] := origin_input
-                result_table.Rows[A_Index, 0] := "pinyin|" A_Index
-                result_table.Rows[A_Index, 4] := result_table.Rows[1, 3]
+                ; result_table.Rows[A_Index, -1] := origin_input
+                ; result_table.Rows[A_Index, 0] := "pinyin|" A_Index
+                ; result_table.Rows[A_Index, 4] := result_table.Rows[1, 3]
             }
         }
         result_table.Rows[0] := origin_input

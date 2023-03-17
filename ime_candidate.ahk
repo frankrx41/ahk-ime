@@ -123,6 +123,23 @@ class Candidate
         return This.candidate[index, 3]
     }
 
+    GetComment(index)
+    {
+        return This.candidate[index, 4]
+    }
+
+    GetCommentDisplayText(index)
+    {
+        comment := This.GetComment(index)
+        if( comment ){
+            if( comment == "name" ){
+                return "名"
+            }
+        } else {
+            return ""
+        }
+    }
+
     GetAssistant(index)
     {
         return This.candidate[index, 6]
