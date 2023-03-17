@@ -130,15 +130,21 @@ PinyinSplit(origin_input, show_full:=0, DB:="")
             tone := GetTone(input_str, initials, vowels, index)
 
             ; 词库辅助分词
-            if( last_char && last_char != "'" && last_initials )
+            if( last_char && last_char != "'" && last_initials && DB)
             {
-                if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
+                ; angeng, enen
+                is_ng_aeo := InStr("ng", last_char) && InStr("aeo", initials)
+                ; er
+                is_er := last_char == "e" && initials == "r" && IsInitials(SubStr(vowels, 1, 1))
+                ; if( (InStr("ng", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
+                if( is_ng_aeo || is_er )
                 {
-                    cutted_last_vowels := SubStr(last_vowels,1,-1)
-                    if( IsFullPinyin(last_initials, cutted_last_vowels) )
+                    ; y-ing -> y-in
+                    last_vowels_cutted := SubStr(last_vowels,1,-1)
+                    if( IsFullPinyin(last_initials, last_vowels_cutted) )
                     {
-                        prev_separate_words := PinyinSplit(SubStr(input_str, start_index-1), show_full, DB)
-                        str_left := separate_words . initials . vowels . tone
+                        prev_separate_words := PinyinSplit(SubStr(input_str, start_index-1), show_full)
+                        str_left := separate_words . initials . vowels . (IsTone(tone) ? tone : "'")
                         str_right := SubStr(separate_words,1,-2) . "'" . prev_separate_words
                         weight_left := PinyinCheckWeight(DB, str_left)
                         weight_right := PinyinCheckWeight(DB, str_right)
