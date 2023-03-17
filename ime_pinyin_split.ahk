@@ -16,7 +16,7 @@ GetTone(input_str, initials, vowels, ByRef index)
         if( index < strlen+1 ){
             tone := "-"
         } else {
-            tone := IsFullPinyin(initials, vowels) ? "'" : ""
+            tone := IsCompletePinyin(initials, vowels) ? "'" : ""
         }
     }
     return tone
@@ -57,7 +57,7 @@ GetVowels(input_str, initials, ByRef index)
         {
             vowels_len := vowels_max_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
-            if( IsFullPinyin(initials, vowels) )
+            if( IsCompletePinyin(initials, vowels) )
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
                 ; tooltip_debug[1] .= "(" next_char ")"
@@ -73,7 +73,7 @@ GetVowels(input_str, initials, ByRef index)
     }
     index += vowels_len
 
-    if( !IsFullPinyin(initials, vowels) ){
+    if( !IsCompletePinyin(initials, vowels) ){
         vowels .= "%"
     }
     return vowels
@@ -159,7 +159,7 @@ CheckSplitWeight(left_initials, left_vowels, next_char)
     }
 
     last_char := SubStr(left_vowels, 0, 1)
-    if( IsFullPinyin(last_char, next_char) )
+    if( IsCompletePinyin(last_char, next_char) )
     {
         return false
     }

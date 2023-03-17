@@ -1,4 +1,4 @@
-IsFullPinyin(initials, vowels)
+IsCompletePinyin(initials, vowels)
 {
     global zero_initials_table
     global pinyin_table
