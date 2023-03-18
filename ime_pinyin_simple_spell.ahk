@@ -5,10 +5,11 @@
 ; "wo3ai4ni" -> "w'o3a'i4'n'i"
 GetSimpleSpellString(input_string)
 {
-    input_string := RegExReplace(input_string,"([a-z])(?=[^'\d])","$1'")
+    input_string := RegExReplace(input_string, "([a-z])(?=[^'\d])", "$1'")
     input_string := RTrim(input_string, "'")
-    input_string := RegExReplace(input_string,"(['\d])","%$1")
-    return input_string "%"
+    input_string := StrReplace(input_string, " ")
+    input_string := RegExReplace(input_string, "(['\d])", "%$1")
+    return input_string . "%"
 }
 
 PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, ime_input_split_trim)
