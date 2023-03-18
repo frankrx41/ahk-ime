@@ -256,4 +256,5 @@ PinyinInit()
     }
 
     PinyinAssistantInitialize()
+    PinyinSplitTableInitialize()
 }

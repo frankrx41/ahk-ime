@@ -49,9 +49,23 @@ IsSplitAbleAt(next_char)
     return next_char == "" || IsInitials(next_char) || IsTone(next_char)
 }
 
+PinyinSplitTableInitialize()
+{
+    global split_weight_table := {}
+    FileRead, file_content, data\pinyin-split.txt
+    Loop, Parse, file_content, `n
+    {
+        key := RTrim(A_LoopField, "`r")
+        if( key ){
+            split_weight_table[key] := 1
+        }
+    }
+    Assert(split_weight_table.Count() != 0)
+}
+
 IsInSplitTable(left_initials, left_vowels, right_string)
 {
-    static split_weight_table := {"re'nao":1, "en'en":1}
+    global split_weight_table
     right_string_len := StrLen(right_string)
     loop, 5
     {
