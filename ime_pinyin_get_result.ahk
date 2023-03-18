@@ -4,33 +4,34 @@
 ; wo3de1 -> w3d[15]
 GetSqlSimpleKey(input_str)
 {
-    sim_key := input_str
-    sim_key := StrReplace(sim_key, "'", "_")
-    sim_key := RegExReplace(sim_key, "([a-z])[a-z%]+", "$1")
-    if( !InStr("_12345", SubStr(sim_key, 0, 1)) ){
-        sim_key .= "_"
+    key_value := input_str
+    last_char := SubStr(key_value, 0, 1)
+    key_value := StrReplace(key_value, "'", "_")
+    key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1")
+    if( last_char == "%" ){
+        key_value .= "%"
     }
-    ; sim_key := StrReplace(sim_key, "1", "_")
-    return sim_key
+    else if( !InStr("_12345", SubStr(key_value, 0, 1)) ){
+        key_value .= "_"
+    }
+    ; key_value := StrReplace(key_value, "1", "_")
+    return key_value
 }
 
 GetFullKey(input_str, sim_key)
 {
-    full_key := input_str
-    full_key := StrReplace(full_key, "'", "_")
-    last_char := SubStr(full_key, 0, 1)
-    if( last_char == "%" ){
-        full_key .= "_"
-    }
-    else
-    if( !InStr("_12345", last_char) ){
-        full_key .= "%_"
+    key_value := input_str
+    key_value := StrReplace(key_value, "'", "_")
+    last_char := SubStr(key_value, 0, 1)
+
+    if( !InStr("_%12345", last_char) ){
+        key_value .= "%_"
     }
 
-    if( StrReplace(full_key, "%") == sim_key ){
-        full_key := ""
+    if( StrReplace(key_value, "%") == sim_key ){
+        key_value := ""
     }
-    return full_key
+    return key_value
 }
 
 StrReplaceLast1To5(input_str)
