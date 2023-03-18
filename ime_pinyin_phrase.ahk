@@ -133,7 +133,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
     search_result           := []
     save_field_array        := []
 
-    if( StrLen(ime_orgin_input) == 1 )
+    if( StrLen(ime_orgin_input) == 1 && !InStr("al", ime_orgin_input) )
     {
         search_result[1] := [ime_orgin_input, ime_orgin_input, "-"]
         return search_result
