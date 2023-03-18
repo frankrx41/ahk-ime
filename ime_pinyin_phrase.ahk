@@ -70,16 +70,7 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 GetFirstWord(input_str)
 {
     local
-    index := 0
-    loop, Parse, input_str
-    {
-        if( InStr("12345'", A_LoopField) ){
-            index := A_Index
-            break
-        }
-    }
-
-    return SubStr(input_str, 1, index)
+    return RegExReplace(input_str, "^([a-z][12345'%])", "$1")
 }
 
 PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, srf_all_Input_tip)
