@@ -60,6 +60,8 @@ ImeRegisterHotkey()
         Hotkey, Space, %func%
         func := Func("ImeInputChar").Bind("'")
         Hotkey, ', %func%
+        func := Func("ImeInputChar").Bind("'")
+        Hotkey, \, %func%
         ; 0-9
         loop 10 {
             func := Func("ImeInputNumber").Bind(A_Index-1)
