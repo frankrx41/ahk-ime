@@ -133,7 +133,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
     {
         ime_input_split_trim := PinyinSplit(ime_orgin_input, true, DB)
 
-        ; ?
+        ; Do sql get result
         PinyinProcess(DB, save_field_array, ime_input_split_trim)
 
         ; 组词
