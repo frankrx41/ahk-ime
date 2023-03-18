@@ -7,9 +7,14 @@ GetSqlSimpleKey(input_str)
     key_value := input_str
     last_char := SubStr(key_value, 0, 1)
     key_value := StrReplace(key_value, "'", "_")
-    key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1")
+    key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
     if( last_char == "%" ){
-        key_value .= "%"
+        ; simple spell mode
+        if( occurr_cnt >= 4 ){
+            key_value .= "%"
+        } else {
+            key_value .= "_"
+        }
     }
     else if( !InStr("_12345", SubStr(key_value, 0, 1)) ){
         key_value .= "_"
