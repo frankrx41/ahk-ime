@@ -21,7 +21,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include, lib\SQLiteDB.ahk
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-PinyinInit()
+PinyinInitialize()
 ImeDBInitialize()
 global tooltip_debug := []
 global history_field_array := []
@@ -32,6 +32,7 @@ tooltip_debug := []
 
 ; Add your debug code here
 tooltip_debug[1] := ">>"
+result := PinyinGetSentences("woxihuanni", "")
 result := PinyinGetSentences("dea", "")
 result := PinyinGetSentences("yu2s", "")
 result := PinyinGetSentences("wxhn", "")

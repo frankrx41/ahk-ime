@@ -18,9 +18,17 @@ SetWorkingDir, %A_ScriptDir%
 #Include, lib\JSON.ahk
 #Include, ime_func.ahk
 #Include, lib\SQLiteDB.ahk
-PinyinInit()
+PinyinInitialize()
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 ImeDBInitialize()
+
+PinyinSplit("jin1",, DB)
+PinyinSplit("enen",, DB)
+PinyinSplit("angan",, DB)
+PinyinSplit("haoa",, DB)
+PinyinSplit("ang",, DB)
+PinyinSplit("yingen",, DB)
+PinyinSplit("nn",, DB)
 
 PinyinSqlGetResult(DB, PinyinSplit("wu3hui1"))
 

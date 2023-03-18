@@ -8,7 +8,7 @@ SetWorkingDir, %A_ScriptDir%
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-PinyinInit()
+PinyinInitialize()
 ImeDBInitialize()
 
 global tooltip_debug := []
@@ -17,7 +17,7 @@ global history_field_array := []
 debug_tip := ""
 tooltip_debug := []
 
-PinyinInit()
+PinyinInitialize()
 ImeDBInitialize()
 global tooltip_debug := []
 global history_field_array := []

@@ -20,7 +20,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include, ime_func.ahk
 #Include, lib\SQLiteDB.ahk
 global tooltip_debug := []
-PinyinInit()
+PinyinInitialize()
 ; x := ""
 ; Msgbox, % x && InStr("aaa", x)
 ; ExitApp, 

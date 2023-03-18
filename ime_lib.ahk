@@ -10,7 +10,7 @@ last_esc_tick       := 0
 ImeDBInitialize()
 ImeSelectInitialize()
 ImeStateInitialize()
-PinyinInit()
+PinyinInitialize()
 ImeUpdateActiveState()
 
 ; tooltip

@@ -24,7 +24,7 @@ IsInitials(initials)
     return pinyin_table.HasKey(initials)
 }
 
-PinyinInit()
+PinyinInitialize()
 {
     local
     global JSON
