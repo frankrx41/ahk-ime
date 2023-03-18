@@ -49,7 +49,24 @@ IsSplitAbleAt(next_char)
     return next_char == "" || IsInitials(next_char) || IsTone(next_char)
 }
 
-CheckSplitWeight(left_initials, left_vowels, right_string)
+IsInSplitTable(left_initials, left_vowels, right_string)
+{
+    static split_weight_table := {"re'nao":1, "en'en":1}
+    right_string_len := StrLen(right_string)
+    loop, 5
+    {
+        key := left_initials . left_vowels . "'" . SubStr(right_string, 1, A_Index)
+        if( split_weight_table.HasKey(Key) ){
+            return true
+        }
+        if( A_Index >= right_string_len ){
+            break
+        }
+    }
+    return false
+}
+
+IsGracefulSplit(left_initials, left_vowels, right_string)
 {
     next_char := SubStr(right_string, 1, 1)
     if( !right_string || IsTone(next_char) ){
@@ -60,14 +77,7 @@ CheckSplitWeight(left_initials, left_vowels, right_string)
     right_initials := SubStr(left_vowels, 0, 1)
     if( IsCompletePinyin(right_initials, next_char) )
     {
-        test_right_initials := SubStr(right_string, 1, 1)
-        if( test_right_initials == left_initials ){
-            test_right_vowels := SubStr(right_string, 2, StrLen(left_vowels))
-            if( test_right_vowels == left_vowels ) {
-                return true
-            }
-        }
-        return false
+        return IsInSplitTable(left_initials, left_vowels, right_string)
     }
 
     return true
@@ -90,7 +100,7 @@ GetVowels(input_str, initials, ByRef index)
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
                 ; tooltip_debug[1] .= "(" next_char ")"
-                if( IsSplitAbleAt(next_char) && CheckSplitWeight(initials, vowels, SubStr(input_str, index+vowels_len)) )
+                if( IsSplitAbleAt(next_char) && IsGracefulSplit(initials, vowels, SubStr(input_str, index+vowels_len)) )
                 {
                     break
                 }
