@@ -32,7 +32,7 @@ PinyinInit()
     global zero_initials_table := {}
 
     ; 零声母
-    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou","n"]
+    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]
 
     ; 全拼声母韵母表
     full_spelling_json =
