@@ -1,30 +1,29 @@
-; abc_def -> a_f_
-; zhong_hua -> z_h_
-GetSimpleKey(input_str)
+; ni'hao' -> n_h_
+; zhong'hua -> z_h_
+; wo3ai4ni3 -> w3a4n3
+; wo3de1 -> w3d[15]
+GetSqlSimpleKey(input_str)
 {
-    sim_key := Trim(RegExReplace(input_str, "([a-z])[a-z%]+", "$1"), "'")
+    sim_key := input_str
+    sim_key := StrReplace(sim_key, "'", "_")
+    sim_key := RegExReplace(sim_key, "([a-z])[a-z%]+", "$1")
     if( !InStr("_12345", SubStr(sim_key, 0, 1)) ){
         sim_key .= "_"
     }
+    ; sim_key := StrReplace(sim_key, "1", "_")
     return sim_key
-}
-
-GetSimpleKeyLength(sim_key)
-{
-    ; Replace all digits in the string with an empty string and store the length difference
-    length := StrLen(str) - StrLen(RegExReplace(str, "[\d_]"))
-    return length
 }
 
 GetFullKey(input_str, sim_key)
 {
     full_key := input_str
+    full_key := StrReplace(full_key, "'", "_")
     last_char := SubStr(full_key, 0, 1)
     if( last_char == "%" ){
         full_key .= "_"
     }
     else
-    if( !InStr("%_12345", last_char) ){
+    if( !InStr("_12345", last_char) ){
         full_key .= "%_"
     }
 
@@ -36,64 +35,82 @@ GetFullKey(input_str, sim_key)
 
 StrReplaceLast1To5(input_str)
 {
-    pos := InStr(input_str, "1",,0,1)
-    if( pos != 0 ){
-        new_str := SubStr(input_str, 1, pos-1) "5" SubStr(input_str, pos+1)
+    tone_pos := InStr(input_str, "1",,0,1)
+    if( tone_pos != 0 ){
+        new_str := SubStr(input_str, 1, tone_pos-1) "5" SubStr(input_str, tone_pos+1)
         return new_str
     }else{
-        return input_str
+        return ""
     }
 }
 
-GetSqlCommand(sim_key, full_key)
+GetSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
 {
-    if( full_key~="[\.\*\?\|\[\]]" )
+    sql_cmd := ""
+    if( key_value )
     {
-        sql_cmd := "sim LIKE '" sim_key "' AND key REGEXP '^" full_key "$' "
+        if( InStr(key_value, "_") || InStr(key_value, "%") )
+        {
+            sql_cmd := " LIKE '" key_value "' "
+        }
+        else
+        {
+            sql_cmd := " = '" key_value "' "
+        }
+        sql_cmd := key_name . sql_cmd
+
+        if( repalce15 )
+        {
+            new_value := StrReplaceLast1To5(key_value)
+            if( new_value ){
+                sql_cmd := "( " sql_cmd "OR " . GetSqlWhereKeyCommand(key_name, new_value) ") "
+            }
+        }
     }
-    else
+    return sql_cmd
+}
+
+GetSqlWhereCommand(sim_key, full_key)
+{
+    Assert(sim_key)
+    sql_cmd := GetSqlWhereKeyCommand("sim", sim_key, true)
+
+    if( full_key )
     {
-        sql_cmd := "sim LIKE '" sim_key "'" (full_key ? " AND key LIKE '" full_key "'" : "") " "
-    }
+        sql_cmd .= "AND " GetSqlWhereKeyCommand("key", full_key, true)
+    } 
     return sql_cmd
 }
 
 ; Get the reseult from database
 ; Input string origin_input must not content "|"
 ; Please spilt raw input by space then use this to get result
-PinyinSqlGetResult(DB, origin_input, limit_num:=100)
+; % = has vowels
+; ['12345] = split word
+; if last char is %, mean need continue input
+; e.g.
+; ki -> k%'i'
+; wo3ai4ni3 -> wo3ai4ni3
+; kannid -> kan'ni'd%
+; kannide -> kan'ni'de'
+PinyinSqlGetResult(DB, input_str, limit_num:=100)
 {
     local
     Critical
     global tooltip_debug
 
-    origin_input := LTrim(origin_input, "'")
-    Assert(!InStr(origin_input, "|"))
-
-    input_str   := origin_input
-    input_str   := StrReplace(input_str, "'", "_")
+    ; input_str := LTrim(input_str, "'")
+    Assert(!InStr(input_str, "|"))
+    ; Assert(SubStr(input_str, 0, 1) != "'")
 
     ; Get first char
-    sim_key_1   := GetSimpleKey(input_str)
-    full_key_1  := GetFullKey(input_str, sim_key_1)
-    sql_cmd_1   := GetSqlCommand(sim_key_1, full_key_1)
-    tooltip_debug[3] .= "`n[" origin_input "]: """ sql_cmd_1
+    sql_sim_key     := GetSqlSimpleKey(input_str)
+    sql_full_key    := GetFullKey(input_str, sql_sim_key)
+    sql_cmd         := GetSqlWhereCommand(sql_sim_key, sql_full_key)
+    tooltip_debug[3] .= "`n[" input_str "]: """ sql_cmd
     ; tooltip_debug[3] .= "`n" CallStack(4)
 
-    ; tone 1 -> 5
-    full_key_5  := StrReplaceLast1To5(full_key_1)
-    if( full_key_5 != full_key_1 ){
-        sim_key_5 := StrReplaceLast1To5(sim_key_1)
-        sql_cmd_5 := GetSqlCommand(sim_key_5, full_key_5)
-    } else {
-        sql_cmd_5 := ""
-    }
-
-    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd_1
-    if( sql_cmd_5 ){
-        sql_cmd .= "UNION "
-        sql_cmd .= "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd_5
-    }
+    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd
     sql_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
 
     if( DB.GetTable(sql_cmd, result_table) )
@@ -111,7 +128,7 @@ PinyinSqlGetResult(DB, origin_input, limit_num:=100)
                 ; result_table.Rows[A_Index, 4] := result_table.Rows[1, 3]
             }
         }
-        result_table.Rows[0] := origin_input
+        result_table.Rows[0] := input_str
         ; result_table.Rows = [
         ;   [0]: "wu'hui"
         ;        ; -1     , 0         , 1
