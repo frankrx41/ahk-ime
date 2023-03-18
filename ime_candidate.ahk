@@ -134,6 +134,8 @@ class Candidate
         if( comment ){
             if( comment == "name" ){
                 return "名"
+            } else {
+                return comment
             }
         } else {
             return ""
