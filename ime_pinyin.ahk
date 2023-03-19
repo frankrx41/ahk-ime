@@ -225,7 +225,7 @@ PinyinInitialize()
                 "a":"a","an":"an","ag":"ang","ang":"ang","ao":"ao",
                 "o":"o","og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e",
-                "i":"i","in":"in","ig":"ing","ing":"ing",
+                "i":"i","in":"in","ing":"ing",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
                 "v":"u","van":"uan","ve":"ue","vn":"un"
             },
@@ -238,8 +238,6 @@ PinyinInitialize()
             }
         }
     )
-
-    ; yig -> yi ge?
 
     pinyin_table := JSON.Load(full_spelling_json)
     pinyin_table["l","ue"] := "ue"
