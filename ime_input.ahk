@@ -19,7 +19,10 @@ ImeClearInputString()
 ImeClearLastSplitedInput()
 {
     global ime_input_string
+    global ime_input_caret_pos
+
     ime_input_string := SubStr(ime_input_string, 1, StrLen(ime_input_string) - 1)
+    ime_input_caret_pos -= 1
 }
 
 ImeClearAssistantCode()
