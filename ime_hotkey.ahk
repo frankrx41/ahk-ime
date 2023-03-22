@@ -114,10 +114,7 @@ Left::
     if( ImeIsSelectMenuOpen() ){
         ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
     } else {
-        ime_input_caret_pos -= 1
-        if( ime_input_caret_pos < 0 ){
-            ime_input_caret_pos := StrLen(ime_input_string)
-        }
+        ImeInputCaretMove(-1)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
@@ -126,28 +123,19 @@ Right::
     if( ImeIsSelectMenuOpen() ){
         ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
     } else {
-        ime_input_caret_pos += 1
-        if( ime_input_caret_pos > StrLen(ime_input_string) ){
-            ime_input_caret_pos := 0
-        }
+        ImeInputCaretMove(+1)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
-    ime_input_caret_pos -= 1
-    if( ime_input_caret_pos < 0 ){
-        ime_input_caret_pos := StrLen(ime_input_string)
-    }
+    ImeInputCaretMove(-1)
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
 +Right::
-    ime_input_caret_pos += 1
-    if( ime_input_caret_pos > StrLen(ime_input_string) ){
-        ime_input_caret_pos := 0
-    }
+    ImeInputCaretMove(+1)
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 

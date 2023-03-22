@@ -36,6 +36,25 @@ ImeClearAssistantCode()
     ime_assistant_code := ""
 }
 
+ImeInputCaretMove(dir, skip_word:=false)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+
+    input_string_len := StrLen(ime_input_string)
+    ime_input_caret_pos += dir
+
+    if( ime_input_caret_pos < 0 )
+    {
+        ime_input_caret_pos := input_string_len
+    }
+    else
+    if( ime_input_caret_pos > input_string_len )
+    {
+        ime_input_caret_pos := 0
+    }
+}
+
 ;*******************************************************************************
 ; 切换成英文前以原始输入上屏文字
 CallBackBeforeToggleEn()
