@@ -126,7 +126,7 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
 
     if( StrLen(ime_orgin_input) == 1 && !InStr("al", ime_orgin_input) )
     {
-        search_result[1] := [ime_orgin_input, ime_orgin_input, "-"]
+        search_result[1] := [ime_orgin_input, ime_orgin_input, "N/A"]
         return search_result
     }
     else
