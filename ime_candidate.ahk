@@ -26,20 +26,15 @@ class Candidate
             This.assistant_code := ""
         }
     }
-
-    SendWordThenUpdate(DB)
+    
+    GetSendLength(full_input_string, send_pinyin_string)
     {
-        global tooltip_debug
-
-        send_word := This.GetWord(This.select_index)
-        pinyin_string := This.GetPinyin(This.select_index)
-
         index_pinyin    := 1
         index_input     := 1
         sent_string_len := 0
-        sent_pinyin_len := StrLen(pinyin_string)
+        sent_pinyin_len := StrLen(send_pinyin_string)
         ; "wohenxihuanni" - "wo'hen" = "xihuanni"
-        loop, Parse, % This.input_string
+        loop, Parse, % full_input_string
         {
             match := false
             if( index_pinyin > sent_pinyin_len ){
@@ -47,7 +42,7 @@ class Candidate
             }
             loop
             {
-                input_char := SubStr(This.input_string, index_input, 1)
+                input_char := SubStr(full_input_string, index_input, 1)
                 if( input_char == " " ){
                     index_input += 1
                     sent_string_len += 1
@@ -57,7 +52,7 @@ class Candidate
             }
             loop
             {
-                pinyin_char := SubStr(pinyin_string, index_pinyin, 1)
+                pinyin_char := SubStr(send_pinyin_string, index_pinyin, 1)
                 if( pinyin_char == input_char ){
                     match := true
                     break
@@ -75,6 +70,17 @@ class Candidate
             index_pinyin    += 1
             index_input     += 1
         }
+        return sent_string_len
+    }
+
+    SendWordThenUpdate(DB)
+    {
+        global tooltip_debug
+
+        send_word := This.GetWord(This.select_index)
+        pinyin_string := This.GetPinyin(This.select_index)
+
+        sent_string_len := This.GetSendLength(This.input_string, pinyin_string)
 
         This.input_string := SubStr(This.input_string, sent_string_len+1)
 
@@ -83,7 +89,15 @@ class Candidate
         This.Initialize(This.input_string, "", DB)
         return send_word
     }
+    GetLastWordPos()
+    {
+        trim_string := RTrim(This.input_split, "%'12345")
+        prev_word_pos := RegExMatch(trim_string, "[12345'|][^12345'|]*$", word_pos, 1)
+        prev_word := SubStr(trim_string, 1, prev_word_pos-1)
 
+        sent_string_len := This.GetSendLength(This.input_string, prev_word)
+        return sent_string_len
+    }
     GetSelectIndex()
     {
         return This.select_index
