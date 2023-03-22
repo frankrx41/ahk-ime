@@ -154,7 +154,7 @@ GetInitials(input_str, initials, ByRef index)
 ; 拼音音节切分
 ; ' 表示自动分词
 ; 12345 空格 大写 表示手动分词
-PinyinSplit(origin_input, show_full:=0, DB:="")
+PinyinSplit(origin_input, show_full:=0)
 {
     local
     Critical

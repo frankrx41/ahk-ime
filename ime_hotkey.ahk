@@ -114,7 +114,7 @@ Left::
     if( ImeIsSelectMenuOpen() ){
         ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
     } else {
-        ImeInputCaretMove(-1)
+        ImeInputCaretMove(-1, true)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
@@ -123,7 +123,7 @@ Right::
     if( ImeIsSelectMenuOpen() ){
         ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
     } else {
-        ImeInputCaretMove(+1)
+        ImeInputCaretMove(+1, true)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return

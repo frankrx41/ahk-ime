@@ -36,22 +36,35 @@ ImeClearAssistantCode()
     ime_assistant_code := ""
 }
 
-ImeInputCaretMove(dir, skip_word:=false)
+ImeInputCaretMove(dir, by_word:=false)
 {
     global ime_input_caret_pos
     global ime_input_string
+    global ime_input_candidate
 
-    input_string_len := StrLen(ime_input_string)
-    ime_input_caret_pos += dir
-
-    if( ime_input_caret_pos < 0 )
+    if( by_word )
     {
-        ime_input_caret_pos := input_string_len
+        if( dir > 0 ){
+            word_pos := ime_input_candidate.GetRightWordPos(ime_input_caret_pos)
+        } else {
+            word_pos := ime_input_candidate.GetLeftWordPos(ime_input_caret_pos)
+        }
+        ime_input_caret_pos := word_pos
     }
     else
-    if( ime_input_caret_pos > input_string_len )
     {
-        ime_input_caret_pos := 0
+        input_string_len := StrLen(ime_input_string)
+        ime_input_caret_pos += dir
+
+        if( ime_input_caret_pos < 0 )
+        {
+            ime_input_caret_pos := input_string_len
+        }
+        else
+        if( ime_input_caret_pos > input_string_len )
+        {
+            ime_input_caret_pos := 0
+        }
     }
 }
 
