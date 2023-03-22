@@ -1,7 +1,7 @@
 ; ni'hao' -> n_h_
 ; zhong'hua -> z_h_
 ; wo3ai4ni3 -> w3a4n3
-; wo3de1 -> w3d[15]
+; wo3ai4ni% -> w3a4n% or w3a4n_
 GetSqlSimpleKey(input_str)
 {
     key_value := input_str
@@ -78,7 +78,7 @@ GetSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
 
 GetSqlWhereCommand(sim_key, full_key)
 {
-    Assert(sim_key)
+    Assert(sim_key,,,true)
     sql_cmd := GetSqlWhereKeyCommand("sim", sim_key, true)
 
     if( full_key )
