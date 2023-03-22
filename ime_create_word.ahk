@@ -10,39 +10,62 @@ SetWorkingDir, %A_ScriptDir%
 #Include, lib\SQLiteDB.ahk
 #Include, ime_pinyin_get_result.ahk
 
-WordCreateGui( value := "" )
+WordCreateGui( input_text )
 {
     local
+    static value, weight, comment
+    global create_gui_pinyin_key
     Gui, create:-MinimizeBox
     Gui, create:Font, s12
 
     Gui, create:Add, Text, , Key:
-    Gui, create:Add, Edit, x80 yp w400 -Multi r1,
+    Gui, create:Add, Edit, x80 yp w400 -Multi r1 vcreate_gui_pinyin_key,
 
     Gui, create:Add, Text, xm, Value:
-    Gui, create:Add, Edit, x80 yp w400 -Multi r1, %value%
+    Gui, create:Add, Edit, x80 yp w400 -Multi r1 vvalue, %input_text%
+
+    Gui, create:Add, Text, xm, Comment:
+    Gui, create:Add, Edit, x80 yp w400 -Multi r1 vcomment,
 
     Gui, create:Add, Text, xm, Weight:
-    Gui, create:Add, Edit, x80 yp w100 Number
-    Gui, create:Add, UpDown, x160 yp w400 Range0-65000, 32000
+    Gui, create:Add, Edit, x80 yp w100 Number vweight
+    Gui, create:Add, UpDown, x160 yp w400 Range0-65000, 28000
 
-    Gui, create:Add, Button, xm Default w100, OK
-    Gui, create:Add, Button, yp x+15 w100, Cancel
+    Gui, create:Add, Button, x+30 w80, Pinyin
+    Gui, create:Add, Button, x+15 Default w80, OK
+    Gui, create:Add, Button, yp x+15 w80, Cancel
     Gui, create:Show, , Create Word
-    Return
+    Gosub, createButtonPinyin
+    return
+
+    createButtonPinyin:
+        Gui, create:Submit, NoHide
+        pinyin := GetPinyin(value)
+        pinyin := StrReplace(pinyin, " ")
+        ; MsgBox, % value "," pinyin "," create_gui_pinyin_key
+        GuiControl, create:, create_gui_pinyin_key, %pinyin%
+    return
 
     createButtonOk:
-        MsgBox, Ok
+        Gui, create:Submit, NoHide
+        ; MsgBox, % create_gui_pinyin_key "," value "," weight "," comment
+        if( create_gui_pinyin_key && value && weight ){
+            weight := StrReplace(weight, ",")
+            global DB
+            WordCreateDB(DB, create_gui_pinyin_key, value, weight, comment)
+        } else {
+            MsgBox, Please fill all value
+        }
     return
 
     createGuiEscape:
     createGuiClose:
     createButtonCancel:
         Gui, create:Destroy
-    Return
+    return
 }
 
-WordCreateDB(DB, key, value, weight:=28000)
+WordCreateDB(DB, key, value, weight:=28000, comment:="")
 {
     local
     Assert(key && value && weight)
@@ -53,7 +76,9 @@ WordCreateDB(DB, key, value, weight:=28000)
 
     if( DB.GetTable(sql_cmd, result_table) )
     {
-        comment = %A_MM%-%A_DD%
+        ; if( !comment ){
+        ;     comment = %A_MM%-%A_DD%
+        ; }
         if( result_table.RowCount == 0 )
         {
             sql_cmd := "INSERT INTO pinyin ( sim, [key], value, weight, comment ) "
@@ -63,7 +88,7 @@ WordCreateDB(DB, key, value, weight:=28000)
             if( DB.Exec(sql_cmd) ){
                 Msgbox, % "Create success`nKey: " key "`nValue: " value
             } else {
-                Assert(0,,,true)
+                Assert(0, DB.ErrorMsg,,true)
             }
         } else {
             sql_cmd := "UPDATE pinyin SET sim = '" sim "', [key] = '" key "', value = '" value "', weight = '" weight "', comment = '" comment "' "
@@ -72,35 +97,29 @@ WordCreateDB(DB, key, value, weight:=28000)
             if( DB.Exec(sql_cmd) ){
                 Msgbox, % "Update success`nKey: " key "`nValue: " value
             } else {
-                Assert(0,,,true)
+                Assert(0, DB.ErrorMsg,,true)
             }
         }
     } else {
-        Assert(0,,,true)
+        Assert(0, DB.ErrorMsg,,true)
+    }
+}
+
+GetPinyin(word)
+{
+    if( word ){
+        pypinyin_exe := "C:\SDK\Python\Python310\Scripts\pypinyin.exe"
+        cmdline := pypinyin_exe . " -s TONE3" . " " . word
+        pinyin := CmdRet(cmdline)
+        pinyin := RTrim(pinyin, "`n`r`t ")
+        return pinyin
+    } else {
+        return ""
     }
 }
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 ImeDBInitialize()
-WordCreateDB(DB, "lian3zhao4", "脸照")
-WordCreateDB(DB, "shou3ru3", "首乳")
-; WordCreateGui("你好")
+
+WordCreateGui("")
 return
-
-; ExitApp
-
-
-; pypinyin_exe    := "C:\SDK\Python\Python310\Scripts\pypinyin.exe"
-
-; InputBox, input_text, Create Word, , , 200, 100
-
-; if( !ErrorLevel && input_text ){
-;     cmdline := pypinyin_exe . " -s TONE3" . " " . input_text
-;     pinyin := CmdRet(cmdline)
-;     pinyin := RTrim(pinyin, "`n`r`t ")
-;     MsgBox, % pinyin "," input_text
-
-;     InputBox, input_pinyin, Create Word, , , 200, 100
-
-; }
-
