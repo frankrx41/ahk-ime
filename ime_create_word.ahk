@@ -15,6 +15,8 @@ WordCreateGui( input_text )
     local
     static value, weight, comment
     global create_gui_pinyin_key
+    global create_gui_pinyin_weight
+    global DB
     Gui, create:-MinimizeBox
     Gui, create:Font, s12
 
@@ -28,14 +30,21 @@ WordCreateGui( input_text )
     Gui, create:Add, Edit, x80 yp w400 -Multi r1 vcomment,
 
     Gui, create:Add, Text, xm, Weight:
-    Gui, create:Add, Edit, x80 yp w100 Number vweight
-    Gui, create:Add, UpDown, x160 yp w400 Range0-65000, 28000
+    Gui, create:Add, Edit, x80 yp w100 Number vcreate_gui_pinyin_weight
+    Gui, create:Add, UpDown, x160 yp w400 Range-1-65000, 28000
 
-    Gui, create:Add, Button, x+30 w80, Pinyin
-    Gui, create:Add, Button, x+15 Default w80, OK
-    Gui, create:Add, Button, yp x+15 w80, Cancel
+    Gui, create:Add, Button, x+15 w60, Pinyin
+    Gui, create:Add, Button, x+5 w60, Weight
+    Gui, create:Add, Button, x+15 Default w70, OK
+    Gui, create:Add, Button, yp x+5 w70, Cancel
     Gui, create:Show, , Create Word
     Gosub, createButtonPinyin
+    return
+
+    createButtonWeight:
+        Gui, create:Submit, NoHide
+        weight := GetWeight(DB, create_gui_pinyin_key, value)
+        GuiControl, create:, create_gui_pinyin_weight, %weight%
     return
 
     createButtonPinyin:
@@ -48,10 +57,9 @@ WordCreateGui( input_text )
 
     createButtonOk:
         Gui, create:Submit, NoHide
-        ; MsgBox, % create_gui_pinyin_key "," value "," weight "," comment
-        if( create_gui_pinyin_key && value && weight ){
-            weight := StrReplace(weight, ",")
-            global DB
+        ; MsgBox, % create_gui_pinyin_key "," value "," create_gui_pinyin_weight "," comment
+        if( create_gui_pinyin_key && value && create_gui_pinyin_weight ){
+            weight := StrReplace(create_gui_pinyin_weight, ",")
             WordCreateDB(DB, create_gui_pinyin_key, value, weight, comment)
         } else {
             MsgBox, Please fill all value
@@ -69,7 +77,7 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
 {
     local
     Assert(key && value && weight)
-
+    weight := Max(0, weight)
     sim := GetSqlSimpleKey(key)
 
     sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
@@ -103,6 +111,23 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
     } else {
         Assert(0, DB.ErrorMsg,,true)
     }
+}
+
+GetWeight(DB, key, value)
+{
+    sim := GetSqlSimpleKey(key)
+    sql_cmd := "SELECT weight FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
+
+    if( DB.GetTable(sql_cmd, result_table) )
+    {
+        if( result_table.RowCount != 0 )
+        {
+            Assert(result_table.RowCount == 1, sql_cmd,,true)
+            ; Msgbox, % result_table.Rows[1, 1]
+            return result_table.Rows[1, 1]
+        }
+    }
+    return -1
 }
 
 GetPinyin(word)
