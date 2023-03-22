@@ -100,6 +100,7 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
         PutCharacter(input_char)
         ImeClearInputString()
     } else {
+        ime_input_candidate.SetSelectIndex(1)
         ime_input_candidate.Initialize(ime_input_string, ime_assistant_code)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, update_coord)
