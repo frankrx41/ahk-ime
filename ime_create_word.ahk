@@ -80,36 +80,27 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
     weight := Max(0, weight)
     sim := GetSqlSimpleKey(key)
 
-    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
-
-    if( DB.GetTable(sql_cmd, result_table) )
+    if( GetWeight(DB, key, value) == -1 )
     {
-        ; if( !comment ){
-        ;     comment = %A_MM%-%A_DD%
-        ; }
-        if( result_table.RowCount == 0 )
-        {
-            sql_cmd := "INSERT INTO pinyin ( sim, [key], value, weight, comment ) "
-            sql_cmd .= "VALUES ( '" sim "', '" key "', '" value "', " weight ", '" comment "' );"
+        sql_cmd := "INSERT INTO pinyin ( sim, [key], value, weight, comment ) "
+        sql_cmd .= "VALUES ( '" sim "', '" key "', '" value "', " weight ", '" comment "' );"
 
-            ; DB.Exec(sql_cmd)
-            if( DB.Exec(sql_cmd) ){
-                Msgbox, % "Create success`nKey: " key "`nValue: " value
-            } else {
-                Assert(0, DB.ErrorMsg,,true)
-            }
+        if( DB.Exec(sql_cmd) ){
+            Msgbox, % "Create success`nKey: " key "`nValue: " value
         } else {
-            sql_cmd := "UPDATE pinyin SET sim = '" sim "', [key] = '" key "', value = '" value "', weight = '" weight "', comment = '" comment "' "
-            sql_cmd .= "WHERE sim = '" sim "' AND ""key"" = '" key "' AND value = '" value "';"
-            
-            if( DB.Exec(sql_cmd) ){
-                Msgbox, % "Update success`nKey: " key "`nValue: " value
-            } else {
-                Assert(0, DB.ErrorMsg,,true)
-            }
+            Assert(0, DB.ErrorMsg,,true)
         }
-    } else {
-        Assert(0, DB.ErrorMsg,,true)
+    }
+    else
+    {
+        sql_cmd := "UPDATE pinyin SET sim = '" sim "', [key] = '" key "', value = '" value "', weight = '" weight "', comment = '" comment "' "
+        sql_cmd .= "WHERE sim = '" sim "' AND ""key"" = '" key "' AND value = '" value "';"
+        
+        if( DB.Exec(sql_cmd) ){
+            Msgbox, % "Update success`nKey: " key "`nValue: " value
+        } else {
+            Assert(0, DB.ErrorMsg,,true)
+        }
     }
 }
 
@@ -126,6 +117,8 @@ GetWeight(DB, key, value)
             ; Msgbox, % result_table.Rows[1, 1]
             return result_table.Rows[1, 1]
         }
+    } else {
+        Assert(0, DB.ErrorMsg,,true)
     }
     return -1
 }
