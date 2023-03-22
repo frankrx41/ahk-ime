@@ -86,15 +86,21 @@ IsGracefulSplit(left_initials, left_vowels, right_string)
     if( !right_string || IsTone(next_char) ){
         return true
     }
-    ; angan -> a + ng + an
-    ; enen -> e + n + en
+
     right_initials := SubStr(left_vowels, 0, 1)
-    if( IsCompletePinyin(right_initials, next_char) )
+    is_complete := 0
+    if( next_char == "o" ){
+        is_complete += IsCompletePinyin(right_initials, "on")
+    }
+
+    if( is_complete || IsCompletePinyin(right_initials, next_char) )
     {
         return IsInSplitTable(left_initials, left_vowels, right_string)
     }
-
-    return true
+    else
+    {
+        return true
+    }
 }
 
 GetVowels(input_str, initials, ByRef index)
