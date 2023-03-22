@@ -57,7 +57,7 @@ BackSpace::
         if( StrLen(ime_assistant_code) == 0 ){
             ime_input_candidate.SetSelectIndex(1)
         }
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code)
+        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
         ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
     }
     else if( ime_input_caret_pos != 0 ){
@@ -65,7 +65,7 @@ BackSpace::
         tooltip_debug[7] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code)
+        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
         ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
     }
 return

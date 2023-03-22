@@ -116,10 +116,9 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 }
 
 ; 拼音取词
-PinyinGetSentences(ime_orgin_input, assistant_code)
+PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
 {
     local
-    global DB
     ; static save_field_array := []
     search_result           := []
     save_field_array        := []
@@ -131,10 +130,8 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
     }
     else
     {
-        ime_input_split_trim := PinyinSplit(ime_orgin_input, true, DB)
-
         ; Do sql get result
-        PinyinProcess(DB, save_field_array, ime_input_split_trim)
+        PinyinProcess(DB, save_field_array, ime_input_split)
 
         ; 组词
         PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
@@ -143,10 +140,10 @@ PinyinGetSentences(ime_orgin_input, assistant_code)
         PinyinResultInsertWords(DB, save_field_array, search_result)
 
         ; 逐码提示 联想
-        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split_trim, assistant_code)
+        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split, assistant_code)
 
         ; 插入字部分
-        PinyinResultInsertSingleWord(DB, search_result, ime_input_split_trim)
+        PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
         ; 显示辅助码
         PinyinResultShowAssistant(search_result)

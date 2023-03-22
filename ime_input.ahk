@@ -48,8 +48,9 @@ PutCandidateCharacter(candidate)
 {
     global ime_input_string
     global ime_input_caret_pos
+    global DB
 
-    send_word := candidate.GetSendSelectWord()
+    send_word := candidate.SendWordThenUpdate(DB)
     PutCharacter( send_word )
 
     before_input_string := ime_input_string
@@ -83,6 +84,7 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
     global ime_assistant_code
     global ime_input_candidate
     global tooltip_debug
+    global DB
 
     update_coord := false
     tooltip_debug := []
@@ -101,7 +103,7 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
         ImeClearInputString()
     } else {
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code)
+        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, update_coord)
 }

@@ -33,7 +33,7 @@ ime_candidate := new Candidate
 ; ime_candidate.Initialize("wxh")
 ime_candidate.Initialize("le1")
 ime_candidate.SetSelectIndex(1)
-ime_candidate.GetSendSelectWord()
+ime_candidate.SendWordThenUpdate(DB)
 
 ExitApp
 

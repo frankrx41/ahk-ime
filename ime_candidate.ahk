@@ -4,9 +4,10 @@ class Candidate
         This.select_index   := 1    ; 选定的候选词，从 1 开始
         This.candidate      := []
         This.input_string   := ""
+        This.input_split    := ""
     }
 
-    Initialize(input_string, assistant_code:="") {
+    Initialize(input_string, assistant_code:="", DB:="") {
         ; [
         ;     ; -1 , 0         , 1
         ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
@@ -16,16 +17,17 @@ class Candidate
         input_string := LTrim(input_string, " ")
         if( input_string )
         {
-            This.candidate := PinyinGetSentences(input_string, assistant_code)
             This.input_string := input_string
+            This.input_split := PinyinSplit(This.input_string, true, DB)
             This.assistant_code := assistant_code
+            This.candidate := PinyinGetSentences(This.input_split, This.input_string, This.assistant_code, DB)
         } else {
             This.input_string := ""
             This.assistant_code := ""
         }
     }
 
-    GetSendSelectWord()
+    SendWordThenUpdate(DB)
     {
         global tooltip_debug
 
@@ -78,7 +80,7 @@ class Candidate
 
         tooltip_debug[11] := "[" send_word "] " pinyin_string "," This.input_string "," sent_string_len
         This.SetSelectIndex(1)
-        This.Initialize(This.input_string, "")
+        This.Initialize(This.input_string, "", DB)
         return send_word
     }
 
