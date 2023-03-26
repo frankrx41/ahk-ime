@@ -179,6 +179,7 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
     if( InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
         ime_assistant_code .= input_char
+        ime_input_candidate.SetSelectIndex(1)
         ime_input_candidate.FilterRadical(ime_assistant_code)
     }
     else
