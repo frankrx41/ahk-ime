@@ -46,9 +46,15 @@ WordCanContinueSplit(word)
     return RegExMatch(word, "['12345][^'12345]")
 }
 
+WordRemoveFirstSplit(word)
+{
+    ; "kai'xin'a'" -> "xin'a'"
+    return RegExReplace(word, "^[^'12345]+['12345]?")
+}
+
 WordRemoveLastSplit(word)
 {
-    ; "kai'xin'a" -> "kai'xin"
+    ; "kai'xin'a'" -> "kai'xin'"
     return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
 }
 
