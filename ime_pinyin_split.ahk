@@ -11,13 +11,11 @@ GetTone(input_str, initials, vowels, ByRef index)
     if( IsTone(tone) ) {
         index += 1
         ; TODO: make space work to split words
-        tone := tone == " " ? "'" : tone
-    } else {
-        if( index < strlen+1 ){
-            tone := "-"
-        } else {
-            tone := IsCompletePinyin(initials, vowels) ? "'" : ""
+        if( tone == " " ){
+            tone := "'"
         }
+    } else {
+        tone := "'"
     }
     return tone
 }
@@ -183,8 +181,6 @@ PinyinSplit(origin_input, ByRef split_index_arr)
             full_vowels := GetFullVowels(initials, vowels)
             tone        := GetTone(input_str, initials, vowels, index)
 
-            ; 更新音调
-            tone := tone != "" ? IsTone(tone) ? tone : "'" : ""
             ; 转全拼显示
             Assert(initials == GetFullInitials(initials))
             vowels := full_vowels ? full_vowels : vowels
