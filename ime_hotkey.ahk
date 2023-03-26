@@ -176,7 +176,7 @@ return
 
 #if ; ime_input_string
 
-!CapsLock::
+!`::
     WordCreateGui(GetSelectText())
 return
 
