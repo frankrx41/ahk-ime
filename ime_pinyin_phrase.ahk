@@ -32,6 +32,14 @@ PinyinKeyGetWords(pinyin)
     return history_field_array[pinyin]
 }
 
+SearchResultPush(ByRef search_result, spilt_word)
+{
+    global history_field_array
+    loop % history_field_array[spilt_word].Length() {
+        search_result.Push(CopyObj(history_field_array[spilt_word, A_Index]))
+    }
+}
+
 WordCanContinueSplit(word)
 {
     ; 包含 word + tone + word + ... 格式
@@ -47,8 +55,6 @@ WordRemoveLastSplit(word)
 PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
 {
     local
-    global history_field_array
-
     ; 插入候选词部分
     spilt_word := WordRemoveLastSplit(input_spilt_string)
     While( WordCanContinueSplit(spilt_word) && !PinyinHasResult(spilt_word) )
@@ -62,10 +68,7 @@ PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
     if( WordCanContinueSplit(spilt_word) )
     {
         PinyinUpdateKey(DB, spilt_word)
-
-        loop % history_field_array[spilt_word].Length() {
-            search_result.Push(CopyObj(history_field_array[spilt_word, A_Index]))
-        }
+        SearchResultPush(search_result, spilt_word)
     }
     return
 }
@@ -78,14 +81,9 @@ GetFirstWord(input_str)
 PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, input_split_string)
 {
     local
-    global history_field_array
-
     first_word := GetFirstWord(input_split_string)
     PinyinUpdateKey(DB, first_word)
-    loop % history_field_array[first_word].Length()
-    {
-        search_result.Push(CopyObj(history_field_array[first_word, A_Index]))
-    }
+    SearchResultPush(search_result, first_word)
     return
 }
 
