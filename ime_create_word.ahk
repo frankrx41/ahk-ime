@@ -8,11 +8,13 @@ WordCreateGui( input_text )
 
     input_text := RegExReplace(input_text, "\s")
 
+    Gui, create:New
     Gui, create:-MinimizeBox
     Gui, create:Font, s12
 
     Gui, create:Add, Text, , Key:
-    Gui, create:Add, Edit, x80 yp w400 -Multi r1 vcreate_gui_pinyin_key,
+    Gui, create:Add, Edit, x80 yp w335 -Multi r1 vcreate_gui_pinyin_key,
+    Gui, create:Add, Button, x+5 yp w60, Pinyin
 
     Gui, create:Add, Text, xm, Value:
     Gui, create:Add, Edit, x80 yp w400 -Multi r1 vvalue, %input_text%
@@ -24,12 +26,16 @@ WordCreateGui( input_text )
     Gui, create:Add, Edit, x80 yp w100 Number vcreate_gui_pinyin_weight
     Gui, create:Add, UpDown, x160 yp w400 Range-1-65000, 28000
 
-    Gui, create:Add, Button, x+15 w60, Pinyin
     Gui, create:Add, Button, x+5 w60, Weight
+    Gui, create:Add, Button, x+5 w60, WReset
     Gui, create:Add, Button, x+15 Default w70, OK
     Gui, create:Add, Button, yp x+5 w70, Cancel
     Gui, create:Show, , Create Word
     Gosub, createButtonPinyin
+    return
+
+    createButtonWReset:
+        GuiControl, create:, create_gui_pinyin_weight, 28,000
     return
 
     createButtonWeight:
