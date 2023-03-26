@@ -113,7 +113,7 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 }
 
 ; 拼音取词
-PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
+PinyinGetSentences(ime_orgin_input, ime_input_split:="", DB:="")
 {
     local
     ; static save_field_array := []
@@ -127,29 +127,30 @@ PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
     }
     else
     {
+        if( ime_input_split == "" ) {
+            ime_input_split := PinyinSplit(ime_orgin_input, "")
+        }
+
         ; Do sql get result
         PinyinProcess(DB, save_field_array, ime_input_split)
 
         ; 字数大于1时 组词
         if( WordCanContinueSplit(ime_input_split) )
         {
-            PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
+            PinyinResultInsertCombine(DB, save_field_array, search_result)
         }
 
         ; 插入前面个拼音所能组成的候选词
         PinyinResultInsertWords(DB, ime_input_split, search_result)
 
         ; 逐码提示 联想
-        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split, assistant_code)
+        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split)
 
         ; 插入字部分
         PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
         ; 更新辅助码
         PinyinResultUpdateAssistant(search_result)
-
-        ; 辅助码筛去除重
-        PinyinResultCheckAssistant(search_result, assistant_code)
 
         ; 超级简拼 显示 4 字及以上简拼候选
         PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)

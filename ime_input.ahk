@@ -30,7 +30,7 @@ ImeClearSplitedInputBefore(check_index)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
 
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
+        ime_input_candidate.Initialize(ime_input_string, DB)
         ime_input_caret_pos := left_pos
     }
 }
@@ -52,7 +52,7 @@ ImeClearLastSplitedInput()
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos)
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
+        ime_input_candidate.Initialize(ime_input_string, DB)
     }
 }
 
@@ -176,22 +176,27 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
     if (!ime_input_string ) {
         update_coord := true
     }
-    if( InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) ){
+    if( InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
+    {
         ime_assistant_code .= input_char
-    } else {
+        ime_input_candidate.FilterRadical(ime_assistant_code)
+    }
+    else
+    {
         pos := pos != -1 ? pos : ime_input_caret_pos
         ime_input_string := SubStr(ime_input_string, 1, pos) . input_char . SubStr(ime_input_string, pos+1)
         ime_input_caret_pos := pos + 1
+
+        if( try_puts && StrLen(ime_input_string) == 1 ) {
+            PutCharacter(input_char)
+            ImeClearInputString()
+        } else {
+            ImeOpenSelectMenu(false)
+            ime_input_candidate.SetSelectIndex(1)
+            ime_input_candidate.Initialize(ime_input_string, DB)
+        }
     }
 
-    if( try_puts && StrLen(ime_input_string) == 1 ) {
-        PutCharacter(input_char)
-        ImeClearInputString()
-    } else {
-        ImeOpenSelectMenu(false)
-        ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
-    }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, update_coord)
 }
 

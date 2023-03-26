@@ -1,7 +1,7 @@
 ;*******************************************************************************
 ; 组词，字数大于1
 ;
-PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, assistant_input)
+PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result)
 {
     local
 

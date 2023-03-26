@@ -111,6 +111,6 @@ PinyinResultCheckAssistant(ByRef search_result, assistant_code)
             search_result := found_result
         }
         
-        tooltip_debug[6] := "Assistant tick: " A_TickCount - begin_tick ", " found_result.Length() " [" assistant_code "]"
+        tooltip_debug[6] := "Radical: [" assistant_code "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
     }
 }

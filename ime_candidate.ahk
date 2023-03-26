@@ -8,7 +8,7 @@ class Candidate
         This.split_indexs   := []
     }
 
-    Initialize(input_string, assistant_code:="", DB:="") {
+    Initialize(input_string, DB:="") {
         ; [
         ;     ; -1 , 0         , 1
         ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
@@ -22,14 +22,21 @@ class Candidate
             This.input_string := input_string
             This.input_split := PinyinSplit(This.input_string, split_indexs)
             This.split_indexs := split_indexs
-            This.assistant_code := assistant_code
-            This.candidate := PinyinGetSentences(This.input_split, This.input_string, This.assistant_code, DB)
+            This.candidate_origin := PinyinGetSentences(This.input_string, This.input_split, DB)
+            This.candidate_filtered := CopyObj(This.candidate_origin)
         } else {
             This.input_string := ""
-            This.assistant_code := ""
         }
     }
-    
+
+    FilterRadical(radical)
+    {
+        local
+        search_result := This.candidate_origin
+        PinyinResultCheckAssistant(search_result, radical)
+        This.candidate_filtered := search_result
+    }
+
     GetSendLength(full_input_string, send_pinyin_string)
     {
         index_pinyin    := 1
@@ -89,7 +96,7 @@ class Candidate
 
         tooltip_debug[11] := "[" send_word "] " pinyin_string "," This.input_string "," sent_string_len
         This.SetSelectIndex(1)
-        This.Initialize(This.input_string, "", DB)
+        This.Initialize(This.input_string, DB)
         return send_word
     }
 
@@ -147,7 +154,7 @@ class Candidate
 
     GetListLength()
     {
-        return This.candidate.Length()
+        return This.candidate_filtered.Length()
     }
     GetRemainString()
     {
@@ -156,26 +163,26 @@ class Candidate
 
     GetDebugInfo(index)
     {
-        return This.candidate[index, 0]
+        return This.candidate_filtered[index, 0]
     }
     GetPinyin(index)
     {
-        return This.candidate[index, 1]
+        return This.candidate_filtered[index, 1]
     }
 
     GetWord(index)
     {
-        return This.candidate[index, 2]
+        return This.candidate_filtered[index, 2]
     }
 
     GetWeight(index)
     {
-        return This.candidate[index, 3]
+        return This.candidate_filtered[index, 3]
     }
 
     GetComment(index)
     {
-        return This.candidate[index, 4]
+        return This.candidate_filtered[index, 4]
     }
 
     GetCommentDisplayText(index)
@@ -194,7 +201,7 @@ class Candidate
 
     GetAssistant(index)
     {
-        return This.candidate[index, 6]
+        return This.candidate_filtered[index, 6]
     }
 }
 
