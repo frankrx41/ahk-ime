@@ -30,7 +30,7 @@ PinyinAssistantInitialize()
     Assert(assistant_pinyin.Count() != 0)
 }
 
-PinyinResultShowAssistant(ByRef search_result)
+PinyinResultUpdateAssistant(ByRef search_result)
 {
     local
     loop % search_result.Length()

@@ -150,8 +150,8 @@ PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
         ; 插入字部分
         PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
-        ; 显示辅助码
-        PinyinResultShowAssistant(search_result)
+        ; 更新辅助码
+        PinyinResultUpdateAssistant(search_result)
 
         ; 辅助码筛去除重
         PinyinResultCheckAssistant(search_result, assistant_code)
