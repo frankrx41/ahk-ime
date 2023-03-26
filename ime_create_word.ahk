@@ -1,15 +1,3 @@
-#NoEnv
-#SingleInstance, Force
-SendMode, Input
-SetBatchLines, -1
-SetWorkingDir, %A_ScriptDir%
-
-#Include, ime_assert.ahk
-#Include, ime_func.ahk
-#Include, ime_db.ahk
-#Include, lib\SQLiteDB.ahk
-#Include, ime_pinyin_get_result.ahk
-
 WordCreateGui( input_text )
 {
     local
@@ -135,9 +123,3 @@ GetPinyin(word)
         return ""
     }
 }
-
-global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-ImeDBInitialize()
-
-WordCreateGui("")
-return

@@ -44,6 +44,8 @@ return
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk
 
+#Include, ime_create_word.ahk
+
 #if WinActive("AHK-Ime")
 ~^S::
 Suspend

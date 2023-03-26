@@ -176,6 +176,10 @@ return
 
 #if ; ime_input_string
 
+!CapsLock::
+    WordCreateGui(GetSelectText())
+return
+
 ;*******************************************************************************
 ; Win + Space: toggle cn and en
 #Space::
