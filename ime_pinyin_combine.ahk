@@ -1,28 +1,18 @@
 ;*******************************************************************************
-; 组词
+; 组词，字数大于1
 ;
 PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, assistant_input)
 {
     local
 
-    if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
+    ; 存在词组时添加之 e.g. wo3ai4ni3
+    if( save_field_array.Length() == 1 )
     {
-        pinyin := save_field_array[1,0]
-        Assert(0, "Trace: I'm no sure why it go here: " . pinyin)
-        PinyinUpdateKey(DB, pinyin)
-        ; TODO:
-        ; sql_result := Get_jianpin(DB, scheme, "'"  "'", "", 0, 0)
-        ; save_field_array[1] := CopyObj(sql_result)
+        loop % save_field_array[1].Length() {
+            search_result.Push(CopyObj(save_field_array[1, A_Index]))
+        }
     }
-
-    ; 存在组词时 "wo", "woai"
-    if( (save_field_array.Length()==1) || assistant_input )
-    {
-        search_result := CopyObj(save_field_array[1])
-    }
-    ; 不能组词时
-    ; "woshei" -> "wo" + "shei"
-    ; "hhhhhhhh" -> "hhhh" + "hhhh" + "h"
+    ; 不存在组词时自动组词 e.g. wo3hen3kai1xin
     else
     {
         if( save_field_array[2,1,1]!=Chr(2) )
@@ -30,16 +20,6 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result,
             word := save_field_array[1,1,-1] . save_field_array[2,1,-1]
             While( InStr(word,"'") && !PinyinHasResult(word) ) {
                 word := RegExReplace(word, "i)'([^']+)?$")
-            }
-            ; if( word ~= "^" . save_field_array[1, 0] . "'[a-z;]+" ){
-            ;     PinyinUpdateKey(DB, word)
-            ;     search_result := PinyinKeyGetWords(word)
-            ; }
-        }
-
-        if( InStr(save_field_array[1, 0], "'") ){
-            loop % save_field_array[1].Length() {
-                search_result.Push(CopyObj(save_field_array[1, A_Index]))
             }
         }
         search_result.InsertAt(1, CombineWord(save_field_array))

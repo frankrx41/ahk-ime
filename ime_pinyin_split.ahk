@@ -3,7 +3,7 @@ IsTone(tone)
     return tone && InStr("12345' ", tone)
 }
 
-GetTone(input_str, ByRef index)
+GetTone(input_str, initials, vowels, ByRef index)
 {
     local
     strlen := StrLen(input_str)
@@ -13,59 +13,128 @@ GetTone(input_str, ByRef index)
         ; TODO: make space work to split words
         tone := tone == " " ? "'" : tone
     } else {
-        tone := ( index < strlen+1 ) ? "-" : ""
+        if( index < strlen+1 ){
+            tone := "-"
+        } else {
+            tone := IsCompletePinyin(initials, vowels) ? "'" : ""
+        }
     }
     return tone
 }
 
-GetVowelsLength(input_str, index)
+CalcMaxVowelsLength(input_str, index)
 {
     local
     strlen := StrLen(input_str)
-    vowels_test_len := 0
+    vowels_max_len := 0
     loop {
-        if( vowels_test_len >= 4 || index+vowels_test_len-A_Index>=strlen ){
+        ; Max len is 4
+        if( vowels_max_len >= 4 || index+vowels_max_len-A_Index>=strlen ){
             break
         }
-        check_char := SubStr(input_str, index+vowels_test_len, 1)
+        check_char := SubStr(input_str, index+vowels_max_len, 1)
         if( IsTone(check_char) ){
             break
         }
         if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
             break
         }
-        vowels_test_len += 1
+        vowels_max_len += 1
     }
-    return vowels_test_len
+    return vowels_max_len
+}
+
+IsSplitAbleAt(next_char)
+{
+    return next_char == "" || IsInitials(next_char) || IsTone(next_char)
+}
+
+PinyinSplitTableInitialize()
+{
+    global split_weight_table := {}
+    FileRead, file_content, data\pinyin-split.txt
+    Loop, Parse, file_content, `n
+    {
+        key := RTrim(A_LoopField, "`r")
+        if( key ){
+            split_weight_table[key] := 1
+        }
+    }
+    Assert(split_weight_table.Count() != 0)
+}
+
+IsInSplitTable(left_initials, left_vowels, right_string)
+{
+    global split_weight_table
+    right_string_len := StrLen(right_string)
+    loop, 5
+    {
+        key := left_initials . left_vowels . "'" . SubStr(right_string, 1, A_Index)
+        if( split_weight_table.HasKey(Key) ){
+            return true
+        }
+        if( A_Index >= right_string_len ){
+            break
+        }
+    }
+    return false
+}
+
+IsGracefulSplit(left_initials, left_vowels, right_string)
+{
+    next_char := SubStr(right_string, 1, 1)
+    if( !right_string || IsTone(next_char) ){
+        return true
+    }
+
+    right_initials := SubStr(left_vowels, 0, 1)
+    is_complete := 0
+    if( next_char == "o" ){
+        is_complete += IsCompletePinyin(right_initials, "on")
+    }
+
+    if( is_complete || IsCompletePinyin(right_initials, next_char) )
+    {
+        return IsInSplitTable(left_initials, left_vowels, right_string)
+    }
+    else
+    {
+        return true
+    }
 }
 
 GetVowels(input_str, initials, ByRef index)
 {
     local
-    global pinyin_table
     ; 最长是4个
-    vowels_test_len := GetVowelsLength(input_str, index)
-    strlen      := StrLen(input_str)
+    vowels_max_len := CalcMaxVowelsLength(input_str, index)
     vowels      := ""
     vowels_len  := 0
-    if( vowels_test_len > 0 )
+    if( vowels_max_len > 0 )
     {
         loop
         {
-            if( index+vowels_test_len-A_Index > strlen ){
-                continue
-            }
-            vowels_len := vowels_test_len+1-A_Index
+            vowels_len := vowels_max_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
-            if( pinyin_table[initials][vowels] ){
-                break
+            if( IsCompletePinyin(initials, vowels) )
+            {
+                next_char := SubStr(input_str, index+vowels_len, 1)
+                ; tooltip_debug[1] .= "(" next_char ")"
+                if( IsSplitAbleAt(next_char) && IsGracefulSplit(initials, vowels, SubStr(input_str, index+vowels_len)) )
+                {
+                    break
+                }
             }
-            if( A_Index >= vowels_test_len+1 ){
+            if( A_Index >= vowels_max_len+1 ){
                 break
             }
         }
     }
     index += vowels_len
+
+    if( !IsCompletePinyin(initials, vowels) ){
+        vowels .= "%"
+    }
     return vowels
 }
 
@@ -85,20 +154,16 @@ GetInitials(input_str, initials, ByRef index)
 ; 拼音音节切分
 ; ' 表示自动分词
 ; 12345 空格 大写 表示手动分词
-PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
+PinyinSplit(origin_input, show_full:=0)
 {
     local
     Critical
-    global pinyin_table
     global tooltip_debug
 
     index           := 1
     separate_words  := ""
     input_str       := origin_input
     strlen          := StrLen(input_str)
-    last_char       := ""
-    last_vowels     := ""
-    last_initials   := ""
 
     loop
     {
@@ -108,67 +173,29 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
 
         initials := SubStr(input_str, index, 1)
         ; 字母，自动分词
-        if( pinyin_table.HasKey(initials) )
+        if( IsInitials(initials) )
         {
             start_index := index
 
-            ; 声母
-            initials := GetInitials(input_str, initials, index)
-
-            ; 韵母
-            vowels := GetVowels(input_str, initials, index)
-
-            ; 声调
-            tone := GetTone(input_str, index)
-
-            ; 词库辅助分词
-            if( (InStr("n|g", last_char)||(last_char="e"&&initials="r")) && (!vowels||InStr("aeo", initials)) )
-            {
-                if( pinyin_table[last_initials][SubStr(last_vowels,1,-1)] )
-                {
-                    prev_separate_words := PinyinSplit(SubStr(input_str, start_index-1))
-                    str_left := separate_words . initials . vowels . tone
-                    str_right := SubStr(separate_words,1,-2) . "'" . prev_separate_words
-                    weight_left := PinyinCheckWeight(DB, str_left)
-                    weight_right := PinyinCheckWeight(DB, str_right)
-                    if( weight_right >= weight_left )
-                    {
-                        Assert(SubStr(separate_words,0) == "'")
-                        separate_words := SubStr(separate_words,1,-2) "'" prev_separate_words
-                        tooltip_debug[1] .= origin_input "->[" separate_words "] "
-                        return separate_words
-                    }
-                }
-            }
-
-            last_initials   := initials
-            last_vowels     := vowels
-
-            if( !IsTone(tone) ){
-                if( pinyin_table[initials][vowels] ){
-                    last_char := SubStr(pinyin_table[initials][vowels],0)
-                } else if( pinyin_table[initials][1] ) {
-                    last_char := SubStr(pinyin_table[initials][1],0)
-                }
-            } else {
-                last_char := "'"
-            }
+            initials    := GetInitials(input_str, initials, index)
+            vowels      := GetVowels(input_str, initials, index)
+            full_vowels := GetFullVowels(initials, vowels)
+            tone        := GetTone(input_str, initials, vowels, index)
 
             ; 更新音调
             tone := tone != "" ? IsTone(tone) ? tone : "'" : ""
             ; 转全拼显示
-            if (show_full) {
-                separate_words .= pinyin_table[initials][1] . pinyin_table[initials][vowels] . tone
+            if( show_full ){
+                Assert(initials == GetFullInitials(initials))
+                vowels := full_vowels ? full_vowels : vowels
             }
-            else {
-                separate_words .= initials . vowels . tone
-            }
+
+            separate_words .= initials . vowels . tone
         }
         ; 忽略
         else
         {
             index += 1
-            last_char := initials
             if( initials!="'" ) {
                 separate_words .= initials "'"
             }
@@ -177,41 +204,4 @@ PinyinSplit(origin_input, pinyintype:="pinyin", show_full:=0, DB:="")
 
     tooltip_debug[1] .= origin_input "->[" separate_words "] "
     return separate_words
-}
-
-PinyinCheckWeight(DB, origin_input)
-{
-    local
-    static weight_data := []
-    static check_split_cnt := 0
-    global tooltip_debug
-
-    if( !DB ){
-        Assert(0, "DB error")
-        return -1
-    }
-
-    input_str := origin_input
-    input_str := StrReplace(input_str, "'", "''")
-    input_str := StrReplace(input_str, "'|'")
-    if( weight_data[input_str] != "" ){
-        tooltip_debug[7] .= ": [" input_str "]->(" weight_data[input_str] ") `n"
-        return weight_data[input_str]
-    }
-
-    sim_str := RegExReplace(Trim(input_str, "'"), "([a-z])[a-z]+", "$1")
-    key_str := RegExReplace(input_str, "'([csz]h?)'", "'$1.*'")
-    sql_cmd := "SELECT weight FROM pinyin WHERE jp='" sim_str "' AND key REGEXP '^" Trim(key_str,"'") "$' ORDER BY weight DESC LIMIT 1"
-    if( DB.GetTable(sql_cmd,Result) )
-    {
-        check_split_cnt += 1
-        weight_data[input_str] := Result.Rows[1][1] ? Result.Rows[1][1] : 0
-        tooltip_debug[7] .= check_split_cnt . ": [" input_str "]->(" weight_data[input_str] ") `n"
-        return weight_data[input_str]
-    }
-    else
-    {
-        Assert(0, "SQL error: " . sql_cmd)
-        return -1
-    }
 }

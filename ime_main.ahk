@@ -10,12 +10,11 @@ if not A_IsAdmin
     Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
-Menu, Tray, Tip, AHK IME `nv0.06 (dev)
+Menu, Tray, Tip, AHK IME `nv0.07 (dev)
 
 #Include, ime_config.ahk
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-global history_field_array := []
 global tooltip_debug := []
 Gosub, ImeInitialize
 return
@@ -43,6 +42,8 @@ return
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk
+
+#Include, ime_create_word.ahk
 
 #if WinActive("AHK-Ime")
 ~^S::

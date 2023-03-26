@@ -108,3 +108,21 @@ OutputDebug(info,type){
         buffer:=""
     return
 }
+
+GetSelectText(timeout := 0.5)
+{
+    IfWinActive, ahk_class ConsoleWindowClass
+    {
+        return ""
+    } else {
+        ; OnClipboardChange("ClipChanged",0)
+        saveboard := clipboard
+        clipboard :=
+        SendInput, {RCtrl Down}c{RCtrl Up}
+        ClipWait, %timeout%
+        copyboard := clipboard
+        clipboard := saveboard
+        ;OnClipboardChange("ClipChanged",1)
+        return copyboard
+    }
+}

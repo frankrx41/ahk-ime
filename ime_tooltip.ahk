@@ -43,7 +43,9 @@ DisplaySelectItems(candidate)
                 }
 
                 end_str := select_index == word_index ? "]" : " "
-                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str
+                comment := candidate.GetCommentDisplayText(word_index)
+
+                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str . comment
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
                 item_str := ""
@@ -98,6 +100,7 @@ ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, u
         ; debug_tip .= "`n" tooltip_debug[6]  ; Assistant
         ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
+        debug_tip .= "`n" tooltip_debug[9]  ; temp
         ; debug_tip .= "`n" tooltip_debug[11] ; Candidate
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 

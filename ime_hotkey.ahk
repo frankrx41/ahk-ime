@@ -57,7 +57,7 @@ BackSpace::
         if( StrLen(ime_assistant_code) == 0 ){
             ime_input_candidate.SetSelectIndex(1)
         }
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code)
+        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
         ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
     }
     else if( ime_input_caret_pos != 0 ){
@@ -65,7 +65,7 @@ BackSpace::
         tooltip_debug[7] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code)
+        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
         ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
     }
 return
@@ -81,8 +81,13 @@ Esc::
             ImeOpenSelectMenu(false)
         }
     } else {
-        ImeClearInputString()
+        if( A_TickCount - last_esc_tick < 1000 ){
+            ImeClearInputString()
+        } else {
+            ImeClearLastSplitedInput()
+        }
     }
+    last_esc_tick := A_TickCount
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
@@ -109,10 +114,7 @@ Left::
     if( ImeIsSelectMenuOpen() ){
         ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
     } else {
-        ime_input_caret_pos -= 1
-        if( ime_input_caret_pos < 0 ){
-            ime_input_caret_pos := StrLen(ime_input_string)
-        }
+        ImeInputCaretMove(-1, true)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
@@ -121,28 +123,19 @@ Right::
     if( ImeIsSelectMenuOpen() ){
         ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
     } else {
-        ime_input_caret_pos += 1
-        if( ime_input_caret_pos > StrLen(ime_input_string) ){
-            ime_input_caret_pos := 0
-        }
+        ImeInputCaretMove(+1, true)
     }
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
-    ime_input_caret_pos -= 1
-    if( ime_input_caret_pos < 0 ){
-        ime_input_caret_pos := StrLen(ime_input_string)
-    }
+    ImeInputCaretMove(-1)
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
 +Right::
-    ime_input_caret_pos += 1
-    if( ime_input_caret_pos > StrLen(ime_input_string) ){
-        ime_input_caret_pos := 0
-    }
+    ImeInputCaretMove(+1)
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
@@ -182,6 +175,11 @@ ImeTooltipUpdateTimer:
 return
 
 #if ; ime_input_string
+
+!`::
+    WordCreateGui(GetSelectText())
+    PinyinResultClear()
+return
 
 ;*******************************************************************************
 ; Win + Space: toggle cn and en

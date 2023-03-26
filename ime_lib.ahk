@@ -5,11 +5,12 @@ ime_input_string    := ""               ; 輸入字符
 ime_input_caret_pos := 0                ; 光标位置
 ime_assistant_code  := ""               ; 辅助码
 ime_input_candidate := new Candidate    ; 候选项
+last_esc_tick       := 0
 
 ImeDBInitialize()
 ImeSelectInitialize()
 ImeStateInitialize()
-PinyinInit()
+PinyinInitialize()
 ImeUpdateActiveState()
 
 ; tooltip
@@ -59,6 +60,8 @@ ImeRegisterHotkey()
         Hotkey, Space, %func%
         func := Func("ImeInputChar").Bind("'")
         Hotkey, ', %func%
+        func := Func("ImeInputChar").Bind("'")
+        Hotkey, \, %func%
         ; 0-9
         loop 10 {
             func := Func("ImeInputNumber").Bind(A_Index-1)
