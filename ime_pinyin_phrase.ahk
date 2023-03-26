@@ -46,6 +46,12 @@ WordCanContinueSplit(word)
     return RegExMatch(word, "['12345][^'12345]")
 }
 
+WordLimitMaxSplit(word, max:=8)
+{
+    ; "kai'xin'a'" -> "xin'a'"
+    return RegExReplace(word, "^(([^'12345]+['12345]?){0," max "}).*$", "$1")
+}
+
 WordRemoveFirstSplit(word)
 {
     ; "kai'xin'a'" -> "xin'a'"
