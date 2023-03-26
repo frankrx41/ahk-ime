@@ -44,27 +44,27 @@ WordRemoveLastSplit(word)
     return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
 }
 
-PinyinResultInsertWords(ByRef DB, ime_input_split, ByRef search_result)
+PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
 {
     local
     global history_field_array
 
     ; 插入候选词部分
-    word := ime_input_split
-    While( WordCanContinueSplit(word) && !PinyinHasResult(word) )
+    spilt_word := input_spilt_string
+    While( WordCanContinueSplit(spilt_word) && !PinyinHasResult(spilt_word) )
     {
-        PinyinUpdateKey(DB, word)
-        if( PinyinHasResult(word) ){
+        PinyinUpdateKey(DB, spilt_word)
+        if( PinyinHasResult(spilt_word) ){
             break
         }
-        word := WordRemoveLastSplit(word)
+        spilt_word := WordRemoveLastSplit(spilt_word)
     }
-    if( WordCanContinueSplit(word) )
+    if( WordCanContinueSplit(spilt_word) )
     {
-        PinyinUpdateKey(DB, word)
+        PinyinUpdateKey(DB, spilt_word)
 
-        loop % history_field_array[word].Length() {
-            search_result.Push(CopyObj(history_field_array[word, A_Index]))
+        loop % history_field_array[spilt_word].Length() {
+            search_result.Push(CopyObj(history_field_array[spilt_word, A_Index]))
         }
     }
     return
@@ -75,12 +75,12 @@ GetFirstWord(input_str)
     return RegExReplace(input_str, "^([a-z]+[12345'%]).*", "$1")
 }
 
-PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, ime_input_split)
+PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, input_split_string)
 {
     local
     global history_field_array
 
-    first_word := GetFirstWord(ime_input_split)
+    first_word := GetFirstWord(input_split_string)
     PinyinUpdateKey(DB, first_word)
     loop % history_field_array[first_word].Length()
     {

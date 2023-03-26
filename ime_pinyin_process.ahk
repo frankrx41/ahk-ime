@@ -16,11 +16,11 @@ GetLeftString(input_str, index, max_length:=8)
     return left_string
 }
 
-PinyinProcess(ByRef DB, ByRef save_field_array, origin_input_string)
+PinyinProcess(ByRef DB, ByRef save_field_array, input_spilt_string)
 {
     local
     global history_field_array
-    input_string := origin_input_string
+    input_string := input_spilt_string
     begin := A_TickCount
 
     loop
