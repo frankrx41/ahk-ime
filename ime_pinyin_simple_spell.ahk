@@ -12,6 +12,32 @@ GetSimpleSpellString(input_string)
     return input_string . "%"
 }
 
+; Not include "i" "u" "v"
+SeparateSingleCharHasSound(separate_single_chars)
+{
+    return !RegExMatch(separate_single_chars, "[iuv]['12345]")
+}
+
+CanMakeSimpleSpell(separate_single_char, ime_input_split_trim)
+{
+    local
+    if( separate_single_char == ime_input_split_trim )
+    {
+        return false
+    }
+    if( !SeparateSingleCharHasSound(separate_single_char) )
+    {
+        return false
+    }
+
+    str_len := StrLen(separate_single_char)/3
+    if( str_len < 4 || str_len > 8 )
+    {
+        return false
+    }
+    return true
+}
+
 PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, ime_input_split_trim)
 {
     local
@@ -19,8 +45,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, ime_input_split_tri
     global tooltip_debug
 
     separate_single_char := GetSimpleSpellString(ime_input_split_trim)
-    str_len := StrLen(separate_single_char)/3
-    if( str_len >= 4 && str_len <= 8 && ime_input_split_trim != separate_single_char )
+    if( CanMakeSimpleSpell(separate_single_char, ime_input_split_trim) )
     {
         PinyinUpdateKey(DB, separate_single_char, 8)
         list_len := history_field_array[separate_single_char].Length()
