@@ -168,7 +168,7 @@ PinyinInitialize()
                 "1":"zh",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uag":"uang","uang":"uang"
             },
