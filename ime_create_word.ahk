@@ -5,6 +5,9 @@ WordCreateGui( input_text )
     global create_gui_pinyin_key
     global create_gui_pinyin_weight
     global DB
+
+    input_text := RegExReplace(input_text, "\s")
+
     Gui, create:-MinimizeBox
     Gui, create:Font, s12
 
