@@ -135,6 +135,18 @@ Right::
     ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
 return
 
+; Ctrl + Left/Right
+; Move caret by a word
+^Left::
+    ImeInputCaretMove(-1, true)
+    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+return
+
+^Right::
+    ImeInputCaretMove(+1, true)
+    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+return
+
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
     ImeInputCaretMove(-1)
