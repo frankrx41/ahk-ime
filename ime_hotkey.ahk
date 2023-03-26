@@ -178,6 +178,7 @@ return
 
 !`::
     WordCreateGui(GetSelectText())
+    PinyinResultClear()
 return
 
 ;*******************************************************************************

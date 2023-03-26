@@ -1,3 +1,8 @@
+PinyinResultClear()
+{
+    global history_field_array := []
+}
+
 PinyinHasResult(pinyin)
 {
     global history_field_array

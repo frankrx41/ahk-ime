@@ -15,7 +15,6 @@ Menu, Tray, Tip, AHK IME `nv0.06 (dev)
 #Include, ime_config.ahk
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-global history_field_array := []
 global tooltip_debug := []
 Gosub, ImeInitialize
 return
