@@ -5,6 +5,7 @@ class Candidate
         This.candidate      := []
         This.input_string   := ""
         This.input_split    := ""
+        This.split_indexs   := []
     }
 
     Initialize(input_string, assistant_code:="", DB:="") {
@@ -14,11 +15,13 @@ class Candidate
         ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
         ;     ...
         ; ]
+        local
         input_string := LTrim(input_string, " ")
         if( input_string )
         {
             This.input_string := input_string
-            This.input_split := PinyinSplit(This.input_string, true)
+            This.input_split := PinyinSplit(This.input_string, split_indexs)
+            This.split_indexs := split_indexs
             This.assistant_code := assistant_code
             This.candidate := PinyinGetSentences(This.input_split, This.input_string, This.assistant_code, DB)
         } else {
@@ -89,43 +92,43 @@ class Candidate
         This.Initialize(This.input_string, "", DB)
         return send_word
     }
-    GetLeftWordLength(input_split, input_string)
-    {
-        trim_string := RTrim(input_split, "%'12345")
-        prev_word_pos := RegExMatch(trim_string, "[12345'|][^12345'|]*$")
-        if( prev_word_pos == 0 ){
-            return 0
-        } else {
-            prev_word := SubStr(trim_string, 1, prev_word_pos-1)
-            sent_string_len := This.GetSendLength(input_string, prev_word)
-            return sent_string_len
-        }
-    }
+
     GetLastWordPos()
     {
-        return This.GetLeftWordLength(This.input_split, This.input_string)
+        return This.split_indexs[This.split_indexs.Length()-1]
     }
-    GetLeftWordPos(index)
+    GetLeftWordPos(start_index)
     {
-        left_string := SubStr(This.input_string, 1, index)
-        left_string_split := PinyinSplit(left_string, true)
-        return This.GetLeftWordLength(left_string_split, left_string)
+        local
+        if( start_index == 0 ){
+            return This.split_indexs[This.split_indexs.Length()]
+        }
+        last_index := 0
+        loop, % This.split_indexs.Length()
+        {
+            split_index := This.split_indexs[A_Index]
+            if( split_index >= start_index ){
+                break
+            }
+            last_index := split_index
+        }
+        return last_index
     }
-    GetRightWordLength(input_split, input_string)
+    GetRightWordPos(start_index)
     {
-        trim_string := RTrim(input_split, "%'12345")
-        prev_word := RegExReplace(trim_string, "[12345'|](.*)$")
+        local
+        last_index := 0
+        loop, % This.split_indexs.Length()
+        {
+            split_index := This.split_indexs[A_Index]
+            if( split_index > start_index ){
+                last_index := split_index
+                break
+            }
+        }
+        return last_index
+    }
 
-        sent_string_len := This.GetSendLength(input_string, prev_word)
-        return sent_string_len
-    }
-    GetRightWordPos(index)
-    {
-        left_index := This.GetLeftWordPos(index+1)
-        left_string := SubStr(This.input_string, left_index+1)
-        left_string_split := PinyinSplit(left_string, true)
-        return This.GetRightWordLength(left_string_split, left_string) + left_index
-    }
     GetSelectIndex()
     {
         return This.select_index

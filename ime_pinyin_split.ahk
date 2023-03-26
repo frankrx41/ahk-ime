@@ -154,7 +154,7 @@ GetInitials(input_str, initials, ByRef index)
 ; 拼音音节切分
 ; ' 表示自动分词
 ; 12345 空格 大写 表示手动分词
-PinyinSplit(origin_input, show_full:=0)
+PinyinSplit(origin_input, ByRef split_index_arr)
 {
     local
     Critical
@@ -164,6 +164,7 @@ PinyinSplit(origin_input, show_full:=0)
     separate_words  := ""
     input_str       := origin_input
     strlen          := StrLen(input_str)
+    split_index_arr := []
 
     loop
     {
@@ -185,12 +186,12 @@ PinyinSplit(origin_input, show_full:=0)
             ; 更新音调
             tone := tone != "" ? IsTone(tone) ? tone : "'" : ""
             ; 转全拼显示
-            if( show_full ){
-                Assert(initials == GetFullInitials(initials))
-                vowels := full_vowels ? full_vowels : vowels
-            }
+            Assert(initials == GetFullInitials(initials))
+            vowels := full_vowels ? full_vowels : vowels
 
             separate_words .= initials . vowels . tone
+
+            split_index_arr.Push(index-1)
         }
         ; 忽略
         else
