@@ -92,6 +92,22 @@ ImeInputCaretMove(dir, by_word:=false)
     }
 }
 
+ImeInputCaretFastMoveAtFirst(char)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_assistant_code
+    global ime_input_candidate
+
+    index := InStr(ime_input_string, char)
+    if( index != 0 )
+    {
+        ime_input_caret_pos := index - 1
+    }
+
+    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, false)
+}
+
 ;*******************************************************************************
 ; 切换成英文前以原始输入上屏文字
 CallBackBeforeToggleEn()

@@ -73,6 +73,9 @@ ImeRegisterHotkey()
             ; A-Z
             func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
             Hotkey, % "+" Chr(96+A_Index), %func%
+
+            func := Func("ImeInputCaretFastMoveAtFirst").Bind(Chr(96+A_Index))
+            Hotkey, % "^" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
