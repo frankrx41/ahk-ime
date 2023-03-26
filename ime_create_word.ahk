@@ -43,7 +43,7 @@ WordCreateGui( input_text )
         weight := GetWeight(DB, create_gui_pinyin_key, value)
         ; Make 1234 -> "1,234"
         if( weight >= 1000 ){
-            weight := Floor((weight / 1000)) "," Mod(weight, 1000)
+            weight := Floor((weight / 1000)) "," Format("{:03}", Mod(weight, 1000))
         }
         GuiControl, create:, create_gui_pinyin_weight, %weight%
     return
