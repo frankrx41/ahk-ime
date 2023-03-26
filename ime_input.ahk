@@ -96,12 +96,14 @@ ImeInputCaretMove(dir, by_word:=false)
 
 ImeInputCaretFastMoveAtFirst(char)
 {
+    local
     global ime_input_caret_pos
     global ime_input_string
     global ime_assistant_code
     global ime_input_candidate
 
-    index := InStr(ime_input_string, char)
+    start_index := StrLen(ime_input_string) - ime_input_caret_pos
+    index := InStr(ime_input_string, char, false, -start_index)
     if( index != 0 )
     {
         ime_input_caret_pos := index - 1
