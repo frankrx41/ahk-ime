@@ -2,7 +2,6 @@ class Candidate
 {
     __New() {
         This.select_index   := 1    ; 选定的候选词，从 1 开始
-        This.candidate      := []
         This.input_string   := ""
         This.input_split    := ""
         This.split_indexs   := []
@@ -20,6 +19,7 @@ class Candidate
         if( input_string )
         {
             This.input_string := input_string
+            split_indexs := []
             This.input_split := PinyinSplit(This.input_string, split_indexs)
             This.split_indexs := split_indexs
             This.candidate_origin := PinyinGetSentences(This.input_string, This.input_split, DB)
