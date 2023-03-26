@@ -87,7 +87,7 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
         sql_cmd .= "VALUES ( '" sim "', '" key "', '" value "', " weight ", '" comment "' );"
 
         if( DB.Exec(sql_cmd) ){
-            Msgbox, % "Create success`nKey: " key "`nValue: " value
+            Msgbox, 48, , % "Create success`nKey: " key "`nValue: " value
         } else {
             Assert(0, DB.ErrorMsg,,true)
         }
@@ -98,7 +98,7 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
         sql_cmd .= "WHERE sim = '" sim "' AND ""key"" = '" key "' AND value = '" value "';"
         
         if( DB.Exec(sql_cmd) ){
-            Msgbox, % "Update success`nKey: " key "`nValue: " value
+            Msgbox, 32, , % "Update success`nKey: " key "`nValue: " value
         } else {
             Assert(0, DB.ErrorMsg,,true)
         }
