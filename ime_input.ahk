@@ -94,7 +94,7 @@ ImeInputCaretMove(dir, by_word:=false)
     }
 }
 
-ImeInputCaretFastMoveAtFirst(char)
+ImeInputCaretFastMoveAt(char, back_to_front)
 {
     local
     global ime_input_caret_pos
@@ -102,8 +102,12 @@ ImeInputCaretFastMoveAtFirst(char)
     global ime_assistant_code
     global ime_input_candidate
 
-    start_index := StrLen(ime_input_string) - ime_input_caret_pos
-    index := InStr(ime_input_string, char, false, -start_index)
+    if( back_to_front ) {
+        start_index := ime_input_caret_pos - StrLen(ime_input_string)
+    } else {
+        start_index := ime_input_caret_pos + 2
+    }
+    index := InStr(ime_input_string, char, false, start_index)
     if( index != 0 )
     {
         ime_input_caret_pos := index - 1
