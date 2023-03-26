@@ -7,7 +7,7 @@ PinyinAssistantInitialize()
     global assistant_table := {}
     global assistant_pinyin := {}
 
-    FileRead, file_content, data\character-spilt.txt
+    FileRead, file_content, data\radicals.txt
     Loop, Parse, file_content, `n
     {
         ; Split each line by the tab character
@@ -20,7 +20,7 @@ PinyinAssistantInitialize()
     }
     Assert(assistant_table.Count() != 0)
 
-    FileRead, file_content, data\character-split-pinyin.txt
+    FileRead, file_content, data\radicals-pinyin.txt
     index := 0
     Loop, Parse, file_content, `n
     {
