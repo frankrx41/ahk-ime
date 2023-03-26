@@ -50,7 +50,7 @@ PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
     global history_field_array
 
     ; 插入候选词部分
-    spilt_word := input_spilt_string
+    spilt_word := WordRemoveLastSplit(input_spilt_string)
     While( WordCanContinueSplit(spilt_word) && !PinyinHasResult(spilt_word) )
     {
         PinyinUpdateKey(DB, spilt_word)
@@ -132,8 +132,11 @@ PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
         ; Do sql get result
         PinyinProcess(DB, save_field_array, ime_input_split)
 
-        ; 组词
-        PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
+        ; 字数大于1时 组词
+        if( WordCanContinueSplit(ime_input_split) )
+        {
+            PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
+        }
 
         ; 插入前面个拼音所能组成的候选词
         PinyinResultInsertWords(DB, ime_input_split, search_result)

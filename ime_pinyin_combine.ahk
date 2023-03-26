@@ -1,11 +1,19 @@
 ;*******************************************************************************
-; 组词
+; 组词，字数大于1
 ;
 PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, assistant_input)
 {
     local
-    ; 不存在组词时自动组词
-    if( save_field_array.Length() != 1 )
+
+    ; 存在词组时添加之 e.g. wo3ai4ni3
+    if( save_field_array.Length() == 1 )
+    {
+        loop % save_field_array[1].Length() {
+            search_result.Push(CopyObj(save_field_array[1, A_Index]))
+        }
+    }
+    ; 不存在组词时自动组词 e.g. wo3hen3kai1xin
+    else
     {
         if( save_field_array[2,1,1]!=Chr(2) )
         {
