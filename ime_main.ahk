@@ -12,7 +12,6 @@ if not A_IsAdmin
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
 Menu, Tray, Tip, AHK IME `nv0.07 (dev)
 
-#Include, ime_config.ahk
 
 global DllFolder := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 global tooltip_debug := []

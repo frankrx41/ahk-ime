@@ -71,7 +71,6 @@ ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, u
     local
     static ime_tooltip_pos := ""
     global tooltip_debug
-    global opt_show_debug_tooltip
 
     if( !input_string )
     {
