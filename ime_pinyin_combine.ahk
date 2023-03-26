@@ -4,26 +4,8 @@
 PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result, assistant_input)
 {
     local
-
-    if( save_field_array[1].Length()==2 && save_field_array[1,2,2]=="" )
-    {
-        pinyin := save_field_array[1,0]
-        Assert(0, "Trace: I'm no sure why it go here: " . pinyin)
-        PinyinUpdateKey(DB, pinyin)
-        ; TODO:
-        ; sql_result := Get_jianpin(DB, scheme, "'"  "'", "", 0, 0)
-        ; save_field_array[1] := CopyObj(sql_result)
-    }
-
-    ; 存在组词时 "wo", "woai"
-    if( (save_field_array.Length()==1) || assistant_input )
-    {
-        search_result := CopyObj(save_field_array[1])
-    }
-    ; 不能组词时
-    ; "woshei" -> "wo" + "shei"
-    ; "hhhhhhhh" -> "hhhh" + "hhhh" + "h"
-    else
+    ; 不存在组词时自动组词
+    if( save_field_array.Length() != 1 )
     {
         if( save_field_array[2,1,1]!=Chr(2) )
         {

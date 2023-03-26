@@ -32,41 +32,39 @@ PinyinKeyGetWords(pinyin)
     return history_field_array[pinyin]
 }
 
-PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
+WordCanContinueSplit(word)
+{
+    ; 包含 word + tone + word + ... 格式
+    return RegExMatch(word, "['12345][^'12345]")
+}
+
+WordRemoveLastSplit(word)
+{
+    ; "kai'xin'a" -> "kai'xin"
+    return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
+}
+
+PinyinResultInsertWords(ByRef DB, ime_input_split, ByRef search_result)
 {
     local
     global history_field_array
-    ; 插入候选词部分
-    ; 比如 "kaixina" 会提取出 "kaixin" 然后判断是否有词组
-    if( word := RegExReplace(save_field_array[1,1,-1], "i)'[^']+$") )
-    {
-        While( InStr(word,"'") && !PinyinHasResult(word) )
-        {
-            PinyinUpdateKey(DB, word)
-            if( PinyinHasResult(word) ){
-                break
-            }
-            word := RegExReplace(word, "i)'([^']+)?$")
-        }
-        if( InStr(word,"'") )
-        {
-            PinyinUpdateKey(DB, word)
 
-            loop % history_field_array[word].Length() {
-                search_result.Push(CopyObj(history_field_array[word, A_Index]))
-            }
-            ; 存在两个 ' 在词组中，比如 "wxhn" -> "wx"
-            if( t:= InStr(word, "'", , , 2) )
-            {
-                ; Assert(0, "二字词: " . save_field_array[1, 0])
-                word := SubStr(word,1,t-1)
-                PinyinUpdateKey(DB, word)
-                if( PinyinHasResult(word) ){
-                    loop % history_field_array[word].Length(){
-                        search_result.Push(CopyObj(history_field_array[word, A_Index]))
-                    }
-                }
-            }
+    ; 插入候选词部分
+    word := ime_input_split
+    While( WordCanContinueSplit(word) && !PinyinHasResult(word) )
+    {
+        PinyinUpdateKey(DB, word)
+        if( PinyinHasResult(word) ){
+            break
+        }
+        word := WordRemoveLastSplit(word)
+    }
+    if( WordCanContinueSplit(word) )
+    {
+        PinyinUpdateKey(DB, word)
+
+        loop % history_field_array[word].Length() {
+            search_result.Push(CopyObj(history_field_array[word, A_Index]))
         }
     }
     return
@@ -74,23 +72,19 @@ PinyinResultInsertWords(ByRef DB, ByRef save_field_array, ByRef search_result)
 
 GetFirstWord(input_str)
 {
-    local
-    return RegExReplace(input_str, "^([a-z][12345'%])", "$1")
+    return RegExReplace(input_str, "^([a-z]+[12345'%]).*", "$1")
 }
 
-PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, srf_all_Input_tip)
+PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, ime_input_split)
 {
     local
     global history_field_array
 
-    first_word := GetFirstWord(srf_all_Input_tip)
-    if( first_word != srf_all_Input_tip )
+    first_word := GetFirstWord(ime_input_split)
+    PinyinUpdateKey(DB, first_word)
+    loop % history_field_array[first_word].Length()
     {
-        PinyinUpdateKey(DB, first_word)
-        loop % history_field_array[first_word].Length()
-        {
-            search_result.Push(CopyObj(history_field_array[first_word, A_Index]))
-        }
+        search_result.Push(CopyObj(history_field_array[first_word, A_Index]))
     }
     return
 }
@@ -142,7 +136,7 @@ PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
         PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
 
         ; 插入前面个拼音所能组成的候选词
-        PinyinResultInsertWords(DB, save_field_array, search_result)
+        PinyinResultInsertWords(DB, ime_input_split, search_result)
 
         ; 逐码提示 联想
         ; PinyinResultInsertAssociate(DB, search_result, ime_input_split, assistant_code)
