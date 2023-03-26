@@ -16,6 +16,23 @@ ImeClearInputString()
     return
 }
 
+ImeClearSplitedInputBefore(check_index)
+{
+    global ime_input_string
+    global ime_input_caret_pos
+    global ime_input_candidate
+    global ime_assistant_code
+    global DB
+
+    left_pos := ime_input_candidate.GetLeftWordPos(check_index)
+    right_pos := ime_input_candidate.GetRightWordPos(check_index-1)
+    ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, right_pos+1)
+
+    ime_input_candidate.SetSelectIndex(1)
+    ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
+    ime_input_caret_pos := Min(ime_input_caret_pos, StrLen(ime_input_string))
+}
+
 ImeClearLastSplitedInput()
 {
     global ime_input_string

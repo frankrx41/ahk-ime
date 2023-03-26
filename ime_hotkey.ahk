@@ -70,6 +70,13 @@ BackSpace::
     }
 return
 
+; Ctrl + Backspace
+; Delete word before this
+^BackSpace::
+    ImeClearSplitedInputBefore(ime_input_caret_pos)
+    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+return
+
 ; Esc
 ; 如果有展开候选框则关闭
 ; 否则删除所有输入的字符
