@@ -41,6 +41,10 @@ WordCreateGui( input_text )
     createButtonWeight:
         Gui, create:Submit, NoHide
         weight := GetWeight(DB, create_gui_pinyin_key, value)
+        ; Make 1234 -> "1,234"
+        if( weight >= 1000 ){
+            weight := Floor((weight / 1000)) "," Mod(weight, 1000)
+        }
         GuiControl, create:, create_gui_pinyin_weight, %weight%
     return
 
