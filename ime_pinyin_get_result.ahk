@@ -33,7 +33,7 @@ GetFullKey(input_str, sim_key)
         key_value .= "%_"
     }
 
-    if( StrReplace(key_value, "%") == sim_key ){
+    if( key_value != "e_" && StrReplace(key_value, "%") == sim_key ){
         key_value := ""
     }
     return key_value

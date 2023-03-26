@@ -120,7 +120,7 @@ PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
     search_result           := []
     save_field_array        := []
 
-    if( StrLen(ime_orgin_input) == 1 && !InStr("alo", ime_orgin_input) )
+    if( StrLen(ime_orgin_input) == 1 && !InStr("aloe", ime_orgin_input) )
     {
         search_result[1] := [ime_orgin_input, ime_orgin_input, "N/A"]
         return search_result
