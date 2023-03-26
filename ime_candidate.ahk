@@ -95,6 +95,9 @@ class Candidate
 
     GetLastWordPos()
     {
+        if( This.split_indexs.Length() <= 1 ){
+            return 0
+        }
         return This.split_indexs[This.split_indexs.Length()-1]
     }
     GetLeftWordPos(start_index)
