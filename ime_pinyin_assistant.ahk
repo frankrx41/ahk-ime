@@ -80,7 +80,7 @@ PinyinAssistantGetPinyin(assistant)
     loop, Parse, % assistant
     {
         pinyin := assistant_pinyin[A_LoopField]
-        Assert(pinyin)
+        Assert(pinyin, assistant)
         result_pinyin .= pinyin
     }
     return result_pinyin
