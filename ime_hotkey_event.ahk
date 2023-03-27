@@ -11,11 +11,7 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
     global tooltip_debug
     global DB
 
-    update_coord := false
     tooltip_debug := []
-    if (!ime_input_string ) {
-        update_coord := true
-    }
     if( ImeIsSelectMenuOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
         if( !ImeIsSelectMenuOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
@@ -44,7 +40,7 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
         }
     }
 
-    ImeTooltipUpdate(update_coord)
+    ImeTooltipUpdate()
 }
 
 HotkeyOnNumber(key)

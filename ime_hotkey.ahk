@@ -173,11 +173,8 @@ return
 ~WheelUp::
 ~WheelDown::
 ~LButton up::
-    SetTimer, ImeTooltipUpdateTimer, -10
-return
-
-ImeTooltipUpdateTimer:
-    ImeTooltipUpdate(true)
+    Sleep, 10
+    ImeTooltipUpdatePos()
 return
 
 #if ; ime_input_string

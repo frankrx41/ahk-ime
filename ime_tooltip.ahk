@@ -65,8 +65,14 @@ DisplaySelectItems(candidate)
     return ime_select_str
 }
 
+; 更新坐标
+ImeTooltipUpdatePos()
+{
+    ImeTooltipUpdate(GetCaretPos())
+}
+
 ; 更新提示
-ImeTooltipUpdate(update_coord:=0)
+ImeTooltipUpdate(tooltip_pos := "")
 {
     local
     static ime_tooltip_pos := ""
@@ -83,6 +89,7 @@ ImeTooltipUpdate(update_coord:=0)
     if( !input_string )
     {
         ToolTip(1, "")
+        ime_tooltip_pos := ""
     }
     else
     {
@@ -94,7 +101,11 @@ ImeTooltipUpdate(update_coord:=0)
             }
         }
 
-        if( update_coord || ime_tooltip_pos == "" ){
+        ; Update pos
+        if( tooltip_pos != "" ){
+            ime_tooltip_pos := tooltip_pos
+        }
+        if( !ime_tooltip_pos ){
             ime_tooltip_pos := GetCaretPos()
         }
 
