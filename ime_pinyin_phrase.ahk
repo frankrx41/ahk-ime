@@ -1,41 +1,17 @@
-WordCanContinueSplit(word)
-{
-    ; 包含 word + tone + word + ... 格式
-    return RegExMatch(word, "['12345][^'12345]")
-}
-
-WordLimitMaxSplit(word, max:=8)
-{
-    ; "kai'xin'a'" -> "xin'a'"
-    return RegExReplace(word, "^(([^'12345]+['12345]?){0," max "}).*$", "$1")
-}
-
-WordRemoveFirstSplit(word)
-{
-    ; "kai'xin'a'" -> "xin'a'"
-    return RegExReplace(word, "^[^'12345]+['12345]?")
-}
-
-WordRemoveLastSplit(word)
-{
-    ; "kai'xin'a'" -> "kai'xin'"
-    return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
-}
-
 PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
 {
     local
     ; 插入候选词部分
-    spilt_word := WordRemoveLastSplit(input_spilt_string)
-    While( WordCanContinueSplit(spilt_word) && !PinyinHistoryHasResult(spilt_word) )
+    spilt_word := SplitWordRemoveLastWord(input_spilt_string)
+    While( SplitWordGetWordCount(spilt_word)>1 && !PinyinHistoryHasResult(spilt_word) )
     {
         PinyinHistoryUpdateKey(DB, spilt_word)
         if( PinyinHistoryHasResult(spilt_word) ){
             break
         }
-        spilt_word := WordRemoveLastSplit(spilt_word)
+        spilt_word := SplitWordRemoveLastWord(spilt_word)
     }
-    if( WordCanContinueSplit(spilt_word) )
+    if( SplitWordGetWordCount(spilt_word)>1 )
     {
         PinyinHistoryUpdateKey(DB, spilt_word)
         PinyinResultPushHistory(search_result, spilt_word)
@@ -105,7 +81,7 @@ PinyinGetSentences(ime_orgin_input, ime_input_split:="", DB:="")
         PinyinProcess(DB, save_field_array, ime_input_split)
 
         ; 字数大于1时 组词
-        if( WordCanContinueSplit(ime_input_split) )
+        if( SplitWordGetWordCount(ime_input_split)>1 )
         {
             PinyinResultInsertCombine(DB, save_field_array, search_result)
         }
