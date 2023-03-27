@@ -15,7 +15,7 @@ ImeHotkeyRegisterInitialize()
         ; symbol
         for key, char in symbol_ctrl_start_hotkey
         {
-            func := Func("HotkeyOnChar").Bind(char, -1, 1)
+            func := Func("ImeInputProcessChar").Bind(char, -1, true)
             Hotkey, %key%, %func%
         }
         loop 26
@@ -30,7 +30,7 @@ ImeHotkeyRegisterInitialize()
     Hotkey, if, ime_input_string
     {
         ; Space and ' to spilt word
-        func := Func("HotkeyOnChar").Bind(" ", -1, 1)
+        func := Func("HotkeyOnChar").Bind(" ")
         Hotkey, Space, %func%
         func := Func("HotkeyOnChar").Bind("'")
         Hotkey, ', %func%

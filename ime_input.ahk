@@ -53,6 +53,44 @@ ImeInputClearLastSplitted()
     }
 }
 
+ImeInputProcessChar(input_char, pos := -1, try_puts := 0)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_input_candidate
+    global tooltip_debug
+    global DB
+
+    tooltip_debug := []
+    if( ImeIsSelectMenuOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
+    {
+        if( !ImeIsSelectMenuOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
+        {
+            ime_input_candidate.SetSelectIndex(1)
+            ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
+        }
+        if( input_char == " " && ImeIsSelectMenuOpen() )
+        {
+            ime_input_candidate.ToggleSingleMode()
+        }
+    }
+    else
+    {
+        pos := ime_input_caret_pos
+        ime_input_string := SubStr(ime_input_string, 1, pos) . input_char . SubStr(ime_input_string, pos+1)
+        ime_input_caret_pos := pos + 1
+
+        if( try_puts && StrLen(ime_input_string) == 1 ) {
+            PutCharacter(input_char)
+            ImeInputClearString()
+        } else {
+            ImeOpenSelectMenu(false)
+            ime_input_candidate.SetSelectIndex(1)
+            ime_input_candidate.Initialize(ime_input_string, DB)
+        }
+    }
+}
+
 ;*******************************************************************************
 ; Input caret
 ImeInputCaretMove(dir, by_word:=false)

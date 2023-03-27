@@ -1,58 +1,25 @@
 ;*******************************************************************************
 ; Hotkey
-HotkeyOnChar(input_char, pos := -1, try_puts := 0)
+HotkeyOnChar(char)
 {
-    global ime_input_caret_pos
-    global ime_input_string
-    global ime_input_candidate
-    global tooltip_debug
-    global DB
-
-    tooltip_debug := []
-    if( ImeIsSelectMenuOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
-    {
-        if( !ImeIsSelectMenuOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
-        {
-            ime_input_candidate.SetSelectIndex(1)
-            ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
-        }
-        if( input_char == " " && ImeIsSelectMenuOpen() )
-        {
-            ime_input_candidate.ToggleSingleMode()
-        }
-    }
-    else
-    {
-        pos := pos != -1 ? pos : ime_input_caret_pos
-        ime_input_string := SubStr(ime_input_string, 1, pos) . input_char . SubStr(ime_input_string, pos+1)
-        ime_input_caret_pos := pos + 1
-
-        if( try_puts && StrLen(ime_input_string) == 1 ) {
-            PutCharacter(input_char)
-            ImeInputClearString()
-        } else {
-            ImeOpenSelectMenu(false)
-            ime_input_candidate.SetSelectIndex(1)
-            ime_input_candidate.Initialize(ime_input_string, DB)
-        }
-    }
-
+    ImeInputProcessChar(char)
     ImeTooltipUpdate()
 }
 
-HotkeyOnNumber(key)
+HotkeyOnNumber(char)
 {
     global ime_input_candidate
 
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
         start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
-        ime_input_candidate.SetSelectIndex(start_index + (key == 0 ? 10 : key))
+        ime_input_candidate.SetSelectIndex(start_index + (char == 0 ? 10 : char))
         PutCandidateCharacter(ime_input_candidate)
         ImeTooltipUpdate()
     }
     else {
-        HotkeyOnChar(key)
+        ImeInputProcessChar(char)
+        ImeTooltipUpdate()
     }
 }
 
