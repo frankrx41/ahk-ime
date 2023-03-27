@@ -22,9 +22,19 @@ ImeTranslatorUpdateInputString(input_string)
     {
         ime_translator_input_string := input_string
         split_indexs := []
-        Imeime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs)
+        ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs)
         ime_translator_split_indexs := split_indexs
-        ime_translator_result_const := PinyinGetTranslateResult(ime_translator_input_string, ime_translator_input_split, DB)
+
+        if( StrLen(ime_translator_input_string) == 1 && !InStr("aloe", ime_translator_input_string) )
+        {
+            search_result := []
+            search_result[1] := [ime_translator_input_string, ime_translator_input_string, "N/A"]
+            ime_translator_result_const := search_result
+        }
+        else
+        {
+            ime_translator_result_const := PinyinGetTranslateResult(ime_translator_input_split, DB)
+        }
         ImeTranslatorFilterResult()
     } else {
         ime_translator_input_string := ""

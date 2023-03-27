@@ -55,55 +55,43 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 
 ;*******************************************************************************
 ; 拼音取词
-PinyinGetTranslateResult(ime_orgin_input, ime_input_split:="", DB:="")
+PinyinGetTranslateResult(ime_input_split, DB:="")
 {
     local
     ; static save_field_array := []
     search_result           := []
     save_field_array        := []
 
-    if( StrLen(ime_orgin_input) == 1 && !InStr("aloe", ime_orgin_input) )
+    ; Do sql get result
+    PinyinProcess(DB, save_field_array, ime_input_split)
+
+    ; 字数大于1时 组词
+    if( SplitWordGetWordCount(ime_input_split)>1 )
     {
-        search_result[1] := [ime_orgin_input, ime_orgin_input, "N/A"]
-        return search_result
+        PinyinResultInsertCombine(DB, save_field_array, search_result)
     }
-    else
-    {
-        if( ime_input_split == "" ) {
-            ime_input_split := PinyinSplit(ime_orgin_input, "")
-        }
 
-        ; Do sql get result
-        PinyinProcess(DB, save_field_array, ime_input_split)
+    ; 插入前面个拼音所能组成的候选词
+    PinyinResultInsertWords(DB, ime_input_split, search_result)
 
-        ; 字数大于1时 组词
-        if( SplitWordGetWordCount(ime_input_split)>1 )
-        {
-            PinyinResultInsertCombine(DB, save_field_array, search_result)
-        }
+    ; 插入字部分
+    PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
-        ; 插入前面个拼音所能组成的候选词
-        PinyinResultInsertWords(DB, ime_input_split, search_result)
+    ; 更新辅助码
+    PinyinResultUpdateRadical(search_result)
 
-        ; 插入字部分
-        PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
+    ; 超级简拼 显示 4 字及以上简拼候选
+    PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
 
-        ; 更新辅助码
-        PinyinResultUpdateRadical(search_result)
-
-        ; 超级简拼 显示 4 字及以上简拼候选
-        PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
-
-        ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-        PinyinResultHideZeroWeight(search_result)
+    ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
+    PinyinResultHideZeroWeight(search_result)
 
 
-        PinyinResultRemoveZeroIndex(search_result)
-    }
+    PinyinResultRemoveZeroIndex(search_result)
     ; [
-    ;     ; -1 , 0         , 1
-    ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
-    ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
+    ;     ; 1   , 2   , 3      , 4  ,5
+    ;     [""wo", "我", "30233", "1", ""]
+    ;     [""wo", "窝", "30219", "1", ""]
     ;     ...
     ; ]
     return search_result
