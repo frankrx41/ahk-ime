@@ -29,7 +29,7 @@ class Translator
             split_indexs := []
             This.input_split := PinyinSplit(This.input_string, split_indexs)
             This.split_indexs := split_indexs
-            This.candidate_origin := PinyinGetCandidate(This.input_string, This.input_split, DB)
+            This.candidate_origin := PinyinGetTranslateResult(This.input_string, This.input_split, DB)
             This.UpdateCandidate()
         } else {
             This.input_string := ""
