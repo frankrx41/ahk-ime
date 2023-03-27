@@ -77,9 +77,6 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     ; 插入字部分
     PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
-    ; 更新辅助码
-    PinyinResultUpdateRadical(search_result)
-
     ; 超级简拼 显示 4 字及以上简拼候选
     PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
 
@@ -89,9 +86,9 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
 
     PinyinResultRemoveZeroIndex(search_result)
     ; [
-    ;     ; 1   , 2   , 3      , 4 , 5  , 6
-    ;     ["wo3", "我", "30233", "", "1", "手戈"]
-    ;     ["wo1", "窝", "30219", "", "1", "穴呙"]
+    ;     ; 1   , 2   , 3      , 4 , 5  
+    ;     ["wo3", "我", "30233", "", "1"]
+    ;     ["wo1", "窝", "30219", "", "1"]
     ;     ...
     ; ]
     return search_result

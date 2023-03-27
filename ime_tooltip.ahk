@@ -36,7 +36,6 @@ DisplaySelectItems()
                         begin_str := Mod(word_index, 10) "."
                         ; begin_str :=  word_index "."
                     }
-                    ; radical_code := ImeTranslatorGetIndexWordRadical(word_index)
                     ; if( radical_code ){
                     ;     radical_code := "{" radical_code "}"
                     ; }

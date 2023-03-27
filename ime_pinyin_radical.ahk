@@ -30,18 +30,6 @@ PinyinRadicalInitialize()
     Assert(radicals_pinyin.Count() != 0)
 }
 
-PinyinResultUpdateRadical(ByRef search_result)
-{
-    local
-    loop % search_result.Length()
-    {
-        if( search_result[A_Index, 6] == "" )
-        {
-            search_result[A_Index, 6] := WordGetRadical(search_result[A_Index, 2])
-        }
-    }
-}
-
 ; 辅助码构成反查
 WordGetRadical(str, max_cnt:=1)
 {

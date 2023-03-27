@@ -239,9 +239,3 @@ ImeTranslatorGetCommentDisplayText(index)
         return ""
     }
 }
-
-ImeTranslatorGetIndexWordRadical(index)
-{
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[index, 6]
-}
