@@ -1,9 +1,3 @@
-; class Translator
-; {
-;     __New() {
-;         TranslatorClear()
-;     }
-
 TranslatorClear()
 {
     global translator_result_const          := []
@@ -16,12 +10,6 @@ TranslatorClear()
 
 TranslatorUpdateInputString(input_string)
 {
-    ; [
-    ;     ; -1 , 0         , 1
-    ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
-    ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
-    ;     ...
-    ; ]
     local
     global DB
     global translator_result_const
@@ -191,10 +179,6 @@ TranslatorSetSelectIndex(index)
 {
     global translator_result_filtered
     translator_result_filtered[0] := Max(1, Min(TranslatorGetListLength(), index))
-}
-TranslatorOffsetSelectIndex(offset)
-{
-    TranslatorSetSelectIndex(TranslatorGetSelectIndex() + offset)
 }
 
 TranslatorGetListLength()

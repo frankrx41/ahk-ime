@@ -47,7 +47,7 @@ ImeSelectorSetSelectIndex(index)
 
 ImeSelectorOffsetSelectIndex(offset)
 {
-    TranslatorOffsetSelectIndex(offset)
+    TranslatorSetSelectIndex(TranslatorGetSelectIndex() + offset)
 }
 
 ImeSelectorToggleSingleMode()
