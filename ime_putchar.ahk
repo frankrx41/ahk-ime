@@ -20,6 +20,7 @@ PutCandidateCharacter(candidate)
     if( !ime_input_string )
     {
         ImeInputClearString()
+        ImeOpenSelectMenu(false)
     }
 }
 
@@ -30,4 +31,5 @@ PutCharacterWordByWord(select_index, offset)
     string := ime_input_candidate.GetWord(select_index)
     PutCharacter( SubStr(string, offset, 1) )
     ImeInputClearString()
+    ImeOpenSelectMenu(false)
 }

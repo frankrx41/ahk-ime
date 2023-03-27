@@ -81,17 +81,20 @@ HotkeyOnEsc()
         } else {
             ImeInputClearLastSplitted()
         }
+        last_esc_tick := A_TickCount
     }
-    last_esc_tick := A_TickCount
     ImeTooltipUpdate()
 }
 
 HotkeyOnShiftSetMode(mode)
 {
     global ime_input_string
-    if ( ime_input_string ) {
-        PutCharacter(ime_input_string)
-        ImeInputClearString()
+    if( mode == "en" ){
+        if ( ime_input_string ) {
+            PutCharacter(ime_input_string)
+            ImeInputClearString()
+            ImeOpenSelectMenu(false)
+        }
     }
     ImeModeSetLanguage(mode)
     ImeHotkeyRegisterShift()
