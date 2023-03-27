@@ -12,7 +12,6 @@ ImeClearInputString()
     tooltip_debug := []
     ime_input_candidate.SetSelectIndex(1)
     ImeOpenSelectMenu(false)
-    ImeClearAssistantCode()
     return
 }
 
@@ -21,7 +20,6 @@ ImeClearSplitedInputBefore(check_index)
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_candidate
-    global ime_assistant_code
     global DB
 
     if( check_index != 0 )
@@ -40,7 +38,6 @@ ImeClearLastSplitedInput()
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_candidate
-    global ime_assistant_code
     global DB
 
     ime_input_caret_pos := ime_input_candidate.GetLastWordPos()
@@ -54,12 +51,6 @@ ImeClearLastSplitedInput()
         ime_input_candidate.SetSelectIndex(1)
         ime_input_candidate.Initialize(ime_input_string, DB)
     }
-}
-
-ImeClearAssistantCode()
-{
-    global ime_assistant_code
-    ime_assistant_code := ""
 }
 
 ImeInputCaretMove(dir, by_word:=false)
@@ -99,7 +90,6 @@ ImeInputCaretFastMoveAt(char, back_to_front)
     local
     global ime_input_caret_pos
     global ime_input_string
-    global ime_assistant_code
     global ime_input_candidate
 
     if( back_to_front ) {
@@ -113,7 +103,7 @@ ImeInputCaretFastMoveAt(char, back_to_front)
         ime_input_caret_pos := index - 1
     }
 
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, false)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, false)
 }
 
 ;*******************************************************************************
@@ -166,7 +156,6 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_assistant_code
     global ime_input_candidate
     global tooltip_debug
     global DB
@@ -178,9 +167,8 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
     }
     if( InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
-        ime_assistant_code .= input_char
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.FilterRadical(ime_assistant_code)
+        ime_input_candidate.UpdateRadicalCode(ime_input_candidate.GetRadicalCode() . input_char)
     }
     else
     {
@@ -198,7 +186,7 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
         }
     }
 
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, update_coord)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, update_coord)
 }
 
 ImeInputNumber(key)
@@ -206,16 +194,40 @@ ImeInputNumber(key)
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_candidate
-    global ime_assistant_code
 
     ; 选择相应的编号并上屏
     if( ImeIsSelectMenuOpen() ) {
         start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         ime_input_candidate.SetSelectIndex(start_index + (key == 0 ? 10 : key))
         PutCandidateCharacter(ime_input_candidate)
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
     else {
         ImeInputChar(key)
+    }
+}
+
+HotkeyOnBackSpace()
+{
+    local
+    global ime_input_candidate
+    global ime_input_string
+    global ime_input_caret_pos
+    global tooltip_debug
+
+    radical_code := ime_input_candidate.GetRadicalCode()
+    if( radical_code ){
+        radical_code := SubStr(radical_code, 1, StrLen(radical_code)-1)
+        ime_input_candidate.SetSelectIndex(1)
+        ime_input_candidate.UpdateRadicalCode( radical_code )
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    }
+    else if( ime_input_caret_pos != 0 ){
+        tooltip_debug[1] := ""
+        tooltip_debug[7] := ""
+        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
+        ime_input_caret_pos := ime_input_caret_pos-1
+        ime_input_candidate.Initialize(ime_input_string, DB)
+        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
 }

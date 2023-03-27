@@ -6,19 +6,19 @@
 Enter::
 NumpadEnter::
     PutCandidateCharacter(ime_input_candidate)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ]::
     PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 0)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 [::
     PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 1)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Tab: Show more select items
@@ -32,7 +32,7 @@ Tab::
     } else {
         ImeOpenSelectMenu(true, false)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 +Tab::
@@ -46,35 +46,20 @@ return
                 ImeOpenSelectMenu(true, false)
             }
         }
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code,  ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate(ime_input_string,  ime_input_caret_pos, ime_input_candidate)
     }
 return
 
 ; BackSpace 删除光标前面的空格
 BackSpace::
-    if( ime_assistant_code ){
-        ime_assistant_code := SubStr(ime_assistant_code, 1, StrLen(ime_assistant_code)-1)
-        if( StrLen(ime_assistant_code) == 0 ){
-            ime_input_candidate.SetSelectIndex(1)
-        }
-        ime_input_candidate.FilterRadical(ime_assistant_code)
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
-    }
-    else if( ime_input_caret_pos != 0 ){
-        tooltip_debug[1] := ""
-        tooltip_debug[7] := ""
-        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
-        ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate.Initialize(ime_input_string, DB)
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
-    }
+    HotkeyOnBackSpace()
 return
 
 ; Ctrl + Backspace
 ; Delete word before this
 ^BackSpace::
     ImeClearSplitedInputBefore(ime_input_caret_pos)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Esc
@@ -95,7 +80,7 @@ Esc::
         }
     }
     last_esc_tick := A_TickCount
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ,::
@@ -104,7 +89,7 @@ return
     } else {
         ime_input_candidate.OffsetSelectIndex(-1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 .::
@@ -113,7 +98,7 @@ return
     } else {
         ime_input_candidate.OffsetSelectIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 左右键移动光标
@@ -123,7 +108,7 @@ Left::
     } else {
         ImeInputCaretMove(-1, true)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 Right::
@@ -132,30 +117,30 @@ Right::
     } else {
         ImeInputCaretMove(+1, true)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Ctrl + Left/Right
 ; Move caret by a word
 ^Left::
     ImeInputCaretMove(-1, true)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ^Right::
     ImeInputCaretMove(+1, true)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
     ImeInputCaretMove(-1)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 +Right::
     ImeInputCaretMove(+1)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 上下选择
@@ -169,7 +154,7 @@ Up::
             ime_input_candidate.OffsetSelectIndex(+1)
         }
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
@@ -179,7 +164,7 @@ Down::
     } else {
         ime_input_candidate.OffsetSelectIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
 ; 更新候选框位置
@@ -190,7 +175,7 @@ return
 return
 
 ImeTooltipUpdateTimer:
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, true)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, true)
 return
 
 #if ; ime_input_string

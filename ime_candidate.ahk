@@ -5,6 +5,7 @@ class Candidate
         This.input_string   := ""
         This.input_split    := ""
         This.split_indexs   := []
+        This.radical        := ""
     }
 
     Initialize(input_string, DB:="") {
@@ -29,11 +30,14 @@ class Candidate
         }
     }
 
-    FilterRadical(radical)
+    UpdateRadicalCode(radical)
     {
         local
+        This.radical := radical
         search_result := This.candidate_origin
-        PinyinResultCheckAssistant(search_result, radical)
+        if( This.radical ){
+            PinyinResultCheckAssistant(search_result, This.radical)
+        }
         This.candidate_filtered := search_result
     }
 
@@ -202,6 +206,10 @@ class Candidate
     GetAssistant(index)
     {
         return This.candidate_filtered[index, 6]
+    }
+    GetRadicalCode()
+    {
+        return This.radical
     }
 }
 

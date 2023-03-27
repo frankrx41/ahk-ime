@@ -66,7 +66,7 @@ DisplaySelectItems(candidate)
 }
 
 ; 更新提示
-ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, update_coord:=0)
+ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
 {
     local
     static ime_tooltip_pos := ""
@@ -103,9 +103,10 @@ ImeTooltipUpdate(input_string, assistant_code:="", caret_pos:=0, candidate:=0, u
         ; debug_tip .= "`n" tooltip_debug[11] ; Candidate
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
-        if( assistant_code ){
+        radical_code := candidate.GetRadicalCode()
+        if( radical_code ){
             tooltip_string := input_string
-            tooltip_string .= " {" assistant_code "|}"
+            tooltip_string .= " {" radical_code "|}"
         } else {
             tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
             tooltip_string .= "(" caret_pos ")"
