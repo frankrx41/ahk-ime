@@ -10,7 +10,7 @@ ImeClearInputString()
     ime_input_string    := ""
     ime_input_caret_pos := 0
     tooltip_debug := []
-    ime_input_candidate.SetSelectIndex(1)
+    ime_input_candidate.Clear()
     ImeOpenSelectMenu(false)
     return
 }

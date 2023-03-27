@@ -1,6 +1,11 @@
 class Candidate
 {
     __New() {
+        This.Clear()
+    }
+
+    Clear()
+    {
         This.select_index   := 1    ; 选定的候选词，从 1 开始
         This.input_string   := ""
         This.input_split    := ""
