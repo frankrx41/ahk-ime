@@ -19,7 +19,7 @@ GetLeftString(input_str, index, max_length:=8)
 PinyinProcess(ByRef DB, ByRef save_field_array, input_spilt_string)
 {
     local
-    global history_field_array
+    global history_field_array  ; TODO: remove this, and remove `save_field_array`
     input_string := input_spilt_string
     begin := A_TickCount
 
