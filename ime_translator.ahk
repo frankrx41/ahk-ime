@@ -6,24 +6,14 @@
 
 TranslatorClear()
 {
-    global translator_result_const
-    global translator_result_const
-    global translator_radical
-    global translator_single_mode
-    global translator_candidate_filtered
-    global translator_input_string
-    global translator_input_split
-    global translator_split_indexs
-    global translator_candidate_origin
-    translator_result_const := []
-    translator_radical      := ""
-    translator_input_string   := ""
-    translator_input_split    := ""
-    translator_split_indexs   := []
-    translator_single_mode    := false
-    global translator_select_index
-    translator_select_index := 0
-    translator_candidate_filtered := []
+    global translator_result_const          := []
+    global translator_radical               := ""
+    global translator_single_mode           := false
+    global translator_candidate_filtered    := []
+    global translator_input_string          := ""
+    global translator_input_split           := ""
+    global translator_split_indexs          := []
+    global translator_select_index          := 0
 }
 
 TranslatorUpdateInputString(input_string)
@@ -36,17 +26,12 @@ TranslatorUpdateInputString(input_string)
     ; ]
     local
     global DB
-    input_string := LTrim(input_string, " ")
-
     global translator_result_const
-    global translator_radical
-    global translator_single_mode
-    global translator_candidate_filtered
     global translator_input_string
     global translator_input_split
     global translator_split_indexs
-    global translator_candidate_origin
 
+    input_string := LTrim(input_string, " ")
     if( input_string )
     {
         translator_input_string := input_string
@@ -67,6 +52,7 @@ TranslatorFilterResult()
     global translator_radical
     global translator_single_mode
     global translator_candidate_filtered
+
     search_result := CopyObj(translator_result_const)
     if( search_result )
     {
@@ -96,6 +82,7 @@ TranslatorToggleSingleMode()
 
 TranslatorGetSendLength(full_input_string, send_pinyin_string)
 {
+    local
     index_pinyin    := 1
     index_input     := 1
     sent_string_len := 0
@@ -143,7 +130,6 @@ TranslatorGetSendLength(full_input_string, send_pinyin_string)
 TranslatorSendWordThenUpdate()
 {
     global tooltip_debug
-    global translator_split_indexs
     global translator_input_string
     global translator_select_index
 
@@ -173,6 +159,7 @@ TranslatorGetLeftWordPos(start_index)
 {
     local
     global translator_split_indexs
+
     if( start_index == 0 ){
         return translator_split_indexs[translator_split_indexs.Length()]
     }
@@ -192,6 +179,7 @@ TranslatorGetRightWordPos(start_index)
 {
     local
     global translator_split_indexs
+
     last_index := 0
     loop, % translator_split_indexs.Length()
     {
@@ -284,4 +272,3 @@ TranslatorGetInputRadical()
     global translator_radical
     return translator_radical
 }
-
