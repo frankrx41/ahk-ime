@@ -23,7 +23,7 @@ ImeDBInitialize()
 ImeSelectInitialize()
 ImeStateInitialize()
 PinyinInitialize()
-ImeUpdateActiveState()
+ImeStateUpdateMode()
 
 ; tooltip
 ime_tooltip_font_size           := 13

@@ -193,7 +193,7 @@ ImeToggleSuspend:
     if( A_ThisHotkey == "#Space" && A_IsSuspended && !ImeModeIsChinese() ){
         Gosub, ImeToggleSuspend
     }
-    ImeUpdateActiveState("cn")
+    ImeStateUpdateMode("cn")
 return
 
 ; Win + Alt + Space: reload

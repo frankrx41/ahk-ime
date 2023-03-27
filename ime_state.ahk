@@ -1,3 +1,5 @@
+;*******************************************************************************
+; Ime state
 ImeStateInitialize()
 {
     global ime_mode_language
@@ -10,12 +12,10 @@ ImeStateInitialize()
     ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
 
-    DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("EventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
+    DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
 }
 
-;*******************************************************************************
-;
-EventProcHook(phook, msg, hwnd)
+ImeStateEventProcHook(phook, msg, hwnd)
 {
     global ime_active_window_class
     global ime_is_active_system_menu
@@ -27,28 +27,26 @@ EventProcHook(phook, msg, hwnd)
     case 0x03:                  ; EVENT_SYSTEM_FOREGROUND
         WinGetClass, win_class, ahk_id %hwnd%
         ime_active_window_class := win_class
-        ImeUpdateActiveState()
+        ImeStateUpdateMode()
     case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
-        ImeUpdateActiveState()
+        ImeStateUpdateMode()
     case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
-        ImeUpdateActiveState()
+        ImeStateUpdateMode()
     }
     return
 }
 
-;*******************************************************************************
-; Ime state
-ImeUpdateActiveState(mode := "")
+ImeStateUpdateMode(mode := "")
 {
-    if(A_IsSuspended || ImeIsPauseWindowActive()){
+    if(A_IsSuspended || ImeStatePauseWindowActive()){
         mode := ""
         ImeClearInputString()
     } else {
         global ime_mode_language
         mode := mode ? mode : ime_mode_language
-        ImeSetModeLanguage(mode)
+        ImeModeSetLanguage(mode)
         ImeHotkeyRegisterShift()
     }
 
@@ -56,7 +54,7 @@ ImeUpdateActiveState(mode := "")
     ImeIconSetMode(mode)
 }
 
-ImeIsPauseWindowActive()
+ImeStatePauseWindowActive()
 {
     ; 菜单打开时，暂停 IME
     global ime_is_active_system_menu
@@ -74,12 +72,14 @@ ImeIsPauseWindowActive()
     return 0
 }
 
-ImeIsWaitingInput()
+ImeStateWaitingInput()
 {
-    return ImeModeIsChinese() && !ImeIsPauseWindowActive()
+    return ImeModeIsChinese() && !ImeStatePauseWindowActive()
 }
 
-ImeSetModeLanguage(mode)
+;*******************************************************************************
+; Mode
+ImeModeSetLanguage(mode)
 {
     global ime_mode_language
     switch (mode) {
@@ -95,6 +95,8 @@ ImeModeIsChinese()
     return ime_mode_language == "cn" || ime_mode_language == "tw"
 }
 
+;*******************************************************************************
+; Icon
 ImeIconSetMode(mode)
 {
     local

@@ -134,7 +134,7 @@ HotkeyOnShift(mode)
     if( mode == "en" ){
         CallBackBeforeToggleEn()
     }
-    ImeSetModeLanguage(mode)
+    ImeModeSetLanguage(mode)
     ImeHotkeyRegisterShift()
     ImeTooltipUpdate("")
     ImeIconSetMode(mode)

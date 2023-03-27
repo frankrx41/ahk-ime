@@ -9,7 +9,7 @@ ImeHotkeyRegister()
     , "^[":"【", "^]":"】", "^+[":"（", "^+]":"）", "^\":"、", "^;":"；", "^+;": "：", "^'":"＇", "^+'":"＂"
     , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" }
 
-    ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
+    ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
     Hotkey if, % ime_is_waiting_input_fn
     {
         ; symbol
@@ -65,7 +65,7 @@ ImeHotkeyRegisterShift()
     func_to_cn := Func("HotkeyOnShift").Bind("cn")
     func_to_en := Func("HotkeyOnShift").Bind("en")
     if( ImeModeIsChinese() ) {
-        ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
+        ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
         Hotkey, Shift, % func_to_cn, Off
         Hotkey, If, % ime_is_waiting_input_fn
         Hotkey, Shift, % func_to_en, On
