@@ -89,9 +89,9 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
 
     PinyinResultRemoveZeroIndex(search_result)
     ; [
-    ;     ; 1   , 2   , 3      , 4  ,5
-    ;     [""wo", "我", "30233", "1", ""]
-    ;     [""wo", "窝", "30219", "1", ""]
+    ;     ; 1   , 2   , 3      , 4 , 5  , 6
+    ;     ["wo3", "我", "30233", "", "1", "手戈"]
+    ;     ["wo1", "窝", "30219", "", "1", "穴呙"]
     ;     ...
     ; ]
     return search_result
