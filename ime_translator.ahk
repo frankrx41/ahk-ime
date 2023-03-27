@@ -1,4 +1,4 @@
-class Candidate
+class Translator
 {
     __New() {
         This.Clear()

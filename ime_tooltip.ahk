@@ -119,7 +119,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
         debug_tip .= "`n" tooltip_debug[9]  ; temp
-        ; debug_tip .= "`n" tooltip_debug[11] ; Candidate
+        ; debug_tip .= "`n" tooltip_debug[11] ; Translator
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
         radical_code := candidate.GetInputRadical()

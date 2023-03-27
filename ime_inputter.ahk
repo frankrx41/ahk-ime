@@ -2,7 +2,7 @@
 ; Input string
 ImeInputterInitialize()
 {
-    global ime_input_candidate  := new Candidate    ; 候选项
+    global ime_input_candidate  := new Translator   ; 候选项
     global ime_input_string     := ""               ; 輸入字符
     global ime_input_caret_pos  := 0                ; 光标位置
 }

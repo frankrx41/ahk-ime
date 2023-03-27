@@ -17,7 +17,7 @@
 #Include, ime_pinyin_split.ahk
 #Include, ime_pinyin_split_word.ahk
 #Include, ime_pinyin_single_word.ahk
-#Include, ime_candidate.ahk
+#Include, ime_translator.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
 
