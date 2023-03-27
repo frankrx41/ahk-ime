@@ -35,8 +35,10 @@ return
 #Include, ime_tooltip.ahk
 #Include, ime_hotkey.ahk
 #Include, ime_input.ahk
+#Include, ime_hotkey_fn.ahk
 #Include, ime_select.ahk
 #Include, ime_state.ahk
+#Include, ime_putchar.ahk
 
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
