@@ -1,6 +1,11 @@
 
 #Include, ime_assert.ahk
 #Include, ime_func.ahk
+
+#Include, ime_hotkey.ahk
+#Include, ime_hotkey_event.ahk
+#Include, ime_hotkey_register.ahk
+
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_phrase.ahk
 #Include, ime_pinyin_combine.ahk
@@ -15,9 +20,8 @@
 #Include, ime_candidate.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
-#Include, ime_hotkey.ahk
+
 #Include, ime_input.ahk
-#Include, ime_hotkey_fn.ahk
 #Include, ime_select.ahk
 #Include, ime_state.ahk
 #Include, ime_putchar.ahk
