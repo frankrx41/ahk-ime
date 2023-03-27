@@ -29,7 +29,7 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
 
         if( try_puts && StrLen(ime_input_string) == 1 ) {
             PutCharacter(input_char)
-            ImeClearInputString()
+            ImeInputClearString()
         } else {
             ImeOpenSelectMenu(false)
             ime_input_candidate.SetSelectIndex(1)
@@ -110,9 +110,9 @@ HotkeyOnEsc()
         }
     } else {
         if( A_TickCount - last_esc_tick < 1000 ){
-            ImeClearInputString()
+            ImeInputClearString()
         } else {
-            ImeClearLastSplitedInput()
+            ImeInputClearLastSplitted()
         }
     }
     last_esc_tick := A_TickCount
@@ -122,7 +122,7 @@ HotkeyOnEsc()
 HotkeyOnShift(mode)
 {
     if( mode == "en" ){
-        CallBackBeforeToggleEn()
+        ImeStateBeforeSwitchToEnglish()
     }
     ImeModeSetLanguage(mode)
     ImeHotkeyRegisterShift()

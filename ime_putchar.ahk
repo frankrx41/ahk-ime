@@ -19,7 +19,7 @@ PutCandidateCharacter(candidate)
 
     if( !ime_input_string )
     {
-        ImeClearInputString()
+        ImeInputClearString()
     }
 }
 
@@ -29,5 +29,5 @@ PutCharacterWordByWord(select_index, offset)
     global ime_input_candidate
     string := ime_input_candidate.GetWord(select_index)
     PutCharacter( SubStr(string, offset, 1) )
-    ImeClearInputString()
+    ImeInputClearString()
 }

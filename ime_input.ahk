@@ -1,6 +1,6 @@
 ;*******************************************************************************
-; 清除输入字符
-ImeClearInputString()
+; Input string
+ImeInputClearString()
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -15,7 +15,7 @@ ImeClearInputString()
     return
 }
 
-ImeClearSplitedInputBefore(check_index)
+ImeInputClearPrevSplitted(check_index)
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -33,7 +33,7 @@ ImeClearSplitedInputBefore(check_index)
     }
 }
 
-ImeClearLastSplitedInput()
+ImeInputClearLastSplitted()
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -43,7 +43,7 @@ ImeClearLastSplitedInput()
     ime_input_caret_pos := ime_input_candidate.GetLastWordPos()
     if( ime_input_caret_pos == 0 )
     {
-        ImeClearInputString()
+        ImeInputClearString()
     }
     else
     {
@@ -53,6 +53,8 @@ ImeClearLastSplitedInput()
     }
 }
 
+;*******************************************************************************
+; Input caret
 ImeInputCaretMove(dir, by_word:=false)
 {
     global ime_input_caret_pos
@@ -100,17 +102,4 @@ ImeInputCaretFastMoveAt(char, input_string, origin_index, back_to_front)
         return index - 1
     }
     return origin_index
-}
-
-;*******************************************************************************
-; 切换成英文前以原始输入上屏文字
-CallBackBeforeToggleEn()
-{
-    global ime_input_string
-
-    if ( ime_input_string ) {
-        PutCharacter(ime_input_string)
-        ImeClearInputString()
-    }
-    return
 }

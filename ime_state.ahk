@@ -42,7 +42,7 @@ ImeStateUpdateMode(mode := "")
 {
     if(A_IsSuspended || ImeStatePauseWindowActive()){
         mode := ""
-        ImeClearInputString()
+        ImeInputClearString()
     } else {
         global ime_mode_language
         mode := mode ? mode : ime_mode_language
@@ -75,6 +75,19 @@ ImeStatePauseWindowActive()
 ImeStateWaitingInput()
 {
     return ImeModeIsChinese() && !ImeStatePauseWindowActive()
+}
+
+;*******************************************************************************
+; 切换成英文前以原始输入上屏文字
+ImeStateBeforeSwitchToEnglish()
+{
+    global ime_input_string
+
+    if ( ime_input_string ) {
+        PutCharacter(ime_input_string)
+        ImeInputClearString()
+    }
+    return
 }
 
 ;*******************************************************************************
