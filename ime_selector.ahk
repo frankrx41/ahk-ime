@@ -3,6 +3,7 @@ ImeSelectorInitialize()
     global ime_selector_column              := 10       ; 最大候选词个数
     global ime_selector_is_open             := 0        ; 是否打开选字窗口
     global ime_selector_is_show_multiple    := 0        ; Show more column
+    global ime_selector_single_mode         := false
 }
 
 ;*******************************************************************************
@@ -51,5 +52,7 @@ ImeSelectorOffsetSelectIndex(offset)
 
 ImeSelectorToggleSingleMode()
 {
-    TranslatorToggleSingleMode()
+    global ime_selector_single_mode
+    ime_selector_single_mode := !ime_selector_single_mode
+    TranslatorFilterResult(ime_selector_single_mode)
 }

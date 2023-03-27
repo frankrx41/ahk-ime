@@ -8,7 +8,6 @@ TranslatorClear()
 {
     global translator_result_const          := []
     global translator_radical               := ""
-    global translator_single_mode           := false
     global translator_candidate_filtered    := []
     global translator_input_string          := ""
     global translator_input_split           := ""
@@ -45,12 +44,11 @@ TranslatorUpdateInputString(input_string)
     }
 }
 
-TranslatorFilterResult()
+TranslatorFilterResult(single_mode:=false)
 {
     local
     global translator_result_const
     global translator_radical
-    global translator_single_mode
     global translator_candidate_filtered
 
     search_result := CopyObj(translator_result_const)
@@ -59,7 +57,7 @@ TranslatorFilterResult()
         if( translator_radical ){
             PinyinResultFilterByRadical(search_result, translator_radical)
         }
-        if( translator_single_mode ){
+        if( single_mode ){
             PinyinResultFilterSingleWord(search_result)
         }
     }
@@ -70,13 +68,6 @@ TranslatorUpdateInputRadical(radical)
 {
     global translator_radical
     translator_radical := radical
-    TranslatorFilterResult()
-}
-
-TranslatorToggleSingleMode()
-{
-    global translator_single_mode
-    translator_single_mode := !translator_single_mode
     TranslatorFilterResult()
 }
 
