@@ -58,7 +58,7 @@ return
 ; Ctrl + Backspace
 ; Delete word before this
 ^BackSpace::
-    ImeInputterClearPrevSplitted(ime_input_caret_pos)
+    ImeInputterClearPrevSplitted()
     ImeTooltipUpdate()
 return
 

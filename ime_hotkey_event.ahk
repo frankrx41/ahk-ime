@@ -25,17 +25,13 @@ HotkeyOnNumber(char)
 
 HotkeyOnCtrlAlphabet(char)
 {
-    global ime_input_caret_pos
-    global ime_input_string
-    ime_input_caret_pos := ImeInputterCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, true)
+    ImeInputterCaretFastMoveAt(char, true)
     ImeTooltipUpdate()
 }
 
 HotkeyOnCtrlShiftAlphabet(char)
 {
-    global ime_input_caret_pos
-    global ime_input_string
-    ime_input_caret_pos := ImeInputterCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, false)
+    ImeInputterCaretFastMoveAt(char, false)
     ImeTooltipUpdate()
 }
 

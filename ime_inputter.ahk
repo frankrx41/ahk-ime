@@ -3,6 +3,8 @@
 ImeInputterInitialize()
 {
     global ime_input_candidate  := new Candidate    ; 候选项
+    global ime_input_string     := ""               ; 輸入字符
+    global ime_input_caret_pos  := 0                ; 光标位置
 }
 
 ImeInputterClearString()
@@ -19,11 +21,14 @@ ImeInputterClearString()
     return
 }
 
-ImeInputterClearPrevSplitted(check_index)
+ImeInputterClearPrevSplitted()
 {
+    local
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_candidate
+
+    check_index := ime_input_caret_pos
 
     if( check_index != 0 )
     {
@@ -56,11 +61,10 @@ ImeInputterClearLastSplitted()
     }
 }
 
-ImeInputterProcessChar(input_char, pos := -1, try_puts := 0)
+ImeInputterProcessChar(input_char, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_input_candidate
     global tooltip_debug
 
     tooltip_debug := []
@@ -74,9 +78,9 @@ ImeInputterProcessChar(input_char, pos := -1, try_puts := 0)
     }
     else
     {
-        pos := ime_input_caret_pos
-        ime_input_string := SubStr(ime_input_string, 1, pos) . input_char . SubStr(ime_input_string, pos+1)
-        ime_input_caret_pos := pos + 1
+        caret_pos := ime_input_caret_pos
+        ime_input_string := SubStr(ime_input_string, 1, caret_pos) . input_char . SubStr(ime_input_string, caret_pos+1)
+        ime_input_caret_pos := caret_pos + 1
 
         ImeSelectorOpen(false)
         if( try_puts && StrLen(ime_input_string) == 1 ) {
@@ -123,10 +127,14 @@ ImeInputterCaretMove(dir, by_word:=false)
     }
 }
 
-ImeInputterCaretFastMoveAt(char, input_string, origin_index, back_to_front)
+ImeInputterCaretFastMoveAt(char, back_to_front)
 {
     local
+    global ime_input_caret_pos
+    global ime_input_string
 
+    input_string := ime_input_string
+    origin_index := ime_input_caret_pos
     if( back_to_front ) {
         start_index := origin_index - StrLen(input_string)
     } else {
@@ -135,9 +143,8 @@ ImeInputterCaretFastMoveAt(char, input_string, origin_index, back_to_front)
     index := InStr(input_string, char, false, start_index)
     if( index != 0 )
     {
-        return index - 1
+        ime_input_caret_pos := index - 1
     }
-    return origin_index
 }
 
 ;*******************************************************************************
