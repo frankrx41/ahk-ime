@@ -1,3 +1,9 @@
+; 字符上屏
+PutCharacter(str, mode:=""){
+    Critical
+    SendInput, % "{Text}" str
+}
+
 PutCandidateCharacter(candidate)
 {
     global ime_input_string
