@@ -121,8 +121,10 @@ HotkeyOnEsc()
 
 HotkeyOnShift(mode)
 {
-    if( mode == "en" ){
-        ImeStateBeforeSwitchToEnglish()
+    global ime_input_string
+    if ( ime_input_string ) {
+        PutCharacter(ime_input_string)
+        ImeInputClearString()
     }
     ImeModeSetLanguage(mode)
     ImeHotkeyRegisterShift()

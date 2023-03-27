@@ -78,19 +78,6 @@ ImeStateWaitingInput()
 }
 
 ;*******************************************************************************
-; 切换成英文前以原始输入上屏文字
-ImeStateBeforeSwitchToEnglish()
-{
-    global ime_input_string
-
-    if ( ime_input_string ) {
-        PutCharacter(ime_input_string)
-        ImeInputClearString()
-    }
-    return
-}
-
-;*******************************************************************************
 ; Mode
 ImeModeSetLanguage(mode)
 {
