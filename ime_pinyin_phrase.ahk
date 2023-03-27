@@ -155,9 +155,6 @@ PinyinGetSentences(ime_orgin_input, ime_input_split:="", DB:="")
         ; 插入前面个拼音所能组成的候选词
         PinyinResultInsertWords(DB, ime_input_split, search_result)
 
-        ; 逐码提示 联想
-        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split)
-
         ; 插入字部分
         PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
