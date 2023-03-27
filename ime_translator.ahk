@@ -7,12 +7,11 @@
 TranslatorClear()
 {
     global translator_result_const          := []
+    global translator_result_filtered       := []
     global translator_radical               := ""
-    global translator_candidate_filtered    := []
     global translator_input_string          := ""
     global translator_input_split           := ""
     global translator_split_indexs          := []
-    global translator_select_index          := 0
 }
 
 TranslatorUpdateInputString(input_string)
@@ -49,7 +48,7 @@ TranslatorFilterResult(single_mode:=false)
     local
     global translator_result_const
     global translator_radical
-    global translator_candidate_filtered
+    global translator_result_filtered
 
     search_result := CopyObj(translator_result_const)
     if( search_result )
@@ -61,7 +60,8 @@ TranslatorFilterResult(single_mode:=false)
             PinyinResultFilterSingleWord(search_result)
         }
     }
-    translator_candidate_filtered := search_result
+    translator_result_filtered := search_result
+    translator_result_filtered[0] := 1
 }
 
 TranslatorUpdateInputRadical(radical)
@@ -122,10 +122,9 @@ TranslatorSendWordThenUpdate()
 {
     global tooltip_debug
     global translator_input_string
-    global translator_select_index
 
-    send_word := TranslatorGetWord(translator_select_index)
-    pinyin_string := TranslatorGetPinyin(translator_select_index)
+    send_word := TranslatorGetWord(TranslatorGetSelectIndex())
+    pinyin_string := TranslatorGetPinyin(TranslatorGetSelectIndex())
 
     sent_string_len := TranslatorGetSendLength(translator_input_string, pinyin_string)
 
@@ -185,24 +184,23 @@ TranslatorGetRightWordPos(start_index)
 
 TranslatorGetSelectIndex()
 {
-    global translator_select_index
-    return translator_select_index
+    global translator_result_filtered
+    return translator_result_filtered[0]
 }
 TranslatorSetSelectIndex(index)
 {
-    global translator_select_index
-    translator_select_index := Max(1, Min(TranslatorGetListLength(), index))
+    global translator_result_filtered
+    translator_result_filtered[0] := Max(1, Min(TranslatorGetListLength(), index))
 }
 TranslatorOffsetSelectIndex(offset)
 {
-    global translator_select_index
-    TranslatorSetSelectIndex(translator_select_index + offset)
+    TranslatorSetSelectIndex(TranslatorGetSelectIndex() + offset)
 }
 
 TranslatorGetListLength()
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered.Length()
+    global translator_result_filtered
+    return translator_result_filtered.Length()
 }
 TranslatorGetRemainString()
 {
@@ -212,31 +210,31 @@ TranslatorGetRemainString()
 
 TranslatorGetDebugInfo(index)
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered[index, 0]
+    global translator_result_filtered
+    return translator_result_filtered[index, 0]
 }
 TranslatorGetPinyin(index)
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered[index, 1]
+    global translator_result_filtered
+    return translator_result_filtered[index, 1]
 }
 
 TranslatorGetWord(index)
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered[index, 2]
+    global translator_result_filtered
+    return translator_result_filtered[index, 2]
 }
 
 TranslatorGetWeight(index)
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered[index, 3]
+    global translator_result_filtered
+    return translator_result_filtered[index, 3]
 }
 
 TranslatorGetComment(index)
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered[index, 4]
+    global translator_result_filtered
+    return translator_result_filtered[index, 4]
 }
 
 TranslatorGetCommentDisplayText(index)
@@ -255,8 +253,8 @@ TranslatorGetCommentDisplayText(index)
 
 TranslatorGetIndexWordRadical(index)
 {
-    global translator_candidate_filtered
-    return translator_candidate_filtered[index, 6]
+    global translator_result_filtered
+    return translator_result_filtered[index, 6]
 }
 TranslatorGetInputRadical()
 {
