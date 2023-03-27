@@ -30,4 +30,4 @@
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk
 
-#Include, ime_create_word.ahk
+#Include, ime_word_creator.ahk
