@@ -55,7 +55,7 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 
 ;*******************************************************************************
 ; 拼音取词
-PinyinGetSentences(ime_orgin_input, ime_input_split:="", DB:="")
+PinyinGetCandidate(ime_orgin_input, ime_input_split:="", DB:="")
 {
     local
     ; static save_field_array := []

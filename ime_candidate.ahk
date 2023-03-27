@@ -23,7 +23,7 @@ class Candidate
             split_indexs := []
             This.input_split := PinyinSplit(This.input_string, split_indexs)
             This.split_indexs := split_indexs
-            This.candidate_origin := PinyinGetSentences(This.input_string, This.input_split, DB)
+            This.candidate_origin := PinyinGetCandidate(This.input_string, This.input_split, DB)
             This.candidate_filtered := CopyObj(This.candidate_origin)
         } else {
             This.input_string := ""
