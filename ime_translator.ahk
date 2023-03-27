@@ -1,61 +1,61 @@
 ImeTranslatorClear()
 {
-    global translator_result_const          := []
-    global translator_result_filtered       := []
-    global translator_radical               := ""
-    global translator_input_string          := ""
-    global translator_input_split           := ""
-    global translator_split_indexs          := []
+    global ime_translator_result_const      := []
+    global ime_translator_result_filtered   := []
+    global ime_translator_radical           := ""
+    global ime_translator_input_string      := ""
+    global ime_translator_input_split       := ""
+    global ime_translator_split_indexs      := []
 }
 
 ImeTranslatorUpdateInputString(input_string)
 {
     local
     global DB
-    global translator_result_const
-    global translator_input_string
-    global translator_input_split
-    global translator_split_indexs
+    global ime_translator_result_const
+    global ime_translator_input_string
+    global ime_translator_input_split
+    global ime_translator_split_indexs
 
     input_string := LTrim(input_string, " ")
     if( input_string )
     {
-        translator_input_string := input_string
+        ime_translator_input_string := input_string
         split_indexs := []
-        Imetranslator_input_split := PinyinSplit(translator_input_string, split_indexs)
-        translator_split_indexs := split_indexs
-        translator_result_const := PinyinGetTranslateResult(translator_input_string, translator_input_split, DB)
+        Imeime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs)
+        ime_translator_split_indexs := split_indexs
+        ime_translator_result_const := PinyinGetTranslateResult(ime_translator_input_string, ime_translator_input_split, DB)
         ImeTranslatorFilterResult()
     } else {
-        translator_input_string := ""
+        ime_translator_input_string := ""
     }
 }
 
 ImeTranslatorFilterResult(single_mode:=false)
 {
     local
-    global translator_result_const
-    global translator_radical
-    global translator_result_filtered
+    global ime_translator_result_const
+    global ime_translator_radical
+    global ime_translator_result_filtered
 
-    search_result := CopyObj(translator_result_const)
+    search_result := CopyObj(ime_translator_result_const)
     if( search_result )
     {
-        if( translator_radical ){
-            PinyinResultFilterByRadical(search_result, translator_radical)
+        if( ime_translator_radical ){
+            PinyinResultFilterByRadical(search_result, ime_translator_radical)
         }
         if( single_mode ){
             PinyinResultFilterSingleWord(search_result)
         }
     }
-    translator_result_filtered := search_result
-    translator_result_filtered[0] := 1
+    ime_translator_result_filtered := search_result
+    ime_translator_result_filtered[0] := 1
 }
 
 ImeTranslatorUpdateInputRadical(radical)
 {
-    global translator_radical
-    translator_radical := radical
+    global ime_translator_radical
+    ime_translator_radical := radical
     ImeTranslatorFilterResult()
 }
 
@@ -109,42 +109,42 @@ ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
 ImeTranslatorSendWordThenUpdate()
 {
     global tooltip_debug
-    global translator_input_string
+    global ime_translator_input_string
 
     send_word := ImeTranslatorGetWord(ImeTranslatorGetSelectIndex())
     pinyin_string := ImeTranslatorGetPinyin(ImeTranslatorGetSelectIndex())
 
-    sent_string_len := ImeTranslatorGetSendLength(translator_input_string, pinyin_string)
+    sent_string_len := ImeTranslatorGetSendLength(ime_translator_input_string, pinyin_string)
 
-    translator_input_string := SubStr(translator_input_string, sent_string_len+1)
+    ime_translator_input_string := SubStr(ime_translator_input_string, sent_string_len+1)
 
-    tooltip_debug[11] := "[" send_word "] " pinyin_string "," translator_input_string "," sent_string_len
+    tooltip_debug[11] := "[" send_word "] " pinyin_string "," ime_translator_input_string "," sent_string_len
     ImeTranslatorSetSelectIndex(1)
-    ImeTranslatorUpdateInputString(translator_input_string)
+    ImeTranslatorUpdateInputString(ime_translator_input_string)
     return send_word
 }
 
 ImeTranslatorGetLastWordPos()
 {
-    global translator_split_indexs
-    if( translator_split_indexs.Length() <= 1 ){
+    global ime_translator_split_indexs
+    if( ime_translator_split_indexs.Length() <= 1 ){
         return 0
     }
-    return translator_split_indexs[translator_split_indexs.Length()-1]
+    return ime_translator_split_indexs[ime_translator_split_indexs.Length()-1]
 }
 
 ImeTranslatorGetLeftWordPos(start_index)
 {
     local
-    global translator_split_indexs
+    global ime_translator_split_indexs
 
     if( start_index == 0 ){
-        return translator_split_indexs[translator_split_indexs.Length()]
+        return ime_translator_split_indexs[ime_translator_split_indexs.Length()]
     }
     last_index := 0
-    loop, % translator_split_indexs.Length()
+    loop, % ime_translator_split_indexs.Length()
     {
-        split_index := translator_split_indexs[A_Index]
+        split_index := ime_translator_split_indexs[A_Index]
         if( split_index >= start_index ){
             break
         }
@@ -156,12 +156,12 @@ ImeTranslatorGetLeftWordPos(start_index)
 ImeTranslatorGetRightWordPos(start_index)
 {
     local
-    global translator_split_indexs
+    global ime_translator_split_indexs
 
     last_index := 0
-    loop, % translator_split_indexs.Length()
+    loop, % ime_translator_split_indexs.Length()
     {
-        split_index := translator_split_indexs[A_Index]
+        split_index := ime_translator_split_indexs[A_Index]
         if( split_index > start_index ){
             last_index := split_index
             break
@@ -172,53 +172,53 @@ ImeTranslatorGetRightWordPos(start_index)
 
 ImeTranslatorGetSelectIndex()
 {
-    global translator_result_filtered
-    return translator_result_filtered[0]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[0]
 }
 ImeTranslatorSetSelectIndex(index)
 {
-    global translator_result_filtered
-    translator_result_filtered[0] := Max(1, Min(ImeTranslatorGetListLength(), index))
+    global ime_translator_result_filtered
+    ime_translator_result_filtered[0] := Max(1, Min(ImeTranslatorGetListLength(), index))
 }
 
 ImeTranslatorGetListLength()
 {
-    global translator_result_filtered
-    return translator_result_filtered.Length()
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered.Length()
 }
 ImeTranslatorGetRemainString()
 {
-    global translator_input_string
-    return translator_input_string
+    global ime_translator_input_string
+    return ime_translator_input_string
 }
 
 ImeTranslatorGetDebugInfo(index)
 {
-    global translator_result_filtered
-    return translator_result_filtered[index, 0]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[index, 0]
 }
 ImeTranslatorGetPinyin(index)
 {
-    global translator_result_filtered
-    return translator_result_filtered[index, 1]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[index, 1]
 }
 
 ImeTranslatorGetWord(index)
 {
-    global translator_result_filtered
-    return translator_result_filtered[index, 2]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[index, 2]
 }
 
 ImeTranslatorGetWeight(index)
 {
-    global translator_result_filtered
-    return translator_result_filtered[index, 3]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[index, 3]
 }
 
 ImeTranslatorGetComment(index)
 {
-    global translator_result_filtered
-    return translator_result_filtered[index, 4]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[index, 4]
 }
 
 ImeTranslatorGetCommentDisplayText(index)
@@ -237,11 +237,11 @@ ImeTranslatorGetCommentDisplayText(index)
 
 ImeTranslatorGetIndexWordRadical(index)
 {
-    global translator_result_filtered
-    return translator_result_filtered[index, 6]
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[index, 6]
 }
 ImeTranslatorGetInputRadical()
 {
-    global translator_radical
-    return translator_radical
+    global ime_translator_radical
+    return ime_translator_radical
 }
