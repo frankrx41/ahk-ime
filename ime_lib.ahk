@@ -74,9 +74,9 @@ ImeRegisterHotkey()
             func := Func("HotkeyOnChar").Bind(Format("{:U}", Chr(96+A_Index)))
             Hotkey, % "+" Chr(96+A_Index), %func%
 
-            func := Func("ImeInputCaretFastMoveAt").Bind(Chr(96+A_Index), true)
+            func := Func("HotkeyOnCtrlAlpha").Bind(Chr(96+A_Index))
             Hotkey, % "^" Chr(96+A_Index), %func%
-            func := Func("ImeInputCaretFastMoveAt").Bind(Chr(96+A_Index), false)
+            func := Func("HotkeyOnCtrlShiftAlpha").Bind(Chr(96+A_Index))
             Hotkey, % "^+" Chr(96+A_Index), %func%
         }
     }

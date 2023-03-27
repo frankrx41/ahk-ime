@@ -85,24 +85,38 @@ ImeInputCaretMove(dir, by_word:=false)
     }
 }
 
-ImeInputCaretFastMoveAt(char, back_to_front)
+ImeInputCaretFastMoveAt(char, input_string, origin_index, back_to_front)
 {
     local
+
+    if( back_to_front ) {
+        start_index := origin_index - StrLen(input_string)
+    } else {
+        start_index := origin_index + 2
+    }
+    index := InStr(input_string, char, false, start_index)
+    if( index != 0 )
+    {
+        return index - 1
+    }
+    return origin_index
+}
+
+HotkeyOnCtrlAlpha(char)
+{
     global ime_input_caret_pos
     global ime_input_string
     global ime_input_candidate
+    ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, true)
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, false)
+}
 
-    if( back_to_front ) {
-        start_index := ime_input_caret_pos - StrLen(ime_input_string)
-    } else {
-        start_index := ime_input_caret_pos + 2
-    }
-    index := InStr(ime_input_string, char, false, start_index)
-    if( index != 0 )
-    {
-        ime_input_caret_pos := index - 1
-    }
-
+HotkeyOnCtrlShiftAlpha(char)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_input_candidate
+    ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, false)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, false)
 }
 
