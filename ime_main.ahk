@@ -17,7 +17,7 @@ global DllFolder            := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 global tooltip_debug        := []
 
 ImeInputterInitialize()
-TranslatorClear()
+ImeTranslatorClear()
 ImeDBInitialize()
 PinyinInitialize()
 ImeStateInitialize()

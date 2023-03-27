@@ -37,22 +37,22 @@ ImeSelectorGetColumn()
 
 ImeSelectorGetSelectIndex()
 {
-    return TranslatorGetSelectIndex()
+    return ImeTranslatorGetSelectIndex()
 }
 
 ImeSelectorSetSelectIndex(index)
 {
-    TranslatorSetSelectIndex(index)
+    ImeTranslatorSetSelectIndex(index)
 }
 
 ImeSelectorOffsetSelectIndex(offset)
 {
-    TranslatorSetSelectIndex(TranslatorGetSelectIndex() + offset)
+    ImeTranslatorSetSelectIndex(ImeTranslatorGetSelectIndex() + offset)
 }
 
 ImeSelectorToggleSingleMode()
 {
     global ime_selector_single_mode
     ime_selector_single_mode := !ime_selector_single_mode
-    TranslatorFilterResult(ime_selector_single_mode)
+    ImeTranslatorFilterResult(ime_selector_single_mode)
 }

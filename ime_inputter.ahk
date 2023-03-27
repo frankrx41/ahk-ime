@@ -15,7 +15,7 @@ ImeInputterClearString()
     ime_input_string    := ""
     ime_input_caret_pos := 0
     tooltip_debug       := []
-    TranslatorClear()
+    ImeTranslatorClear()
     return
 }
 
@@ -29,7 +29,7 @@ ImeInputterClearPrevSplitted()
 
     if( check_index != 0 )
     {
-        left_pos := TranslatorGetLeftWordPos(check_index)
+        left_pos := ImeTranslatorGetLeftWordPos(check_index)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
 
         ImeSelectorSetSelectIndex(1)
@@ -43,7 +43,7 @@ ImeInputterClearLastSplitted()
     global ime_input_string
     global ime_input_caret_pos
 
-    ime_input_caret_pos := TranslatorGetLastWordPos()
+    ime_input_caret_pos := ImeTranslatorGetLastWordPos()
     if( ime_input_caret_pos == 0 )
     {
         ImeInputterClearString()
@@ -99,9 +99,9 @@ ImeInputterCaretMove(dir, by_word:=false)
     if( by_word )
     {
         if( dir > 0 ){
-            word_pos := TranslatorGetRightWordPos(ime_input_caret_pos)
+            word_pos := ImeTranslatorGetRightWordPos(ime_input_caret_pos)
         } else {
-            word_pos := TranslatorGetLeftWordPos(ime_input_caret_pos)
+            word_pos := ImeTranslatorGetLeftWordPos(ime_input_caret_pos)
         }
         ime_input_caret_pos := word_pos
     }
@@ -146,15 +146,15 @@ ImeInputterCaretFastMoveAt(char, back_to_front)
 ;
 ImeInputterGetRadical()
 {
-    return TranslatorGetInputRadical()
+    return ImeTranslatorGetInputRadical()
 }
 
 ImeInputterUpdateRadical(input_radical)
 {
-    TranslatorUpdateInputRadical(input_radical)
+    ImeTranslatorUpdateInputRadical(input_radical)
 }
 
 ImeInputterUpdateString(input_string)
 {
-    TranslatorUpdateInputString(input_string)
+    ImeTranslatorUpdateInputString(input_string)
 }

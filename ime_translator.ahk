@@ -1,4 +1,4 @@
-TranslatorClear()
+ImeTranslatorClear()
 {
     global translator_result_const          := []
     global translator_result_filtered       := []
@@ -8,7 +8,7 @@ TranslatorClear()
     global translator_split_indexs          := []
 }
 
-TranslatorUpdateInputString(input_string)
+ImeTranslatorUpdateInputString(input_string)
 {
     local
     global DB
@@ -22,16 +22,16 @@ TranslatorUpdateInputString(input_string)
     {
         translator_input_string := input_string
         split_indexs := []
-        translator_input_split := PinyinSplit(translator_input_string, split_indexs)
+        Imetranslator_input_split := PinyinSplit(translator_input_string, split_indexs)
         translator_split_indexs := split_indexs
         translator_result_const := PinyinGetTranslateResult(translator_input_string, translator_input_split, DB)
-        TranslatorFilterResult()
+        ImeTranslatorFilterResult()
     } else {
         translator_input_string := ""
     }
 }
 
-TranslatorFilterResult(single_mode:=false)
+ImeTranslatorFilterResult(single_mode:=false)
 {
     local
     global translator_result_const
@@ -52,14 +52,14 @@ TranslatorFilterResult(single_mode:=false)
     translator_result_filtered[0] := 1
 }
 
-TranslatorUpdateInputRadical(radical)
+ImeTranslatorUpdateInputRadical(radical)
 {
     global translator_radical
     translator_radical := radical
-    TranslatorFilterResult()
+    ImeTranslatorFilterResult()
 }
 
-TranslatorGetSendLength(full_input_string, send_pinyin_string)
+ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
 {
     local
     index_pinyin    := 1
@@ -106,25 +106,25 @@ TranslatorGetSendLength(full_input_string, send_pinyin_string)
     return sent_string_len
 }
 
-TranslatorSendWordThenUpdate()
+ImeTranslatorSendWordThenUpdate()
 {
     global tooltip_debug
     global translator_input_string
 
-    send_word := TranslatorGetWord(TranslatorGetSelectIndex())
-    pinyin_string := TranslatorGetPinyin(TranslatorGetSelectIndex())
+    send_word := ImeTranslatorGetWord(ImeTranslatorGetSelectIndex())
+    pinyin_string := ImeTranslatorGetPinyin(ImeTranslatorGetSelectIndex())
 
-    sent_string_len := TranslatorGetSendLength(translator_input_string, pinyin_string)
+    sent_string_len := ImeTranslatorGetSendLength(translator_input_string, pinyin_string)
 
     translator_input_string := SubStr(translator_input_string, sent_string_len+1)
 
     tooltip_debug[11] := "[" send_word "] " pinyin_string "," translator_input_string "," sent_string_len
-    TranslatorSetSelectIndex(1)
-    TranslatorUpdateInputString(translator_input_string)
+    ImeTranslatorSetSelectIndex(1)
+    ImeTranslatorUpdateInputString(translator_input_string)
     return send_word
 }
 
-TranslatorGetLastWordPos()
+ImeTranslatorGetLastWordPos()
 {
     global translator_split_indexs
     if( translator_split_indexs.Length() <= 1 ){
@@ -133,7 +133,7 @@ TranslatorGetLastWordPos()
     return translator_split_indexs[translator_split_indexs.Length()-1]
 }
 
-TranslatorGetLeftWordPos(start_index)
+ImeTranslatorGetLeftWordPos(start_index)
 {
     local
     global translator_split_indexs
@@ -153,7 +153,7 @@ TranslatorGetLeftWordPos(start_index)
     return last_index
 }
 
-TranslatorGetRightWordPos(start_index)
+ImeTranslatorGetRightWordPos(start_index)
 {
     local
     global translator_split_indexs
@@ -170,60 +170,60 @@ TranslatorGetRightWordPos(start_index)
     return last_index
 }
 
-TranslatorGetSelectIndex()
+ImeTranslatorGetSelectIndex()
 {
     global translator_result_filtered
     return translator_result_filtered[0]
 }
-TranslatorSetSelectIndex(index)
+ImeTranslatorSetSelectIndex(index)
 {
     global translator_result_filtered
-    translator_result_filtered[0] := Max(1, Min(TranslatorGetListLength(), index))
+    translator_result_filtered[0] := Max(1, Min(ImeTranslatorGetListLength(), index))
 }
 
-TranslatorGetListLength()
+ImeTranslatorGetListLength()
 {
     global translator_result_filtered
     return translator_result_filtered.Length()
 }
-TranslatorGetRemainString()
+ImeTranslatorGetRemainString()
 {
     global translator_input_string
     return translator_input_string
 }
 
-TranslatorGetDebugInfo(index)
+ImeTranslatorGetDebugInfo(index)
 {
     global translator_result_filtered
     return translator_result_filtered[index, 0]
 }
-TranslatorGetPinyin(index)
+ImeTranslatorGetPinyin(index)
 {
     global translator_result_filtered
     return translator_result_filtered[index, 1]
 }
 
-TranslatorGetWord(index)
+ImeTranslatorGetWord(index)
 {
     global translator_result_filtered
     return translator_result_filtered[index, 2]
 }
 
-TranslatorGetWeight(index)
+ImeTranslatorGetWeight(index)
 {
     global translator_result_filtered
     return translator_result_filtered[index, 3]
 }
 
-TranslatorGetComment(index)
+ImeTranslatorGetComment(index)
 {
     global translator_result_filtered
     return translator_result_filtered[index, 4]
 }
 
-TranslatorGetCommentDisplayText(index)
+ImeTranslatorGetCommentDisplayText(index)
 {
-    comment := TranslatorGetComment(index)
+    comment := ImeTranslatorGetComment(index)
     if( comment ){
         if( comment == "name" ){
             return "名"
@@ -235,12 +235,12 @@ TranslatorGetCommentDisplayText(index)
     }
 }
 
-TranslatorGetIndexWordRadical(index)
+ImeTranslatorGetIndexWordRadical(index)
 {
     global translator_result_filtered
     return translator_result_filtered[index, 6]
 }
-TranslatorGetInputRadical()
+ImeTranslatorGetInputRadical()
 {
     global translator_radical
     return translator_radical
