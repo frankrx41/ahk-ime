@@ -28,7 +28,7 @@ SeparateStringShouldProcess(separate_string, input_split)
         return false
     }
 
-    str_len := (StrLen(separate_string)+1)/3
+    str_len := StrLen(separate_string)/3
     ; Do simple spell: yeb mla
     if( str_len == 3 ){
         char_1 := SubStr(separate_string, 1, 1)
@@ -52,12 +52,15 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
     global history_field_array
     global tooltip_debug
 
-    separate_string := SplitWordGetSimpleSpell(input_split)
-    if( SeparateStringShouldProcess(separate_string, input_split) )
+    if( SplitWordGetWordCount(input_split) > 1 )
     {
-        PinyinHistoryUpdateKey(DB, separate_string, true)
-        PinyinResultInsertAtHistory(search_result, separate_string, 1)
-        tooltip_debug[8] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
+        separate_string := SplitWordGetSimpleSpell(input_split)
+        if( SeparateStringShouldProcess(separate_string, input_split) )
+        {
+            PinyinHistoryUpdateKey(DB, separate_string, true)
+            PinyinResultInsertAtHistory(search_result, separate_string, 1)
+            tooltip_debug[8] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
+        }
     }
     return
 }
