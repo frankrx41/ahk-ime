@@ -118,14 +118,9 @@ ImeTooltipUpdate(tooltip_pos := "")
         ; debug_tip .= "`n" tooltip_debug[11] ; Translator
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
-        radical_code := ImeTranslatorGetInputRadical()
-        if( radical_code ){
-            tooltip_string := input_string
-            tooltip_string .= " {" radical_code "|}"
-        } else {
-            tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
-            tooltip_string .= "(" caret_pos ")"
-        }
+
+        tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
+        tooltip_string .= "(" caret_pos ")"
         ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return

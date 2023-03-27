@@ -69,23 +69,21 @@ ImeInputterProcessChar(input_char, try_puts := 0)
         if( !ImeSelectorIsOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
         {
             ImeSelectorSetSelectIndex(1)
-            ImeInputterUpdateRadical(ImeInputterGetRadical() . input_char)
+            input_char := Format("{:U}", input_char)
         }
     }
-    else
-    {
-        caret_pos := ime_input_caret_pos
-        ime_input_string := SubStr(ime_input_string, 1, caret_pos) . input_char . SubStr(ime_input_string, caret_pos+1)
-        ime_input_caret_pos := caret_pos + 1
 
-        ImeSelectorOpen(false)
-        if( try_puts && StrLen(ime_input_string) == 1 ) {
-            PutCharacter(input_char)
-            ImeInputterClearString()
-        } else {
-            ImeSelectorSetSelectIndex(1)
-            ImeInputterUpdateString(ime_input_string)
-        }
+    caret_pos := ime_input_caret_pos
+    ime_input_string := SubStr(ime_input_string, 1, caret_pos) . input_char . SubStr(ime_input_string, caret_pos+1)
+    ime_input_caret_pos := caret_pos + 1
+
+    ImeSelectorOpen(false)
+    if( try_puts && StrLen(ime_input_string) == 1 ) {
+        PutCharacter(input_char)
+        ImeInputterClearString()
+    } else {
+        ImeSelectorSetSelectIndex(1)
+        ImeInputterUpdateString(ime_input_string)
     }
 }
 
@@ -144,11 +142,6 @@ ImeInputterCaretFastMoveAt(char, back_to_front)
 
 ;*******************************************************************************
 ;
-ImeInputterGetRadical()
-{
-    return ImeTranslatorGetInputRadical()
-}
-
 ImeInputterUpdateRadical(input_radical)
 {
     ImeTranslatorUpdateInputRadical(input_radical)

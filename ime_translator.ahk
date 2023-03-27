@@ -22,7 +22,7 @@ ImeTranslatorUpdateInputString(input_string)
     {
         ime_translator_input_string := input_string
         split_indexs := []
-        ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs)
+        ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
         ime_translator_split_indexs := split_indexs
 
         if( StrLen(ime_translator_input_string) == 1 && !InStr("aloe", ime_translator_input_string) )
@@ -249,9 +249,4 @@ ImeTranslatorGetIndexWordRadical(index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[index, 6]
-}
-ImeTranslatorGetInputRadical()
-{
-    global ime_translator_radical
-    return ime_translator_radical
 }

@@ -42,14 +42,7 @@ HotkeyOnBackSpace()
     global ime_input_caret_pos
     global tooltip_debug
 
-    input_radical := ImeInputterGetRadical()
-    if( input_radical ){
-        input_radical := SubStr(input_radical, 1, StrLen(input_radical)-1)
-        ImeSelectorSetSelectIndex(1)
-        ImeInputterUpdateRadical(input_radical)
-        ImeTooltipUpdate()
-    }
-    else if( ime_input_caret_pos != 0 ){
+    if( ime_input_caret_pos != 0 ){
         tooltip_debug[1] := ""
         tooltip_debug[7] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
