@@ -1,8 +1,5 @@
 ;*******************************************************************************
-; 输入相关的函数
-; 输入标点符号
-; 输入字符
-; 输入音调
+; Hotkey
 HotkeyOnChar(input_char, pos := -1, try_puts := 0)
 {
     global ime_input_caret_pos
@@ -45,8 +42,6 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
 
 HotkeyOnNumber(key)
 {
-    global ime_input_string
-    global ime_input_caret_pos
     global ime_input_candidate
 
     ; 选择相应的编号并上屏
@@ -65,7 +60,6 @@ HotkeyOnCtrlAlpha(char)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_input_candidate
     ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, true)
     ImeTooltipUpdate()
 }
@@ -74,7 +68,6 @@ HotkeyOnCtrlShiftAlpha(char)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_input_candidate
     ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, false)
     ImeTooltipUpdate()
 }
@@ -107,9 +100,6 @@ HotkeyOnBackSpace()
 
 HotkeyOnEsc()
 {
-    global ime_input_string
-    global ime_input_caret_pos
-    global ime_input_candidate
     static last_esc_tick := 0
 
     if( ImeIsSelectMenuOpen() ) {
