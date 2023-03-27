@@ -16,6 +16,7 @@ ImeTranslatorUpdateInputString(input_string)
     global ime_translator_input_string
     global ime_translator_input_split
     global ime_translator_split_indexs
+    global ime_translator_radical_list
 
     input_string := LTrim(input_string, " ")
     if( input_string )
@@ -24,6 +25,7 @@ ImeTranslatorUpdateInputString(input_string)
         split_indexs := []
         ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
         ime_translator_split_indexs := split_indexs
+        ime_translator_radical_list := radical_list
 
         if( StrLen(ime_translator_input_string) == 1 && !InStr("aloe", ime_translator_input_string) )
         {

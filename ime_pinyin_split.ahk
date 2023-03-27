@@ -4,9 +4,9 @@ IsTone(tone)
     return tone && InStr("12345' ", tone)
 }
 
-IsSplitAbleAt(next_char)
+IsRadical(char)
 {
-    return next_char == "" || IsInitials(next_char) || IsTone(next_char)
+    return InStr("AEOBPMFDTNLGKHJQXZCSRYW", char, true)
 }
 
 ;*******************************************************************************
@@ -55,7 +55,7 @@ PinyinSplitMaxVowelsLength(input_str, index)
         if( IsTone(check_char) ){
             break
         }
-        if( InStr("AEOBPMFDTNLGKHJQXZCSRYW", check_char, true) ) {
+        if( IsRadical(check_char) ) {
             break
         }
         vowels_max_len += 1
@@ -119,9 +119,11 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
             if( IsCompletePinyin(initials, vowels) )
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
+                if( next_char == "" || IsRadical(next_char) || IsTone(next_char) ) {
+                    break
+                }
                 ; tooltip_debug[1] .= "(" next_char ")"
-                if( IsSplitAbleAt(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) )
-                {
+                if( IsInitials(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) ) {
                     break
                 }
             }

@@ -60,15 +60,6 @@ WordGetRadical(str, max_cnt:=1)
             }
         }
     }
-    else
-    {
-        ; 每字第一码
-        loop, Parse, str
-        {
-            code := radical_table[A_LoopField, 1]
-            result .= SubStr(code, 1, 1)
-        }
-    }
     return result
 }
 
@@ -86,30 +77,43 @@ RadicalGetPinyin(radical)
     return result_pinyin
 }
 
-PinyinResultFilterByRadical(ByRef search_result, input_radical)
+PinyinResultFilterByRadical(ByRef search_result, radical_list)
 {
     local
     global tooltip_debug
 
-    if( input_radical )
+    if( radical_list )
     {
         begin_tick := A_TickCount
         index := 1
         loop % search_result.Length()
         {
-            test_pinyin := RadicalGetPinyin(search_result[index,6])
-            content_radical := InStr(test_pinyin, input_radical)
-            same_as_radical := input_radical == search_result[index, 2]
-            if( !content_radical && !same_as_radical )
+            word_value := search_result[index, 2]
+            sould_remove := false
+            loop % StrLen(word_value)
             {
-                search_result.RemoveAt(index)
+                test_radical := radical_list[A_Index]
+                if( test_radical )
+                {
+                    word := SubStr(word_value, A_Index, 1)
+                    test_pinyin := RadicalGetPinyin(WordGetRadical(word))
+                    content_radical := InStr(test_pinyin, test_radical)
+                    same_as_radical := radical_list == word_value
+                    if( !content_radical && !same_as_radical )
+                    {
+                        sould_remove := true
+                        break
+                    }
+                }
             }
-            else
-            {
+
+            if( sould_remove ) {
+                search_result.RemoveAt(index)
+            } else {
                 index += 1
             }
         }
 
-        ; tooltip_debug[6] := "Radical: [" input_radical "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+        ; tooltip_debug[6] := "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
     }
 }
