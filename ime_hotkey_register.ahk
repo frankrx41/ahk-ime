@@ -1,6 +1,6 @@
 ;*******************************************************************************
 ; Ime hotkeys
-ImeRegisterHotkey()
+ImeHotkeyRegister()
 {
     local
     ; symbol
@@ -58,4 +58,20 @@ ImeRegisterHotkey()
     }
     Hotkey, if,
     return
+}
+
+ImeHotkeyRegisterShift()
+{
+    func_to_cn := Func("HotkeyOnShift").Bind("cn")
+    func_to_en := Func("HotkeyOnShift").Bind("en")
+    if( ImeModeIsChinese() ) {
+        ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
+        Hotkey, Shift, % func_to_cn, Off
+        Hotkey, If, % ime_is_waiting_input_fn
+        Hotkey, Shift, % func_to_en, On
+        Hotkey, If
+    } else {
+        Hotkey, Shift, % func_to_en, Off
+        Hotkey, Shift, % func_to_cn, On
+    }
 }

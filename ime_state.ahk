@@ -49,11 +49,11 @@ ImeUpdateActiveState(mode := "")
         global ime_mode_language
         mode := mode ? mode : ime_mode_language
         ImeSetModeLanguage(mode)
-        ImeUpdateModeHotkey()
+        ImeHotkeyRegisterShift()
     }
 
     ImeTooltipUpdate("")
-    ImeSetIconState(mode)
+    ImeIconSetMode(mode)
 }
 
 ImeIsPauseWindowActive()
@@ -89,43 +89,13 @@ ImeSetModeLanguage(mode)
     return
 }
 
-ImeUpdateModeHotkey()
-{
-    func_to_cn := Func("ImeSetModeLanguageByHotkey").Bind("cn")
-    func_to_en := Func("ImeSetModeLanguageByHotkey").Bind("en")
-    if( ImeModeIsChinese() ) {
-        ime_is_waiting_input_fn := Func("ImeIsWaitingInput").Bind()
-        Hotkey, Shift, % func_to_cn, Off
-        Hotkey, If, % ime_is_waiting_input_fn
-        Hotkey, Shift, % func_to_en, On
-        Hotkey, If
-    } else {
-        Hotkey, Shift, % func_to_en, Off
-        Hotkey, Shift, % func_to_cn, On
-    }
-}
-
-ImeSetModeLanguageByHotkey(mode)
-{
-    global ime_mode_language
-
-    if( mode == "en" ){
-        CallBackBeforeToggleEn()
-    }
-    ImeSetModeLanguage(mode)
-    ImeUpdateModeHotkey()
-    ImeTooltipUpdate("")
-    ImeSetIconState(mode)
-    return
-}
-
 ImeModeIsChinese()
 {
     global ime_mode_language
     return ime_mode_language == "cn" || ime_mode_language == "tw"
 }
 
-ImeSetIconState(mode)
+ImeIconSetMode(mode)
 {
     local
     static ime_opt_icon_path := "ime.icl"

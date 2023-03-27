@@ -128,3 +128,14 @@ HotkeyOnEsc()
     last_esc_tick := A_TickCount
     ImeTooltipUpdate()
 }
+
+HotkeyOnShift(mode)
+{
+    if( mode == "en" ){
+        CallBackBeforeToggleEn()
+    }
+    ImeSetModeLanguage(mode)
+    ImeHotkeyRegisterShift()
+    ImeTooltipUpdate("")
+    ImeIconSetMode(mode)
+}
