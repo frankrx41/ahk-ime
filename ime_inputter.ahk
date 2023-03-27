@@ -2,7 +2,6 @@
 ; Input string
 ImeInputterInitialize()
 {
-    global ime_input_candidate  := new Translator   ; 候选项
     global ime_input_string     := ""               ; 輸入字符
     global ime_input_caret_pos  := 0                ; 光标位置
 }
@@ -11,13 +10,12 @@ ImeInputterClearString()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global ime_input_candidate
     global tooltip_debug
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
     tooltip_debug       := []
-    ime_input_candidate.Clear()
+    TranslatorClear()
     return
 }
 
@@ -26,13 +24,12 @@ ImeInputterClearPrevSplitted()
     local
     global ime_input_string
     global ime_input_caret_pos
-    global ime_input_candidate
 
     check_index := ime_input_caret_pos
 
     if( check_index != 0 )
     {
-        left_pos := ime_input_candidate.GetLeftWordPos(check_index)
+        left_pos := TranslatorGetLeftWordPos(check_index)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
 
         ImeSelectorSetSelectIndex(1)
@@ -45,9 +42,8 @@ ImeInputterClearLastSplitted()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global ime_input_candidate
 
-    ime_input_caret_pos := ime_input_candidate.GetLastWordPos()
+    ime_input_caret_pos := TranslatorGetLastWordPos()
     if( ime_input_caret_pos == 0 )
     {
         ImeInputterClearString()
@@ -99,14 +95,13 @@ ImeInputterCaretMove(dir, by_word:=false)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_input_candidate
 
     if( by_word )
     {
         if( dir > 0 ){
-            word_pos := ime_input_candidate.GetRightWordPos(ime_input_caret_pos)
+            word_pos := TranslatorGetRightWordPos(ime_input_caret_pos)
         } else {
-            word_pos := ime_input_candidate.GetLeftWordPos(ime_input_caret_pos)
+            word_pos := TranslatorGetLeftWordPos(ime_input_caret_pos)
         }
         ime_input_caret_pos := word_pos
     }
@@ -151,19 +146,15 @@ ImeInputterCaretFastMoveAt(char, back_to_front)
 ;
 ImeInputterGetRadical()
 {
-    global ime_input_candidate
-    return ime_input_candidate.GetInputRadical()
+    return TranslatorGetInputRadical()
 }
 
 ImeInputterUpdateRadical(input_radical)
 {
-    global ime_input_candidate
-    ime_input_candidate.UpdateInputRadical(input_radical)
+    TranslatorUpdateInputRadical(input_radical)
 }
 
 ImeInputterUpdateString(input_string)
 {
-    global ime_input_candidate
-    global DB
-    ime_input_candidate.Initialize(input_string, DB)
+    TranslatorUpdateInputString(input_string)
 }

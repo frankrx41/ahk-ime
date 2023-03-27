@@ -36,24 +36,20 @@ ImeSelectorGetColumn()
 
 ImeSelectorGetSelectIndex()
 {
-    global ime_input_candidate
-    return ime_input_candidate.GetSelectIndex()
+    return TranslatorGetSelectIndex()
 }
 
 ImeSelectorSetSelectIndex(index)
 {
-    global ime_input_candidate
-    ime_input_candidate.SetSelectIndex(index)
+    TranslatorSetSelectIndex(index)
 }
 
 ImeSelectorOffsetSelectIndex(offset)
 {
-    global ime_input_candidate
-    ime_input_candidate.OffsetSelectIndex(offset)
+    TranslatorOffsetSelectIndex(offset)
 }
 
 ImeSelectorToggleSingleMode()
 {
-    global ime_input_candidate
-    ime_input_candidate.ToggleSingleMode()
+    TranslatorToggleSingleMode()
 }
