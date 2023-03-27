@@ -21,7 +21,7 @@ SeparateSingleCharHasSound(separate_single_chars)
 CanMakeSimpleSpell(separate_single_char, ime_input_split_trim)
 {
     local
-    if( GetSqlSimpleKey(separate_single_char) == GetSqlSimpleKey(ime_input_split_trim) )
+    if( PinyinSqlSimpleKey(separate_single_char) == PinyinSqlSimpleKey(ime_input_split_trim) )
     {
         return false
     }

@@ -22,14 +22,14 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result)
                 word := RegExReplace(word, "i)'([^']+)?$")
             }
         }
-        search_result.InsertAt(1, CombineWord(save_field_array))
+        search_result.InsertAt(1, PinyinCombineWord(save_field_array))
         search_result[1, 0] := "pinyin"
     }
     return
 }
 
 ; 首选组词
-CombineWord(arr)
+PinyinCombineWord(arr)
 {
     rarr := ["", "", "auto"]
     loop % arr.Length()

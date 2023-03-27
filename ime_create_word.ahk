@@ -79,7 +79,7 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
     local
     Assert(key && value && weight)
     weight := Max(0, weight)
-    sim := GetSqlSimpleKey(key)
+    sim := PinyinSqlSimpleKey(key)
 
     if( GetWeight(DB, key, value) == -1 )
     {
@@ -107,7 +107,7 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
 
 GetWeight(DB, key, value)
 {
-    sim := GetSqlSimpleKey(key)
+    sim := PinyinSqlSimpleKey(key)
     sql_cmd := "SELECT weight FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
 
     if( DB.GetTable(sql_cmd, result_table) )

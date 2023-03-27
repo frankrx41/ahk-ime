@@ -2,7 +2,7 @@
 ; zhong'hua -> z_h_
 ; wo3ai4ni3 -> w3a4n3
 ; wo3ai4ni% -> w3a4n% or w3a4n_
-GetSqlSimpleKey(input_str)
+PinyinSqlSimpleKey(input_str)
 {
     key_value := input_str
     last_char := SubStr(key_value, 0, 1)
@@ -23,7 +23,7 @@ GetSqlSimpleKey(input_str)
     return key_value
 }
 
-GetFullKey(input_str, sim_key)
+PinyinSqlFullKey(input_str, sim_key)
 {
     key_value := input_str
     key_value := StrReplace(key_value, "'", "_")
@@ -39,7 +39,7 @@ GetFullKey(input_str, sim_key)
     return key_value
 }
 
-StrReplaceLast1To5(input_str)
+StrReplaceLastTone1To5(input_str)
 {
     tone_pos := InStr(input_str, "1",,0,1)
     if( tone_pos != 0 ){
@@ -50,7 +50,7 @@ StrReplaceLast1To5(input_str)
     }
 }
 
-GetSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
+PinyinSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
 {
     sql_cmd := ""
     if( key_value )
@@ -67,23 +67,23 @@ GetSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
 
         if( repalce15 )
         {
-            new_value := StrReplaceLast1To5(key_value)
+            new_value := StrReplaceLastTone1To5(key_value)
             if( new_value ){
-                sql_cmd := "( " sql_cmd "OR " . GetSqlWhereKeyCommand(key_name, new_value) ") "
+                sql_cmd := "( " sql_cmd "OR " . PinyinSqlWhereKeyCommand(key_name, new_value) ") "
             }
         }
     }
     return sql_cmd
 }
 
-GetSqlWhereCommand(sim_key, full_key)
+PinyinSqlWhereCommand(sim_key, full_key)
 {
     Assert(sim_key,,,true)
-    sql_cmd := GetSqlWhereKeyCommand("sim", sim_key, true)
+    sql_cmd := PinyinSqlWhereKeyCommand("sim", sim_key, true)
 
     if( full_key )
     {
-        sql_cmd .= "AND " GetSqlWhereKeyCommand("key", full_key, true)
+        sql_cmd .= "AND " PinyinSqlWhereKeyCommand("key", full_key, true)
     } 
     return sql_cmd
 }
@@ -110,9 +110,9 @@ PinyinSqlGetResult(DB, input_str, limit_num:=100)
     ; Assert(SubStr(input_str, 0, 1) != "'")
 
     ; Get first char
-    sql_sim_key     := GetSqlSimpleKey(input_str)
-    sql_full_key    := GetFullKey(input_str, sql_sim_key)
-    sql_cmd         := GetSqlWhereCommand(sql_sim_key, sql_full_key)
+    sql_sim_key     := PinyinSqlSimpleKey(input_str)
+    sql_full_key    := PinyinSqlFullKey(input_str, sql_sim_key)
+    sql_cmd         := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
     tooltip_debug[3] .= "`n[" input_str "]: """ sql_cmd
     ; tooltip_debug[3] .= "`n" CallStack(4)
 

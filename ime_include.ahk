@@ -7,7 +7,7 @@
 #Include, ime_pinyin_process.ahk
 #Include, ime_pinyin_radical.ahk
 #Include, ime_pinyin_simple_spell.ahk
-#Include, ime_pinyin_get_result.ahk
+#Include, ime_pinyin_sql.ahk
 #Include, ime_pinyin_split.ahk
 #Include, ime_candidate.ahk
 #Include, ime_db.ahk
