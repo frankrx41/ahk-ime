@@ -18,7 +18,7 @@ PinyinResultInsertCombine(ByRef DB, ByRef save_field_array, ByRef search_result)
         if( save_field_array[2,1,1]!=Chr(2) )
         {
             word := save_field_array[1,1,-1] . save_field_array[2,1,-1]
-            While( InStr(word,"'") && !PinyinHasResult(word) ) {
+            While( InStr(word,"'") && !PinyinHistoryHasResult(word) ) {
                 word := RegExReplace(word, "i)'([^']+)?$")
             }
         }

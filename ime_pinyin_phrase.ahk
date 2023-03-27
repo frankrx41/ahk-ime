@@ -1,45 +1,3 @@
-PinyinResultClear()
-{
-    global history_field_array := []
-}
-
-PinyinHasResult(pinyin)
-{
-    global history_field_array
-    return history_field_array[pinyin, 1, 2] != ""
-}
-
-PinyinHasKey(pinyin)
-{
-    global history_field_array
-    global tooltip_debug
-    tooltip_debug[5] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
-    return history_field_array.HasKey(pinyin)
-}
-
-PinyinUpdateKey(DB, pinyin, limit_num:=100)
-{
-    global history_field_array
-    if( !PinyinHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
-    {
-        history_field_array[pinyin] := PinyinSqlGetResult(DB, pinyin, limit_num)
-    }
-}
-
-PinyinKeyGetWords(pinyin)
-{
-    global history_field_array
-    return history_field_array[pinyin]
-}
-
-SearchResultPush(ByRef search_result, spilt_word)
-{
-    global history_field_array
-    loop % history_field_array[spilt_word].Length() {
-        search_result.Push(CopyObj(history_field_array[spilt_word, A_Index]))
-    }
-}
-
 WordCanContinueSplit(word)
 {
     ; 包含 word + tone + word + ... 格式
@@ -69,18 +27,18 @@ PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
     local
     ; 插入候选词部分
     spilt_word := WordRemoveLastSplit(input_spilt_string)
-    While( WordCanContinueSplit(spilt_word) && !PinyinHasResult(spilt_word) )
+    While( WordCanContinueSplit(spilt_word) && !PinyinHistoryHasResult(spilt_word) )
     {
-        PinyinUpdateKey(DB, spilt_word)
-        if( PinyinHasResult(spilt_word) ){
+        PinyinHistoryUpdateKey(DB, spilt_word)
+        if( PinyinHistoryHasResult(spilt_word) ){
             break
         }
         spilt_word := WordRemoveLastSplit(spilt_word)
     }
     if( WordCanContinueSplit(spilt_word) )
     {
-        PinyinUpdateKey(DB, spilt_word)
-        SearchResultPush(search_result, spilt_word)
+        PinyinHistoryUpdateKey(DB, spilt_word)
+        PinyinResultPushHistory(search_result, spilt_word)
     }
     return
 }
@@ -94,8 +52,8 @@ PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, input_split_string)
 {
     local
     first_word := GetFirstWord(input_split_string)
-    PinyinUpdateKey(DB, first_word)
-    SearchResultPush(search_result, first_word)
+    PinyinHistoryUpdateKey(DB, first_word)
+    PinyinResultPushHistory(search_result, first_word)
     return
 }
 

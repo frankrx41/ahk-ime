@@ -253,7 +253,7 @@ PinyinInitialize()
         }
     }
 
-    PinyinResultClear()
+    PinyinHistoryClear()
     PinyinRadicalInitialize()
     PinyinSplitTableInitialize()
 }

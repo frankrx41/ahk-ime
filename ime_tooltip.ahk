@@ -95,7 +95,7 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
         debug_tip .= " (" candidate.GetPinyin(candidate.GetSelectIndex()) ")"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
-        ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHasKey
+        ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHistoryHasKey
         debug_tip .= "`n" tooltip_debug[6]  ; Radical
         ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell

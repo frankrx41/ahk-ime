@@ -168,7 +168,7 @@ return
 
 !`::
     WordCreateGui(GetSelectText())
-    PinyinResultClear()
+    PinyinHistoryClear()
 return
 
 ;*******************************************************************************

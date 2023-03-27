@@ -4,6 +4,7 @@
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_phrase.ahk
 #Include, ime_pinyin_combine.ahk
+#Include, ime_pinyin_history.ahk
 #Include, ime_pinyin_process.ahk
 #Include, ime_pinyin_radical.ahk
 #Include, ime_pinyin_simple_spell.ahk

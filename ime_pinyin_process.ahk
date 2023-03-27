@@ -42,8 +42,8 @@ PinyinProcess(ByRef DB, ByRef save_field_array, input_spilt_string)
                 break
             }
             if( input_left ){
-                PinyinUpdateKey(DB, input_left)
-                if( PinyinHasKey(input_left) && PinyinHasResult(input_left) ){
+                PinyinHistoryUpdateKey(DB, input_left)
+                if( PinyinHistoryHasKey(input_left) && PinyinHistoryHasResult(input_left) ){
                     save_field_array.Push(CopyObj(history_field_array[input_left]))
                     input_string := SubStr(input_string, StrLen(input_left)+1)
                     break
