@@ -99,7 +99,7 @@ PinyinSqlWhereCommand(sim_key, full_key)
 ; wo3ai4ni3 -> wo3ai4ni3
 ; kannid -> kan'ni'd%
 ; kannide -> kan'ni'de'
-PinyinSqlGetResult(DB, input_str, limit_num:=100)
+PinyinSqlGetResult(DB, input_str, auto_comple:=false, limit_num:=100)
 {
     local
     Critical

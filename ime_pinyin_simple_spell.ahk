@@ -5,15 +5,8 @@
 ; "wo3ai4ni" -> "w%'o%3a%'i%4'n%'i%"
 SplitWordGetSimpleSpell(input_string)
 {
-    input_string := RegExReplace(input_string, "([a-z])(?=[^'\d])", "$1'")
-    input_string := RTrim(input_string, "'")
-    input_string := StrReplace(input_string, " ")
-    input_string := RegExReplace(input_string, "(['\d])", "%$1")
-    if( InStr("12345", SubStr(input_string, 0, 1)) ) {
-        input_string .= ""
-    } else {
-        input_string .= "%"
-    }
+    input_string := RegExReplace(input_string, "([a-z])(?=[^%'12345])", "$1'")
+    input_string := RegExReplace(input_string, "([^%])(['12345])", "$1%$2")
     return input_string
 }
 
@@ -23,10 +16,10 @@ SeparateStringHasSound(separate_string)
     return !RegExMatch(separate_string, "[iuv]%")
 }
 
-SeparateStringShouldProcess(separate_string, ime_input_split_trim)
+SeparateStringShouldProcess(separate_string, input_split)
 {
     local
-    if( PinyinSqlSimpleKey(separate_string) == PinyinSqlSimpleKey(ime_input_split_trim) )
+    if( PinyinSqlSimpleKey(separate_string) == PinyinSqlSimpleKey(input_split) )
     {
         return false
     }
@@ -53,16 +46,16 @@ SeparateStringShouldProcess(separate_string, ime_input_split_trim)
     return true
 }
 
-PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, ime_input_split_trim)
+PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
 {
     local
     global history_field_array
     global tooltip_debug
 
-    separate_string := SplitWordGetSimpleSpell(ime_input_split_trim)
-    if( SeparateStringShouldProcess(separate_string, ime_input_split_trim) )
+    separate_string := SplitWordGetSimpleSpell(input_split)
+    if( SeparateStringShouldProcess(separate_string, input_split) )
     {
-        PinyinHistoryUpdateKey(DB, separate_string)
+        PinyinHistoryUpdateKey(DB, separate_string, true)
         PinyinResultInsertAtHistory(search_result, separate_string, 1)
         tooltip_debug[8] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
     }

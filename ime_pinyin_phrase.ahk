@@ -92,7 +92,7 @@ PinyinGetCandidate(ime_orgin_input, ime_input_split:="", DB:="")
         PinyinResultUpdateRadical(search_result)
 
         ; 超级简拼 显示 4 字及以上简拼候选
-        PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)
+        PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
 
         ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
         PinyinResultHideZeroWeight(search_result)

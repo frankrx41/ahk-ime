@@ -17,12 +17,12 @@ PinyinHistoryHasKey(spilt_word)
     return history_field_array.HasKey(spilt_word)
 }
 
-PinyinHistoryUpdateKey(DB, spilt_word, limit_num:=100)
+PinyinHistoryUpdateKey(DB, spilt_word, auto_comple:=false, limit_num:=100)
 {
     global history_field_array
     if( !PinyinHistoryHasKey(spilt_word) || history_field_array[spilt_word].Length()==2 && history_field_array[spilt_word,2,2]=="" )
     {
-        history_field_array[spilt_word] := PinyinSqlGetResult(DB, spilt_word, limit_num)
+        history_field_array[spilt_word] := PinyinSqlGetResult(DB, spilt_word, auto_comple, limit_num)
     }
 }
 
