@@ -162,7 +162,7 @@ PinyinGetSentences(ime_orgin_input, ime_input_split:="", DB:="")
         PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
 
         ; 更新辅助码
-        PinyinResultUpdateAssistant(search_result)
+        PinyinResultUpdateRadical(search_result)
 
         ; 超级简拼 显示 4 字及以上简拼候选
         PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)

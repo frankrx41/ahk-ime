@@ -28,7 +28,7 @@ DisplaySelectItems(candidate)
             if( word_index <= candidate.GetListLength() )
             {
                 begin_str := "  "
-                assistant_code := ""
+                radical_code := ""
                 if( in_column ) {
                     if ( select_index == word_index ) {
                         begin_str := ">["
@@ -36,16 +36,16 @@ DisplaySelectItems(candidate)
                         begin_str := Mod(word_index, 10) "."
                         ; begin_str :=  word_index "."
                     }
-                    ; assistant_code := candidate.GetAssistant(word_index)
-                    ; if( assistant_code ){
-                    ;     assistant_code := "{" assistant_code "}"
+                    ; radical_code := candidate.GetIndexWordRadical(word_index)
+                    ; if( radical_code ){
+                    ;     radical_code := "{" radical_code "}"
                     ; }
                 }
 
                 end_str := select_index == word_index ? "]" : " "
                 comment := candidate.GetCommentDisplayText(word_index)
 
-                item_str := begin_str . candidate.GetWord(word_index) . assistant_code . end_str . comment
+                item_str := begin_str . candidate.GetWord(word_index) . radical_code . end_str . comment
                 ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
             } else {
                 item_str := ""
@@ -91,19 +91,19 @@ ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
         }
 
         debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
-        debug_tip .= " {" GetAssistantTable(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
+        debug_tip .= " {" WordGetRadical(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= " (" candidate.GetPinyin(candidate.GetSelectIndex()) ")"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
         ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHasKey
-        debug_tip .= "`n" tooltip_debug[6]  ; Assistant
+        debug_tip .= "`n" tooltip_debug[6]  ; Radical
         ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
         ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
         debug_tip .= "`n" tooltip_debug[9]  ; temp
         ; debug_tip .= "`n" tooltip_debug[11] ; Candidate
         debug_tip .= "`n" tooltip_debug[18] ; Assert info
 
-        radical_code := candidate.GetRadicalCode()
+        radical_code := candidate.GetInputRadical()
         if( radical_code ){
             tooltip_string := input_string
             tooltip_string .= " {" radical_code "|}"

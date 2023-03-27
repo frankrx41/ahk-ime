@@ -81,7 +81,7 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
     if( InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.UpdateRadicalCode(ime_input_candidate.GetRadicalCode() . input_char)
+        ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
     }
     else
     {
@@ -147,11 +147,11 @@ HotkeyOnBackSpace()
     global tooltip_debug
     global DB
 
-    radical_code := ime_input_candidate.GetRadicalCode()
-    if( radical_code ){
-        radical_code := SubStr(radical_code, 1, StrLen(radical_code)-1)
+    input_radical := ime_input_candidate.GetInputRadical()
+    if( input_radical ){
+        input_radical := SubStr(input_radical, 1, StrLen(input_radical)-1)
         ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.UpdateRadicalCode( radical_code )
+        ime_input_candidate.UpdateInputRadical( input_radical )
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
     else if( ime_input_caret_pos != 0 ){

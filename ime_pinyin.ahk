@@ -254,6 +254,6 @@ PinyinInitialize()
     }
 
     PinyinResultClear()
-    PinyinAssistantInitialize()
+    PinyinRadicalInitialize()
     PinyinSplitTableInitialize()
 }

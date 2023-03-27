@@ -30,13 +30,13 @@ class Candidate
         }
     }
 
-    UpdateRadicalCode(radical)
+    UpdateInputRadical(radical)
     {
         local
         This.radical := radical
         search_result := This.candidate_origin
         if( This.radical ){
-            PinyinResultCheckAssistant(search_result, This.radical)
+            PinyinResultFilterByRadical(search_result, This.radical)
         }
         This.candidate_filtered := search_result
     }
@@ -203,11 +203,11 @@ class Candidate
         }
     }
 
-    GetAssistant(index)
+    GetIndexWordRadical(index)
     {
         return This.candidate_filtered[index, 6]
     }
-    GetRadicalCode()
+    GetInputRadical()
     {
         return This.radical
     }
