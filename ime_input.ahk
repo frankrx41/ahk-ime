@@ -152,7 +152,7 @@ PutCharacterWordByWord(select_index, offset)
 ; 输入标点符号
 ; 输入字符
 ; 输入音调
-ImeInputChar(input_char, pos := -1, try_puts := 0)
+HotkeyOnChar(input_char, pos := -1, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -189,7 +189,7 @@ ImeInputChar(input_char, pos := -1, try_puts := 0)
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, update_coord)
 }
 
-ImeInputNumber(key)
+HotkeyOnNumber(key)
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -203,7 +203,7 @@ ImeInputNumber(key)
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
     else {
-        ImeInputChar(key)
+        HotkeyOnChar(key)
     }
 }
 

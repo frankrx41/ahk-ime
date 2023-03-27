@@ -39,13 +39,13 @@ ImeRegisterHotkey()
         global symbol_ctrl_start_hotkey
         for key, char in symbol_ctrl_start_hotkey
         {
-            func := Func("ImeInputChar").Bind(char, -1, 1)
+            func := Func("HotkeyOnChar").Bind(char, -1, 1)
             Hotkey, %key%, %func%
         }
         loop 26
         {
             ; a-z
-            func := Func("ImeInputChar").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnChar").Bind(Chr(96+A_Index))
             Hotkey, % Chr(96+A_Index), %func%
         }
     }
@@ -54,24 +54,24 @@ ImeRegisterHotkey()
     Hotkey, if, ime_input_string
     {
         ; Space and ' to spilt word
-        func := Func("ImeInputChar").Bind(" ", -1, 1)
+        func := Func("HotkeyOnChar").Bind(" ", -1, 1)
         Hotkey, Space, %func%
-        func := Func("ImeInputChar").Bind("'")
+        func := Func("HotkeyOnChar").Bind("'")
         Hotkey, ', %func%
-        func := Func("ImeInputChar").Bind("'")
+        func := Func("HotkeyOnChar").Bind("'")
         Hotkey, \, %func%
-        func := Func("ImeInputChar").Bind("'")
+        func := Func("HotkeyOnChar").Bind("'")
         Hotkey, `;, %func%
         ; 0-9
         loop 10 {
-            func := Func("ImeInputNumber").Bind(A_Index-1)
+            func := Func("HotkeyOnNumber").Bind(A_Index-1)
             Hotkey, % A_Index-1, %func%
             Hotkey, % "Numpad" A_Index-1, %func%
         }
         loop 26
         {
             ; A-Z
-            func := Func("ImeInputChar").Bind(Format("{:U}", Chr(96+A_Index)))
+            func := Func("HotkeyOnChar").Bind(Format("{:U}", Chr(96+A_Index)))
             Hotkey, % "+" Chr(96+A_Index), %func%
 
             func := Func("ImeInputCaretFastMoveAt").Bind(Chr(96+A_Index), true)
