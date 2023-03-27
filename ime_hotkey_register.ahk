@@ -1,6 +1,6 @@
 ;*******************************************************************************
-; Ime hotkeys
-ImeHotkeyRegister()
+; Hotkeys register
+ImeHotkeyRegisterInitialize()
 {
     local
     ; symbol
