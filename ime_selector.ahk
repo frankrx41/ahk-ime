@@ -33,3 +33,21 @@ ImeSelectorGetColumn()
     global ime_selector_column
     return ime_selector_column
 }
+
+ImeSelectorGetSelectIndex()
+{
+    global ime_input_candidate
+    return ime_input_candidate.GetSelectIndex()
+}
+
+ImeSelectorSetSelectIndex(index)
+{
+    global ime_input_candidate
+    ime_input_candidate.SetSelectIndex(index)
+}
+
+ImeSelectorOffsetSelectIndex(offset)
+{
+    global ime_input_candidate
+    ime_input_candidate.OffsetSelectIndex(offset)
+}

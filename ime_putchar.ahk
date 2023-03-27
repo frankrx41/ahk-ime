@@ -4,12 +4,15 @@ PutCharacter(str, mode:=""){
     SendInput, % "{Text}" str
 }
 
-PutCandidateCharacter(candidate)
+PutCandidateCharacter()
 {
+    local
+    global ime_input_candidate
     global ime_input_string
     global ime_input_caret_pos
     global DB
 
+    candidate := ime_input_candidate
     send_word := candidate.SendWordThenUpdate(DB)
     PutCharacter( send_word )
 
@@ -28,6 +31,7 @@ PutCandidateCharacter(candidate)
 PutCharacterWordByWord(select_index, offset)
 {
     global ime_input_candidate
+    
     string := ime_input_candidate.GetWord(select_index)
     PutCharacter( SubStr(string, offset, 1) )
     ImeInputClearString()

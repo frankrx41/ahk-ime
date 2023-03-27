@@ -141,3 +141,24 @@ ImeInputCaretFastMoveAt(char, input_string, origin_index, back_to_front)
     }
     return origin_index
 }
+
+;*******************************************************************************
+;
+ImeInputterGetRadical()
+{
+    global ime_input_candidate
+    return ime_input_candidate.GetInputRadical()
+}
+
+ImeInputterUpdateRadical(input_radical)
+{
+    global ime_input_candidate
+    ime_input_candidate.UpdateInputRadical(input_radical)
+}
+
+ImeInputterUpdateString(input_string)
+{
+    global ime_input_candidate
+    global DB
+    ime_input_candidate.Initialize(input_string)
+}

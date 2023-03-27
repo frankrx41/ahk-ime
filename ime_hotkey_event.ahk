@@ -8,13 +8,13 @@ HotkeyOnAlphabet(char)
 
 HotkeyOnNumber(char)
 {
-    global ime_input_candidate
-
+    local
     ; 选择相应的编号并上屏
     if( ImeSelectorIsOpen() ) {
-        start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
-        ime_input_candidate.SetSelectIndex(start_index + (char == 0 ? 10 : char))
-        PutCandidateCharacter(ime_input_candidate)
+        index := Floor((ImeSelectorGetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
+        index += (char == 0 ? 10 : char)
+        ImeSelectorSetSelectIndex(index)
+        PutCandidateCharacter()
         ImeTooltipUpdate()
     }
     else {
@@ -42,17 +42,15 @@ HotkeyOnCtrlShiftAlphabet(char)
 HotkeyOnBackSpace()
 {
     local
-    global ime_input_candidate
     global ime_input_string
     global ime_input_caret_pos
     global tooltip_debug
-    global DB
 
-    input_radical := ime_input_candidate.GetInputRadical()
+    input_radical := ImeInputterGetRadical()
     if( input_radical ){
         input_radical := SubStr(input_radical, 1, StrLen(input_radical)-1)
-        ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.UpdateInputRadical( input_radical )
+        ImeSelectorSetSelectIndex(1)
+        ImeInputterUpdateRadical(input_radical)
         ImeTooltipUpdate()
     }
     else if( ime_input_caret_pos != 0 ){
@@ -60,7 +58,7 @@ HotkeyOnBackSpace()
         tooltip_debug[7] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate.Initialize(ime_input_string, DB)
+        ImeInputterUpdateString(ime_input_string)
         ImeTooltipUpdate()
     }
 }

@@ -5,18 +5,18 @@
 ; Enter 上屏文字
 Enter::
 NumpadEnter::
-    PutCandidateCharacter(ime_input_candidate)
+    PutCandidateCharacter()
     ImeTooltipUpdate()
 return
 
 ]::
-    PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 0)
+    PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 0)
     ImeSelectorOpen(false)
     ImeTooltipUpdate()
 return
 
 [::
-    PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 1)
+    PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 1)
     ImeSelectorOpen(false)
     ImeTooltipUpdate()
 return
@@ -27,7 +27,7 @@ Tab::
         if( !ImeSelectorShowMultiple() ) {
             ImeSelectorOpen(true, true)
         } else {
-            ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
+            ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
         }
     } else {
         ImeSelectorOpen(true, false)
@@ -41,8 +41,8 @@ return
             ImeSelectorOpen(false)
         }
         else { 
-            ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
-            if( ImeSelectorGetColumn() >= ime_input_candidate.GetSelectIndex() ){
+            ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
+            if( ImeSelectorGetColumn() >= ImeSelectorGetSelectIndex() ){
                 ImeSelectorOpen(true, false)
             }
         }
@@ -71,18 +71,18 @@ return
 
 ,::
     if( ImeSelectorIsOpen() ){
-        ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
+        ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
-        ime_input_candidate.OffsetSelectIndex(-1)
+        ImeSelectorOffsetSelectIndex(-1)
     }
     ImeTooltipUpdate()
 return
 
 .::
     if( ImeSelectorIsOpen() ){
-        ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
+        ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
-        ime_input_candidate.OffsetSelectIndex(+1)
+        ImeSelectorOffsetSelectIndex(+1)
     }
     ImeTooltipUpdate()
 return
@@ -90,7 +90,7 @@ return
 -::
     if( ImeSelectorIsOpen() ){
         ImeSelectorOpen(true, true)
-        ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
+        ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
     }
     ImeTooltipUpdate()
 return
@@ -98,7 +98,7 @@ return
 =::
     if( ImeSelectorIsOpen() ){
         ImeSelectorOpen(true, true)
-        ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
+        ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
     }
     ImeTooltipUpdate()
 return
@@ -106,7 +106,7 @@ return
 ; 左右键移动光标
 Left::
     if( ImeSelectorIsOpen() ){
-        ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
+        ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
         ImeInputCaretMove(-1, true)
     }
@@ -115,7 +115,7 @@ return
 
 Right::
     if( ImeSelectorIsOpen() ){
-        ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
+        ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
         ImeInputCaretMove(+1, true)
     }
@@ -148,12 +148,12 @@ return
 ; 上下选择
 Up::
     if( ImeSelectorIsOpen() ) {
-        ime_input_candidate.OffsetSelectIndex(-1)
+        ImeSelectorOffsetSelectIndex(-1)
     } else {
-        if( ime_input_candidate.GetSelectIndex() >= 4 ) {
-            ime_input_candidate.SetSelectIndex(1)
+        if( ImeSelectorGetSelectIndex() >= 4 ) {
+            ImeSelectorSetSelectIndex(1)
         } else {
-            ime_input_candidate.OffsetSelectIndex(+1)
+            ImeSelectorOffsetSelectIndex(+1)
         }
     }
     ImeTooltipUpdate()
@@ -164,7 +164,7 @@ Down::
     if( !ImeSelectorIsOpen() ) {
         ImeSelectorOpen(true, false)
     } else {
-        ime_input_candidate.OffsetSelectIndex(+1)
+        ImeSelectorOffsetSelectIndex(+1)
     }
     ImeTooltipUpdate()
 return
