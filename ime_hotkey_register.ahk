@@ -30,7 +30,7 @@ ImeHotkeyRegisterInitialize()
     Hotkey, if, ime_input_string
     {
         ; Space and ' to spilt word
-        func := Func("HotkeyOnSplitMark").Bind(" ")
+        func := Func("HotkeyOnSpace")
         Hotkey, Space, %func%
         func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, ', %func%

@@ -71,10 +71,6 @@ ImeInputterProcessChar(input_char, pos := -1, try_puts := 0)
             ImeSelectorSetSelectIndex(1)
             ImeInputterUpdateRadical(ImeInputterGetRadical() . input_char)
         }
-        if( input_char == " " && ImeSelectorIsOpen() )
-        {
-            ime_input_candidate.ToggleSingleMode()
-        }
     }
     else
     {

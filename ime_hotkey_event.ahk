@@ -105,3 +105,14 @@ HotkeyOnSplitMark(char)
     ImeInputterProcessChar(char)
     ImeTooltipUpdate()
 }
+
+HotkeyOnSpace()
+{
+    if( ImeSelectorIsOpen() ) {
+        ImeSelectorToggleSingleMode()
+    }
+    else {
+        ImeInputterProcessChar(" ")
+    }
+    ImeTooltipUpdate()
+}

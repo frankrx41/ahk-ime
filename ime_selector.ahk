@@ -51,3 +51,9 @@ ImeSelectorOffsetSelectIndex(offset)
     global ime_input_candidate
     ime_input_candidate.OffsetSelectIndex(offset)
 }
+
+ImeSelectorToggleSingleMode()
+{
+    global ime_input_candidate
+    ime_input_candidate.ToggleSingleMode()
+}
