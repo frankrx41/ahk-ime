@@ -90,25 +90,23 @@ PinyinSqlWhereCommand(sim_key, full_key)
 ; wo3ai4ni3 -> wo3ai4ni3
 ; kannid -> kan'ni'd%
 ; kannide -> kan'ni'de'
-PinyinSqlGetResult(DB, input_str, auto_comple:=false, limit_num:=100)
+PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
 {
     local
     Critical
     global tooltip_debug
 
-    ; input_str := LTrim(input_str, "'")
-    Assert(!InStr(input_str, "|"))
-    ; Assert(SubStr(input_str, 0, 1) != "'")
+    Assert(!InStr(split_input, "|"))
 
     ; Get first char
-    sql_sim_key     := PinyinSqlSimpleKey(input_str, auto_comple)
-    sql_full_key    := PinyinSqlFullKey(input_str, auto_comple)
+    sql_sim_key     := PinyinSqlSimpleKey(split_input, auto_comple)
+    sql_full_key    := PinyinSqlFullKey(split_input, auto_comple)
     if( StrLen(sql_full_key) != 2 && StrReplace(sql_full_key, "%") == sql_sim_key ){
         sql_full_key := ""
     }
 
     sql_cmd         := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
-    tooltip_debug[3] .= "`n[" input_str "]: """ sql_cmd
+    tooltip_debug[3] .= "`n[" split_input "]: """ sql_cmd
     ; tooltip_debug[3] .= "`n" CallStack(4)
 
     sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd
@@ -116,25 +114,15 @@ PinyinSqlGetResult(DB, input_str, auto_comple:=false, limit_num:=100)
 
     if( DB.GetTable(sql_cmd, result_table) )
     {
-        ; result_table.Rows = [
-        ;   ["wu'hui", "舞会", "30000", "备注"]
-        ;   ["wu'hui", "误会", "26735", ""]
-        ; ]
-
-        if( result_table.RowCount )
-        {
-            loop % result_table.RowCount {
-                ; result_table.Rows[A_Index, -1] := origin_input
-                ; result_table.Rows[A_Index, 0] := "pinyin|" A_Index
-                ; result_table.Rows[A_Index, 4] := result_table.Rows[1, 3]
-            }
+        length := SplitWordGetWordCount(split_input)
+        loop % result_table.RowCount {
+            result_table.Rows[A_Index, 5] := length
         }
-        result_table.Rows[0] := input_str
+        result_table.Rows[0] := split_input
         ; result_table.Rows = [
-        ;   [0]: "wu'hui"
-        ;        ; -1     , 0         , 1
-        ;   [1]: ["wu'hui", "pinyin|1", "wu'hui", "舞会", "30000", "30000"]
-        ;   [2]: ["wu'hui", "pinyin|2", "wu'hui", "误会", "26735", "30000"]
+        ;   [0]: "wu'hui'"
+        ;   [1]: ["wu3hui4", "舞会", "30000", "", 2]
+        ;   [2]: ["wu4hui4", "误会", "26735", "", 2]
         ; ]
         tooltip_debug[3] .= """->(" result_table.RowCount ")"
         ; tooltip_debug[3] .= "`n" origin_input "," full_key_1 ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
