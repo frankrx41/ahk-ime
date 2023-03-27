@@ -5,7 +5,7 @@ SplitWordGetWordCount(word)
     return count
 }
 
-SplitWordTrimMaxCount(word, max:=8)
+SplitWordTrimMaxCount(word, max)
 {
     ; "kai'xin'a'" -> "xin'a'"
     return RegExReplace(word, "^(([^'12345]+['12345]?){0," max "}).*$", "$1")
@@ -23,6 +23,7 @@ SplitWordRemoveLastWord(word)
     return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
 }
 
+;*******************************************************************************
 IsTone(tone)
 {
     return tone && InStr("12345' ", tone)

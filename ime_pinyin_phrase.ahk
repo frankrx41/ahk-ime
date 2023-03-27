@@ -19,15 +19,10 @@ PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
     return
 }
 
-GetFirstWord(input_str)
-{
-    return RegExReplace(input_str, "^([a-z]+[12345'%]).*", "$1")
-}
-
 PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, input_split_string)
 {
     local
-    first_word := GetFirstWord(input_split_string)
+    first_word := SplitWordTrimMaxCount(input_split_string, 1)
     PinyinHistoryUpdateKey(DB, first_word)
     PinyinResultPushHistory(search_result, first_word)
     return
@@ -58,6 +53,7 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
     return
 }
 
+;*******************************************************************************
 ; 拼音取词
 PinyinGetSentences(ime_orgin_input, ime_input_split:="", DB:="")
 {
