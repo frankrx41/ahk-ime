@@ -85,6 +85,10 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
             ime_input_candidate.SetSelectIndex(1)
             ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
         }
+        if( input_char == " " && ImeIsSelectMenuOpen() )
+        {
+            ime_input_candidate.ToggleSingleMode()
+        }
     }
     else
     {

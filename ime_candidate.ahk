@@ -11,6 +11,7 @@ class Candidate
         This.input_split    := ""
         This.split_indexs   := []
         This.radical        := ""
+        This.single_mode    := false
     }
 
     Initialize(input_string, DB:="") {
@@ -29,21 +30,38 @@ class Candidate
             This.input_split := PinyinSplit(This.input_string, split_indexs)
             This.split_indexs := split_indexs
             This.candidate_origin := PinyinGetCandidate(This.input_string, This.input_split, DB)
-            This.candidate_filtered := CopyObj(This.candidate_origin)
+            This.UpdateCandidate()
         } else {
             This.input_string := ""
         }
     }
 
-    UpdateInputRadical(radical)
+    UpdateCandidate()
     {
         local
-        This.radical := radical
-        search_result := This.candidate_origin
-        if( This.radical ){
-            PinyinResultFilterByRadical(search_result, This.radical)
+        search_result := CopyObj(This.candidate_origin)
+        if( search_result )
+        {
+            if( This.radical ){
+                PinyinResultFilterByRadical(search_result, This.radical)
+            }
+            if( This.single_mode ){
+                PinyinResultFilterSingleWord(search_result)
+            }
         }
         This.candidate_filtered := search_result
+    }
+
+    UpdateInputRadical(radical)
+    {
+        This.radical := radical
+        This.UpdateCandidate()
+    }
+
+    ToggleSingleMode()
+    {
+        This.single_mode := !This.single_mode
+        This.UpdateCandidate()
     }
 
     GetSendLength(full_input_string, send_pinyin_string)
