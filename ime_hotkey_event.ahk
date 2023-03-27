@@ -1,6 +1,6 @@
 ;*******************************************************************************
 ; Hotkey
-HotkeyOnChar(char)
+HotkeyOnAlphabet(char)
 {
     ImeInputProcessChar(char)
     ImeTooltipUpdate()
@@ -23,7 +23,7 @@ HotkeyOnNumber(char)
     }
 }
 
-HotkeyOnCtrlAlpha(char)
+HotkeyOnCtrlAlphabet(char)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -31,7 +31,7 @@ HotkeyOnCtrlAlpha(char)
     ImeTooltipUpdate()
 }
 
-HotkeyOnCtrlShiftAlpha(char)
+HotkeyOnCtrlShiftAlphabet(char)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -97,4 +97,10 @@ HotkeyOnShiftSetMode(mode)
     ImeHotkeyRegisterShift()
     ImeTooltipUpdate("")
     ImeIconSetMode(mode)
+}
+
+HotkeyOnSplitMark(char)
+{
+    ImeInputProcessChar(char)
+    ImeTooltipUpdate()
 }

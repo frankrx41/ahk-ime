@@ -21,7 +21,7 @@ ImeHotkeyRegisterInitialize()
         loop 26
         {
             ; a-z
-            func := Func("HotkeyOnChar").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnAlphabet").Bind(Chr(96+A_Index))
             Hotkey, % Chr(96+A_Index), %func%
         }
     }
@@ -30,13 +30,13 @@ ImeHotkeyRegisterInitialize()
     Hotkey, if, ime_input_string
     {
         ; Space and ' to spilt word
-        func := Func("HotkeyOnChar").Bind(" ")
+        func := Func("HotkeyOnSplitMark").Bind(" ")
         Hotkey, Space, %func%
-        func := Func("HotkeyOnChar").Bind("'")
+        func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, ', %func%
-        func := Func("HotkeyOnChar").Bind("'")
+        func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, \, %func%
-        func := Func("HotkeyOnChar").Bind("'")
+        func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, `;, %func%
         ; 0-9
         loop 10 {
@@ -47,12 +47,13 @@ ImeHotkeyRegisterInitialize()
         loop 26
         {
             ; A-Z
-            func := Func("HotkeyOnChar").Bind(Format("{:U}", Chr(96+A_Index)))
+            func := Func("HotkeyOnAlphabet").Bind(Format("{:U}", Chr(96+A_Index)))
             Hotkey, % "+" Chr(96+A_Index), %func%
 
-            func := Func("HotkeyOnCtrlAlpha").Bind(Chr(96+A_Index))
+            ; Ctrl + Shift + A-Z
+            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index))
             Hotkey, % "^" Chr(96+A_Index), %func%
-            func := Func("HotkeyOnCtrlShiftAlpha").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnCtrlShiftAlphabet").Bind(Chr(96+A_Index))
             Hotkey, % "^+" Chr(96+A_Index), %func%
         }
     }
