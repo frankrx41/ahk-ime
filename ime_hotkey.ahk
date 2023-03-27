@@ -87,6 +87,22 @@ return
     ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
 return
 
+-::
+    if( ImeIsSelectMenuOpen() ){
+        ImeOpenSelectMenu(true, true)
+        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+    }
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+return
+
+=::
+    if( ImeIsSelectMenuOpen() ){
+        ImeOpenSelectMenu(true, true)
+        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+    }
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+return
+
 ; 左右键移动光标
 Left::
     if( ImeIsSelectMenuOpen() ){
