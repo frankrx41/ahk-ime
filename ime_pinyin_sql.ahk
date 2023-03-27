@@ -2,19 +2,14 @@
 ; zhong'hua -> z_h_
 ; wo3ai4ni3 -> w3a4n3
 ; wo3ai4ni% -> w3a4n% or w3a4n_
-PinyinSqlSimpleKey(input_str)
+PinyinSqlSimpleKey(input_str, auto_comple:=false)
 {
     key_value := input_str
     last_char := SubStr(key_value, 0, 1)
     key_value := StrReplace(key_value, "'", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
-    if( last_char == "%" ){
-        ; simple spell mode
-        if( occurr_cnt >= 4 ){
-            key_value .= "%"
-        } else {
-            key_value .= "_"
-        }
+    if( auto_comple ){
+        key_value .= "%"
     }
     else if( !InStr("_12345", SubStr(key_value, 0, 1)) ){
         key_value .= "_"
@@ -23,7 +18,7 @@ PinyinSqlSimpleKey(input_str)
     return key_value
 }
 
-PinyinSqlFullKey(input_str, sim_key)
+PinyinSqlFullKey(input_str, auto_comple:=false)
 {
     key_value := input_str
     key_value := StrReplace(key_value, "'", "_")
@@ -31,10 +26,6 @@ PinyinSqlFullKey(input_str, sim_key)
 
     if( !InStr("_%12345", last_char) ){
         key_value .= "%_"
-    }
-
-    if( StrLen(key_value) != 2 && StrReplace(key_value, "%") == sim_key ){
-        key_value := ""
     }
     return key_value
 }
@@ -110,8 +101,12 @@ PinyinSqlGetResult(DB, input_str, auto_comple:=false, limit_num:=100)
     ; Assert(SubStr(input_str, 0, 1) != "'")
 
     ; Get first char
-    sql_sim_key     := PinyinSqlSimpleKey(input_str)
-    sql_full_key    := PinyinSqlFullKey(input_str, sql_sim_key)
+    sql_sim_key     := PinyinSqlSimpleKey(input_str, auto_comple)
+    sql_full_key    := PinyinSqlFullKey(input_str, auto_comple)
+    if( StrLen(sql_full_key) != 2 && StrReplace(sql_full_key, "%") == sql_sim_key ){
+        sql_full_key := ""
+    }
+
     sql_cmd         := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
     tooltip_debug[3] .= "`n[" input_str "]: """ sql_cmd
     ; tooltip_debug[3] .= "`n" CallStack(4)
