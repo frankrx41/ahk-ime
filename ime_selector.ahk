@@ -1,36 +1,35 @@
-ImeSelectInitialize()
+ImeSelectorInitialize()
 {
-    global ime_selectmenu_column    := 10       ; 最大候选词个数
-    global ime_selectmenu_open      := 0        ; 是否打开选字窗口
-    global ime_selectmenu_more      := 0        ; Show more column
+    global ime_selector_column              := 10       ; 最大候选词个数
+    global ime_selector_is_open             := 0        ; 是否打开选字窗口
+    global ime_selector_is_show_multiple    := 0        ; Show more column
 }
 
 ;*******************************************************************************
-ImeOpenSelectMenu(open, more := false)
+ImeSelectorOpen(open, more := false)
 {
-    global ime_selectmenu_open
-    global ime_selectmenu_more
+    global ime_selector_is_open
+    global ime_selector_is_show_multiple
 
-    ime_selectmenu_open := open
-    ime_selectmenu_more := more
+    ime_selector_is_open := open
+    ime_selector_is_show_multiple := more
     return
 }
 
-ImeIsSelectMenuOpen()
+ImeSelectorIsOpen()
 {
-    global ime_selectmenu_open
-    return ime_selectmenu_open
+    global ime_selector_is_open
+    return ime_selector_is_open
 }
 
-ImeIsSelectMenuMore()
+ImeSelectorShowMultiple()
 {
-    global ime_selectmenu_more
-    return ime_selectmenu_more
+    global ime_selector_is_show_multiple
+    return ime_selector_is_show_multiple
 }
 
-GetSelectMenuColumn()
+ImeSelectorGetColumn()
 {
-    global ime_selectmenu_column
-    return ime_selectmenu_column
+    global ime_selector_column
+    return ime_selector_column
 }
-

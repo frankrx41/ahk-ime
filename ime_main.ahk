@@ -20,7 +20,7 @@ global ime_input_caret_pos  := 0                ; 光标位置
 global ime_input_candidate  := new Candidate    ; 候选项
 
 ImeDBInitialize()
-ImeSelectInitialize()
+ImeSelectorInitialize()
 ImeStateInitialize()
 PinyinInitialize()
 ImeStateUpdateMode()

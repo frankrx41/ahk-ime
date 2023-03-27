@@ -11,39 +11,39 @@ return
 
 ]::
     PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 0)
-    ImeOpenSelectMenu(false)
+    ImeSelectorOpen(false)
     ImeTooltipUpdate()
 return
 
 [::
     PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 1)
-    ImeOpenSelectMenu(false)
+    ImeSelectorOpen(false)
     ImeTooltipUpdate()
 return
 
 ; Tab: Show more select items
 Tab::
-    if( ImeIsSelectMenuOpen() ){
-        if( !ImeIsSelectMenuMore() ) {
-            ImeOpenSelectMenu(true, true)
+    if( ImeSelectorIsOpen() ){
+        if( !ImeSelectorShowMultiple() ) {
+            ImeSelectorOpen(true, true)
         } else {
-            ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+            ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
         }
     } else {
-        ImeOpenSelectMenu(true, false)
+        ImeSelectorOpen(true, false)
     }
     ImeTooltipUpdate()
 return
 
 +Tab::
-    if( ImeIsSelectMenuOpen() ){
-        if( !ImeIsSelectMenuMore() ){
-            ImeOpenSelectMenu(false)
+    if( ImeSelectorIsOpen() ){
+        if( !ImeSelectorShowMultiple() ){
+            ImeSelectorOpen(false)
         }
         else { 
-            ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
-            if( GetSelectMenuColumn() >= ime_input_candidate.GetSelectIndex() ){
-                ImeOpenSelectMenu(true, false)
+            ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
+            if( ImeSelectorGetColumn() >= ime_input_candidate.GetSelectIndex() ){
+                ImeSelectorOpen(true, false)
             }
         }
         ImeTooltipUpdate()
@@ -70,8 +70,8 @@ Esc::
 return
 
 ,::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
         ime_input_candidate.OffsetSelectIndex(-1)
     }
@@ -79,8 +79,8 @@ return
 return
 
 .::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
         ime_input_candidate.OffsetSelectIndex(+1)
     }
@@ -88,25 +88,25 @@ return
 return
 
 -::
-    if( ImeIsSelectMenuOpen() ){
-        ImeOpenSelectMenu(true, true)
-        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOpen(true, true)
+        ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
     }
     ImeTooltipUpdate()
 return
 
 =::
-    if( ImeIsSelectMenuOpen() ){
-        ImeOpenSelectMenu(true, true)
-        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOpen(true, true)
+        ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
     }
     ImeTooltipUpdate()
 return
 
 ; 左右键移动光标
 Left::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ime_input_candidate.OffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
         ImeInputCaretMove(-1, true)
     }
@@ -114,8 +114,8 @@ Left::
 return
 
 Right::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ime_input_candidate.OffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
         ImeInputCaretMove(+1, true)
     }
@@ -147,7 +147,7 @@ return
 
 ; 上下选择
 Up::
-    if( ImeIsSelectMenuOpen() ) {
+    if( ImeSelectorIsOpen() ) {
         ime_input_candidate.OffsetSelectIndex(-1)
     } else {
         if( ime_input_candidate.GetSelectIndex() >= 4 ) {
@@ -161,8 +161,8 @@ return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
 Down::
-    if( !ImeIsSelectMenuOpen() ) {
-        ImeOpenSelectMenu(true, false)
+    if( !ImeSelectorIsOpen() ) {
+        ImeSelectorOpen(true, false)
     } else {
         ime_input_candidate.OffsetSelectIndex(+1)
     }

@@ -43,7 +43,7 @@ ImeInputClearLastSplitted()
     if( ime_input_caret_pos == 0 )
     {
         ImeInputClearString()
-        ImeOpenSelectMenu(false)
+        ImeSelectorOpen(false)
     }
     else
     {
@@ -62,14 +62,14 @@ ImeInputProcessChar(input_char, pos := -1, try_puts := 0)
     global DB
 
     tooltip_debug := []
-    if( ImeIsSelectMenuOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
+    if( ImeSelectorIsOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
-        if( !ImeIsSelectMenuOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
+        if( !ImeSelectorIsOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
         {
             ime_input_candidate.SetSelectIndex(1)
             ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
         }
-        if( input_char == " " && ImeIsSelectMenuOpen() )
+        if( input_char == " " && ImeSelectorIsOpen() )
         {
             ime_input_candidate.ToggleSingleMode()
         }
@@ -80,7 +80,7 @@ ImeInputProcessChar(input_char, pos := -1, try_puts := 0)
         ime_input_string := SubStr(ime_input_string, 1, pos) . input_char . SubStr(ime_input_string, pos+1)
         ime_input_caret_pos := pos + 1
 
-        ImeOpenSelectMenu(false)
+        ImeSelectorOpen(false)
         if( try_puts && StrLen(ime_input_string) == 1 ) {
             PutCharacter(input_char)
             ImeInputClearString()

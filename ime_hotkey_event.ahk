@@ -11,8 +11,8 @@ HotkeyOnNumber(char)
     global ime_input_candidate
 
     ; 选择相应的编号并上屏
-    if( ImeIsSelectMenuOpen() ) {
-        start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
+    if( ImeSelectorIsOpen() ) {
+        start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
         ime_input_candidate.SetSelectIndex(start_index + (char == 0 ? 10 : char))
         PutCandidateCharacter(ime_input_candidate)
         ImeTooltipUpdate()
@@ -69,11 +69,11 @@ HotkeyOnEsc()
 {
     static last_esc_tick := 0
 
-    if( ImeIsSelectMenuOpen() ) {
-        if( ImeIsSelectMenuMore() ) {
-            ImeOpenSelectMenu(true, false)
+    if( ImeSelectorIsOpen() ) {
+        if( ImeSelectorShowMultiple() ) {
+            ImeSelectorOpen(true, false)
         } else {
-            ImeOpenSelectMenu(false)
+            ImeSelectorOpen(false)
         }
     } else {
         if( A_TickCount - last_esc_tick < 1000 ){
@@ -93,7 +93,7 @@ HotkeyOnShiftSetMode(mode)
         if ( ime_input_string ) {
             PutCharacter(ime_input_string)
             ImeInputClearString()
-            ImeOpenSelectMenu(false)
+            ImeSelectorOpen(false)
         }
     }
     ImeModeSetLanguage(mode)

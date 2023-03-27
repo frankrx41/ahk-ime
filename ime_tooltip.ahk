@@ -1,11 +1,11 @@
 DisplaySelectItems(candidate)
 {
     local
-    column          := GetSelectMenuColumn()
+    column          := ImeSelectorGetColumn()
     select_index    := candidate.GetSelectIndex()
     ime_select_str  := "----------------"
-    start_index     := ImeIsSelectMenuMore() ? 0 : Floor((select_index-1) / column) * column
-    column_loop     := ImeIsSelectMenuMore() ? Floor(candidate.GetListLength() / column) +1 : 1
+    start_index     := ImeSelectorShowMultiple() ? 0 : Floor((select_index-1) / column) * column
+    column_loop     := ImeSelectorShowMultiple() ? Floor(candidate.GetListLength() / column) +1 : 1
     max_item_len    := []
     max_column_loop := 6
 
@@ -92,7 +92,7 @@ ImeTooltipUpdate(tooltip_pos := "")
     else
     {
         if( candidate ) {
-            if( ImeIsSelectMenuOpen() ){
+            if( ImeSelectorIsOpen() ){
                 ime_select_str := DisplaySelectItems(candidate)
             } else {
                 ime_select_str := candidate.GetWord(candidate.GetSelectIndex())
