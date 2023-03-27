@@ -142,11 +142,6 @@ ImeInputterCaretFastMoveAt(char, back_to_front)
 
 ;*******************************************************************************
 ;
-ImeInputterUpdateRadical(input_radical)
-{
-    ImeTranslatorUpdateInputRadical(input_radical)
-}
-
 ImeInputterUpdateString(input_string)
 {
     ImeTranslatorUpdateInputString(input_string)

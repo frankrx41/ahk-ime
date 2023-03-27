@@ -2,7 +2,7 @@ ImeTranslatorClear()
 {
     global ime_translator_result_const      := []
     global ime_translator_result_filtered   := []
-    global ime_translator_radical           := ""
+    global ime_translator_radical_list      := ""
     global ime_translator_input_string      := ""
     global ime_translator_input_split       := ""
     global ime_translator_split_indexs      := []
@@ -45,14 +45,14 @@ ImeTranslatorFilterResult(single_mode:=false)
 {
     local
     global ime_translator_result_const
-    global ime_translator_radical
+    global ime_translator_radical_list
     global ime_translator_result_filtered
 
     search_result := CopyObj(ime_translator_result_const)
     if( search_result )
     {
-        if( ime_translator_radical ){
-            PinyinResultFilterByRadical(search_result, ime_translator_radical)
+        if( ime_translator_radical_list ){
+            PinyinResultFilterByRadical(search_result, ime_translator_radical_list)
         }
         if( single_mode ){
             PinyinResultFilterSingleWord(search_result)
@@ -60,13 +60,6 @@ ImeTranslatorFilterResult(single_mode:=false)
     }
     ime_translator_result_filtered := search_result
     ime_translator_result_filtered[0] := 1
-}
-
-ImeTranslatorUpdateInputRadical(radical)
-{
-    global ime_translator_radical
-    ime_translator_radical := radical
-    ImeTranslatorFilterResult()
 }
 
 ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
