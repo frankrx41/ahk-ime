@@ -1,35 +1,30 @@
-SplitWordGetWordCount(word)
-{
-    ; 包含 word + tone + word + ... 格式
-    RegExReplace(word, "(['12345])", "", count)
-    return count
-}
-
-SplitWordTrimMaxCount(word, max)
-{
-    ; "kai'xin'a'" -> "xin'a'"
-    return RegExReplace(word, "^(([^'12345]+['12345]?){0," max "}).*$", "$1")
-}
-
-SplitWordRemoveFirstWord(word)
-{
-    ; "kai'xin'a'" -> "xin'a'"
-    return RegExReplace(word, "^[^'12345]+['12345]?")
-}
-
-SplitWordRemoveLastWord(word)
-{
-    ; "kai'xin'a'" -> "kai'xin'"
-    return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
-}
-
 ;*******************************************************************************
 IsTone(tone)
 {
     return tone && InStr("12345' ", tone)
 }
 
-GetTone(input_str, initials, vowels, ByRef index)
+IsSplitAbleAt(next_char)
+{
+    return next_char == "" || IsInitials(next_char) || IsTone(next_char)
+}
+
+;*******************************************************************************
+PinyinSplitTableInitialize()
+{
+    global split_weight_table := {}
+    FileRead, file_content, data\pinyin-split.txt
+    Loop, Parse, file_content, `n
+    {
+        key := RTrim(A_LoopField, "`r")
+        if( key ){
+            split_weight_table[key] := 1
+        }
+    }
+    Assert(split_weight_table.Count() != 0)
+}
+
+PinyinSplitGetTone(input_str, initials, vowels, ByRef index)
 {
     local
     strlen := StrLen(input_str)
@@ -46,7 +41,7 @@ GetTone(input_str, initials, vowels, ByRef index)
     return tone
 }
 
-CalcMaxVowelsLength(input_str, index)
+PinyinSplitMaxVowelsLength(input_str, index)
 {
     local
     strlen := StrLen(input_str)
@@ -68,26 +63,7 @@ CalcMaxVowelsLength(input_str, index)
     return vowels_max_len
 }
 
-IsSplitAbleAt(next_char)
-{
-    return next_char == "" || IsInitials(next_char) || IsTone(next_char)
-}
-
-PinyinSplitTableInitialize()
-{
-    global split_weight_table := {}
-    FileRead, file_content, data\pinyin-split.txt
-    Loop, Parse, file_content, `n
-    {
-        key := RTrim(A_LoopField, "`r")
-        if( key ){
-            split_weight_table[key] := 1
-        }
-    }
-    Assert(split_weight_table.Count() != 0)
-}
-
-IsInSplitTable(left_initials, left_vowels, right_string)
+PinyinSplitIsInTable(left_initials, left_vowels, right_string)
 {
     global split_weight_table
     right_string_len := StrLen(right_string)
@@ -104,7 +80,7 @@ IsInSplitTable(left_initials, left_vowels, right_string)
     return false
 }
 
-IsGracefulSplit(left_initials, left_vowels, right_string)
+PinyinSplitIsGraceful(left_initials, left_vowels, right_string)
 {
     next_char := SubStr(right_string, 1, 1)
     if( !right_string || IsTone(next_char) ){
@@ -119,7 +95,7 @@ IsGracefulSplit(left_initials, left_vowels, right_string)
 
     if( is_complete || IsCompletePinyin(right_initials, next_char) )
     {
-        return IsInSplitTable(left_initials, left_vowels, right_string)
+        return PinyinSplitIsInTable(left_initials, left_vowels, right_string)
     }
     else
     {
@@ -127,11 +103,11 @@ IsGracefulSplit(left_initials, left_vowels, right_string)
     }
 }
 
-GetVowels(input_str, initials, ByRef index)
+PinyinSplitGetVowels(input_str, initials, ByRef index)
 {
     local
     ; 最长是4个
-    vowels_max_len := CalcMaxVowelsLength(input_str, index)
+    vowels_max_len := PinyinSplitMaxVowelsLength(input_str, index)
     vowels      := ""
     vowels_len  := 0
     if( vowels_max_len > 0 )
@@ -144,7 +120,7 @@ GetVowels(input_str, initials, ByRef index)
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
                 ; tooltip_debug[1] .= "(" next_char ")"
-                if( IsSplitAbleAt(next_char) && IsGracefulSplit(initials, vowels, SubStr(input_str, index+vowels_len)) )
+                if( IsSplitAbleAt(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) )
                 {
                     break
                 }
@@ -162,7 +138,7 @@ GetVowels(input_str, initials, ByRef index)
     return vowels
 }
 
-GetInitials(input_str, initials, ByRef index)
+PinyinSplitGetInitials(input_str, initials, ByRef index)
 {
     local
     index += 1
@@ -202,10 +178,10 @@ PinyinSplit(origin_input, ByRef split_index_arr)
         {
             start_index := index
 
-            initials    := GetInitials(input_str, initials, index)
-            vowels      := GetVowels(input_str, initials, index)
+            initials    := PinyinSplitGetInitials(input_str, initials, index)
+            vowels      := PinyinSplitGetVowels(input_str, initials, index)
             full_vowels := GetFullVowels(initials, vowels)
-            tone        := GetTone(input_str, initials, vowels, index)
+            tone        := PinyinSplitGetTone(input_str, initials, vowels, index)
 
             ; 转全拼显示
             Assert(initials == GetFullInitials(initials))
