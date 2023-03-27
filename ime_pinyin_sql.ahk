@@ -2,9 +2,9 @@
 ; zhong'hua -> z_h_
 ; wo3ai4ni3 -> w3a4n3
 ; wo3ai4ni% -> w3a4n% or w3a4n_
-PinyinSqlSimpleKey(input_str, auto_comple:=false)
+PinyinSqlSimpleKey(split_input, auto_comple:=false)
 {
-    key_value := input_str
+    key_value := split_input
     last_char := SubStr(key_value, 0, 1)
     key_value := StrReplace(key_value, "'", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
@@ -18,9 +18,9 @@ PinyinSqlSimpleKey(input_str, auto_comple:=false)
     return key_value
 }
 
-PinyinSqlFullKey(input_str, auto_comple:=false)
+PinyinSqlFullKey(split_input, auto_comple:=false)
 {
-    key_value := input_str
+    key_value := split_input
     key_value := StrReplace(key_value, "'", "_")
     last_char := SubStr(key_value, 0, 1)
 
@@ -30,11 +30,11 @@ PinyinSqlFullKey(input_str, auto_comple:=false)
     return key_value
 }
 
-StrReplaceLastTone1To5(input_str)
+StrReplaceLastTone1To5(split_input)
 {
-    tone_pos := InStr(input_str, "1",,0,1)
+    tone_pos := InStr(split_input, "1",,0,1)
     if( tone_pos != 0 ){
-        new_str := SubStr(input_str, 1, tone_pos-1) "5" SubStr(input_str, tone_pos+1)
+        new_str := SubStr(split_input, 1, tone_pos-1) "5" SubStr(split_input, tone_pos+1)
         return new_str
     }else{
         return ""
