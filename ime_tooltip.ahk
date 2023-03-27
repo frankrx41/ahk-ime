@@ -65,13 +65,11 @@ DisplaySelectItems(candidate)
     return ime_select_str
 }
 
-; 更新坐标
 ImeTooltipUpdatePos()
 {
     ImeTooltipUpdate(GetCaretPos())
 }
 
-; 更新提示
 ImeTooltipUpdate(tooltip_pos := "")
 {
     local
@@ -109,6 +107,7 @@ ImeTooltipUpdate(tooltip_pos := "")
             ime_tooltip_pos := GetCaretPos()
         }
 
+        ; Debug info
         debug_tip := "`n----------------`n" "[" candidate.GetSelectIndex() "/" candidate.GetListLength() "] (" candidate.GetWeight(candidate.GetSelectIndex()) ")"
         debug_tip .= " {" WordGetRadical(candidate.GetWord(candidate.GetSelectIndex()), 10) "}"
         debug_tip .= " (" candidate.GetPinyin(candidate.GetSelectIndex()) ")"
