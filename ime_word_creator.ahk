@@ -50,7 +50,7 @@ WordCreatorUI( input_text )
 
     createButtonPinyin:
         Gui, create:Submit, NoHide
-        pinyin := WordCreatorDBGetPinyin(value)
+        pinyin := WordCreatorGetPinyin(value)
         pinyin := StrReplace(pinyin, " ")
         ; MsgBox, % value "," pinyin "," word_creator_ui_pinyin_key
         GuiControl, create:, word_creator_ui_pinyin_key, %pinyin%
@@ -124,7 +124,7 @@ WordCreatorDBGetWeight(DB, key, value)
     return -1
 }
 
-WordCreatorDBGetPinyin(word)
+WordCreatorGetPinyin(word)
 {
     if( word ){
         pypinyin_exe := "C:\SDK\Python\Python310\Scripts\pypinyin.exe"
