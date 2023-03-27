@@ -22,7 +22,7 @@
 #Include, ime_tooltip.ahk
 
 #Include, ime_input.ahk
-#Include, ime_select.ahk
+#Include, ime_selector.ahk
 #Include, ime_state.ahk
 #Include, ime_putchar.ahk
 
