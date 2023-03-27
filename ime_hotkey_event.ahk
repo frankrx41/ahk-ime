@@ -44,7 +44,7 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
         }
     }
 
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, update_coord)
+    ImeTooltipUpdate(update_coord)
 }
 
 HotkeyOnNumber(key)
@@ -58,7 +58,7 @@ HotkeyOnNumber(key)
         start_index := Floor((ime_input_candidate.GetSelectIndex()-1) / GetSelectMenuColumn()) * GetSelectMenuColumn()
         ime_input_candidate.SetSelectIndex(start_index + (key == 0 ? 10 : key))
         PutCandidateCharacter(ime_input_candidate)
-        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate()
     }
     else {
         HotkeyOnChar(key)
@@ -71,7 +71,7 @@ HotkeyOnCtrlAlpha(char)
     global ime_input_string
     global ime_input_candidate
     ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, true)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, false)
+    ImeTooltipUpdate()
 }
 
 HotkeyOnCtrlShiftAlpha(char)
@@ -80,7 +80,7 @@ HotkeyOnCtrlShiftAlpha(char)
     global ime_input_string
     global ime_input_candidate
     ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, false)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, false)
+    ImeTooltipUpdate()
 }
 
 HotkeyOnBackSpace()
@@ -97,7 +97,7 @@ HotkeyOnBackSpace()
         input_radical := SubStr(input_radical, 1, StrLen(input_radical)-1)
         ime_input_candidate.SetSelectIndex(1)
         ime_input_candidate.UpdateInputRadical( input_radical )
-        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate()
     }
     else if( ime_input_caret_pos != 0 ){
         tooltip_debug[1] := ""
@@ -105,7 +105,7 @@ HotkeyOnBackSpace()
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
         ime_input_candidate.Initialize(ime_input_string, DB)
-        ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate()
     }
 }
 
@@ -130,5 +130,5 @@ HotkeyOnEsc()
         }
     }
     last_esc_tick := A_TickCount
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 }

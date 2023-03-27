@@ -6,19 +6,19 @@
 Enter::
 NumpadEnter::
     PutCandidateCharacter(ime_input_candidate)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ]::
     PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 0)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 [::
     PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 1)
     ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; Tab: Show more select items
@@ -32,7 +32,7 @@ Tab::
     } else {
         ImeOpenSelectMenu(true, false)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 +Tab::
@@ -46,7 +46,7 @@ return
                 ImeOpenSelectMenu(true, false)
             }
         }
-        ImeTooltipUpdate(ime_input_string,  ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate()
     }
 return
 
@@ -59,7 +59,7 @@ return
 ; Delete word before this
 ^BackSpace::
     ImeClearSplitedInputBefore(ime_input_caret_pos)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; Esc
@@ -75,7 +75,7 @@ return
     } else {
         ime_input_candidate.OffsetSelectIndex(-1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 .::
@@ -84,7 +84,7 @@ return
     } else {
         ime_input_candidate.OffsetSelectIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 -::
@@ -92,7 +92,7 @@ return
         ImeOpenSelectMenu(true, true)
         ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 =::
@@ -100,7 +100,7 @@ return
         ImeOpenSelectMenu(true, true)
         ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; 左右键移动光标
@@ -110,7 +110,7 @@ Left::
     } else {
         ImeInputCaretMove(-1, true)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 Right::
@@ -119,30 +119,30 @@ Right::
     } else {
         ImeInputCaretMove(+1, true)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; Ctrl + Left/Right
 ; Move caret by a word
 ^Left::
     ImeInputCaretMove(-1, true)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ^Right::
     ImeInputCaretMove(+1, true)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
     ImeInputCaretMove(-1)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 +Right::
     ImeInputCaretMove(+1)
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; 上下选择
@@ -156,7 +156,7 @@ Up::
             ime_input_candidate.OffsetSelectIndex(+1)
         }
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
@@ -166,7 +166,7 @@ Down::
     } else {
         ime_input_candidate.OffsetSelectIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; 更新候选框位置
@@ -177,7 +177,7 @@ return
 return
 
 ImeTooltipUpdateTimer:
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate, true)
+    ImeTooltipUpdate(true)
 return
 
 #if ; ime_input_string

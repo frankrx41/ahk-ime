@@ -66,11 +66,19 @@ DisplaySelectItems(candidate)
 }
 
 ; 更新提示
-ImeTooltipUpdate(input_string, caret_pos:=0, candidate:=0, update_coord:=0)
+ImeTooltipUpdate(update_coord:=0)
 {
     local
     static ime_tooltip_pos := ""
     global tooltip_debug
+
+    global ime_input_string
+    global ime_input_caret_pos
+    global ime_input_candidate
+
+    input_string := ime_input_string
+    caret_pos := ime_input_caret_pos
+    candidate := ime_input_candidate
 
     if( !input_string )
     {
