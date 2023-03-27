@@ -1,9 +1,9 @@
-WordCreateGui( input_text )
+WordCreatorUI( input_text )
 {
     local
     static value, weight, comment
-    global create_gui_pinyin_key
-    global create_gui_pinyin_weight
+    global word_creator_ui_pinyin_key
+    global word_creator_ui_pinyin_weight
     global DB
 
     input_text := RegExReplace(input_text, "\s")
@@ -13,7 +13,7 @@ WordCreateGui( input_text )
     Gui, create:Font, s12
 
     Gui, create:Add, Text, , Key:
-    Gui, create:Add, Edit, x80 yp w335 -Multi r1 vcreate_gui_pinyin_key,
+    Gui, create:Add, Edit, x80 yp w335 -Multi r1 vword_creator_ui_pinyin_key,
     Gui, create:Add, Button, x+5 yp w60, Pinyin
 
     Gui, create:Add, Text, xm, Value:
@@ -23,7 +23,7 @@ WordCreateGui( input_text )
     Gui, create:Add, Edit, x80 yp w400 -Multi r1 vcomment,
 
     Gui, create:Add, Text, xm, Weight:
-    Gui, create:Add, Edit, x80 yp w100 Number vcreate_gui_pinyin_weight
+    Gui, create:Add, Edit, x80 yp w100 Number vword_creator_ui_pinyin_weight
     Gui, create:Add, UpDown, x160 yp w400 Range-1-65000, 28000
 
     Gui, create:Add, Button, x+5 w60, Weight
@@ -35,33 +35,33 @@ WordCreateGui( input_text )
     return
 
     createButtonWReset:
-        GuiControl, create:, create_gui_pinyin_weight, 28,000
+        GuiControl, create:, word_creator_ui_pinyin_weight, 28,000
     return
 
     createButtonWeight:
         Gui, create:Submit, NoHide
-        weight := GetWeight(DB, create_gui_pinyin_key, value)
+        weight := WordCreatorDBGetWeight(DB, word_creator_ui_pinyin_key, value)
         ; Make 1234 -> "1,234"
         if( weight >= 1000 ){
             weight := Floor((weight / 1000)) "," Format("{:03}", Mod(weight, 1000))
         }
-        GuiControl, create:, create_gui_pinyin_weight, %weight%
+        GuiControl, create:, word_creator_ui_pinyin_weight, %weight%
     return
 
     createButtonPinyin:
         Gui, create:Submit, NoHide
-        pinyin := GetPinyin(value)
+        pinyin := WordCreatorDBGetPinyin(value)
         pinyin := StrReplace(pinyin, " ")
-        ; MsgBox, % value "," pinyin "," create_gui_pinyin_key
-        GuiControl, create:, create_gui_pinyin_key, %pinyin%
+        ; MsgBox, % value "," pinyin "," word_creator_ui_pinyin_key
+        GuiControl, create:, word_creator_ui_pinyin_key, %pinyin%
     return
 
     createButtonOk:
         Gui, create:Submit, NoHide
-        ; MsgBox, % create_gui_pinyin_key "," value "," create_gui_pinyin_weight "," comment
-        if( create_gui_pinyin_key && value && create_gui_pinyin_weight ){
-            weight := StrReplace(create_gui_pinyin_weight, ",")
-            WordCreateDB(DB, create_gui_pinyin_key, value, weight, comment)
+        ; MsgBox, % word_creator_ui_pinyin_key "," value "," word_creator_ui_pinyin_weight "," comment
+        if( word_creator_ui_pinyin_key && value && word_creator_ui_pinyin_weight ){
+            weight := StrReplace(word_creator_ui_pinyin_weight, ",")
+            WordCreatorUpdateDB(DB, word_creator_ui_pinyin_key, value, weight, comment)
         } else {
             MsgBox, Please fill all value
         }
@@ -74,14 +74,14 @@ WordCreateGui( input_text )
     return
 }
 
-WordCreateDB(DB, key, value, weight:=28000, comment:="")
+WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
 {
     local
     Assert(key && value && weight)
     weight := Max(0, weight)
     sim := PinyinSqlSimpleKey(key)
 
-    if( GetWeight(DB, key, value) == -1 )
+    if( WordCreatorDBGetWeight(DB, key, value) == -1 )
     {
         sql_cmd := "INSERT INTO pinyin ( sim, [key], value, weight, comment ) "
         sql_cmd .= "VALUES ( '" sim "', '" key "', '" value "', " weight ", '" comment "' );"
@@ -105,7 +105,7 @@ WordCreateDB(DB, key, value, weight:=28000, comment:="")
     }
 }
 
-GetWeight(DB, key, value)
+WordCreatorDBGetWeight(DB, key, value)
 {
     sim := PinyinSqlSimpleKey(key)
     sql_cmd := "SELECT weight FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
@@ -124,7 +124,7 @@ GetWeight(DB, key, value)
     return -1
 }
 
-GetPinyin(word)
+WordCreatorDBGetPinyin(word)
 {
     if( word ){
         pypinyin_exe := "C:\SDK\Python\Python310\Scripts\pypinyin.exe"

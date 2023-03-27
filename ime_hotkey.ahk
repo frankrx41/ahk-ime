@@ -180,7 +180,7 @@ return
 #if ; ime_input_string
 
 !`::
-    WordCreateGui(GetSelectText())
+    WordCreatorUI(GetSelectText())
     PinyinHistoryClear()
 return
 
