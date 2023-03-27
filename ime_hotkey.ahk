@@ -58,7 +58,7 @@ return
 ; Ctrl + Backspace
 ; Delete word before this
 ^BackSpace::
-    ImeInputClearPrevSplitted(ime_input_caret_pos)
+    ImeInputterClearPrevSplitted(ime_input_caret_pos)
     ImeTooltipUpdate()
 return
 
@@ -108,7 +108,7 @@ Left::
     if( ImeSelectorIsOpen() ){
         ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
-        ImeInputCaretMove(-1, true)
+        ImeInputterCaretMove(-1, true)
     }
     ImeTooltipUpdate()
 return
@@ -117,7 +117,7 @@ Right::
     if( ImeSelectorIsOpen() ){
         ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
-        ImeInputCaretMove(+1, true)
+        ImeInputterCaretMove(+1, true)
     }
     ImeTooltipUpdate()
 return
@@ -125,23 +125,23 @@ return
 ; Ctrl + Left/Right
 ; Move caret by a word
 ^Left::
-    ImeInputCaretMove(-1, true)
+    ImeInputterCaretMove(-1, true)
     ImeTooltipUpdate()
 return
 
 ^Right::
-    ImeInputCaretMove(+1, true)
+    ImeInputterCaretMove(+1, true)
     ImeTooltipUpdate()
 return
 
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
-    ImeInputCaretMove(-1)
+    ImeInputterCaretMove(-1)
     ImeTooltipUpdate()
 return
 
 +Right::
-    ImeInputCaretMove(+1)
+    ImeInputterCaretMove(+1)
     ImeTooltipUpdate()
 return
 

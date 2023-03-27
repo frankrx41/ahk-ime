@@ -15,7 +15,7 @@ ImeHotkeyRegisterInitialize()
         ; symbol
         for key, char in symbol_ctrl_start_hotkey
         {
-            func := Func("ImeInputProcessChar").Bind(char, -1, true)
+            func := Func("ImeInputterProcessChar").Bind(char, -1, true)
             Hotkey, %key%, %func%
         }
         loop 26

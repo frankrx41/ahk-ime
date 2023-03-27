@@ -42,7 +42,7 @@ ImeStateUpdateMode(mode := "")
 {
     if(A_IsSuspended || ImeStatePauseWindowActive()){
         mode := ""
-        ImeInputClearString()
+        ImeInputterClearString()
         ImeSelectorOpen(false)
     } else {
         global ime_mode_language

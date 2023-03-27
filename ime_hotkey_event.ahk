@@ -2,7 +2,7 @@
 ; Hotkey
 HotkeyOnAlphabet(char)
 {
-    ImeInputProcessChar(char)
+    ImeInputterProcessChar(char)
     ImeTooltipUpdate()
 }
 
@@ -18,7 +18,7 @@ HotkeyOnNumber(char)
         ImeTooltipUpdate()
     }
     else {
-        ImeInputProcessChar(char)
+        ImeInputterProcessChar(char)
         ImeTooltipUpdate()
     }
 }
@@ -27,7 +27,7 @@ HotkeyOnCtrlAlphabet(char)
 {
     global ime_input_caret_pos
     global ime_input_string
-    ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, true)
+    ime_input_caret_pos := ImeInputterCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, true)
     ImeTooltipUpdate()
 }
 
@@ -35,7 +35,7 @@ HotkeyOnCtrlShiftAlphabet(char)
 {
     global ime_input_caret_pos
     global ime_input_string
-    ime_input_caret_pos := ImeInputCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, false)
+    ime_input_caret_pos := ImeInputterCaretFastMoveAt(char, ime_input_string, ime_input_caret_pos, false)
     ImeTooltipUpdate()
 }
 
@@ -75,9 +75,9 @@ HotkeyOnEsc()
         }
     } else {
         if( A_TickCount - last_esc_tick < 1000 ){
-            ImeInputClearString()
+            ImeInputterClearString()
         } else {
-            ImeInputClearLastSplitted()
+            ImeInputterClearLastSplitted()
         }
         last_esc_tick := A_TickCount
     }
@@ -90,7 +90,7 @@ HotkeyOnShiftSetMode(mode)
     if( mode == "en" ){
         if ( ime_input_string ) {
             PutCharacter(ime_input_string)
-            ImeInputClearString()
+            ImeInputterClearString()
             ImeSelectorOpen(false)
         }
     }
@@ -102,6 +102,6 @@ HotkeyOnShiftSetMode(mode)
 
 HotkeyOnSplitMark(char)
 {
-    ImeInputProcessChar(char)
+    ImeInputterProcessChar(char)
     ImeTooltipUpdate()
 }

@@ -1,6 +1,11 @@
 ;*******************************************************************************
 ; Input string
-ImeInputClearString()
+ImeInputterInitialize()
+{
+    global ime_input_candidate  := new Candidate    ; 候选项
+}
+
+ImeInputterClearString()
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -14,7 +19,7 @@ ImeInputClearString()
     return
 }
 
-ImeInputClearPrevSplitted(check_index)
+ImeInputterClearPrevSplitted(check_index)
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -32,7 +37,7 @@ ImeInputClearPrevSplitted(check_index)
     }
 }
 
-ImeInputClearLastSplitted()
+ImeInputterClearLastSplitted()
 {
     global ime_input_string
     global ime_input_caret_pos
@@ -42,7 +47,7 @@ ImeInputClearLastSplitted()
     ime_input_caret_pos := ime_input_candidate.GetLastWordPos()
     if( ime_input_caret_pos == 0 )
     {
-        ImeInputClearString()
+        ImeInputterClearString()
         ImeSelectorOpen(false)
     }
     else
@@ -53,7 +58,7 @@ ImeInputClearLastSplitted()
     }
 }
 
-ImeInputProcessChar(input_char, pos := -1, try_puts := 0)
+ImeInputterProcessChar(input_char, pos := -1, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -83,7 +88,7 @@ ImeInputProcessChar(input_char, pos := -1, try_puts := 0)
         ImeSelectorOpen(false)
         if( try_puts && StrLen(ime_input_string) == 1 ) {
             PutCharacter(input_char)
-            ImeInputClearString()
+            ImeInputterClearString()
         } else {
             ime_input_candidate.SetSelectIndex(1)
             ime_input_candidate.Initialize(ime_input_string, DB)
@@ -93,7 +98,7 @@ ImeInputProcessChar(input_char, pos := -1, try_puts := 0)
 
 ;*******************************************************************************
 ; Input caret
-ImeInputCaretMove(dir, by_word:=false)
+ImeInputterCaretMove(dir, by_word:=false)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -125,7 +130,7 @@ ImeInputCaretMove(dir, by_word:=false)
     }
 }
 
-ImeInputCaretFastMoveAt(char, input_string, origin_index, back_to_front)
+ImeInputterCaretFastMoveAt(char, input_string, origin_index, back_to_front)
 {
     local
 
