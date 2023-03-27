@@ -231,3 +231,27 @@ HotkeyOnBackSpace()
         ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
     }
 }
+
+HotkeyOnEsc()
+{
+    global ime_input_string
+    global ime_input_caret_pos
+    global ime_input_candidate
+    static last_esc_tick := 0
+
+    if( ImeIsSelectMenuOpen() ) {
+        if( ImeIsSelectMenuMore() ) {
+            ImeOpenSelectMenu(true, false)
+        } else {
+            ImeOpenSelectMenu(false)
+        }
+    } else {
+        if( A_TickCount - last_esc_tick < 1000 ){
+            ImeClearInputString()
+        } else {
+            ImeClearLastSplitedInput()
+        }
+    }
+    last_esc_tick := A_TickCount
+    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+}

@@ -66,21 +66,7 @@ return
 ; 如果有展开候选框则关闭
 ; 否则删除所有输入的字符
 Esc::
-    if( ImeIsSelectMenuOpen() ) {
-        if( ImeIsSelectMenuMore() ) {
-            ImeOpenSelectMenu(true, false)
-        } else {
-            ImeOpenSelectMenu(false)
-        }
-    } else {
-        if( A_TickCount - last_esc_tick < 1000 ){
-            ImeClearInputString()
-        } else {
-            ImeClearLastSplitedInput()
-        }
-    }
-    last_esc_tick := A_TickCount
-    ImeTooltipUpdate(ime_input_string, ime_input_caret_pos, ime_input_candidate)
+    HotkeyOnEsc()
 return
 
 ,::
