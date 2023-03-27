@@ -62,8 +62,8 @@ ImeHotkeyRegisterInitialize()
 
 ImeHotkeyRegisterShift()
 {
-    func_to_cn := Func("HotkeyOnShift").Bind("cn")
-    func_to_en := Func("HotkeyOnShift").Bind("en")
+    func_to_cn := Func("HotkeyOnShiftSetMode").Bind("cn")
+    func_to_en := Func("HotkeyOnShiftSetMode").Bind("en")
     if( ImeModeIsChinese() ) {
         ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
         Hotkey, Shift, % func_to_cn, Off

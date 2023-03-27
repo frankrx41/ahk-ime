@@ -119,7 +119,7 @@ HotkeyOnEsc()
     ImeTooltipUpdate()
 }
 
-HotkeyOnShift(mode)
+HotkeyOnShiftSetMode(mode)
 {
     global ime_input_string
     if ( ime_input_string ) {
