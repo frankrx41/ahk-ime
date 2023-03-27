@@ -3,33 +3,39 @@ PinyinHistoryClear()
     global history_field_array := []
 }
 
-PinyinHistoryHasResult(pinyin)
+PinyinHistoryHasResult(spilt_word)
 {
     global history_field_array
-    return history_field_array[pinyin, 1, 2] != ""
+    return history_field_array[spilt_word, 1, 2] != ""
 }
 
-PinyinHistoryHasKey(pinyin)
+PinyinHistoryHasKey(spilt_word)
 {
     global history_field_array
     global tooltip_debug
-    tooltip_debug[5] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
-    return history_field_array.HasKey(pinyin)
+    tooltip_debug[5] .= "`n[" spilt_word ": " history_field_array.HasKey(spilt_word) "]"
+    return history_field_array.HasKey(spilt_word)
 }
 
-PinyinHistoryUpdateKey(DB, pinyin, limit_num:=100)
+PinyinHistoryUpdateKey(DB, spilt_word, limit_num:=100)
 {
     global history_field_array
-    if( !PinyinHistoryHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
+    if( !PinyinHistoryHasKey(spilt_word) || history_field_array[spilt_word].Length()==2 && history_field_array[spilt_word,2,2]=="" )
     {
-        history_field_array[pinyin] := PinyinSqlGetResult(DB, pinyin, limit_num)
+        history_field_array[spilt_word] := PinyinSqlGetResult(DB, spilt_word, limit_num)
     }
 }
 
-PinyinHistoryGetWords(pinyin)
+PinyinHistoryGetWords(spilt_word)
 {
     global history_field_array
-    return history_field_array[pinyin]
+    return history_field_array[spilt_word]
+}
+
+PinyinHistoryGetResultLength(spilt_word)
+{
+    global history_field_array
+    return history_field_array[spilt_word].Length()
 }
 
 PinyinResultPushHistory(ByRef search_result, spilt_word, max_num := 100)
