@@ -94,23 +94,22 @@ PinyinResultFilterByRadical(ByRef search_result, input_radical)
     if( input_radical )
     {
         begin_tick := A_TickCount
-        found_result := []
+        index := 1
         loop % search_result.Length()
         {
-            test_pinyin := RadicalGetPinyin(search_result[A_Index,6])
+            test_pinyin := RadicalGetPinyin(search_result[index,6])
             content_radical := InStr(test_pinyin, input_radical)
-            same_as_radical := input_radical == search_result[A_Index, 2]
-            if( content_radical || same_as_radical )
+            same_as_radical := input_radical == search_result[index, 2]
+            if( !content_radical && !same_as_radical )
             {
-                found_result.Push(search_result[A_Index])
+                search_result.RemoveAt(index)
+            }
+            else
+            {
+                index += 1
             }
         }
 
-        if( found_result.Length() )
-        {
-            search_result := found_result
-        }
-        
-        tooltip_debug[6] := "Radical: [" input_radical "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+        ; tooltip_debug[6] := "Radical: [" input_radical "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
     }
 }
