@@ -78,10 +78,13 @@ HotkeyOnChar(input_char, pos := -1, try_puts := 0)
     if (!ime_input_string ) {
         update_coord := true
     }
-    if( InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
+    if( ImeIsSelectMenuOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
-        ime_input_candidate.SetSelectIndex(1)
-        ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
+        if( !ImeIsSelectMenuOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
+        {
+            ime_input_candidate.SetSelectIndex(1)
+            ime_input_candidate.UpdateInputRadical(ime_input_candidate.GetInputRadical() . input_char)
+        }
     }
     else
     {
