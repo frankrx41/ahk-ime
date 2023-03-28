@@ -13,8 +13,13 @@ ImeSelectorOpen(open, more := false)
     global ime_selector_is_open
     global ime_selector_is_show_multiple
     global ime_input_caret_pos
+    global ime_input_string
 
     ime_selector_is_open := open
+    if( open )
+    {
+        ImeInputterUpdateString(ime_input_string)
+    }
     if( more ){
         split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
         more := ImeTranslatorResultGetListLength(split_index) > ImeSelectorGetColumn()
