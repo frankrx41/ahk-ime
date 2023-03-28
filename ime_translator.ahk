@@ -165,6 +165,24 @@ ImeTranslatorFilterResult(single_mode:=false)
     ime_translator_result_filtered := search_result
 }
 
+ImeTranslatorGetResultString()
+{
+    global ime_translator_result_filtered
+    search_result := ime_translator_result_filtered
+
+    result_string := ""
+    loop % search_result.Length()
+    {
+        split_index := A_Index
+        select_index := ImeTranslatorGetSelectIndex(split_index)
+        if( select_index > 0 )
+        {
+            result_string .= ImeTranslatorGetWord(split_index, select_index)
+        }
+    }
+    return result_string
+}
+
 ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
 {
     local
@@ -210,25 +228,6 @@ ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
         index_input     += 1
     }
     return sent_string_len
-}
-
-ImeTranslatorSendWordThenUpdate()
-{
-    global tooltip_debug
-    global ime_translator_input_string
-
-    split_index := 1
-    send_word := ImeTranslatorGetWord(split_index, ImeTranslatorGetSelectIndex(split_index))
-    pinyin_string := ImeTranslatorGetPinyin(split_index, ImeTranslatorGetSelectIndex(split_index))
-
-    sent_string_len := ImeTranslatorGetSendLength(ime_translator_input_string, pinyin_string)
-
-    ime_translator_input_string := SubStr(ime_translator_input_string, sent_string_len+1)
-
-    tooltip_debug[11] := "[" send_word "] " pinyin_string "," ime_translator_input_string "," sent_string_len
-    ImeTranslatorSetSelectIndex(1, 1)
-    ImeTranslatorUpdateInputString(ime_translator_input_string)
-    return send_word
 }
 
 ImeTranslatorGetLastWordPos()
@@ -305,11 +304,6 @@ ImeTranslatorGetListLength(split_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index].Length()
-}
-ImeTranslatorGetRemainString()
-{
-    global ime_translator_input_string
-    return ime_translator_input_string
 }
 
 ImeTranslatorGetPinyin(split_index, word_index)

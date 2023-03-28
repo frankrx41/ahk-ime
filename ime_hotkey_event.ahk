@@ -14,7 +14,7 @@ HotkeyOnNumber(char)
         index := Floor((ImeSelectorGetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
         index += (char == 0 ? 10 : char)
         ImeSelectorSetSelectIndex(index)
-        PutCandidateCharacter()
+        ImeSelectorOpen(false)
         ImeTooltipUpdate()
     }
     else {
