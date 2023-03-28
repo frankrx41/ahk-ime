@@ -202,7 +202,7 @@ ImeTranslatorGetLeftWordPos(start_index)
     global ime_translator_split_indexs
 
     if( start_index == 0 ){
-        return ime_translator_split_indexs[ime_translator_split_indexs.Length()]
+        return 0
     }
     last_index := 0
     loop, % ime_translator_split_indexs.Length()
@@ -221,7 +221,7 @@ ImeTranslatorGetRightWordPos(start_index)
     local
     global ime_translator_split_indexs
 
-    last_index := 0
+    last_index := start_index
     loop, % ime_translator_split_indexs.Length()
     {
         split_index := ime_translator_split_indexs[A_Index]

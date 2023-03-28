@@ -94,9 +94,20 @@ ImeInputterCaretMove(dir, by_word:=false)
     if( by_word )
     {
         if( dir > 0 ){
-            word_pos := ImeTranslatorGetRightWordPos(ime_input_caret_pos)
+            if( ime_input_caret_pos == StrLen(ime_input_string) ){
+                word_pos := 0
+            } else {
+                word_pos := ImeTranslatorGetRightWordPos(ime_input_caret_pos)
+                if( word_pos == ime_input_caret_pos ){
+                    word_pos := StrLen(ime_input_string)
+                }
+            }
         } else {
-            word_pos := ImeTranslatorGetLeftWordPos(ime_input_caret_pos)
+            if( ime_input_caret_pos == 0 ){
+                word_pos := StrLen(ime_input_string)
+            } else {
+                word_pos := ImeTranslatorGetLeftWordPos(ime_input_caret_pos)
+            }
         }
         ime_input_caret_pos := word_pos
     }
