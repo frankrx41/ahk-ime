@@ -36,13 +36,6 @@ ImeTranslatorUpdateInputString(input_string)
             ime_translator_split_indexs := split_indexs
             ime_translator_radical_list := radical_list
 
-            global tooltip_debug
-            tooltip_debug[9] .= "`n1:[" ime_translator_split_indexs.Length() "]"
-            loop % ime_translator_split_indexs.Length()
-            {
-                tooltip_debug[9] .= ", " ime_translator_split_indexs[A_Index]
-            }
-
             ime_translator_result_const := []
             test_split_string := ime_translator_input_split
             loop % SplitWordGetWordCount(ime_translator_input_split)
@@ -61,14 +54,8 @@ ImeTranslatorUpdateInputString(input_string)
 ImeTranslatorGetPosSplitIndex(caret_pos)
 {
     global ime_translator_split_indexs
-    global tooltip_debug
-    tooltip_debug[9] .= "`n2:[" ime_translator_split_indexs.Length() "]"
-    loop % ime_translator_split_indexs.Length()
-    {
-        tooltip_debug[9] .= ", " ime_translator_split_indexs[A_Index]
-    }
-    ; Assert(false,caret_pos,,true)
-    if( ime_translator_split_indexs.Length() > 1)
+    global ime_input_string
+    if( ime_translator_split_indexs.Length() >= 1)
     {
         loop % ime_translator_split_indexs.Length()
         {
@@ -76,8 +63,7 @@ ImeTranslatorGetPosSplitIndex(caret_pos)
                 return A_Index
             }
         }
-        ; MsgBox, % ime_translator_split_indexs.Length()
-        Assert(false,caret_pos,,true)
+        Assert(false, ime_input_string "," caret_pos)
     }
     return 1
 }
@@ -227,7 +213,7 @@ ImeTranslatorGetSelectIndex(split_index)
 ImeTranslatorSetSelectIndex(split_index, word_index)
 {
     global ime_translator_result_filtered
-    ime_translator_result_filtered[split_index] := Max(1, Min(ImeTranslatorGetListLength(split_index), word_index))
+    ime_translator_result_filtered[split_index, 0] := Max(1, Min(ImeTranslatorGetListLength(split_index), word_index))
 }
 
 ImeTranslatorGetWordCount()
