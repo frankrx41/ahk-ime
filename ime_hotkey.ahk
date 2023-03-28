@@ -160,6 +160,7 @@ Up::
         } else {
             ImeSelectorOffsetSelectIndex(+1)
         }
+        ImeSelectorFixupSelectIndex()
     }
     ImeTooltipUpdate()
 return
