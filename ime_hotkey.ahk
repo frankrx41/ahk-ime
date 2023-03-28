@@ -158,10 +158,13 @@ Up::
     if( ImeSelectorIsOpen() ) {
         ImeSelectorOffsetSelectIndex(-1)
     } else {
-        if( ImeSelectorGetSelectIndex() >= 4 ) {
-            ImeSelectorResetSelectIndex()
-        } else {
-            ImeSelectorOffsetSelectIndex(+1)
+        if( !ImeInputterUpdateString(ime_input_string) )
+        {
+            if( ImeSelectorGetSelectIndex() >= 4 ) {
+                ImeSelectorResetSelectIndex()
+            } else {
+                ImeSelectorOffsetSelectIndex(+1)
+            }
         }
         ImeSelectorFixupSelectIndex()
     }
