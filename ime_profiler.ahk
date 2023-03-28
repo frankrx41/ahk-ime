@@ -16,9 +16,5 @@ ImeProfilerReset()
 ImeProfilerPlusTick(index, tick)
 {
     global profiler
-    if( index == 15 )
-    {
-        tick += 100
-    }
     profiler[index] += tick
 }
