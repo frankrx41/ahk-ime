@@ -51,6 +51,7 @@ ImeSelectorSetSelectIndex(index)
 {
     global ime_input_caret_pos
     split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+    index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
     ImeTranslatorResultSetSelectIndex(split_index, index)
 }
 
@@ -58,7 +59,9 @@ ImeSelectorOffsetSelectIndex(offset)
 {
     global ime_input_caret_pos
     split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    ImeTranslatorResultSetSelectIndex(split_index, ImeTranslatorResultGetSelectIndex(split_index) + offset)
+    index := ImeTranslatorResultGetSelectIndex(split_index) + offset
+    index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
+    ImeTranslatorResultSetSelectIndex(split_index, index)
 }
 
 ImeSelectorToggleSingleMode()

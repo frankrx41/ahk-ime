@@ -247,7 +247,7 @@ ImeTranslatorGetRightWordPos(start_index)
 ImeTranslatorResultSetSelectIndex(split_index, word_index, lock_select:=true)
 {
     global ime_translator_result_filtered
-    ime_translator_result_filtered[split_index, 0] := [Max(0, Min(ImeTranslatorResultGetListLength(split_index), word_index)), lock_select]
+    ime_translator_result_filtered[split_index, 0] := [word_index, lock_select]
 }
 
 ImeTranslatorResultGetSelectIndex(split_index)
