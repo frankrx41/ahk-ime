@@ -1,8 +1,9 @@
 ;*******************************************************************************
 ; 超级简拼
 ;
-; "wo3xi3huanni" -> "w%'o%3x%'i%3h%'u%'a%'n%'n%'i%"
-; "wo3ai4ni" -> "w%'o%3a%'i%4'n%'i%"
+; "wo3xi3huan'ni'" -> "w%'o%3x%'i%3h%'u%'a%'n%'n%'i%'"
+; "wo3ai4ni'" -> "w%'o%3a%'i%4n%'i%'"
+; "wo'xi3huan1ni3" -> "w%'o%'x%'i%3h%'u%'a%'n%1n%'i%3"
 SplitWordGetSimpleSpell(input_string)
 {
     input_string := RegExReplace(input_string, "([a-z])(?=[^%'12345])", "$1'")
@@ -19,6 +20,7 @@ SeparateStringHasSound(separate_string)
 SeparateStringShouldProcess(separate_string, input_split)
 {
     local
+    static simple_spell_list := { "yeb":1, "mla": 1 }
     if( PinyinSqlSimpleKey(separate_string) == PinyinSqlSimpleKey(input_split) )
     {
         return false
@@ -28,17 +30,11 @@ SeparateStringShouldProcess(separate_string, input_split)
         return false
     }
 
-    str_len := StrLen(separate_string)/3
-    ; Do simple spell: yeb mla
-    if( str_len == 3 ){
-        char_1 := SubStr(separate_string, 1, 1)
-        char_2 := SubStr(separate_string, 4, 1)
-        char_3 := SubStr(separate_string, 7, 1)
-        if( !IsCompletePinyin(char_1, char_2) && !IsCompletePinyin(char_2, char_3) )
-        {
-            return true
-        }
+    if( simple_spell_list.HasKey(RegExReplace(separate_string, "%['12345]")) )
+    {
+        return true
     }
+    str_len := StrLen(separate_string)/3
     if( str_len < 4 || str_len > 8 )
     {
         return false

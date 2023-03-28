@@ -186,7 +186,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
             full_vowels := GetFullVowels(initials, vowels)
             tone        := PinyinSplitGetTone(input_str, initials, vowels, index)
 
-            if( !IsCompletePinyin(initials, vowels, tone) ){
+            if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
                 vowels .= "%"
             }
             ; 转全拼显示
