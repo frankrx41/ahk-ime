@@ -112,15 +112,26 @@ ImeTooltipUpdate(tooltip_pos := "")
                 split_index     := A_Index
                 select_index    := ImeTranslatorResultGetSelectIndex(split_index)
                 select_lock     := ImeTranslatorResultIsLock(split_index)
+                selected_word   := ImeTranslatorResultGetWord(split_index, select_index)
                 if( select_index != 0 )
                 {
                     if( SubStr(ime_select_str, 0, 1) != "/" ){
                         ime_select_str .= "/"
-                        ime_select_index .= " "
+                        ime_select_index .= "/"
                     }
-                    ime_select_str .= ImeTranslatorResultGetWord(split_index, select_index)
+                    ime_select_str .= selected_word
                 }
-                ime_select_index .= Mod(select_index,10) . (select_lock ? "^" : "+")
+                select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
+                if( select_index != 0 && selected_word == ImeTranslatorResultGetPinyin(split_index, select_index) ) {
+                    ime_select_index .= select_index_char
+                    loop % StrLen(selected_word) -1 {
+                        ime_select_index .= "-"
+                    }
+                }
+                else
+                if(selected_word || select_index == 0) {
+                    ime_select_index .= select_index_char . (select_lock ? "^" : "-")
+                }
             }
             ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
         }
