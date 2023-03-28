@@ -75,6 +75,17 @@ HotkeyOnEsc()
 
 HotkeyOnShiftSetMode(mode)
 {
+    static shift_down_tick := A_TickCount
+    if( GetKeyState("RShift", "P") )
+    {
+        shift_down_tick := A_TickCount
+        return
+    }
+    if( A_TickCount - shift_down_tick < 1000 )
+    {
+        return
+    }
+
     global ime_input_string
     if( mode == "en" ){
         if ( ime_input_string ) {
