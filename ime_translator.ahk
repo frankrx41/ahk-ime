@@ -89,16 +89,16 @@ ImeTranslatorFixupSelectIndex()
         }
         else
         {
-            test_result := search_result[split_index]
             select_index := ImeTranslatorResultGetSelectIndex(split_index)
+            current_length := ImeTranslatorResultGetLength(split_index, select_index)
             if( ImeTranslatorResultIsLock(split_index) )
             {
-                skip_word := test_result[select_index, 5]-1
+                skip_word := current_length-1
             }
             else
             {
                 max_length := 1
-                loop % test_result[select_index, 5]-1
+                loop % ImeTranslatorResultGetLength(split_index, 1)-1
                 {
                     check_index := split_index + A_Index
                     if( ImeTranslatorResultIsLock(check_index) )
@@ -109,15 +109,15 @@ ImeTranslatorFixupSelectIndex()
                 }
 
                 ; Find a result the no longer than `max_length`
-                if( test_result[select_index, 5] <= max_length )
+                if( select_index != 0 && current_length <= max_length )
                 {
-                    skip_word := test_result[select_index, 5]-1
+                    skip_word := current_length-1
                 }
                 else
                 {
-                    loop % test_result.Length()
+                    loop % ImeTranslatorResultGetListLength(split_index)
                     {
-                        test_len := test_result[A_Index, 5]
+                        test_len := ImeTranslatorResultGetLength(split_index, A_Index)
                         if( test_len <= max_length )
                         {
                             ImeTranslatorResultSetSelectIndex(split_index, A_Index, false)
@@ -153,6 +153,7 @@ ImeTranslatorFilterResults(single_mode:=false)
         }
         ; if prev length > 1, this[0] := 0
         ; [select_index, lock]
+        ; Can not use `ImeTranslatorResultSetSelectIndex`
         if( skip_word ) {
             test_result[0] := [0, false]
             skip_word -= 1
