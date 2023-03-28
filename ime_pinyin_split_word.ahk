@@ -9,7 +9,7 @@ SplitWordGetWordCount(word)
 
 SplitWordTrimMaxCount(word, max)
 {
-    ; TODO: Escape char
+    ; TODO: Check scape char
     ; "kai'xin'a'" -> "xin'a'"
     return RegExReplace(word, "^(([^'12345]+['12345]?){0," max "}).*$", "$1")
 }
