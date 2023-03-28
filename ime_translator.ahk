@@ -109,14 +109,21 @@ ImeTranslatorFixupSelectIndex()
                 }
 
                 ; Find a result the no longer than `max_length`
-                loop % test_result.Length()
+                if( test_result[select_index, 5] <= max_length )
                 {
-                    test_len := test_result[A_Index, 5]
-                    if( test_len <= max_length )
+                    skip_word := test_result[select_index, 5]-1
+                }
+                else
+                {
+                    loop % test_result.Length()
                     {
-                        ImeTranslatorSetSelectIndex(split_index, A_Index, false)
-                        skip_word := test_len-1
-                        break
+                        test_len := test_result[A_Index, 5]
+                        if( test_len <= max_length )
+                        {
+                            ImeTranslatorSetSelectIndex(split_index, A_Index, false)
+                            skip_word := test_len-1
+                            break
+                        }
                     }
                 }
             }
@@ -285,7 +292,7 @@ ImeTranslatorIsSelectIndexLock(split_index)
 ImeTranslatorSetSelectIndex(split_index, word_index, lock_select:=true)
 {
     global ime_translator_result_filtered
-    ime_translator_result_filtered[split_index, 0] := [Max(1, Min(ImeTranslatorGetListLength(split_index), word_index)), lock_select]
+    ime_translator_result_filtered[split_index, 0] := [Max(0, Min(ImeTranslatorGetListLength(split_index), word_index)), lock_select]
 }
 
 ImeTranslatorGetWordCount()
