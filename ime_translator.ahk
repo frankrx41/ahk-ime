@@ -77,6 +77,7 @@ ImeTranslatorFilterResult(single_mode:=false)
 
     search_result := CopyObj(ime_translator_result_const)
     radical_list := CopyObj(ime_translator_radical_list)
+    skip_word := 0
     loop % search_result.Length()
     {
         test_result := search_result[A_Index]
@@ -87,8 +88,14 @@ ImeTranslatorFilterResult(single_mode:=false)
         if( single_mode ){
             PinyinResultFilterSingleWord(test_result)
         }
-        ; if prev length > 1, this[0] := 1
-        test_result[0] := 1
+        ; if prev length > 1, this[0] := 0
+        if( skip_word ) {
+            test_result[0] := 0
+        }
+        else {
+            test_result[0] := 1
+            skip_word := test_result[1,5]-1
+        }
     }
     ime_translator_result_filtered := search_result
 }
