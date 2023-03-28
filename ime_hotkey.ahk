@@ -169,6 +169,18 @@ Down::
     ImeTooltipUpdate()
 return
 
+NumpadHome::
+Home::
+    ImeInputterCaretMoveHome(true)
+    ImeTooltipUpdate()
+return
+
+NumpadEnd::
+End::
+    ImeInputterCaretMoveHome(false)
+    ImeTooltipUpdate()
+return
+
 ; 更新候选框位置
 ~WheelUp::
 ~WheelDown::

@@ -140,6 +140,18 @@ ImeInputterCaretFastMoveAt(char, back_to_front)
     }
 }
 
+ImeInputterCaretMoveHome(move_home)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+
+    if( move_home ){
+        ime_input_caret_pos := 0
+    } else {
+        ime_input_caret_pos := StrLen(ime_input_string)
+    }
+}
+
 ;*******************************************************************************
 ;
 ImeInputterUpdateString(input_string)
