@@ -4,9 +4,9 @@ PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
     ; 插入候选词部分
     spilt_word := input_spilt_string
 
-    loop, 4
+    loop, 8
     {
-        While( !PinyinHistoryHasResult(spilt_word) )
+        While( spilt_word && !PinyinHistoryHasResult(spilt_word) )
         {
             PinyinHistoryUpdateKey(DB, spilt_word)
             if( PinyinHistoryHasResult(spilt_word) ){
@@ -14,9 +14,14 @@ PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
             }
             spilt_word := SplitWordRemoveLastWord(spilt_word)
         }
-        PinyinResultPushHistory(search_result, spilt_word)
+        if( spilt_word )
+        {
+            PinyinResultPushHistory(search_result, spilt_word)
+        }
+
         spilt_word := SplitWordRemoveLastWord(spilt_word)
-        if( spilt_word == "" ){
+        if( spilt_word == "" )
+        {
             break
         }
     }
