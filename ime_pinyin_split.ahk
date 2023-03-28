@@ -168,6 +168,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
     strlen          := StrLen(input_str)
     split_indexs    := []
     radical_list    := []
+    has_skip_char   := false
 
     loop
     {
@@ -179,6 +180,13 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         ; 字母，自动分词
         if( IsInitials(initials) )
         {
+            if( has_skip_char ) {
+                has_skip_char := false
+                separate_words .= EscapeCharsGetRightMark()
+                split_indexs.Push(index-1)
+                radical_list.Push("")
+            }
+
             start_index := index
 
             initials    := PinyinSplitGetInitials(input_str, initials, index)
@@ -211,15 +219,17 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         {
             index += 1
             if( initials!="'" ) {
-                if( !InStr("12345", initials) )
-                {
-                    separate_words .= initials "'"
+                if( !has_skip_char ) {
+                    has_skip_char := true
+                    separate_words .= EscapeCharsGetLeftMark()
                 }
-            }
-            if( split_indexs.Length() >= 1 ){
-                split_indexs[split_indexs.Length()] += 1
+                separate_words .= initials
             }
         }
+    }
+
+    if( has_skip_char ) {
+        separate_words .= EscapeCharsGetRightMark()
     }
 
     tooltip_debug[1] .= origin_input "->[" separate_words "] "

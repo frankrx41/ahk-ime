@@ -38,14 +38,18 @@ ImeTranslatorUpdateInputString(input_string)
 
             ime_translator_result_const := []
             test_split_string := ime_translator_input_split
-            loop % SplitWordGetWordCount(ime_translator_input_split)
+            loop % split_indexs.Length()
             {
-                find_split_string := RegExReplace(test_split_string, " .*$")
-                if( find_split_string )
+                ; SplitWordRemoveUnuseChar(find_split_string)
+                ; find_split_string := RegExReplace(test_split_string, "\[.*?\]")
+                find_split_string := SplitWordGetPrevWords(test_split_string)
+                if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
                 {
                     translate_result := PinyinGetTranslateResult(find_split_string, DB)
-                    ime_translator_result_const.Push(translate_result)
+                } else {
+                    translate_result := [[""]]
                 }
+                ime_translator_result_const.Push(translate_result)
                 test_split_string := SplitWordRemoveFirstWord(test_split_string)
             }
         }
