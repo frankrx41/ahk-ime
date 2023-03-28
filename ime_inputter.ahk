@@ -157,7 +157,6 @@ ImeInputterUpdateString(input_string, on_backspace := false)
     if( input_string == last_input_string ){
         return false
     }
-    last_input_string := input_string
     if( on_backspace ) {
         input_string := RegExReplace(input_string, "[12345' ]([^12345' ]+?)$", "", replace_count)
         if( replace_count != 1 ){
@@ -167,6 +166,7 @@ ImeInputterUpdateString(input_string, on_backspace := false)
             }
         }
     }
+    last_input_string := input_string
     ImeTranslatorUpdateInputString(input_string)
     return true
 }

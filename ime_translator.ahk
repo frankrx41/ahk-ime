@@ -24,39 +24,28 @@ ImeTranslatorUpdateInputString(input_string)
         ime_translator_input_string := input_string
         split_indexs := []
 
-        if( StrLen(ime_translator_input_string) == 1 && !InStr("aloe", ime_translator_input_string) )
-        {
-            search_result := []
-            search_result[1] := [ime_translator_input_string, ime_translator_input_string, "N/A"]
-            ime_translator_result_const := search_result
-        }
-        else
-        {
-            ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
-            ime_translator_split_indexs := split_indexs
-            ime_translator_radical_list := radical_list
+        ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
+        ime_translator_split_indexs := split_indexs
+        ime_translator_radical_list := radical_list
 
-            ime_translator_result_const := []
-            test_split_string := ime_translator_input_split
-            loop % split_indexs.Length()
+        ime_translator_result_const := []
+        test_split_string := ime_translator_input_split
+        loop % split_indexs.Length()
+        {
+            find_split_string := SplitWordGetPrevWords(test_split_string)
+            if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
-                ; SplitWordRemoveUnuseChar(find_split_string)
-                ; find_split_string := RegExReplace(test_split_string, "\[.*?\]")
-                find_split_string := SplitWordGetPrevWords(test_split_string)
-                if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
-                {
-                    translate_result := PinyinGetTranslateResult(find_split_string, DB)
+                translate_result := PinyinGetTranslateResult(find_split_string, DB)
+            } else {
+                find_split_string := EscapeCharsGetContent(find_split_string)
+                if( !RegexMatch(find_split_string, "^\s+$") ) {
+                    translate_result := [[find_split_string, find_split_string]]
                 } else {
-                    find_split_string := EscapeCharsGetContent(find_split_string)
-                    if( !RegexMatch(find_split_string, "^\s+$") ) {
-                        translate_result := [[find_split_string, find_split_string]]
-                    } else {
-                        translate_result := [[find_split_string, ""]]
-                    }
+                    translate_result := [[find_split_string, ""]]
                 }
-                ime_translator_result_const.Push(translate_result)
-                test_split_string := SplitWordRemoveFirstWord(test_split_string)
             }
+            ime_translator_result_const.Push(translate_result)
+            test_split_string := SplitWordRemoveFirstWord(test_split_string)
         }
         ImeTranslatorFilterResults()
     } else {
