@@ -151,6 +151,7 @@ ImeTranslatorFilterResults(single_mode:=false)
         if( single_mode ){
             PinyinResultFilterSingleWord(test_result)
         }
+        PinyinResultUniquify(test_result)
         ; if prev length > 1, this[0] := 0
         ; [select_index, lock]
         ; Can not use `ImeTranslatorResultSetSelectIndex`
