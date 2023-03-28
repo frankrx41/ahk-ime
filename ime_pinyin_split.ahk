@@ -211,9 +211,14 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         {
             index += 1
             if( initials!="'" ) {
-                separate_words .= initials "'"
+                if( !InStr("12345", initials) )
+                {
+                    separate_words .= initials "'"
+                }
             }
-            split_indexs[split_indexs.Length()] += 1
+            if( split_indexs.Length() >= 1 ){
+                split_indexs[split_indexs.Length()] += 1
+            }
         }
     }
 
