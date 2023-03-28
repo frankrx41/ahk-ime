@@ -57,9 +57,13 @@ ImeTranslatorGetPosSplitIndex(caret_pos)
     global ime_input_string
     if( ime_translator_split_indexs.Length() >= 1)
     {
+        if( ime_translator_split_indexs[ime_translator_split_indexs.Length()] == caret_pos )
+        {
+            return ime_translator_split_indexs.Length()
+        }
         loop % ime_translator_split_indexs.Length()
         {
-            if( ime_translator_split_indexs[A_Index] >= caret_pos ){
+            if( ime_translator_split_indexs[A_Index] > caret_pos ){
                 return A_Index
             }
         }
