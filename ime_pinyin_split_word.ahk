@@ -20,5 +20,6 @@ SplitWordRemoveFirstWord(word)
 SplitWordRemoveLastWord(word)
 {
     ; "kai'xin'a'" -> "kai'xin'"
-    return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
+    ; "wo'" -> ""
+    return RegExReplace(word, "([^'12345]+['12345])$")
 }

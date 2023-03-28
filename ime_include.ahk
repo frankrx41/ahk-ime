@@ -11,11 +11,11 @@
 #Include, ime_pinyin_combine.ahk
 #Include, ime_pinyin_history.ahk
 #Include, ime_pinyin_process.ahk
-#Include, ime_pinyin_radical.ahk
 #Include, ime_pinyin_simple_spell.ahk
 #Include, ime_pinyin_sql.ahk
 #Include, ime_pinyin_split.ahk
 #Include, ime_pinyin_split_word.ahk
+
 #Include, ime_translator.ahk
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
@@ -25,6 +25,7 @@
 #Include, ime_state.ahk
 #Include, ime_putchar.ahk
 
+#Include, ime_result_radical.ahk
 #Include, ime_result_single_word.ahk
 #Include, ime_result_uniquify.ahk
 

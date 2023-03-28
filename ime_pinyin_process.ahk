@@ -1,8 +1,7 @@
 ; TODO: give a better name
-PinyinProcess(ByRef DB, ByRef save_field_array, input_spilt_string)
+PinyinProcess(ByRef DB, input_spilt_string)
 {
     local
-    global history_field_array  ; TODO: remove this, and remove `save_field_array`
     spilt_string := input_spilt_string
     begin := A_TickCount
 
@@ -26,7 +25,6 @@ PinyinProcess(ByRef DB, ByRef save_field_array, input_spilt_string)
                 Assert( input_left )
                 PinyinHistoryUpdateKey(DB, input_left)
                 if( PinyinHistoryHasKey(input_left) && PinyinHistoryHasResult(input_left) ){
-                    save_field_array.Push(CopyObj(history_field_array[input_left]))
                     spilt_string := SubStr(spilt_string, StrLen(input_left)+1)
                     break
                 } else {

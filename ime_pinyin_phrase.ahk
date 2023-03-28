@@ -1,30 +1,25 @@
-PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
+PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
 {
     local
     ; 插入候选词部分
-    spilt_word := SplitWordRemoveLastWord(input_spilt_string)
-    While( SplitWordGetWordCount(spilt_word)>1 && !PinyinHistoryHasResult(spilt_word) )
+    spilt_word := input_spilt_string
+
+    loop, 4
     {
-        PinyinHistoryUpdateKey(DB, spilt_word)
-        if( PinyinHistoryHasResult(spilt_word) ){
+        While( !PinyinHistoryHasResult(spilt_word) )
+        {
+            PinyinHistoryUpdateKey(DB, spilt_word)
+            if( PinyinHistoryHasResult(spilt_word) ){
+                break
+            }
+            spilt_word := SplitWordRemoveLastWord(spilt_word)
+        }
+        PinyinResultPushHistory(search_result, spilt_word)
+        spilt_word := SplitWordRemoveLastWord(spilt_word)
+        if( spilt_word == "" ){
             break
         }
-        spilt_word := SplitWordRemoveLastWord(spilt_word)
     }
-    if( SplitWordGetWordCount(spilt_word)>1 )
-    {
-        PinyinHistoryUpdateKey(DB, spilt_word)
-        PinyinResultPushHistory(search_result, spilt_word)
-    }
-    return
-}
-
-PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, input_split_string)
-{
-    local
-    first_word := SplitWordTrimMaxCount(input_split_string, 1)
-    PinyinHistoryUpdateKey(DB, first_word)
-    PinyinResultPushHistory(search_result, first_word)
     return
 }
 
@@ -60,22 +55,12 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     local
     ; static save_field_array := []
     search_result           := []
-    save_field_array        := []
 
     ; Do sql get result
-    PinyinProcess(DB, save_field_array, ime_input_split)
+    PinyinProcess(DB, ime_input_split)
 
-    ; 字数大于1时 组词
-    if( SplitWordGetWordCount(ime_input_split)>1 )
-    {
-        PinyinResultInsertCombine(DB, save_field_array, search_result)
-    }
-
-    ; 插入前面个拼音所能组成的候选词
-    PinyinResultInsertWords(DB, ime_input_split, search_result)
-
-    ; 插入字部分
-    PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
+    ; 插入拼音所能组成的候选词
+    PinyinResultInsertWords(DB, search_result, ime_input_split)
 
     ; 超级简拼 显示 4 字及以上简拼候选
     PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
