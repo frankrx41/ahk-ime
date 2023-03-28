@@ -95,6 +95,7 @@ ImeTranslatorFilterResult(single_mode:=false)
         ; if prev length > 1, this[0] := 0
         if( skip_word ) {
             test_result[0] := 0
+            skip_word -= 1
         }
         else {
             test_result[0] := 1
