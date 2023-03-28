@@ -1,4 +1,4 @@
-DisplaySelectItems()
+ImeTooltipGetDisplaySelectItems()
 {
     local
     global ime_input_caret_pos
@@ -78,6 +78,40 @@ DisplaySelectItems()
     return ime_select_str
 }
 
+ImeTooltipGetDisplayInputString()
+{
+    ime_select_index := ""
+    ime_select_str := ""
+    loop % ImeTranslatorGetWordCount()
+    {
+        split_index     := A_Index
+        select_index    := ImeTranslatorResultGetSelectIndex(split_index)
+        select_lock     := ImeTranslatorResultIsLock(split_index)
+        selected_word   := ImeTranslatorResultGetWord(split_index, select_index)
+        if( select_index != 0 )
+        {
+            if( SubStr(ime_select_str, 0, 1) != "/" ){
+                ime_select_str .= "/"
+                ime_select_index .= "/"
+            }
+            ime_select_str .= selected_word
+        }
+        select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
+        if( select_index != 0 && selected_word == ImeTranslatorResultGetPinyin(split_index, select_index) ) {
+            ime_select_index .= select_index_char
+            loop % StrPut(selected_word, "CP936") - 2 {
+                ime_select_index .= "-"
+            }
+        }
+        else
+        if(selected_word || select_index == 0) {
+            ime_select_index .= select_index_char . (select_lock ? "^" : "-")
+        }
+    }
+    ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
+    return ime_select_str
+}
+
 ImeTooltipUpdatePos()
 {
     ImeTooltipUpdate(GetCaretPos())
@@ -111,37 +145,9 @@ ImeTooltipUpdate(tooltip_pos := "")
     else
     {
         if( ImeSelectorIsOpen() ){
-            ime_select_str := DisplaySelectItems()
+            ime_select_str := ImeTooltipGetDisplaySelectItems()
         } else {
-            ime_select_index := ""
-            ime_select_str := ""
-            loop % ImeTranslatorGetWordCount()
-            {
-                split_index     := A_Index
-                select_index    := ImeTranslatorResultGetSelectIndex(split_index)
-                select_lock     := ImeTranslatorResultIsLock(split_index)
-                selected_word   := ImeTranslatorResultGetWord(split_index, select_index)
-                if( select_index != 0 )
-                {
-                    if( SubStr(ime_select_str, 0, 1) != "/" ){
-                        ime_select_str .= "/"
-                        ime_select_index .= "/"
-                    }
-                    ime_select_str .= selected_word
-                }
-                select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
-                if( select_index != 0 && selected_word == ImeTranslatorResultGetPinyin(split_index, select_index) ) {
-                    ime_select_index .= select_index_char
-                    loop % StrPut(selected_word, "CP936") - 2 {
-                        ime_select_index .= "-"
-                    }
-                }
-                else
-                if(selected_word || select_index == 0) {
-                    ime_select_index .= select_index_char . (select_lock ? "^" : "-")
-                }
-            }
-            ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
+            ime_select_str := ImeTooltipGetDisplayInputString()
         }
 
         ; Update pos
@@ -160,7 +166,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
         ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
         ImeTooltipDebugTipAdd(debug_tip, 14, 0) ; PinyinHistoryHasKey
-        ImeTooltipDebugTipAdd(debug_tip, 15)    ; PinyinSqlGetResult
+        ImeTooltipDebugTipAdd(debug_tip, 15, 2000)    ; PinyinSqlGetResult
         ImeTooltipDebugTipAdd(debug_tip, 16, 2000)    ; PinyinSqlGetResult
         ImeTooltipDebugTipAdd(debug_tip, 20)    ; PinyinGetTranslateResult
         ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
