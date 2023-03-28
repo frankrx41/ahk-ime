@@ -75,13 +75,15 @@ ImeInputterProcessChar(input_char, try_puts := 0)
     ime_input_string := SubStr(ime_input_string, 1, caret_pos) . input_char . SubStr(ime_input_string, caret_pos+1)
     ime_input_caret_pos := caret_pos + 1
 
-    ImeSelectorOpen(false)
     if( try_puts && StrLen(ime_input_string) == 1 ) {
         PutCharacter(input_char)
         ImeInputterClearString()
     } else {
         ImeSelectorResetSelectIndex()
-        ImeInputterUpdateString(ime_input_string)
+        if( InStr("'12345 ", input_char) )
+        {
+            ImeInputterUpdateString(ime_input_string)
+        }
     }
 }
 
