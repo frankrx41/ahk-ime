@@ -167,6 +167,10 @@ return
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
 Down::
     if( !ImeSelectorIsOpen() ) {
+        if( ImeSelectorGetSelectIndex() == 0 )
+        {
+            ImeSelectorSetSelectIndex(1)
+        }
         ImeSelectorOpen(true, false)
     } else {
         ImeSelectorOffsetSelectIndex(+1)
