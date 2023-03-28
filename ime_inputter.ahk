@@ -151,7 +151,13 @@ ImeInputterCaretMoveHome(move_home)
 
 ;*******************************************************************************
 ;
-ImeInputterUpdateString(input_string)
+ImeInputterUpdateString(input_string, on_backspace := false)
 {
+    if( on_backspace ) {
+        input_string := RegExReplace(input_string, "[12345' ]([^12345' ]+?)$", "", replace_count)
+        if( replace_count != 1 ){
+            input_string := ""
+        }
+    }
     ImeTranslatorUpdateInputString(input_string)
 }

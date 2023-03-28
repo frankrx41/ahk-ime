@@ -60,7 +60,7 @@ ImeTranslatorUpdateInputString(input_string)
         }
         ImeTranslatorFilterResults()
     } else {
-        ime_translator_input_string := ""
+        ImeTranslatorClear()
     }
 }
 
