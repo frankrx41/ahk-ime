@@ -114,7 +114,7 @@ ImeTooltipUpdate(tooltip_pos := "")
                 {
                     ime_select_str  .= ImeTranslatorGetWord(split_index, select_index)
                 }
-                ime_select_str .= ","
+                ime_select_str .= "(" select_index ","
             }
         }
 
@@ -126,11 +126,12 @@ ImeTooltipUpdate(tooltip_pos := "")
             ime_tooltip_pos := GetCaretPos()
         }
 
+        split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
         ; Debug info
         debug_tip := "`n----------------`n"
-        ; debug_tip .= "[" ImeTranslatorGetSelectIndex() "/" ImeTranslatorGetListLength() "] (" ImeTranslatorGetWeight(ImeTranslatorGetSelectIndex()) ")"
-        ; debug_tip .= " {" WordGetRadical(ImeTranslatorGetWord(ImeTranslatorGetSelectIndex()), 10) "}"
-        ; debug_tip .= " (" ImeTranslatorGetPinyin(ImeTranslatorGetSelectIndex()) ")"
+        debug_tip .= "[" ImeTranslatorGetSelectIndex(split_index) "/" ImeTranslatorGetListLength(split_index) "] (" ImeTranslatorGetWeight(split_index, ImeTranslatorGetSelectIndex(split_index)) ")"
+        debug_tip .= " {" WordGetRadical(ImeTranslatorGetWord(split_index, ImeTranslatorGetSelectIndex(split_index)), 10) "}"
+        debug_tip .= " (" ImeTranslatorGetPinyin(split_index, ImeTranslatorGetSelectIndex(split_index)) ")"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
         ; debug_tip .= "`n" tooltip_debug[4]  ; single word
