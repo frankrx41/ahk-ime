@@ -28,7 +28,7 @@ ImeTooltipGetDisplaySelectItems()
             start_index := Min(start_index, (Floor((ImeTranslatorResultGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
         }
 
-        loop % Min(ImeTranslatorResultGetListLength(split_index), column) {
+        loop % Min(ImeTranslatorResultGetListLength(split_index)+1, column) {
             word_index      := start_index + A_Index
             ime_select_str  .= "`n"
             row_index       := A_Index
@@ -75,6 +75,7 @@ ImeTooltipGetDisplaySelectItems()
             }
         }
     }
+    ime_select_str .= "`n----------------"
     return ime_select_str
 }
 
@@ -109,6 +110,7 @@ ImeTooltipGetDisplayInputString()
         }
     }
     ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
+    ime_select_str .= "`n"
     return ime_select_str
 }
 
@@ -159,11 +161,13 @@ ImeTooltipUpdate(tooltip_pos := "")
         }
 
         split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+        extern_info := ""
+        extern_info .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
+        extern_info .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
+        extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
+
         ; Debug info
-        debug_tip := "`n----------------`n"
-        debug_tip .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        debug_tip .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
-        debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
+        debug_tip := ""
         ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
         ImeTooltipDebugTipAdd(debug_tip, 14, 0) ; PinyinHistoryHasKey
         ImeTooltipDebugTipAdd(debug_tip, 15, 2000)    ; PinyinSqlGetResult
@@ -181,7 +185,8 @@ ImeTooltipUpdate(tooltip_pos := "")
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
         tooltip_string := StrReplace(tooltip_string, " ", "_")
         tooltip_string .= "(" caret_pos ")"
-        ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
+        ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
+        ; ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info , "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
 }
