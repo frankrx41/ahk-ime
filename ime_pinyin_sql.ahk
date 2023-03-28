@@ -95,10 +95,7 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
     local
     Critical
     global tooltip_debug
-
     begin_tick := A_TickCount
-
-    Assert(!InStr(split_input, "|"))
 
     ; Get first char
     sql_sim_key     := PinyinSqlSimpleKey(split_input, auto_comple)
@@ -107,12 +104,15 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
         sql_full_key := ""
     }
 
-    sql_cmd         := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
-    tooltip_debug[15] .= "[" split_input "]: """ sql_cmd
-    ; tooltip_debug[15] .= CallStack(4)
+    sql_cmd := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
+    tooltip_debug[16] .= "`n  - " . sql_cmd
 
     sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd
     sql_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+
+    tooltip_debug[15] .= 
+    ; tooltip_debug[15] .= CallStack(4)
+    ImeProfilerPlusTick(16, 1)
 
     result := []
     if( DB.GetTable(sql_cmd, result_table) )
@@ -127,11 +127,11 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
         ;   [1]: ["wu3hui4", "舞会", "30000", "", 2]
         ;   [2]: ["wu4hui4", "误会", "26735", "", 2]
         ; ]
-        tooltip_debug[15] .= """->(" result_table.RowCount ")"
         ; tooltip_debug[15] .= "`n" origin_input "," full_key_1 ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
         result := result_table.Rows
     }
 
+    tooltip_debug[15] .= "`n  - (" A_TickCount - begin_tick ") [" split_input "]" """->{" result.Length() "}"
     ImeProfilerPlusTick(15, A_TickCount - begin_tick)
     return result
 }

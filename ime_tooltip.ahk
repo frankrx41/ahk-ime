@@ -90,7 +90,7 @@ ImeTooltipDebugTipAdd(ByRef debug_tip, index)
     if( tooltip_debug[index] || profiler[index] > 0 ){
         debug_tip .= "`n" . index . ":"
         debug_tip .= "(" profiler[index] ") "
-        debug_tip .= SubStr(tooltip_debug[index], 1, 50)
+        debug_tip .= SubStr(tooltip_debug[index], 1, 2000)
     }
 }
 
@@ -163,6 +163,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
         ImeTooltipDebugTipAdd(debug_tip, 14)    ; PinyinHistoryHasKey
         ImeTooltipDebugTipAdd(debug_tip, 15)    ; PinyinSqlGetResult
+        ImeTooltipDebugTipAdd(debug_tip, 16)    ; PinyinSqlGetResult
         ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
         ImeTooltipDebugTipAdd(debug_tip, 26)    ; PinyinResultFilterByRadical
         ImeTooltipDebugTipAdd(debug_tip, 27)    ; PinyinResultFilterSingleWord

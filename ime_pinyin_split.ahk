@@ -240,7 +240,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         split_indexs.Push(index-1)
     }
 
-    tooltip_debug[11] .= origin_input "->[" separate_words "] "
+    tooltip_debug[11] .= """" origin_input """->[" separate_words "] "
     ImeProfilerPlusTick(11, A_TickCount - begin_tick)
     return separate_words
 }
