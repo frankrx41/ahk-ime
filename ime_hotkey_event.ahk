@@ -118,3 +118,9 @@ HotkeyOnSpace()
     }
     ImeTooltipUpdate()
 }
+
+HotkeyOnSymbol(char)
+{
+    ImeInputterProcessChar(char, true)
+    ImeTooltipUpdate()
+}
