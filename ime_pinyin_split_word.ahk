@@ -14,6 +14,12 @@ SplitWordTrimMaxCount(word, max)
     return RegExReplace(word, "^(([^'12345]+['12345]?){0," max "}).*$", "$1")
 }
 
+SplitWordGetFirstWord(word)
+{
+    ; TODO: Check scape char
+    return RegExReplace(word, "^([a-z]+[12345' ]).*", "$1")
+}
+
 SplitWordRemoveFirstWord(word)
 {
     if( EscapeCharsIsMark(SubStr(word, 1, 1)) ){

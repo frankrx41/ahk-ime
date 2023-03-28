@@ -36,6 +36,10 @@ ImeTranslatorUpdateInputString(input_string)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
                 translate_result := PinyinGetTranslateResult(find_split_string, DB)
+                if( translate_result.Length() == 0 ){
+                    first_word := SplitWordGetFirstWord(find_split_string)
+                    translate_result := [[first_word, first_word]]
+                }
             } else {
                 find_split_string := EscapeCharsGetContent(find_split_string)
                 if( !RegexMatch(find_split_string, "^\s+$") ) {
