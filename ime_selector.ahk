@@ -39,33 +39,33 @@ ImeSelectorGetSelectIndex()
 {
     global ime_input_caret_pos
     split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    return ImeTranslatorGetSelectIndex(split_index)
+    return ImeTranslatorResultGetSelectIndex(split_index)
 }
 
 ImeSelectorResetSelectIndex()
 {
-    ImeTranslatorSetSelectIndex(1,1)
+    ImeTranslatorResultSetSelectIndex(1,1)
 }
 
 ImeSelectorSetSelectIndex(index)
 {
     global ime_input_caret_pos
     split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    ImeTranslatorSetSelectIndex(split_index, index)
+    ImeTranslatorResultSetSelectIndex(split_index, index)
 }
 
 ImeSelectorOffsetSelectIndex(offset)
 {
     global ime_input_caret_pos
     split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    ImeTranslatorSetSelectIndex(split_index, ImeTranslatorGetSelectIndex(split_index) + offset)
+    ImeTranslatorResultSetSelectIndex(split_index, ImeTranslatorResultGetSelectIndex(split_index) + offset)
 }
 
 ImeSelectorToggleSingleMode()
 {
     global ime_selector_single_mode
     ime_selector_single_mode := !ime_selector_single_mode
-    ImeTranslatorFilterResult(ime_selector_single_mode)
+    ImeTranslatorFilterResults(ime_selector_single_mode)
 }
 
 ; "woaini" => ["我爱你", "", ""]

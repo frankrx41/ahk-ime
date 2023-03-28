@@ -45,7 +45,7 @@ ImeTranslatorUpdateInputString(input_string)
                 test_split_string := SplitWordRemoveFirstWord(test_split_string)
             }
         }
-        ImeTranslatorFilterResult()
+        ImeTranslatorFilterResults()
     } else {
         ime_translator_input_string := ""
     }
@@ -84,14 +84,14 @@ ImeTranslatorFixupSelectIndex()
 
         if( skip_word )
         {
-            ImeTranslatorSetSelectIndex(split_index, 0, false)
+            ImeTranslatorResultSetSelectIndex(split_index, 0, false)
             skip_word -= 1
         }
         else
         {
             test_result := search_result[split_index]
-            select_index := ImeTranslatorGetSelectIndex(split_index)
-            if( ImeTranslatorIsSelectIndexLock(split_index) )
+            select_index := ImeTranslatorResultGetSelectIndex(split_index)
+            if( ImeTranslatorResultIsLock(split_index) )
             {
                 skip_word := test_result[select_index, 5]-1
             }
@@ -101,7 +101,7 @@ ImeTranslatorFixupSelectIndex()
                 loop % test_result[select_index, 5]-1
                 {
                     check_index := split_index + A_Index
-                    if( ImeTranslatorIsSelectIndexLock(check_index) )
+                    if( ImeTranslatorResultIsLock(check_index) )
                     {
                         break
                     }
@@ -120,7 +120,7 @@ ImeTranslatorFixupSelectIndex()
                         test_len := test_result[A_Index, 5]
                         if( test_len <= max_length )
                         {
-                            ImeTranslatorSetSelectIndex(split_index, A_Index, false)
+                            ImeTranslatorResultSetSelectIndex(split_index, A_Index, false)
                             skip_word := test_len-1
                             break
                         }
@@ -131,7 +131,7 @@ ImeTranslatorFixupSelectIndex()
     }
 }
 
-ImeTranslatorFilterResult(single_mode:=false)
+ImeTranslatorFilterResults(single_mode:=false)
 {
     local
     global ime_translator_result_const
@@ -165,7 +165,7 @@ ImeTranslatorFilterResult(single_mode:=false)
     ime_translator_result_filtered := search_result
 }
 
-ImeTranslatorGetResultString()
+ImeTranslatorGetOutputString()
 {
     global ime_translator_result_filtered
     search_result := ime_translator_result_filtered
@@ -174,60 +174,13 @@ ImeTranslatorGetResultString()
     loop % search_result.Length()
     {
         split_index := A_Index
-        select_index := ImeTranslatorGetSelectIndex(split_index)
+        select_index := ImeTranslatorResultGetSelectIndex(split_index)
         if( select_index > 0 )
         {
-            result_string .= ImeTranslatorGetWord(split_index, select_index)
+            result_string .= ImeTranslatorResultGetWord(split_index, select_index)
         }
     }
     return result_string
-}
-
-ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
-{
-    local
-    index_pinyin    := 1
-    index_input     := 1
-    sent_string_len := 0
-    sent_pinyin_len := StrLen(send_pinyin_string)
-    ; "wohenxihuanni" - "wo'hen" = "xihuanni"
-    loop, Parse, % full_input_string
-    {
-        match := false
-        if( index_pinyin > sent_pinyin_len ){
-            break
-        }
-        loop
-        {
-            input_char := SubStr(full_input_string, index_input, 1)
-            if( input_char == " " ){
-                index_input += 1
-                sent_string_len += 1
-            } else {
-                break
-            }
-        }
-        loop
-        {
-            pinyin_char := SubStr(send_pinyin_string, index_pinyin, 1)
-            if( pinyin_char == input_char ){
-                match := true
-                break
-            }
-            if( input_char == "1" && pinyin_char == "5" ){
-                match := true
-                break
-            }
-            if( pinyin_char == "" ) {
-                break
-            }
-            index_pinyin += 1
-        }
-        sent_string_len += match ? 1 : 0
-        index_pinyin    += 1
-        index_input     += 1
-    }
-    return sent_string_len
 }
 
 ImeTranslatorGetLastWordPos()
@@ -276,22 +229,22 @@ ImeTranslatorGetRightWordPos(start_index)
     return last_index
 }
 
-ImeTranslatorGetSelectIndex(split_index)
+ImeTranslatorResultSetSelectIndex(split_index, word_index, lock_select:=true)
+{
+    global ime_translator_result_filtered
+    ime_translator_result_filtered[split_index, 0] := [Max(0, Min(ImeTranslatorResultGetListLength(split_index), word_index)), lock_select]
+}
+
+ImeTranslatorResultGetSelectIndex(split_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index, 0, 1]
 }
 
-ImeTranslatorIsSelectIndexLock(split_index)
+ImeTranslatorResultIsLock(split_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index, 0, 2]
-}
-
-ImeTranslatorSetSelectIndex(split_index, word_index, lock_select:=true)
-{
-    global ime_translator_result_filtered
-    ime_translator_result_filtered[split_index, 0] := [Max(0, Min(ImeTranslatorGetListLength(split_index), word_index)), lock_select]
 }
 
 ImeTranslatorGetWordCount()
@@ -300,39 +253,45 @@ ImeTranslatorGetWordCount()
     return ime_translator_result_filtered.Length()
 }
 
-ImeTranslatorGetListLength(split_index)
+ImeTranslatorResultGetListLength(split_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index].Length()
 }
 
-ImeTranslatorGetPinyin(split_index, word_index)
+ImeTranslatorResultGetPinyin(split_index, word_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index, word_index, 1]
 }
 
-ImeTranslatorGetWord(split_index, word_index)
+ImeTranslatorResultGetWord(split_index, word_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index, word_index, 2]
 }
 
-ImeTranslatorGetWeight(split_index, word_index)
+ImeTranslatorResultGetWeight(split_index, word_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index, word_index, 3]
 }
 
-ImeTranslatorGetComment(split_index, word_index)
+ImeTranslatorResultGetComment(split_index, word_index)
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered[split_index, word_index, 4]
 }
 
-ImeTranslatorGetCommentDisplayText(split_index, word_index)
+ImeTranslatorResultGetLength(split_index, word_index)
 {
-    comment := ImeTranslatorGetComment(split_index, word_index)
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[split_index, word_index, 5]
+}
+
+ImeTranslatorResultGetFormattedComment(split_index, word_index)
+{
+    comment := ImeTranslatorResultGetComment(split_index, word_index)
     if( comment ){
         if( comment == "name" ){
             return "名"

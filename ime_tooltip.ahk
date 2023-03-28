@@ -9,7 +9,7 @@ DisplaySelectItems()
     loop % ImeTranslatorGetWordCount()
     {
         split_index     := A_Index
-        select_index    := ImeTranslatorGetSelectIndex(split_index)
+        select_index    := ImeTranslatorResultGetSelectIndex(split_index)
         if( select_index == 0 ){
             continue
         }
@@ -18,17 +18,17 @@ DisplaySelectItems()
             continue
         }
         start_index     := ImeSelectorShowMultiple() ? 0 : Floor((select_index-1) / column) * column
-        column_loop     := ImeSelectorShowMultiple() ? Floor(ImeTranslatorGetListLength(split_index) / column) +1 : 1
+        column_loop     := ImeSelectorShowMultiple() ? Floor(ImeTranslatorResultGetListLength(split_index) / column) +1 : 1
 
         max_item_len    := []
 
         if( column_loop > max_column_loop ) {
             column_loop := max_column_loop
             start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
-            start_index := Min(start_index, (Floor((ImeTranslatorGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
+            start_index := Min(start_index, (Floor((ImeTranslatorResultGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
         }
 
-        loop % Min(ImeTranslatorGetListLength(split_index), column) {
+        loop % Min(ImeTranslatorResultGetListLength(split_index), column) {
             word_index      := start_index + A_Index
             ime_select_str  .= "`n"
             row_index       := A_Index
@@ -38,7 +38,7 @@ DisplaySelectItems()
                 item_str := ""
                 ; in_column := word_index / column >= start_index && word_index / column <= start_index + column
                 in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
-                if( word_index <= ImeTranslatorGetListLength(split_index) )
+                if( word_index <= ImeTranslatorResultGetListLength(split_index) )
                 {
                     begin_str := "  "
                     radical_code := ""
@@ -55,9 +55,9 @@ DisplaySelectItems()
                     }
 
                     end_str := select_index == word_index ? "]" : " "
-                    comment := ImeTranslatorGetCommentDisplayText(split_index, word_index)
+                    comment := ImeTranslatorResultGetFormattedComment(split_index, word_index)
 
-                    item_str := begin_str . ImeTranslatorGetWord(split_index, word_index) . radical_code . end_str . comment
+                    item_str := begin_str . ImeTranslatorResultGetWord(split_index, word_index) . radical_code . end_str . comment
                     ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
                 } else {
                     item_str := ""
@@ -109,12 +109,13 @@ ImeTooltipUpdate(tooltip_pos := "")
             loop % ImeTranslatorGetWordCount()
             {
                 split_index     := A_Index
-                select_index    := ImeTranslatorGetSelectIndex(split_index)
+                select_index    := ImeTranslatorResultGetSelectIndex(split_index)
+                select_lock     := ImeTranslatorResultIsLock(split_index)
                 if( select_index != 0 )
                 {
-                    ime_select_str  .= ImeTranslatorGetWord(split_index, select_index)
+                    ime_select_str  .= ImeTranslatorResultGetWord(split_index, select_index)
                 }
-                ime_select_str .= "(" select_index ","
+                ime_select_str .= "(" select_index "," select_lock ") "
             }
         }
 
@@ -129,9 +130,9 @@ ImeTooltipUpdate(tooltip_pos := "")
         split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
         ; Debug info
         debug_tip := "`n----------------`n"
-        debug_tip .= "[" ImeTranslatorGetSelectIndex(split_index) "/" ImeTranslatorGetListLength(split_index) "] (" ImeTranslatorGetWeight(split_index, ImeTranslatorGetSelectIndex(split_index)) ")"
-        debug_tip .= " {" WordGetRadical(ImeTranslatorGetWord(split_index, ImeTranslatorGetSelectIndex(split_index)), 10) "}"
-        debug_tip .= " (" ImeTranslatorGetPinyin(split_index, ImeTranslatorGetSelectIndex(split_index)) ")"
+        debug_tip .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
+        debug_tip .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
+        debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
         debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
         ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
         ; debug_tip .= "`n" tooltip_debug[4]  ; single word
