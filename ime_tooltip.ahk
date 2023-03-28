@@ -83,11 +83,21 @@ ImeTooltipUpdatePos()
     ImeTooltipUpdate(GetCaretPos())
 }
 
+ImeTooltipDebugTipAdd(ByRef debug_tip, index)
+{
+    global tooltip_debug
+    global profiler
+    if( tooltip_debug[index] || profiler[index] > 0 ){
+        debug_tip .= "`n" . index . ":"
+        debug_tip .= "(" profiler[index] ") "
+        debug_tip .= SubStr(tooltip_debug[index], 1, 50)
+    }
+}
+
 ImeTooltipUpdate(tooltip_pos := "")
 {
     local
     static ime_tooltip_pos := ""
-    global tooltip_debug
 
     global ime_input_string
     global ime_input_caret_pos
@@ -150,16 +160,16 @@ ImeTooltipUpdate(tooltip_pos := "")
         debug_tip .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
         debug_tip .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
         debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        debug_tip .= "`n" tooltip_debug[11] ; PinyinSplit
-        debug_tip .= "`n" tooltip_debug[14] ; PinyinHistoryHasKey
-        debug_tip .= "`n" tooltip_debug[15] ; PinyinSqlGetResult
-        debug_tip .= "`n" tooltip_debug[22] ; PinyinResultInsertSimpleSpell
-        debug_tip .= "`n" tooltip_debug[26] ; PinyinResultFilterByRadical
-        debug_tip .= "`n" tooltip_debug[27] ; PinyinResultFilterSingleWord
-        debug_tip .= "`n" tooltip_debug[28] ; PinyinResultUniquify
-        debug_tip .= "`n" tooltip_debug[1]  ; temp
-        debug_tip .= "`n" tooltip_debug[2]  ; tick
-        debug_tip .= "`n" tooltip_debug[4]  ; assert info
+        ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
+        ImeTooltipDebugTipAdd(debug_tip, 14)    ; PinyinHistoryHasKey
+        ImeTooltipDebugTipAdd(debug_tip, 15)    ; PinyinSqlGetResult
+        ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
+        ImeTooltipDebugTipAdd(debug_tip, 26)    ; PinyinResultFilterByRadical
+        ImeTooltipDebugTipAdd(debug_tip, 27)    ; PinyinResultFilterSingleWord
+        ImeTooltipDebugTipAdd(debug_tip, 28)    ; PinyinResultUniquify
+        ImeTooltipDebugTipAdd(debug_tip, 1)     ; temp
+        ImeTooltipDebugTipAdd(debug_tip, 2)     ; tick
+        ImeTooltipDebugTipAdd(debug_tip, 4)     ; assert info
 
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)

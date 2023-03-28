@@ -128,7 +128,6 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
                 if( next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) ) {
                     break
                 }
-                ; tooltip_debug[11] .= "(" next_char ")"
                 if( IsInitials(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) ) {
                     break
                 }
@@ -175,6 +174,8 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
     split_indexs    := []
     radical_list    := []
     has_skip_char   := false
+
+    begin_tick := A_TickCount
 
     loop
     {
@@ -240,5 +241,6 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
     }
 
     tooltip_debug[11] .= origin_input "->[" separate_words "] "
+    ImeProfilerPlusTick(11, A_TickCount - begin_tick)
     return separate_words
 }

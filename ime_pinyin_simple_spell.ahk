@@ -48,6 +48,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
     global history_field_array
     global tooltip_debug
 
+    begin_tick := A_TickCount
     if( SplitWordGetWordCount(input_split) > 1 )
     {
         separate_string := SplitWordGetSimpleSpell(input_split)
@@ -56,6 +57,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
             PinyinHistoryUpdateKey(DB, separate_string, true)
             PinyinResultInsertAtHistory(search_result, separate_string, 1)
             tooltip_debug[22] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
+            ImeProfilerPlusTick(22, A_TickCount - begin_tick)
         }
     }
     return
