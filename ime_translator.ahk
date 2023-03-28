@@ -47,7 +47,12 @@ ImeTranslatorUpdateInputString(input_string)
                 {
                     translate_result := PinyinGetTranslateResult(find_split_string, DB)
                 } else {
-                    translate_result := [[""]]
+                    find_split_string := EscapeCharsGetContent(find_split_string)
+                    if( !RegexMatch(find_split_string, "^\s+$") ) {
+                        translate_result := [[find_split_string, find_split_string]]
+                    } else {
+                        translate_result := [[find_split_string, ""]]
+                    }
                 }
                 ime_translator_result_const.Push(translate_result)
                 test_split_string := SplitWordRemoveFirstWord(test_split_string)

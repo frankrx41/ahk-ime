@@ -44,6 +44,6 @@ SplitWordGetPrevWords(word)
     }
     else
     {
-        return RegExReplace(word, "[" . EscapeCharsGetLeftMark()  . "].*$")
+        return RegExReplace(word, "[" . EscapeCharsGetMark(0, 0)  . "].*$")
     }
 }

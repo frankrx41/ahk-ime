@@ -3,19 +3,17 @@ EscapeCharsIsMark(word)
     return InStr("{}", word)
 }
 
-EscapeCharsGetLeftMark()
+EscapeCharsGetMark(get_right, is_regex := false)
 {
-    return "{"
-}
-
-EscapeCharsGetRightMark()
-{
-    return "}"
+    mark := ""
+    mark .= is_regex ? "\" : ""
+    mark .= (get_right == 0) ? "{" : "}"
+    return mark
 }
 
 EscapeCharsGetRegex()
 {
-    return "\" . EscapeCharsGetLeftMark() . ".*?" . "\" . EscapeCharsGetRightMark()
+    return EscapeCharsGetMark(0, 1) . ".*?" . EscapeCharsGetMark(1, 1)
 }
 
 EscapeCharsRemove(word, ByRef count)
@@ -37,4 +35,10 @@ EscapeCharsRemoveLast(word)
 EscapeCharsGetFirst(word)
 {
     return RegExReplace(word, "^(" EscapeCharsGetRegex() ").*$", "$1")
+}
+
+EscapeCharsGetContent(word)
+{
+    word := RegExReplace(word, EscapeCharsGetMark(0, 1) . "(.*?)" . EscapeCharsGetMark(1, 1), "$1")
+    return word
 }

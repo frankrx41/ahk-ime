@@ -182,7 +182,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         {
             if( has_skip_char ) {
                 has_skip_char := false
-                separate_words .= EscapeCharsGetRightMark()
+                separate_words .= EscapeCharsGetMark(1)
                 split_indexs.Push(index-1)
                 radical_list.Push("")
             }
@@ -221,7 +221,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
             if( initials!="'" ) {
                 if( !has_skip_char ) {
                     has_skip_char := true
-                    separate_words .= EscapeCharsGetLeftMark()
+                    separate_words .= EscapeCharsGetMark(0)
                 }
                 separate_words .= initials
             }
@@ -229,7 +229,8 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
     }
 
     if( has_skip_char ) {
-        separate_words .= EscapeCharsGetRightMark()
+        separate_words .= EscapeCharsGetMark(1)
+        split_indexs.Push(index-1)
     }
 
     tooltip_debug[1] .= origin_input "->[" separate_words "] "
