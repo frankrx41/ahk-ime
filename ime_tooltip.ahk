@@ -86,7 +86,7 @@ ImeTooltipUpdatePos()
 ImeTooltipDebugTipAdd(ByRef debug_tip, index, max_length := 50)
 {
     if( ImeProfilerGetCount(index) >= 1 ){
-        debug_tip .= "`n" . index . ":"
+        debug_tip .= "`n" . index . "*" ImeProfilerGetCount(index) ":"
         debug_tip .= "(" ImeProfilerGetTotalTick(index) ") "
         debug_tip .= SubStr(ImeProfilerGetDebugInfo(index), 1, max_length)
     }
