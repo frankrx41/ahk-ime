@@ -5,180 +5,205 @@
 ; Enter 上屏文字
 Enter::
 NumpadEnter::
-    PutCandidateCharacter(ime_input_candidate)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorFixupSelectIndex()
+        ImeSelectorOpen(false)
+    } else {
+        PutCandidateCharacter()
+    }
+    ImeTooltipUpdate()
 return
 
 ]::
-    PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 0)
-    ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 0)
+    ImeSelectorOpen(false)
+    ImeTooltipUpdate()
 return
 
 [::
-    PutCharacterWordByWord(ime_input_candidate.GetSelectIndex(), 1)
-    ImeOpenSelectMenu(false)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 1)
+    ImeSelectorOpen(false)
+    ImeTooltipUpdate()
 return
 
 ; Tab: Show more select items
 Tab::
-    if( ImeIsSelectMenuOpen() ){
-        if( !ImeIsSelectMenuMore() ) {
-            ImeOpenSelectMenu(true, true)
+    if( ImeSelectorIsOpen() ){
+        if( !ImeSelectorShowMultiple() ) {
+            ImeSelectorOpen(true, true)
         } else {
-            ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+            ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
         }
     } else {
-        ImeOpenSelectMenu(true, false)
+        ImeSelectorOpen(true, false)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 +Tab::
-    if( ImeIsSelectMenuOpen() ){
-        if( !ImeIsSelectMenuMore() ){
-            ImeOpenSelectMenu(false)
+    if( ImeSelectorIsOpen() ){
+        if( !ImeSelectorShowMultiple() ){
+            ImeSelectorOpen(false)
         }
         else { 
-            ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
-            if( GetSelectMenuColumn() >= ime_input_candidate.GetSelectIndex() ){
-                ImeOpenSelectMenu(true, false)
+            ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
+            if( ImeSelectorGetColumn() >= ImeSelectorGetSelectIndex() ){
+                ImeSelectorOpen(true, false)
             }
         }
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code,  ime_input_caret_pos, ime_input_candidate)
+        ImeTooltipUpdate()
     }
 return
 
 ; BackSpace 删除光标前面的空格
 BackSpace::
-    if( ime_assistant_code ){
-        ime_assistant_code := SubStr(ime_assistant_code, 1, StrLen(ime_assistant_code)-1)
-        if( StrLen(ime_assistant_code) == 0 ){
-            ime_input_candidate.SetSelectIndex(1)
-        }
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
-    }
-    else if( ime_input_caret_pos != 0 ){
-        tooltip_debug[1] := ""
-        tooltip_debug[7] := ""
-        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
-        ime_input_caret_pos := ime_input_caret_pos-1
-        ime_input_candidate.Initialize(ime_input_string, ime_assistant_code, DB)
-        ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
-    }
+    HotkeyOnBackSpace()
+return
+
+; Ctrl + Backspace
+; Delete word before this
+^BackSpace::
+    ImeInputterClearPrevSplitted()
+    ImeTooltipUpdate()
 return
 
 ; Esc
 ; 如果有展开候选框则关闭
 ; 否则删除所有输入的字符
 Esc::
-    if( ImeIsSelectMenuOpen() ) {
-        if( ImeIsSelectMenuMore() ) {
-            ImeOpenSelectMenu(true, false)
-        } else {
-            ImeOpenSelectMenu(false)
-        }
-    } else {
-        if( A_TickCount - last_esc_tick < 1000 ){
-            ImeClearInputString()
-        } else {
-            ImeClearLastSplitedInput()
-        }
-    }
-    last_esc_tick := A_TickCount
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    HotkeyOnEsc()
 return
 
 ,::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
-        ime_input_candidate.OffsetSelectIndex(-1)
+        ImeSelectorOffsetSelectIndex(-1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 .::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
-        ime_input_candidate.OffsetSelectIndex(+1)
+        ImeSelectorOffsetSelectIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
+return
+
+-::
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOpen(true, true)
+        ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
+    }
+    ImeTooltipUpdate()
+return
+
+=::
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOpen(true, true)
+        ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
+    }
+    ImeTooltipUpdate()
 return
 
 ; 左右键移动光标
 Left::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(-GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
     } else {
-        ImeInputCaretMove(-1, true)
+        ImeInputterCaretMove(-1, true)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 Right::
-    if( ImeIsSelectMenuOpen() ){
-        ime_input_candidate.OffsetSelectIndex(+GetSelectMenuColumn())
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
     } else {
-        ImeInputCaretMove(+1, true)
+        ImeInputterCaretMove(+1, true)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
+return
+
+; Ctrl + Left/Right
+; Move caret by a word
+^Left::
+    ImeInputterCaretMove(-1, true)
+    ImeTooltipUpdate()
+return
+
+^Right::
+    ImeInputterCaretMove(+1, true)
+    ImeTooltipUpdate()
 return
 
 ; Shift + 左右键移动光标，不论是否打开候选框
 +Left::
-    ImeInputCaretMove(-1)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeInputterCaretMove(-1)
+    ImeTooltipUpdate()
 return
 
 +Right::
-    ImeInputCaretMove(+1)
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeInputterCaretMove(+1)
+    ImeTooltipUpdate()
 return
 
 ; 上下选择
 Up::
-    if( ImeIsSelectMenuOpen() ) {
-        ime_input_candidate.OffsetSelectIndex(-1)
+    if( ImeSelectorIsOpen() ) {
+        ImeSelectorOffsetSelectIndex(-1)
     } else {
-        if( ime_input_candidate.GetSelectIndex() >= 4 ) {
-            ime_input_candidate.SetSelectIndex(1)
+        if( ImeSelectorGetSelectIndex() >= 4 ) {
+            ImeSelectorResetSelectIndex()
         } else {
-            ime_input_candidate.OffsetSelectIndex(+1)
+            ImeSelectorOffsetSelectIndex(+1)
         }
+        ImeSelectorFixupSelectIndex()
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
 return
 
 ; 如果没有展开候选框则展开之，否则调整候选框的选项
 Down::
-    if( !ImeIsSelectMenuOpen() ) {
-        ImeOpenSelectMenu(true, false)
+    if( !ImeSelectorIsOpen() ) {
+        if( ImeSelectorGetSelectIndex() == 0 )
+        {
+            ImeSelectorSetSelectIndex(1)
+        }
+        ImeSelectorOpen(true, false)
     } else {
-        ime_input_candidate.OffsetSelectIndex(+1)
+        ImeSelectorOffsetSelectIndex(+1)
     }
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate)
+    ImeTooltipUpdate()
+return
+
+NumpadHome::
+Home::
+    ImeInputterCaretMoveHome(true)
+    ImeTooltipUpdate()
+return
+
+NumpadEnd::
+End::
+    ImeInputterCaretMoveHome(false)
+    ImeTooltipUpdate()
 return
 
 ; 更新候选框位置
 ~WheelUp::
 ~WheelDown::
 ~LButton up::
-    SetTimer, ImeTooltipUpdateTimer, -10
-return
-
-ImeTooltipUpdateTimer:
-    ImeTooltipUpdate(ime_input_string, ime_assistant_code, ime_input_caret_pos, ime_input_candidate, true)
+    Sleep, 10
+    ImeTooltipUpdatePos()
 return
 
 #if ; ime_input_string
 
 !`::
-    WordCreateGui(GetSelectText())
-    PinyinResultClear()
+    WordCreatorUI(GetSelectText())
+    PinyinHistoryClear()
 return
 
 ;*******************************************************************************
@@ -190,7 +215,7 @@ ImeToggleSuspend:
     if( A_ThisHotkey == "#Space" && A_IsSuspended && !ImeModeIsChinese() ){
         Gosub, ImeToggleSuspend
     }
-    ImeUpdateActiveState("cn")
+    ImeStateUpdateMode("cn")
 return
 
 ; Win + Alt + Space: reload

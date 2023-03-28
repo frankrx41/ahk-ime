@@ -1,10 +1,4 @@
-﻿; 字符上屏
-PutCharacter(str, mode:=""){
-    Critical
-    SendInput, % "{Text}" str
-}
-
-; https://www.autohotkey.com/boards/viewtopic.php?t=86355
+﻿; https://www.autohotkey.com/boards/viewtopic.php?t=86355
 CmdRet(sCmd, callBackFuncObj := "", encoding := "CP0")
 {
     ; MsgBox, %sCmd%
@@ -81,32 +75,6 @@ CopyObj(obj){
             retObj[k] := CopyObj(v)
     }
     return retObj
-}
-
-OutputDebug(info,type){
-    static buffer:=""
-    switch type
-    {
-        case 1:
-            FormatTime, Now, , [yyyy-MM-dd HH:mm:ss]
-            FileAppend, % Now "`n" info "`n", debug.log, UTF-8
-        case 2:
-            OutputDebug % info
-        case 3:
-            MsgBox, 16, 错误, % StrReplace(info, "|", "`n")
-        case 4:
-            buffer .= info "    "
-            SetTimer, writeintolog, -1000
-        Default:
-            return
-    }
-    return
-    writeintolog:
-        FormatTime, Now, , [yyyy-MM-dd HH:mm:ss]
-        FileAppend, % Now "`n" buffer "`n", debug.log, UTF-8
-        ; OutputDebug % buffer
-        buffer:=""
-    return
 }
 
 GetSelectText(timeout := 0.5)

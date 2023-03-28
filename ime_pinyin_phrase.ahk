@@ -1,89 +1,30 @@
-PinyinResultClear()
-{
-    global history_field_array := []
-}
-
-PinyinHasResult(pinyin)
-{
-    global history_field_array
-    return history_field_array[pinyin, 1, 2] != ""
-}
-
-PinyinHasKey(pinyin)
-{
-    global history_field_array
-    global tooltip_debug
-    tooltip_debug[5] .= "`n[" pinyin ": " history_field_array.HasKey(pinyin) "]"
-    return history_field_array.HasKey(pinyin)
-}
-
-PinyinUpdateKey(DB, pinyin, limit_num:=100)
-{
-    global history_field_array
-    if( !PinyinHasKey(pinyin) || history_field_array[pinyin].Length()==2 && history_field_array[pinyin,2,2]=="" )
-    {
-        history_field_array[pinyin] := PinyinSqlGetResult(DB, pinyin, limit_num)
-    }
-}
-
-PinyinKeyGetWords(pinyin)
-{
-    global history_field_array
-    return history_field_array[pinyin]
-}
-
-SearchResultPush(ByRef search_result, spilt_word)
-{
-    global history_field_array
-    loop % history_field_array[spilt_word].Length() {
-        search_result.Push(CopyObj(history_field_array[spilt_word, A_Index]))
-    }
-}
-
-WordCanContinueSplit(word)
-{
-    ; 包含 word + tone + word + ... 格式
-    return RegExMatch(word, "['12345][^'12345]")
-}
-
-WordRemoveLastSplit(word)
-{
-    ; "kai'xin'a" -> "kai'xin"
-    return RegExReplace(word, "(['12345])([^'12345]+['12345]?)$", "$1")
-}
-
-PinyinResultInsertWords(ByRef DB, input_spilt_string, ByRef search_result)
+PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
 {
     local
     ; 插入候选词部分
-    spilt_word := WordRemoveLastSplit(input_spilt_string)
-    While( WordCanContinueSplit(spilt_word) && !PinyinHasResult(spilt_word) )
+    spilt_word := input_spilt_string
+
+    loop, 8
     {
-        PinyinUpdateKey(DB, spilt_word)
-        if( PinyinHasResult(spilt_word) ){
+        While( spilt_word && !PinyinHistoryHasResult(spilt_word) )
+        {
+            PinyinHistoryUpdateKey(DB, spilt_word)
+            if( PinyinHistoryHasResult(spilt_word) ){
+                break
+            }
+            spilt_word := SplitWordRemoveLastWord(spilt_word)
+        }
+        if( spilt_word )
+        {
+            PinyinResultPushHistory(search_result, spilt_word)
+        }
+
+        spilt_word := SplitWordRemoveLastWord(spilt_word)
+        if( spilt_word == "" )
+        {
             break
         }
-        spilt_word := WordRemoveLastSplit(spilt_word)
     }
-    if( WordCanContinueSplit(spilt_word) )
-    {
-        PinyinUpdateKey(DB, spilt_word)
-        SearchResultPush(search_result, spilt_word)
-    }
-    return
-}
-
-GetFirstWord(input_str)
-{
-    return RegExReplace(input_str, "^([a-z]+[12345'%]).*", "$1")
-}
-
-PinyinResultInsertSingleWord(ByRef DB, ByRef search_result, input_split_string)
-{
-    local
-    first_word := GetFirstWord(input_split_string)
-    PinyinUpdateKey(DB, first_word)
-    SearchResultPush(search_result, first_word)
     return
 }
 
@@ -112,58 +53,29 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
     return
 }
 
+;*******************************************************************************
 ; 拼音取词
-PinyinGetSentences(ime_input_split, ime_orgin_input, assistant_code, DB:="")
+PinyinGetTranslateResult(ime_input_split, DB:="")
 {
     local
     ; static save_field_array := []
     search_result           := []
-    save_field_array        := []
 
-    if( StrLen(ime_orgin_input) == 1 && !InStr("alo", ime_orgin_input) )
-    {
-        search_result[1] := [ime_orgin_input, ime_orgin_input, "N/A"]
-        return search_result
-    }
-    else
-    {
-        ; Do sql get result
-        PinyinProcess(DB, save_field_array, ime_input_split)
+    ; 插入拼音所能组成的候选词
+    PinyinResultInsertWords(DB, search_result, ime_input_split)
 
-        ; 字数大于1时 组词
-        if( WordCanContinueSplit(ime_input_split) )
-        {
-            PinyinResultInsertCombine(DB, save_field_array, search_result, assistant_code)
-        }
+    ; 超级简拼 显示 4 字及以上简拼候选
+    PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
 
-        ; 插入前面个拼音所能组成的候选词
-        PinyinResultInsertWords(DB, ime_input_split, search_result)
-
-        ; 逐码提示 联想
-        ; PinyinResultInsertAssociate(DB, search_result, ime_input_split, assistant_code)
-
-        ; 插入字部分
-        PinyinResultInsertSingleWord(DB, search_result, ime_input_split)
-
-        ; 更新辅助码
-        PinyinResultUpdateAssistant(search_result)
-
-        ; 辅助码筛去除重
-        PinyinResultCheckAssistant(search_result, assistant_code)
-
-        ; 超级简拼 显示 4 字及以上简拼候选
-        PinyinResultInsertSimpleSpell(DB, search_result, ime_orgin_input)
-
-        ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-        PinyinResultHideZeroWeight(search_result)
+    ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
+    PinyinResultHideZeroWeight(search_result)
 
 
-        PinyinResultRemoveZeroIndex(search_result)
-    }
+    PinyinResultRemoveZeroIndex(search_result)
     ; [
-    ;     ; -1 , 0         , 1
-    ;     ["wo", "pinyin|1", "wo", "我", "30233", "30233"]
-    ;     ["wo", "pinyin|2", "wo", "窝", "30219", "30233"]
+    ;     ; 1   , 2   , 3      , 4 , 5  
+    ;     ["wo3", "我", "30233", "", "1"]
+    ;     ["wo1", "窝", "30219", "", "1"]
     ;     ...
     ; ]
     return search_result

@@ -1,34 +1,62 @@
 ;*******************************************************************************
 ; 超级简拼
 ;
-; "wo3xi3huanni" -> "w'o3x'i3h'u'a'n'n'i"
-; "wo3ai4ni" -> "w'o3a'i4'n'i"
-GetSimpleSpellString(input_string)
+; "wo3xi3huan'ni'" -> "w%'o%3x%'i%3h%'u%'a%'n%'n%'i%'"
+; "wo3ai4ni'" -> "w%'o%3a%'i%4n%'i%'"
+; "wo'xi3huan1ni3" -> "w%'o%'x%'i%3h%'u%'a%'n%1n%'i%3"
+SplitWordGetSimpleSpell(input_string)
 {
-    input_string := RegExReplace(input_string, "([a-z])(?=[^'\d])", "$1'")
-    input_string := RTrim(input_string, "'")
-    input_string := StrReplace(input_string, " ")
-    input_string := RegExReplace(input_string, "(['\d])", "%$1")
-    return input_string . "%"
+    input_string := RegExReplace(input_string, "([a-z])(?=[^%'12345])", "$1'")
+    input_string := RegExReplace(input_string, "([^%])(['12345])", "$1%$2")
+    return input_string
 }
 
-PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, ime_input_split_trim)
+; Not include "i" "u" "v"
+SeparateStringHasSound(separate_string)
+{
+    return !RegExMatch(separate_string, "[iuv]%")
+}
+
+SeparateStringShouldProcess(separate_string, input_split)
+{
+    local
+    static simple_spell_list := { "yeb":1, "mla": 1 }
+    if( PinyinSqlSimpleKey(separate_string) == PinyinSqlSimpleKey(input_split) )
+    {
+        return false
+    }
+    if( !SeparateStringHasSound(separate_string) )
+    {
+        return false
+    }
+
+    if( simple_spell_list.HasKey(RegExReplace(separate_string, "%['12345]")) )
+    {
+        return true
+    }
+    str_len := StrLen(separate_string)/3
+    if( str_len < 4 || str_len > 8 )
+    {
+        return false
+    }
+    return true
+}
+
+PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
 {
     local
     global history_field_array
     global tooltip_debug
 
-    separate_single_char := GetSimpleSpellString(ime_input_split_trim)
-    str_len := StrLen(separate_single_char)/3
-    if( str_len >= 4 && str_len <= 8 && ime_input_split_trim != separate_single_char )
+    if( SplitWordGetWordCount(input_split) > 1 )
     {
-        PinyinUpdateKey(DB, separate_single_char, 8)
-        list_len := history_field_array[separate_single_char].Length()
-        loop % list_len
+        separate_string := SplitWordGetSimpleSpell(input_split)
+        if( SeparateStringShouldProcess(separate_string, input_split) )
         {
-            search_result.InsertAt(1, CopyObj(history_field_array[separate_single_char, list_len+1-A_Index]))
+            PinyinHistoryUpdateKey(DB, separate_string, true)
+            PinyinResultInsertAtHistory(search_result, separate_string, 1)
+            tooltip_debug[8] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
         }
-        tooltip_debug[8] .= """" separate_single_char """->(" list_len ")"
     }
     return
 }

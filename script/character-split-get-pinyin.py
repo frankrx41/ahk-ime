@@ -3,13 +3,13 @@ import os
 
 absolute_path = os.path.dirname(__file__)
 
-# open file "../data/character-split-duplicate.txt"
-relative_path = "../data/character-split-duplicate.txt"
+# open file "../data/radicals-duplicate.txt"
+relative_path = "../data/radicals-duplicate.txt"
 full_path = os.path.join(absolute_path, relative_path)
 f1 = open(full_path, "r")
 
 # open file output.txt
-relative_path = "../data/character-split-pinyin.txt"
+relative_path = "../data/radicals-pinyin.txt"
 full_path = os.path.join(absolute_path, relative_path)
 f2 = open(full_path, "w")
 
