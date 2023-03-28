@@ -29,6 +29,8 @@
 #Include, ime_result_single_word.ahk
 #Include, ime_result_uniquify.ahk
 
+#Include, ime_profiler.ahk
+
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk

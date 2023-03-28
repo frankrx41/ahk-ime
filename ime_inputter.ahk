@@ -64,6 +64,7 @@ ImeInputterProcessChar(input_char, try_puts := 0)
     global tooltip_debug
 
     tooltip_debug := []
+    ImeProfilerReset()
     if( ImeSelectorIsOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
         if( !ImeSelectorIsOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
