@@ -121,6 +121,9 @@ HotkeyOnSpace()
 
 HotkeyOnSymbol(char)
 {
-    ImeInputterProcessChar(char, true)
+    loop % StrLen(char)
+    {
+        ImeInputterProcessChar(SubStr(char, A_Index, 1), true)
+    }
     ImeTooltipUpdate()
 }
