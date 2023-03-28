@@ -198,12 +198,13 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
 
             separate_words .= initials . vowels . tone
 
-            split_indexs.Push(index-1)
-
             ; Radical
             RegExMatch(SubStr(input_str, index), "^([A-Z]+)", radical)
             index += StrLen(radical)
             radical_list.Push(radical)
+
+            ; Store index
+            split_indexs.Push(index-1)
         }
         ; 忽略
         else
