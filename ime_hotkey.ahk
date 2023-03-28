@@ -5,7 +5,12 @@
 ; Enter 上屏文字
 Enter::
 NumpadEnter::
-    PutCandidateCharacter()
+    if( ImeSelectorIsOpen() ){
+        ImeSelectorFixupSelectIndex()
+        ImeSelectorOpen(false)
+    } else {
+        PutCandidateCharacter()
+    }
     ImeTooltipUpdate()
 return
 

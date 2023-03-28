@@ -72,6 +72,58 @@ ImeTranslatorGetPosSplitIndex(caret_pos)
     return 1
 }
 
+ImeTranslatorFixupSelectIndex()
+{
+    global ime_translator_result_filtered
+    search_result := ime_translator_result_filtered
+
+    skip_word := 0
+    loop % search_result.Length()
+    {
+        split_index := A_Index
+
+        if( skip_word )
+        {
+            ImeTranslatorSetSelectIndex(split_index, 0, false)
+            skip_word -= 1
+        }
+        else
+        {
+            test_result := search_result[split_index]
+            select_index := ImeTranslatorGetSelectIndex(split_index)
+            if( ImeTranslatorIsSelectIndexLock(split_index) )
+            {
+                skip_word := test_result[select_index, 5]-1
+            }
+            else
+            {
+                max_length := 1
+                loop % test_result[select_index, 5]-1
+                {
+                    check_index := split_index + A_Index
+                    if( ImeTranslatorIsSelectIndexLock(check_index) )
+                    {
+                        break
+                    }
+                    max_length += 1
+                }
+
+                ; Find a result the no longer than `max_length`
+                loop % test_result.Length()
+                {
+                    test_len := test_result[A_Index, 5]
+                    if( test_len <= max_length )
+                    {
+                        ImeTranslatorSetSelectIndex(split_index, A_Index, false)
+                        skip_word := test_len-1
+                        break
+                    }
+                }
+            }
+        }
+    }
+}
+
 ImeTranslatorFilterResult(single_mode:=false)
 {
     local
@@ -93,12 +145,13 @@ ImeTranslatorFilterResult(single_mode:=false)
             PinyinResultFilterSingleWord(test_result)
         }
         ; if prev length > 1, this[0] := 0
+        ; [select_index, lock]
         if( skip_word ) {
-            test_result[0] := 0
+            test_result[0] := [0, false]
             skip_word -= 1
         }
         else {
-            test_result[0] := 1
+            test_result[0] := [1, false]
             skip_word := test_result[1,5]-1
         }
     }
@@ -220,12 +273,19 @@ ImeTranslatorGetRightWordPos(start_index)
 ImeTranslatorGetSelectIndex(split_index)
 {
     global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index, 0]
+    return ime_translator_result_filtered[split_index, 0, 1]
 }
-ImeTranslatorSetSelectIndex(split_index, word_index)
+
+ImeTranslatorIsSelectIndexLock(split_index)
 {
     global ime_translator_result_filtered
-    ime_translator_result_filtered[split_index, 0] := Max(1, Min(ImeTranslatorGetListLength(split_index), word_index))
+    return ime_translator_result_filtered[split_index, 0, 2]
+}
+
+ImeTranslatorSetSelectIndex(split_index, word_index, lock_select:=true)
+{
+    global ime_translator_result_filtered
+    ime_translator_result_filtered[split_index, 0] := [Max(1, Min(ImeTranslatorGetListLength(split_index), word_index)), lock_select]
 }
 
 ImeTranslatorGetWordCount()
