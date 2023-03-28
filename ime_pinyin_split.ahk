@@ -212,6 +212,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
             if( initials!="'" ) {
                 separate_words .= initials "'"
             }
+            split_indexs[split_indexs.Length()] += 1
         }
     }
 

@@ -40,8 +40,12 @@ ImeTranslatorUpdateInputString(input_string)
             test_split_string := ime_translator_input_split
             loop % SplitWordGetWordCount(ime_translator_input_split)
             {
-                translate_result := PinyinGetTranslateResult(test_split_string, DB)
-                ime_translator_result_const.Push(translate_result)
+                find_split_string := RegExReplace(test_split_string, " .*$")
+                if( find_split_string )
+                {
+                    translate_result := PinyinGetTranslateResult(find_split_string, DB)
+                    ime_translator_result_const.Push(translate_result)
+                }
                 test_split_string := SplitWordRemoveFirstWord(test_split_string)
             }
         }
