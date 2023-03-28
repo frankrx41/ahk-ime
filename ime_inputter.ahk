@@ -14,7 +14,7 @@ ImeInputterClearString()
     ime_input_string    := ""
     ime_input_caret_pos := 0
     ImeProfilerClear()
-    ImeTranslatorClear()
+    ImeInputterUpdateString("")
     return
 }
 
@@ -155,7 +155,7 @@ ImeInputterUpdateString(input_string, on_backspace := false)
 {
     static last_input_string := ""
     if( input_string == last_input_string ){
-        return
+        return false
     }
     last_input_string := input_string
     if( on_backspace ) {
@@ -168,4 +168,5 @@ ImeInputterUpdateString(input_string, on_backspace := false)
         }
     }
     ImeTranslatorUpdateInputString(input_string)
+    return true
 }

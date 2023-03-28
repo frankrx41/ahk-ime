@@ -9,7 +9,10 @@ NumpadEnter::
         ImeSelectorFixupSelectIndex()
         ImeSelectorOpen(false)
     } else {
-        PutCandidateCharacter()
+        if( !ImeInputterUpdateString(ime_input_string) )
+        {
+            PutCandidateCharacter()
+        }
     }
     ImeTooltipUpdate()
 return
