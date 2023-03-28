@@ -9,6 +9,11 @@ IsRadical(char)
     return InStr("AEOBPMFDTNLGKHJQXZCSRYW", char, true)
 }
 
+IsSymbol(char)
+{
+    return InStr("～`！＠#$％…＆＊「」—－＋＝（【）】、：；＂＇《，》。？~`!@#$%^&*()_+{[}]|\:;""'<,>.?/", char)
+}
+
 ;*******************************************************************************
 PinyinSplitTableInitialize()
 {
@@ -119,7 +124,7 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
             if( IsCompletePinyin(initials, vowels) )
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
-                if( next_char == "" || IsRadical(next_char) || IsTone(next_char) ) {
+                if( next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) ) {
                     break
                 }
                 ; tooltip_debug[1] .= "(" next_char ")"
