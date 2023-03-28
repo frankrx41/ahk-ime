@@ -105,6 +105,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         if( ImeSelectorIsOpen() ){
             ime_select_str := DisplaySelectItems()
         } else {
+            ime_select_index := ""
             ime_select_str := ""
             loop % ImeTranslatorGetWordCount()
             {
@@ -113,10 +114,15 @@ ImeTooltipUpdate(tooltip_pos := "")
                 select_lock     := ImeTranslatorResultIsLock(split_index)
                 if( select_index != 0 )
                 {
-                    ime_select_str  .= ImeTranslatorResultGetWord(split_index, select_index)
+                    if( SubStr(ime_select_str, 0, 1) != "/" ){
+                        ime_select_str .= "/"
+                        ime_select_index .= " "
+                    }
+                    ime_select_str .= ImeTranslatorResultGetWord(split_index, select_index)
                 }
-                ime_select_str .= "(" select_index "," select_lock ") "
+                ime_select_index .= Mod(select_index,10) . (select_lock ? "^" : "+")
             }
+            ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
         }
 
         ; Update pos
@@ -146,6 +152,7 @@ ImeTooltipUpdate(tooltip_pos := "")
 
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
+        tooltip_string := StrReplace(tooltip_string, " ", "_")
         tooltip_string .= "(" caret_pos ")"
         ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
