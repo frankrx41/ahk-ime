@@ -9,10 +9,16 @@ ImeSelectorInitialize()
 ;*******************************************************************************
 ImeSelectorOpen(open, more := false)
 {
+    local
     global ime_selector_is_open
     global ime_selector_is_show_multiple
+    global ime_input_caret_pos
 
     ime_selector_is_open := open
+    if( more ){
+        split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+        more := ImeTranslatorResultGetListLength(split_index) > ImeSelectorGetColumn()
+    }
     ime_selector_is_show_multiple := more
     return
 }
