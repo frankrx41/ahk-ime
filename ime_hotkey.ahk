@@ -151,7 +151,7 @@ Up::
         ImeSelectorOffsetSelectIndex(-1)
     } else {
         if( ImeSelectorGetSelectIndex() >= 4 ) {
-            ImeSelectorSetSelectIndex(1)
+            ImeSelectorResetSelectIndex()
         } else {
             ImeSelectorOffsetSelectIndex(+1)
         }

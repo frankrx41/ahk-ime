@@ -32,7 +32,7 @@ ImeInputterClearPrevSplitted()
         left_pos := ImeTranslatorGetLeftWordPos(check_index)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
 
-        ImeSelectorSetSelectIndex(1)
+        ImeSelectorResetSelectIndex()
         ImeInputterUpdateString(ime_input_string)
         ime_input_caret_pos := left_pos
     }
@@ -52,7 +52,7 @@ ImeInputterClearLastSplitted()
     else
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos)
-        ImeSelectorSetSelectIndex(1)
+        ImeSelectorResetSelectIndex()
         ImeInputterUpdateString(ime_input_string)
     }
 }
@@ -68,7 +68,7 @@ ImeInputterProcessChar(input_char, try_puts := 0)
     {
         if( !ImeSelectorIsOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
         {
-            ImeSelectorSetSelectIndex(1)
+            ImeSelectorResetSelectIndex()
             input_char := Format("{:U}", input_char)
         }
     }
@@ -82,7 +82,7 @@ ImeInputterProcessChar(input_char, try_puts := 0)
         PutCharacter(input_char)
         ImeInputterClearString()
     } else {
-        ImeSelectorSetSelectIndex(1)
+        ImeSelectorResetSelectIndex()
         ImeInputterUpdateString(ime_input_string)
     }
 }

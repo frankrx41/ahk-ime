@@ -37,17 +37,28 @@ ImeSelectorGetColumn()
 
 ImeSelectorGetSelectIndex()
 {
-    return ImeTranslatorGetSelectIndex()
+    global ime_input_caret_pos
+    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+    return ImeTranslatorGetSelectIndex(split_index)
+}
+
+ImeSelectorResetSelectIndex()
+{
+    ImeTranslatorSetSelectIndex(1,1)
 }
 
 ImeSelectorSetSelectIndex(index)
 {
-    ImeTranslatorSetSelectIndex(index)
+    global ime_input_caret_pos
+    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+    ImeTranslatorSetSelectIndex(split_index, index)
 }
 
 ImeSelectorOffsetSelectIndex(offset)
 {
-    ImeTranslatorSetSelectIndex(ImeTranslatorGetSelectIndex() + offset)
+    global ime_input_caret_pos
+    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+    ImeTranslatorSetSelectIndex(split_index, ImeTranslatorGetSelectIndex(split_index) + offset)
 }
 
 ImeSelectorToggleSingleMode()

@@ -23,9 +23,6 @@ ImeTranslatorUpdateInputString(input_string)
     {
         ime_translator_input_string := input_string
         split_indexs := []
-        ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
-        ime_translator_split_indexs := split_indexs
-        ime_translator_radical_list := radical_list
 
         if( StrLen(ime_translator_input_string) == 1 && !InStr("aloe", ime_translator_input_string) )
         {
@@ -35,12 +32,54 @@ ImeTranslatorUpdateInputString(input_string)
         }
         else
         {
-            ime_translator_result_const := PinyinGetTranslateResult(ime_translator_input_split, DB)
+            ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
+            ime_translator_split_indexs := split_indexs
+            ime_translator_radical_list := radical_list
+
+            global tooltip_debug
+            tooltip_debug[9] .= "`n1:[" ime_translator_split_indexs.Length() "]"
+            loop % ime_translator_split_indexs.Length()
+            {
+                tooltip_debug[9] .= ", " ime_translator_split_indexs[A_Index]
+            }
+
+            ime_translator_result_const := []
+            test_split_string := ime_translator_input_split
+            loop % SplitWordGetWordCount(ime_translator_input_split)
+            {
+                translate_result := PinyinGetTranslateResult(test_split_string, DB)
+                ime_translator_result_const.Push(translate_result)
+                test_split_string := SplitWordRemoveFirstWord(test_split_string)
+            }
         }
         ImeTranslatorFilterResult()
     } else {
         ime_translator_input_string := ""
     }
+}
+
+ImeTranslatorGetPosSplitIndex(caret_pos)
+{
+    global ime_translator_split_indexs
+    global tooltip_debug
+    tooltip_debug[9] .= "`n2:[" ime_translator_split_indexs.Length() "]"
+    loop % ime_translator_split_indexs.Length()
+    {
+        tooltip_debug[9] .= ", " ime_translator_split_indexs[A_Index]
+    }
+    ; Assert(false,caret_pos,,true)
+    if( ime_translator_split_indexs.Length() > 1)
+    {
+        loop % ime_translator_split_indexs.Length()
+        {
+            if( ime_translator_split_indexs[A_Index] >= caret_pos ){
+                return A_Index
+            }
+        }
+        ; MsgBox, % ime_translator_split_indexs.Length()
+        Assert(false,caret_pos,,true)
+    }
+    return 1
 }
 
 ImeTranslatorFilterResult(single_mode:=false)
@@ -51,17 +90,21 @@ ImeTranslatorFilterResult(single_mode:=false)
     global ime_translator_result_filtered
 
     search_result := CopyObj(ime_translator_result_const)
-    if( search_result )
+    radical_list := CopyObj(ime_translator_radical_list)
+    loop % search_result.Length()
     {
-        if( ime_translator_radical_list ){
-            PinyinResultFilterByRadical(search_result, ime_translator_radical_list)
+        test_result := search_result[A_Index]
+        if( radical_list ){
+            PinyinResultFilterByRadical(test_result, radical_list)
+            radical_list.RemoveAt(1)
         }
         if( single_mode ){
-            PinyinResultFilterSingleWord(search_result)
+            PinyinResultFilterSingleWord(test_result)
         }
+        ; if prev length > 1, this[0] := 1
+        test_result[0] := 1
     }
     ime_translator_result_filtered := search_result
-    ime_translator_result_filtered[0] := 1
 }
 
 ImeTranslatorGetSendLength(full_input_string, send_pinyin_string)
@@ -116,15 +159,16 @@ ImeTranslatorSendWordThenUpdate()
     global tooltip_debug
     global ime_translator_input_string
 
-    send_word := ImeTranslatorGetWord(ImeTranslatorGetSelectIndex())
-    pinyin_string := ImeTranslatorGetPinyin(ImeTranslatorGetSelectIndex())
+    split_index := 1
+    send_word := ImeTranslatorGetWord(split_index, ImeTranslatorGetSelectIndex(split_index))
+    pinyin_string := ImeTranslatorGetPinyin(split_index, ImeTranslatorGetSelectIndex(split_index))
 
     sent_string_len := ImeTranslatorGetSendLength(ime_translator_input_string, pinyin_string)
 
     ime_translator_input_string := SubStr(ime_translator_input_string, sent_string_len+1)
 
     tooltip_debug[11] := "[" send_word "] " pinyin_string "," ime_translator_input_string "," sent_string_len
-    ImeTranslatorSetSelectIndex(1)
+    ImeTranslatorSetSelectIndex(1, 1)
     ImeTranslatorUpdateInputString(ime_translator_input_string)
     return send_word
 }
@@ -175,21 +219,27 @@ ImeTranslatorGetRightWordPos(start_index)
     return last_index
 }
 
-ImeTranslatorGetSelectIndex()
+ImeTranslatorGetSelectIndex(split_index)
 {
     global ime_translator_result_filtered
-    return ime_translator_result_filtered[0]
+    return ime_translator_result_filtered[split_index, 0]
 }
-ImeTranslatorSetSelectIndex(index)
+ImeTranslatorSetSelectIndex(split_index, word_index)
 {
     global ime_translator_result_filtered
-    ime_translator_result_filtered[0] := Max(1, Min(ImeTranslatorGetListLength(), index))
+    ime_translator_result_filtered[split_index] := Max(1, Min(ImeTranslatorGetListLength(split_index), word_index))
 }
 
-ImeTranslatorGetListLength()
+ImeTranslatorGetWordCount()
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered.Length()
+}
+
+ImeTranslatorGetListLength(split_index)
+{
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[split_index].Length()
 }
 ImeTranslatorGetRemainString()
 {
@@ -197,38 +247,33 @@ ImeTranslatorGetRemainString()
     return ime_translator_input_string
 }
 
-ImeTranslatorGetDebugInfo(index)
+ImeTranslatorGetPinyin(split_index, word_index)
 {
     global ime_translator_result_filtered
-    return ime_translator_result_filtered[index, 0]
-}
-ImeTranslatorGetPinyin(index)
-{
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[index, 1]
+    return ime_translator_result_filtered[split_index, word_index, 1]
 }
 
-ImeTranslatorGetWord(index)
+ImeTranslatorGetWord(split_index, word_index)
 {
     global ime_translator_result_filtered
-    return ime_translator_result_filtered[index, 2]
+    return ime_translator_result_filtered[split_index, word_index, 2]
 }
 
-ImeTranslatorGetWeight(index)
+ImeTranslatorGetWeight(split_index, word_index)
 {
     global ime_translator_result_filtered
-    return ime_translator_result_filtered[index, 3]
+    return ime_translator_result_filtered[split_index, word_index, 3]
 }
 
-ImeTranslatorGetComment(index)
+ImeTranslatorGetComment(split_index, word_index)
 {
     global ime_translator_result_filtered
-    return ime_translator_result_filtered[index, 4]
+    return ime_translator_result_filtered[split_index, word_index, 4]
 }
 
-ImeTranslatorGetCommentDisplayText(index)
+ImeTranslatorGetCommentDisplayText(split_index, word_index)
 {
-    comment := ImeTranslatorGetComment(index)
+    comment := ImeTranslatorGetComment(split_index, word_index)
     if( comment ){
         if( comment == "name" ){
             return "名"
