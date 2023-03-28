@@ -124,7 +124,7 @@ ImeTooltipUpdate(tooltip_pos := "")
                 select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
                 if( select_index != 0 && selected_word == ImeTranslatorResultGetPinyin(split_index, select_index) ) {
                     ime_select_index .= select_index_char
-                    loop % StrLen(selected_word) -1 {
+                    loop % StrPut(selected_word, "CP936") - 2 {
                         ime_select_index .= "-"
                     }
                 }
