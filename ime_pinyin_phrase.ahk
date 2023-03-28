@@ -58,7 +58,8 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 PinyinGetTranslateResult(ime_input_split, DB:="")
 {
     local
-    ; static save_field_array := []
+    ImeProfilerBegin(20)
+
     search_result           := []
 
     ; 插入拼音所能组成的候选词
@@ -78,5 +79,7 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     ;     ["wo1", "窝", "30219", "", "1"]
     ;     ...
     ; ]
+
+    ImeProfilerEnd(20)
     return search_result
 }

@@ -68,11 +68,10 @@ RadicalGetPinyin(radical)
 PinyinResultFilterByRadical(ByRef search_result, radical_list)
 {
     local
-    global tooltip_debug
 
     if( radical_list )
     {
-        begin_tick := A_TickCount
+        ImeProfilerBegin(26)
         index := 1
         loop % search_result.Length()
         {
@@ -102,7 +101,7 @@ PinyinResultFilterByRadical(ByRef search_result, radical_list)
             }
         }
 
-        ; tooltip_debug[26] := "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
-        ImeProfilerPlusTick(26, A_TickCount - begin_tick)
+        ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+        ImeProfilerEnd(26)
     }
 }

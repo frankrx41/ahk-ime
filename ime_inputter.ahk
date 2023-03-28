@@ -10,11 +10,10 @@ ImeInputterClearString()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global tooltip_debug
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
-    tooltip_debug       := []
+    ImeProfilerClear()
     ImeTranslatorClear()
     return
 }
@@ -61,10 +60,8 @@ ImeInputterProcessChar(input_char, try_puts := 0)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global tooltip_debug
 
-    tooltip_debug := []
-    ImeProfilerReset()
+    ImeProfilerClear()
     if( ImeSelectorIsOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
     {
         if( !ImeSelectorIsOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )

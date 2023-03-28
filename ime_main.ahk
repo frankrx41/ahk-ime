@@ -14,7 +14,6 @@ Menu, Tray, Tip, AHK IME `nv0.08 (dev)
 ;*******************************************************************************
 ; Ime Initialize
 global DllFolder        := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-global tooltip_debug    := []
 
 ImeProfilerInitialize()
 ImeInputterInitialize()

@@ -18,7 +18,6 @@ CallStack(deepness = 5, printLines = 0)
 Assert(bool, str:="", deepness:=5, show_msg:=false)
 {
     local
-    global tooltip_debug
     if( !bool )
     {
         git_hash := RTrim(CmdRet("git rev-parse --short HEAD"), "`n")
@@ -34,6 +33,6 @@ Assert(bool, str:="", deepness:=5, show_msg:=false)
         if( show_msg ){
             Msgbox, % debug_info
         }
-        tooltip_debug[4] := "Assert: " CallStack(1) ": """ str """"
+        ImeProfilerSetDebugInfo(4, "Assert: " CallStack(1) ": """ str """")
     }
 }

@@ -83,14 +83,12 @@ ImeTooltipUpdatePos()
     ImeTooltipUpdate(GetCaretPos())
 }
 
-ImeTooltipDebugTipAdd(ByRef debug_tip, index)
+ImeTooltipDebugTipAdd(ByRef debug_tip, index, max_length := 50)
 {
-    global tooltip_debug
-    global profiler
-    if( tooltip_debug[index] || profiler[index] > 0 ){
+    if( ImeProfilerGetCount(index) >= 1 ){
         debug_tip .= "`n" . index . ":"
-        debug_tip .= "(" profiler[index] ") "
-        debug_tip .= SubStr(tooltip_debug[index], 1, 2000)
+        debug_tip .= "(" ImeProfilerGetTotalTick(index) ") "
+        debug_tip .= SubStr(ImeProfilerGetDebugInfo(index), 1, max_length)
     }
 }
 
@@ -161,9 +159,10 @@ ImeTooltipUpdate(tooltip_pos := "")
         debug_tip .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
         debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
         ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
-        ImeTooltipDebugTipAdd(debug_tip, 14)    ; PinyinHistoryHasKey
+        ImeTooltipDebugTipAdd(debug_tip, 14, 0) ; PinyinHistoryHasKey
         ImeTooltipDebugTipAdd(debug_tip, 15)    ; PinyinSqlGetResult
-        ImeTooltipDebugTipAdd(debug_tip, 16)    ; PinyinSqlGetResult
+        ImeTooltipDebugTipAdd(debug_tip, 16, 2000)    ; PinyinSqlGetResult
+        ImeTooltipDebugTipAdd(debug_tip, 20)    ; PinyinGetTranslateResult
         ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
         ImeTooltipDebugTipAdd(debug_tip, 26)    ; PinyinResultFilterByRadical
         ImeTooltipDebugTipAdd(debug_tip, 27)    ; PinyinResultFilterSingleWord

@@ -1,10 +1,8 @@
 PinyinResultFilterSingleWord(ByRef search_result)
 {
     local
-    global tooltip_debug
-    global profiler
+    ImeProfilerBegin(27)
 
-    begin_tick := A_TickCount
     index := 1
     loop % search_result.Length()
     {
@@ -17,6 +15,6 @@ PinyinResultFilterSingleWord(ByRef search_result)
             index += 1
         }
     }
-    tooltip_debug[27] .= "(" A_TickCount - begin_tick ")"
-    ImeProfilerPlusTick(27, A_TickCount - begin_tick)
+
+    ImeProfilerEnd(27)
 }

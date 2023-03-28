@@ -1,8 +1,7 @@
 PinyinResultUniquify(ByRef search_result)
 {
     local
-    global tooltip_debug
-    global profiler
+    ImeProfilerBegin(28)
     store_result := {}
 
     begin_tick := A_TickCount
@@ -20,6 +19,5 @@ PinyinResultUniquify(ByRef search_result)
             index += 1
         }
     }
-    tooltip_debug[28] := "(" A_TickCount - begin_tick ")"
-    ImeProfilerPlusTick(28, A_TickCount - begin_tick)
+    ImeProfilerEnd(28)
 }

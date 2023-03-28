@@ -165,7 +165,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
 {
     local
     Critical
-    global tooltip_debug
+    ImeProfilerBegin(11)
 
     index           := 1
     separate_words  := ""
@@ -174,8 +174,6 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
     split_indexs    := []
     radical_list    := []
     has_skip_char   := false
-
-    begin_tick := A_TickCount
 
     loop
     {
@@ -240,7 +238,6 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         split_indexs.Push(index-1)
     }
 
-    tooltip_debug[11] .= """" origin_input """->[" separate_words "] "
-    ImeProfilerPlusTick(11, A_TickCount - begin_tick)
+    ImeProfilerEnd(11, """" origin_input """->[" separate_words "] ")
     return separate_words
 }
