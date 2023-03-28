@@ -11,7 +11,8 @@ IsRadical(char)
 
 IsSymbol(char)
 {
-    return InStr("～`！＠#$％…＆＊「」—－＋＝（【）】、：；＂＇《，》。？~`!@#$%^&*()_+{[}]|\:;""'<,>.?/", char)
+    global symbol_list_string
+    return InStr(symbol_list_string, char)
 }
 
 ;*******************************************************************************

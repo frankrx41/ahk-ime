@@ -8,6 +8,7 @@ ImeHotkeyRegisterInitialize()
     , "^+6":"……", "^+7":"＆", "^+8":"＊", "^+9":"「", "^+0":"」", "^-":"－", "^+-":"——", "^=":"＝", "^+=":"＋"
     , "^[":"【", "^]":"】", "^+[":"（", "^+]":"）", "^\":"、", "^;":"；", "^+;": "：", "^'":"＇", "^+'":"＂"
     , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" }
+    global symbol_list_string := ""
 
     ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
     Hotkey if, % ime_is_waiting_input_fn
@@ -17,6 +18,7 @@ ImeHotkeyRegisterInitialize()
         {
             func := Func("HotkeyOnSymbol").Bind(char)
             Hotkey, %key%, %func%
+            symbol_list_string .= char
         }
         loop 26
         {
