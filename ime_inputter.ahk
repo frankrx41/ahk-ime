@@ -62,13 +62,10 @@ ImeInputterProcessChar(input_char, try_puts := 0)
     global ime_input_string
 
     ImeProfilerClear()
-    if( ImeSelectorIsOpen() || InStr("QWERTYPASDFGHJKLZXCBNM", input_char, true) )
+    if( ImeSelectorIsOpen() || IsSymbol(input_char) )
     {
-        if( !ImeSelectorIsOpen() || InStr("qwertyuiopasdfghjklzxcvbnm", input_char) )
-        {
-            ImeSelectorResetSelectIndex()
-            input_char := Format("{:U}", input_char)
-        }
+        input_char := Format("{:U}", input_char)
+        ImeSelectorResetSelectIndex()
     }
 
     caret_pos := ime_input_caret_pos
@@ -80,7 +77,7 @@ ImeInputterProcessChar(input_char, try_puts := 0)
         ImeInputterClearString()
     } else {
         ImeSelectorResetSelectIndex()
-        if( InStr("'12345 ", input_char) )
+        if( IsRadical(input_char) || IsTone(input_char) || IsSymbol(input_char) )
         {
             ImeInputterUpdateString(ime_input_string)
         }
