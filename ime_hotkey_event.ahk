@@ -44,8 +44,7 @@ HotkeyOnBackSpace()
     global tooltip_debug
 
     if( ime_input_caret_pos != 0 ){
-        tooltip_debug[1] := ""
-        tooltip_debug[7] := ""
+        tooltip_debug[11] := ""
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
         ImeInputterUpdateString(ime_input_string)

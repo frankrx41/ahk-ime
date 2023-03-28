@@ -55,7 +55,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
         {
             PinyinHistoryUpdateKey(DB, separate_string, true)
             PinyinResultInsertAtHistory(search_result, separate_string, 1)
-            tooltip_debug[8] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
+            tooltip_debug[22] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
         }
     }
     return

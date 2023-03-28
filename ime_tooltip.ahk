@@ -150,16 +150,16 @@ ImeTooltipUpdate(tooltip_pos := "")
         debug_tip .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
         debug_tip .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
         debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
-        ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
-        ; debug_tip .= "`n" tooltip_debug[4]  ; single word
-        ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHistoryHasKey
-        debug_tip .= "`n" tooltip_debug[6]  ; Radical
-        ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
-        ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
-        debug_tip .= "`n" tooltip_debug[9]  ; temp
-        ; debug_tip .= "`n" tooltip_debug[11] ; Translator
-        debug_tip .= "`n" tooltip_debug[18] ; Assert info
+        debug_tip .= "`n" tooltip_debug[11] ; PinyinSplit
+        debug_tip .= "`n" tooltip_debug[14] ; PinyinHistoryHasKey
+        debug_tip .= "`n" tooltip_debug[15] ; PinyinSqlGetResult
+        debug_tip .= "`n" tooltip_debug[22] ; PinyinResultInsertSimpleSpell
+        debug_tip .= "`n" tooltip_debug[26] ; PinyinResultFilterByRadical
+        debug_tip .= "`n" tooltip_debug[27] ; PinyinResultFilterSingleWord
+        debug_tip .= "`n" tooltip_debug[28] ; PinyinResultUniquify
+        debug_tip .= "`n" tooltip_debug[1]  ; temp
+        debug_tip .= "`n" tooltip_debug[2]  ; tick
+        debug_tip .= "`n" tooltip_debug[4]  ; assert info
 
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)

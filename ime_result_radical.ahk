@@ -102,6 +102,6 @@ PinyinResultFilterByRadical(ByRef search_result, radical_list)
             }
         }
 
-        ; tooltip_debug[6] := "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+        ; tooltip_debug[26] := "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
     }
 }

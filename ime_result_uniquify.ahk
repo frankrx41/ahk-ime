@@ -19,5 +19,5 @@ PinyinResultUniquify(ByRef search_result)
             index += 1
         }
     }
-    ; tooltip_debug[4] := "(" A_TickCount - begin_tick ")"
+    tooltip_debug[28] := "(" A_TickCount - begin_tick ")"
 }

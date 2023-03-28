@@ -128,7 +128,7 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
                 if( next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) ) {
                     break
                 }
-                ; tooltip_debug[1] .= "(" next_char ")"
+                ; tooltip_debug[11] .= "(" next_char ")"
                 if( IsInitials(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) ) {
                     break
                 }
@@ -239,6 +239,6 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         split_indexs.Push(index-1)
     }
 
-    tooltip_debug[1] .= origin_input "->[" separate_words "] "
+    tooltip_debug[11] .= origin_input "->[" separate_words "] "
     return separate_words
 }

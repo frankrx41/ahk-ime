@@ -13,7 +13,7 @@ PinyinHistoryHasKey(spilt_word)
 {
     global history_field_array
     global tooltip_debug
-    tooltip_debug[5] .= "`n[" spilt_word ": " history_field_array.HasKey(spilt_word) "]"
+    tooltip_debug[14] .= "`n[" spilt_word ": " history_field_array.HasKey(spilt_word) "]"
     return history_field_array.HasKey(spilt_word)
 }
 

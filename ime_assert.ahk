@@ -34,6 +34,6 @@ Assert(bool, str:="", deepness:=5, show_msg:=false)
         if( show_msg ){
             Msgbox, % debug_info
         }
-        tooltip_debug[18] := "Assert: " CallStack(1) ": """ str """"
+        tooltip_debug[4] := "Assert: " CallStack(1) ": """ str """"
     }
 }
