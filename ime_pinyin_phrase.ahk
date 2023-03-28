@@ -56,9 +56,6 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     ; static save_field_array := []
     search_result           := []
 
-    ; Do sql get result
-    PinyinProcess(DB, ime_input_split)
-
     ; 插入拼音所能组成的候选词
     PinyinResultInsertWords(DB, search_result, ime_input_split)
 
