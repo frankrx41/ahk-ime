@@ -15,6 +15,7 @@ HotkeyOnNumber(char)
         index += (char == 0 ? 10 : char)
         ImeSelectorSetSelectIndex(index)
         ImeSelectorOpen(false)
+        ImeSelectorFixupSelectIndex()
         ImeTooltipUpdate()
     }
     else {
@@ -60,6 +61,7 @@ HotkeyOnEsc()
         if( ImeSelectorShowMultiple() ) {
             ImeSelectorOpen(true, false)
         } else {
+            ImeSelectorFixupSelectIndex()
             ImeSelectorOpen(false)
         }
     } else {
