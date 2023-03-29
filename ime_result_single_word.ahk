@@ -30,6 +30,9 @@ PinyinResultFilterZeroWeight(ByRef search_result)
         weight := search_result[index, 3]
         if( weight<=0 )
         {
+            if( index == 1 ){
+                break
+            }
             search_result.RemoveAt(index, search_result.Length() - index + 1)
             break
         }
