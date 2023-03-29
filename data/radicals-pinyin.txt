@@ -1,2335 +1,2335 @@
-一H
-丁D
-丂K
-七Q
-丄S
-丅X
-万W
-丈Z
-三S
-上S
-下X
-丌J
-不B
-与Y
-丏M
-丐G
-丑C
-专Z
-且Q
-丕P
-世S
-丗S
-丘Q
-丙B
-业Y
-丛C
-东D
-丝S
-丞C
-丢D
-丣Y
-两L
-严Y
-並B
-丨S
-丩J
-个G
-丫Y
-丬Q
-中Z
-丰F
-丱G
-串C
-临L
-丵Z
-丶Z
-丷B
-丸W
-丹D
-为W
-主Z
-丽L
-举J
-丿P
-乀F
-乁Y
-乂Y
-乃N
-久J
-乇T
-么M
-义Y
-之Z
-乌W
-乍Z
-乎H
-乏F
-乐L
-乑Y
-乔Q
-乕H
-乖G
-乘C
-乙Y
-乚Y
-乛Y
-九J
-乞Q
-也Y
-习X
-乡X
-买M
-乱L
-乳R
-乾Q
-亀G
-亅J
-了L
-予Y
-争Z
-事S
-二E
-亍C
-于Y
-亏K
-云Y
-互H
-五W
-井J
-亘G
-亚Y
-亞Y
-亟J
-亠T
-亡W
-亢K
-交J
-亥H
-亦Y
-产C
-亨H
-亩M
-享X
-京J
-亭T
-亮L
-亯X
-亲Q
-亶D
-亷L
-人R
-亻R
-亾W
-仁R
-仄Z
-仆P
-今J
-介J
-仌B
-仍R
-从C
-仑L
-仒B
-仓C
-仕S
-他T
-付F
-仙X
-仚X
-仝T
-代D
-令L
-以Y
-仲Z
-任R
-企Q
-伊Y
-伏F
-伐F
-休X
-众Z
-会H
-伪W
-伸S
-似S
-但D
-佇Z
-位W
-何H
-佘S
-余Y
-作Z
-你N
-佥Q
-侃K
-侯H
-侵Q
-便B
-俊J
-俎Z
-保B
-俞Y
-修X
-倉C
-倍B
-倠S
-倩Q
-僕P
-儵S
-儿E
-兀W
-允Y
-元Y
-兄X
-充C
-兆Z
-兇X
-先X
-光G
-兊D
-克K
-兌D
-免M
-兑D
-兒E
-兓J
-兔T
-兖Y
-兗Y
-党D
-兜D
-兠D
-入R
-內N
-全Q
-八B
-公G
-六L
-兮X
-兰L
-共G
-关G
-兴X
-兵B
-其Q
-具J
-典D
-兹Z
-养Y
-兼J
-冀J
-冂J
-冃M
-冄R
-内N
-円Y
-冈G
-冉R
-冊C
-冋J
-册C
-再Z
-冏J
-冐M
-冒M
-冓G
-冖M
-冗R
-冘Y
-写X
-冚K
-军J
-农N
-冝Y
-冠G
-冡M
-冢Z
-冤Y
-冥M
-冫D
-冬D
-冯F
-冰B
-冷L
-几J
-凡F
-処C
-凳D
-凵Q
-凶X
-凹A
-出C
-击J
-函H
-刀D
-刁D
-刂D
-刃R
-刄R
-刅C
-分F
-切Q
-刈Y
-刍C
-刑X
-划H
-刕L
-列L
-刘L
-则Z
-別B
-利L
-别B
-到D
-制Z
-刷S
-刺C
-削X
-剌L
-前Q
-剡S
-剪J
-剽P
-力L
-办B
-功G
-加J
-务W
-劦X
-动D
-助Z
-劲J
-劳L
-効X
-勃B
-勅C
-勇Y
-勉M
-勒L
-動D
-勘K
-務W
-勝S
-勞L
-勢S
-勤Q
-勳X
-勹B
-勺S
-勻Y
-勾G
-勿W
-匀Y
-包B
-匆C
-匈X
-匊J
-匋T
-匍P
-匕B
-化H
-北B
-匘N
-匚F
-匝Z
-匡K
-匣X
-匧Q
-匪F
-匮K
-匸X
-匹P
-区Q
-医Y
-匽Y
-匿N
-十S
-卂X
-千Q
-卄N
-卅S
-卆Z
-升S
-午W
-卉H
-半B
-卋S
-卌X
-华H
-卑B
-卒Z
-卓Z
-单D
-卖M
-南N
-単D
-博B
-卜B
-卝K
-卞B
-占Z
-卡K
-卢L
-卣Y
-卤L
-卦G
-卧W
-卩J
-卪J
-卫W
-卬A
-卭Q
-卮Z
-卯M
-印Y
-危W
-即J
-却Q
-卵L
-卷J
-卸X
-厂C
-厃W
-厄E
-历L
-厈H
-厉L
-厌Y
-厓Y
-厘L
-原Y
-厤L
-厥J
-厨C
-厶S
-厷G
-去Q
-厽L
-县X
-叀Z
-参C
-參C
-叅C
-又Y
-叉C
-及J
-友Y
-双S
-反F
-发F
-叒R
-叔S
-叕Z
-取Q
-受S
-叙X
-叚J
-叜S
-叟S
-口K
-古G
-句J
-另L
-叩K
-只Z
-召Z
-可K
-台T
-史S
-右Y
-叵P
-叶Y
-号H
-司S
-吁X
-各G
-合H
-吉J
-吊D
-吋C
-同T
-名M
-后H
-吏L
-向X
-吒Z
-吕L
-君J
-吝L
-吟Y
-否F
-含H
-启Q
-吳W
-吴W
-吾W
-呂L
-呆D
-呈C
-告G
-员Y
-呙G
-周Z
-味W
-呴X
-咅P
-和H
-咎J
-咠Q
-咢E
-咨Z
-咸X
-哀A
-品P
-哉Z
-哥G
-唇C
-唐T
-唯W
-商S
-啇D
-啚B
-啬S
-啻C
-善S
-喜X
-喦N
-單D
-喲Y
-喿Z
-嘼C
-噩E
-嚣X
-嚴Y
-囊N
-囗W
-囙Y
-囚Q
-四S
-回H
-囟X
-因Y
-囧J
-囪C
-囬H
-园Y
-困K
-囱C
-围W
-囷Q
-固G
-国G
-圂H
-圈Q
-國G
-圜H
-土T
-圡T
-圣S
-圥L
-在Z
-圭G
-地D
-圶Q
-圼N
-均J
-坎K
-坐Z
-坒B
-坚J
-坴L
-垂C
-垒L
-垔Y
-埋M
-埜Y
-埶Y
-基J
-堂T
-堅J
-堇J
-堯Y
-報B
-塗T
-塞S
-塵C
-墙Q
-墨M
-壓Y
-壘L
-壞H
-士S
-壬R
-壮Z
-壯Z
-声S
-壳K
-壴Z
-壹Y
-壽S
-夂Z
-夃G
-处C
-夅J
-夆F
-备B
-夊S
-夋Q
-夌L
-复F
-夎C
-夏X
-夐X
-夒N
-夔K
-夕X
-外W
-夗Y
-夙S
-多D
-夜Y
-夤Y
-大D
-夨Z
-天T
-太T
-夫F
-夬G
-夭Y
-央Y
-夰G
-失S
-夲T
-头T
-夷Y
-夸K
-夹J
-夺D
-夾J
-奁L
-奂H
-奄Y
-奇Q
-奈N
-奉F
-奎K
-奏Z
-奐H
-契Q
-奓Z
-奔B
-奕Y
-奚X
-奠D
-奢S
-奥A
-奧A
-奭S
-女N
-奴N
-好H
-如R
-妙M
-妟Y
-妥T
-妻Q
-妾Q
-姑G
-委W
-姚Y
-姜J
-姦J
-威W
-娄L
-婆P
-婪L
-婴Y
-媷R
-嬴Y
-子Z
-孔K
-字Z
-存C
-孙S
-孚F
-孛B
-孝X
-孟M
-季J
-孤G
-学X
-孨Z
-孩H
-孰S
-孱C
-宀B
-宁N
-宂R
-它T
-宅Z
-守S
-安A
-宊T
-宋S
-完W
-宏H
-宓M
-宕D
-宗Z
-官G
-定D
-宛W
-宜Y
-宝B
-审S
-客K
-宣X
-室S
-宪X
-宰Z
-害H
-家J
-容R
-宽K
-宾B
-宿S
-寂J
-寄J
-寅Y
-密M
-寇K
-察C
-寸C
-对D
-寺S
-寻X
-寽L
-寿S
-封F
-尃F
-射S
-将J
-將J
-尉W
-尊Z
-尌S
-小X
-少S
-尒E
-尓E
-尔E
-尗S
-尚S
-尝C
-尞L
-尢Y
-尣W
-尤Y
-尧Y
-尨M
-就J
-尸S
-尹Y
-尺C
-尻K
-尼N
-尽J
-尾W
-尿N
-局J
-居J
-屈Q
-屋W
-屏P
-屑X
-展Z
-屖X
-屚L
-属S
-屠T
-屬S
-屮C
-屯T
-屰N
-山S
-岁S
-岂Q
-岑C
-岛D
-岡G
-岢K
-岩Y
-岳Y
-岸A
-崇C
-崔C
-崖Y
-崩B
-嶲X
-巂G
-巔D
-巛C
-巜K
-川C
-州Z
-巟H
-巢C
-巤L
-工G
-左Z
-巧Q
-巨J
-巩G
-巫W
-差C
-己J
-已Y
-巳S
-巴B
-巵Z
-巷X
-巸Y
-巽X
-巾J
-巿F
-帀Z
-市S
-布B
-师S
-希X
-帖T
-帚Z
-帛B
-帝D
-带D
-席X
-帶D
-常C
-幕M
-干G
-平P
-年N
-幵J
-并B
-幷B
-幸X
-幹G
-幺Y
-幻H
-幼Y
-幽Y
-幾J
-广G
-庄Z
-庆Q
-序X
-库K
-底D
-店D
-庚G
-府F
-废F
-度D
-座Z
-庭T
-庳B
-庵A
-庶S
-康K
-庸Y
-廂X
-廆G
-廉L
-廌Z
-廚C
-廛C
-廝S
-廟M
-廴Y
-延Y
-廷T
-建J
-廾G
-廿N
-开K
-弁B
-异Y
-弃Q
-弄N
-弇Y
-弋Y
-式S
-弒S
-弓G
-弔D
-引Y
-弗F
-弘H
-弜J
-弟D
-张Z
-弥M
-弦X
-弭M
-弯W
-弱R
-強Q
-强Q
-彐J
-彑J
-归G
-当D
-彔L
-录L
-彖T
-彗H
-彘Z
-彡S
-彣W
-彤T
-彥Y
-彦Y
-彧Y
-彪B
-彬B
-彭P
-彳R
-役Y
-往W
-征Z
-待D
-律L
-徐X
-徒T
-得D
-徙X
-徝Z
-從C
-御Y
-復F
-微W
-徴Z
-徵Z
-徹C
-心X
-忄X
-必B
-忌J
-忍R
-忒T
-志Z
-忘W
-忝T
-忠Z
-忡C
-忧Y
-忩C
-快K
-念N
-忽H
-忿F
-思S
-怠D
-急J
-怨Y
-怱C
-总Z
-恆H
-恋L
-恒H
-恝J
-恣Z
-恩E
-恬T
-恭G
-息X
-恶E
-悉X
-悘Y
-悠Y
-患H
-悤C
-悲B
-惠H
-惢S
-惰D
-愁C
-意Y
-感G
-慈C
-慝T
-慧H
-慰W
-憂Y
-憲X
-懷H
-戈G
-戉Y
-戊W
-戋J
-戌X
-戍S
-戎R
-戏X
-成C
-我W
-戒J
-戔J
-或H
-戚Q
-戛J
-戟J
-戠Z
-戢J
-截J
-戴D
-戶H
-户H
-戸H
-戹E
-戻T
-戾L
-房F
-所S
-扁B
-扇S
-扈H
-手S
-扌S
-才C
-扎Z
-打D
-扣K
-执Z
-扳B
-扶F
-承C
-技J
-抄C
-把B
-抖D
-折Z
-披P
-抱B
-抽C
-拆C
-拉L
-拋P
-拍P
-拐G
-拑Q
-招Z
-拜B
-择Z
-括K
-拳Q
-拾S
-拿N
-挐N
-挛L
-捕B
-捭B
-捷J
-掌Z
-推T
-措C
-掷Z
-搆G
-搴Q
-搵W
-摩M
-攀P
-支Z
-攴P
-攵P
-收S
-攸Y
-放F
-政Z
-敃M
-敄W
-故G
-敇C
-敍X
-敏M
-救J
-敕C
-敖A
-敘X
-教J
-敛L
-敝B
-敞C
-敢G
-散S
-敦D
-敫J
-敬J
-数S
-敷F
-文W
-斉Q
-斌B
-斑B
-斗D
-料L
-斛H
-斡W
-斤J
-斥C
-斩Z
-斬Z
-断D
-斯S
-新X
-方F
-於Y
-施S
-斿Y
-旁P
-旅L
-旉F
-旋X
-族Z
-旑Y
-旖Y
-无W
-旡J
-既J
-旣J
-日R
-旦D
-旧J
-旨Z
-早Z
-旬X
-旰G
-旱H
-时S
-旻M
-旾C
-昆K
-昇S
-昊H
-昌C
-明M
-昏H
-易Y
-昔X
-昚S
-昛J
-昜Y
-昝Z
-星X
-春C
-昨Z
-昫X
-昬H
-是S
-昱Y
-昷W
-显X
-晃H
-晉J
-晋J
-晒S
-晨C
-普P
-景J
-晶J
-晷G
-晹Y
-智Z
-暑S
-暨J
-暴B
-曅Y
-曰Y
-曲Q
-曳Y
-更G
-曶H
-曷H
-曹C
-曼M
-曽C
-曾C
-替T
-最Z
-朁C
-會H
-月Y
-有Y
-朋P
-服F
-朐Q
-朔S
-朗L
-朝C
-木M
-朩D
-未W
-末M
-本B
-札Z
-朮S
-术S
-朱Z
-朴P
-朵D
-朶D
-朿C
-杀S
-杉S
-杏X
-杜D
-束S
-条T
-来L
-杨Y
-杰J
-杲G
-松S
-枀S
-析X
-林L
-果G
-枣Z
-枭X
-枯K
-枲X
-架J
-枼Y
-柏B
-某M
-染R
-柔R
-查C
-柬J
-柯K
-柰N
-柱Z
-柴C
-栈Z
-栗L
-格G
-栽Z
-栾L
-桀J
-桂G
-桊J
-桑S
-桼Q
-梁L
-條T
-梦M
-梨L
-梵F
-棒B
-棘J
-棠T
-棥F
-森S
-楙M
-楚C
-榴L
-槀G
-槖T
-樵Q
-橢T
-橤R
-檗B
-櫐L
-欠Q
-次C
-欣X
-欮J
-欲Y
-欶S
-欺Q
-款K
-歆X
-歇X
-歊X
-歋Y
-歎T
-歛H
-止Z
-正Z
-此C
-步B
-武W
-歨B
-歪W
-歮S
-歰S
-歲S
-歹D
-歺E
-死S
-殄T
-殳S
-段D
-殷Y
-殸Q
-殹Y
-殺S
-殿D
-毀H
-毅Y
-毋W
-母M
-每M
-毒D
-比B
-毕B
-毚C
-毛M
-毳C
-氏S
-氐D
-民M
-气Q
-氣Q
-水S
-氵D
-氶Z
-氷B
-永Y
-氾F
-氿G
-求Q
-汇H
-汎F
-汙W
-汞G
-江J
-池C
-汤T
-沂Y
-沃W
-沈S
-沐M
-沒M
-沓D
-沙S
-沛P
-沥L
-沮J
-河H
-治Z
-沼Z
-沾Z
-泉Q
-泊P
-泓H
-法F
-波B
-泥N
-注Z
-泰T
-泵B
-泻X
-洒S
-洗X
-洛L
-洞D
-津J
-洪H
-洰J
-洴P
-活H
-派P
-流L
-浂Y
-浦P
-浧Y
-浪L
-海H
-浸J
-涂T
-涅N
-淑S
-淩L
-淵Y
-添T
-清Q
-渊Y
-渐J
-渝Y
-渠Q
-温W
-湛Z
-湡Y
-滂P
-滈H
-滑H
-滕T
-滞Z
-满M
-滥L
-漂P
-漅C
-漸J
-潔J
-潘P
-澡Z
-火H
-灬D
-灭M
-灰H
-灵L
-灾Z
-炎Y
-炙Z
-炭T
-点D
-烏W
-烕M
-烝Z
-烦F
-热R
-焄X
-焉Y
-焊H
-焦J
-焭Q
-焱Y
-然R
-煔S
-煖N
-煞S
-照Z
-熏X
-熙X
-燕Y
-燮X
-爪Z
-爫Z
-爭Z
-爯C
-爰Y
-爱A
-爵J
-父F
-爹D
-爻Y
-爽S
-爾E
-爿P
-片P
-版B
-牌P
-牙Y
-牚C
-牛N
-牜N
-牟M
-牢L
-物W
-牵Q
-犀X
-犬Q
-犭Q
-犮B
-犹Y
-狂K
-狃N
-狄D
-狊J
-狱Y
-猄J
-猋B
-猪Z
-献X
-獻X
-玄X
-率L
-玉Y
-王W
-琴Q
-琶P
-琺F
-瑟S
-瓜G
-瓠H
-瓦W
-甄Z
-甘G
-甚S
-甜T
-生S
-產C
-用Y
-甫F
-甬Y
-甯N
-田T
-由Y
-甲J
-申S
-电D
-男N
-甸D
-甹P
-画H
-甾Z
-畀B
-畁B
-畇Y
-界J
-畎Q
-畏W
-畐F
-畔P
-留L
-畚B
-畜C
-畟C
-畣D
-畧L
-番F
-異Y
-畱L
-畺J
-畾L
-疋P
-疌J
-疏S
-疐Z
-疑Y
-疒N
-疾J
-病B
-癶B
-癸G
-登D
-白B
-百B
-皀J
-皂Z
-的D
-皅P
-皆J
-皇H
-皋G
-皐G
-皓H
-皛X
-皮P
-皿M
-盆P
-盇H
-盈Y
-益Y
-盍H
-盎A
-监J
-盖G
-盘P
-盙F
-盛S
-盟M
-盪D
-目M
-直Z
-相X
-盾D
-省S
-眇M
-眉M
-眔D
-眘S
-眞Z
-真Z
-眯M
-眷J
-眾Z
-着Z
-睘Q
-睢S
-睪Y
-睽K
-睿R
-瞢M
-瞿Q
-矍J
-矛M
-矞Y
-矢S
-矣Y
-矤S
-知Z
-矩J
-石S
-砉H
-研Y
-碯N
-磊L
-磨M
-示S
-礻S
-神S
-票P
-祭J
-祸H
-祿L
-禀B
-禁J
-禦Y
-禸R
-禹Y
-禺Y
-离L
-禽Q
-禾H
-禿T
-秀X
-秃T
-秉B
-秋Q
-科K
-秝L
-租Z
-秦Q
-移Y
-稊T
-稍S
-稜L
-稣S
-稨B
-稾G
-穀G
-穴X
-穵W
-穹Q
-空K
-穼S
-穾Y
-穿C
-突T
-窄Z
-窊W
-窒Z
-窗C
-窘J
-窜C
-窨X
-窮Q
-立L
-竝B
-竟J
-章Z
-童T
-竹Z
-笋S
-笔B
-笠L
-笪D
-筄Y
-筍S
-筑Z
-答D
-策C
-筮S
-箕J
-算S
-管G
-箭J
-箴Z
-箸Z
-簋G
-米M
-类L
-粜T
-粟S
-粥Z
-粦L
-粲C
-糜M
-糞F
-糸M
-系X
-素S
-索S
-紧J
-累L
-終Z
-絜J
-絭J
-絮X
-絲S
-綦Q
-縠H
-縢T
-縣X
-縻M
-繁F
-纂Z
-纍L
-纟S
-红H
-纣Z
-约Y
-纯C
-纳N
-纷F
-纺F
-结J
-绝J
-绢J
-绰C
-维W
-绵M
-缊Y
-缓H
-缘Y
-缚F
-缶F
-缺Q
-罅X
-网W
-罒W
-罓G
-罔W
-罕H
-罗L
-罙S
-罚F
-罡G
-罢B
-罪Z
-署S
-罽J
-羊Y
-羌Q
-美M
-羑Y
-羔G
-羕Y
-羗Q
-羞X
-羨X
-羲X
-羴S
-羽Y
-翁W
-翌Y
-翏L
-習X
-翕X
-翟D
-翠C
-翦J
-翬H
-翯H
-翰H
-翳Y
-翼Y
-老L
-耂L
-考K
-者Z
-耆Q
-而E
-耎R
-耑D
-耒L
-耤J
-耦O
-耳E
-耴Y
-耶Y
-耷D
-耿G
-聂N
-聊L
-职Z
-联L
-聚J
-聶N
-聿Y
-肀Y
-肃S
-肆S
-肉R
-肋L
-肎K
-肖X
-肙Y
-肥F
-肩J
-肯K
-育Y
-肴Y
-胃W
-背B
-胙Z
-胡H
-胤Y
-胥X
-胶J
-能N
-脅X
-脈M
-脉M
-脊J
-脓N
-脔L
-脣C
-脩X
-脾P
-臣C
-臤Q
-臦G
-臧Z
-自Z
-臬N
-臭C
-臯G
-臱M
-至Z
-臺T
-臼J
-臽X
-臾Y
-臿C
-舀Y
-舂C
-舃X
-舄X
-與Y
-興X
-舋X
-舌S
-舍S
-舛C
-舜S
-舞W
-舟Z
-般B
-艮G
-良L
-色S
-艳Y
-艸C
-艹C
-艺Y
-艾A
-节J
-芈M
-芒M
-芬F
-芮R
-芯X
-花H
-芳F
-芷Z
-芻C
-苑Y
-苔T
-苕S
-苗M
-苜M
-苞B
-若R
-苦K
-英Y
-苴J
-苻F
-茁Z
-茂M
-茅M
-茍J
-茧J
-茲Z
-茶C
-茸R
-茹R
-荀X
-荃Q
-荅D
-草C
-荐J
-荒H
-荣R
-荥X
-荧Y
-荷H
-荼T
-莑P
-莝C
-莫M
-莹Y
-莽M
-莾M
-菐P
-菞L
-華H
-菲F
-萃C
-萌M
-萠P
-营Y
-萦Y
-萧X
-葉Y
-著Z
-葛G
-董D
-葱C
-蒙M
-蒦H
-蒪P
-蒿H
-蓋G
-蓝L
-蓬P
-蓺Y
-蔑M
-蔡C
-蔺L
-蔽B
-蕇D
-蕈X
-蕉J
-蕊R
-蕩D
-蕲Q
-薄B
-薛X
-薦J
-藉J
-藏C
-虍H
-虎H
-虏L
-虐N
-虑L
-虒S
-虔Q
-虖H
-虘C
-虚X
-虛X
-虞Y
-號H
-虡J
-虫C
-虱S
-虹H
-虽S
-虿C
-蚉W
-蚤Z
-蚩C
-蛮M
-蜀S
-蜜M
-融R
-蟲C
-蟺S
-蠆C
-蠡L
-血X
-衆Z
-行X
-衍Y
-衞W
-衡H
-衣Y
-衤Y
-表B
-衮G
-衰S
-衾Q
-袁Y
-袅N
-袲C
-褰Q
-褱H
-襄X
-襾Y
-西X
-覀X
-要Y
-覃T
-見J
-覞Y
-親Q
-见J
-规G
-觅M
-览L
-觉J
-角J
-觜Z
-解J
-言Y
-訁Y
-訂D
-訇H
-詹Z
-讎C
-讠Y
-讨T
-训X
-许X
-设S
-诸Z
-谒Y
-谖X
-谷G
-豆D
-豈Q
-豊L
-豐F
-豔Y
-豕Z
-豖C
-豙Y
-豚T
-象X
-豦J
-豩B
-豪H
-豫Y
-豸Z
-貌M
-貍L
-貝B
-貞Z
-責Z
-貴G
-貸D
-賴L
-贏Y
-贝B
-贞Z
-负F
-贠Y
-贡G
-责Z
-贤X
-败B
-质Z
-贪T
-贯G
-贰E
-贱J
-贲B
-贳S
-贵G
-贸M
-费F
-贼Z
-贾J
-资Z
-赏S
-赐C
-赖L
-赘Z
-赞Z
-赤C
-赦S
-赫H
-走Z
-赵Z
-越Y
-足Z
-路L
-蹇J
-身S
-躬G
-躳G
-車C
-軌G
-軗S
-輂J
-车C
-轧Y
-轨G
-轩X
-转Z
-软R
-轻Q
-载Z
-辂L
-辇N
-辛X
-辜G
-辟P
-辥X
-辰C
-辱R
-辵C
-辶Z
-边B
-达D
-迁Q
-过G
-运Y
-近J
-进J
-远Y
-连L
-述S
-迶Y
-迷M
-迹J
-追Z
-退T
-送S
-适S
-逆N
-逐Z
-通T
-造Z
-逢F
-逮D
-進J
-遀S
-遂S
-遐X
-道D
-遗Y
-遝T
-遣Q
-適S
-遬S
-遷Q
-邑Y
-邕Y
-邛Q
-那N
-邦B
-邪X
-邵S
-郁Y
-郎L
-郑Z
-部B
-郭G
-都D
-酉Y
-酋Q
-配P
-酓Y
-釁X
-釆B
-采C
-里L
-重Z
-野Y
-金J
-釒J
-釜F
-鋶L
-鍾Z
-鐐L
-钅J
-钓D
-钦Q
-钧J
-铦X
-银Y
-锡X
-镸C
-长Z
-閵L
-閻Y
-门M
-闪S
-问W
-闰R
-闲X
-间J
-闵M
-闷M
-闾L
-阁G
-阎Y
-阐C
-阑L
-阘D
-阙Q
-阚H
-阜F
-阝D
-阞L
-队D
-防F
-阳Y
-阴Y
-阵Z
-阻Z
-阿A
-陈C
-陏D
-陟Z
-除C
-陰Y
-陷X
-隆L
-隋S
-随S
-隐Y
-隤T
-隶L
-隹Z
-隺H
-隻Z
-隼S
-隽J
-难N
-雀Q
-雅Y
-集J
-雉Z
-雋J
-雍Y
-雔C
-雚G
-雜Z
-雝Y
-離L
-雨Y
-雩Y
-雪X
-雲Y
-零L
-雷L
-需X
-霍H
-霜S
-霝L
-露L
-霸B
-靑Q
-青Q
-靓J
-靘Q
-静J
-非F
-靡M
-面M
-革G
-靴X
-鞋X
-鞠J
-韋W
-韦W
-韭J
-韯X
-韰X
-韱X
-韲J
-音Y
-頁Y
-頣S
-頼L
-顚D
-顛D
-页Y
-顶D
-顷Q
-项X
-须X
-预Y
-颇P
-颉J
-频P
-颓T
-颖Y
-题T
-颠D
-颢H
-风F
-飛F
-飞F
-食S
-飠S
-飧S
-飱S
-養Y
-餋J
-饣S
-首S
-香X
-馬M
-马M
-骨G
-高G
-髟B
-鬥D
-鬯C
-鬲G
-鬵Q
-鬼G
-魁K
-魏W
-鱼Y
-鲁L
-鲜X
-鲞X
-鳥N
-鵭Q
-鸟N
-鸡J
-鹝Y
-鹤H
-鹿L
-麃P
-麇J
-麋M
-麕J
-麥M
-麦M
-麻M
-麼M
-麽M
-黃H
-黄H
-黈T
-黊H
-黍S
-黎L
-黑H
-黹Z
-黽M
-黾M
-鼈B
-鼎D
-鼓G
-鼠S
-鼻B
-齊Q
-齐Q
-齿C
-龙L
-龟G
-龠Y
-㐆Y
-㐬L
-㒼M
-㓁W
-㔾X
-㚇Z
-㝵D
-㠯Y
-㡀B
-䇲C
-𠂔Z
-𠂢P
-𠃊Y
-𠄌J
-𠔉J
-𠤏B
-𡿺N
-𢦏Z
-𢰌G
-𤇾Y
-𦥯X
-龴H
-㇆G
+𠂢 P
+一 H
+丁 D
+丂 K
+七 Q
+丄 S
+丅 X
+万 W
+丈 Z
+三 S
+上 S
+下 X
+丌 J
+不 B
+与 Y
+丏 M
+丐 G
+丑 C
+专 Z
+且 Q
+丕 P
+世 S
+丗 S
+丘 Q
+丙 B
+业 Y
+丛 C
+东 D
+丝 S
+丞 C
+丢 D
+丣 Y
+两 L
+严 Y
+並 B
+丨 S
+丩 J
+个 G
+丫 Y
+丬 Q
+中 Z
+丰 F
+丱 G
+串 C
+临 L
+丵 Z
+丶 D
+丷 B
+丸 W
+丹 D
+为 W
+主 Z
+丽 L
+举 J
+丿 P
+乀 F
+乁 N
+乂 Y
+乃 N
+久 J
+乇 T
+么 M
+义 Y
+之 Z
+乌 W
+乍 Z
+乎 H
+乏 F
+乐 L
+乑 Y
+乔 Q
+乕 H
+乖 G
+乘 C
+乙 Y
+乚 G
+乛 Z
+九 J
+乞 Q
+也 Y
+习 X
+乡 X
+买 M
+乱 L
+乳 R
+乾 Q
+亀 G
+亅 J
+了 L
+予 Y
+争 Z
+事 S
+二 E
+亍 C
+于 Y
+亏 K
+云 Y
+互 H
+五 W
+井 J
+亘 G
+亚 Y
+亞 Y
+亟 J
+亠 T
+亡 W
+亢 K
+交 J
+亥 H
+亦 Y
+产 C
+亨 H
+亩 M
+享 X
+京 J
+亭 T
+亮 L
+亯 X
+亲 Q
+亶 D
+亷 L
+人 R
+亻 R
+亾 W
+仁 R
+仄 Z
+仆 P
+今 J
+介 J
+仌 B
+仍 R
+从 C
+仑 L
+仒 B
+仓 C
+仕 S
+他 T
+付 F
+仙 X
+仚 X
+仝 T
+代 D
+令 L
+以 Y
+仲 Z
+任 R
+企 Q
+伊 Y
+伏 F
+伐 F
+休 X
+众 Z
+会 H
+伪 W
+伸 S
+似 S
+但 D
+佇 Z
+位 W
+何 H
+佘 S
+余 Y
+作 Z
+你 N
+佥 Q
+侃 K
+侯 H
+侵 Q
+便 B
+俊 J
+俎 Z
+保 B
+俞 Y
+修 X
+倉 C
+倍 B
+倠 S
+倩 Q
+僕 P
+儵 S
+儿 E
+兀 W
+允 Y
+元 Y
+兄 X
+充 C
+兆 Z
+兇 X
+先 X
+光 G
+兊 D
+克 K
+兌 D
+免 M
+兑 D
+兒 E
+兓 J
+兔 T
+兖 Y
+兗 Y
+党 D
+兜 D
+兠 D
+入 R
+內 N
+全 Q
+八 B
+公 G
+六 L
+兮 X
+兰 L
+共 G
+关 G
+兴 X
+兵 B
+其 Q
+具 J
+典 D
+兹 Z
+养 Y
+兼 J
+冀 J
+冂 J
+冃 M
+冄 R
+内 N
+円 Y
+冈 G
+冉 R
+冊 C
+冋 J
+册 C
+再 Z
+冏 J
+冐 M
+冒 M
+冓 G
+冖 M
+冗 R
+冘 Y
+写 X
+冚 K
+军 J
+农 N
+冝 Y
+冠 G
+冡 M
+冢 Z
+冤 Y
+冥 M
+冫 D
+冬 D
+冯 F
+冰 B
+冷 L
+几 J
+凡 F
+処 C
+凳 D
+凵 Q
+凶 X
+凹 A
+出 C
+击 J
+函 H
+刀 D
+刁 D
+刂 D
+刃 R
+刄 R
+刅 C
+分 F
+切 Q
+刈 Y
+刍 C
+刑 X
+划 H
+刕 L
+列 L
+刘 L
+则 Z
+別 B
+利 L
+别 B
+到 D
+制 Z
+刷 S
+刺 C
+削 X
+剌 L
+前 Q
+剡 S
+剪 J
+剽 P
+力 L
+办 B
+功 G
+加 J
+务 W
+劦 X
+动 D
+助 Z
+劲 J
+劳 L
+効 X
+勃 B
+勅 C
+勇 Y
+勉 M
+勒 L
+動 D
+勘 K
+務 W
+勝 S
+勞 L
+勢 S
+勤 Q
+勳 X
+勹 B
+勺 S
+勻 Y
+勾 G
+勿 W
+匀 Y
+包 B
+匆 C
+匈 X
+匊 J
+匋 T
+匍 P
+匕 B
+化 H
+北 B
+匘 N
+匚 F
+匝 Z
+匡 K
+匣 X
+匧 Q
+匪 F
+匮 K
+匸 X
+匹 P
+区 Q
+医 Y
+匽 Y
+匿 N
+十 S
+卂 X
+千 Q
+卄 N
+卅 S
+卆 Z
+升 S
+午 W
+卉 H
+半 B
+卋 S
+卌 X
+华 H
+卑 B
+卒 Z
+卓 Z
+单 D
+卖 M
+南 N
+単 D
+博 B
+卜 B
+卝 K
+卞 B
+占 Z
+卡 K
+卢 L
+卣 Y
+卤 L
+卦 G
+卧 W
+卩 J
+卪 J
+卫 W
+卬 A
+卭 Q
+卮 Z
+卯 M
+印 Y
+危 W
+即 J
+却 Q
+卵 L
+卷 J
+卸 X
+厂 C
+厃 W
+厄 E
+历 L
+厈 H
+厉 L
+厌 Y
+厓 Y
+厘 L
+原 Y
+厤 L
+厥 J
+厨 C
+厶 M
+厷 G
+去 Q
+厽 L
+县 X
+叀 Z
+参 C
+參 C
+叅 C
+又 Y
+叉 C
+及 J
+友 Y
+双 S
+反 F
+发 F
+叒 R
+叔 S
+叕 Z
+取 Q
+受 S
+叙 X
+叚 J
+叜 S
+叟 S
+口 K
+古 G
+句 J
+另 L
+叩 K
+只 Z
+召 Z
+可 K
+台 T
+史 S
+右 Y
+叵 P
+叶 Y
+号 H
+司 S
+吁 X
+各 G
+合 H
+吉 J
+吊 D
+吋 C
+同 T
+名 M
+后 H
+吏 L
+向 X
+吒 Z
+吕 L
+君 J
+吝 L
+吟 Y
+否 F
+含 H
+启 Q
+吳 W
+吴 W
+吾 W
+呂 L
+呆 D
+呈 C
+告 G
+员 Y
+呙 G
+周 Z
+味 W
+呴 X
+咅 P
+和 H
+咎 J
+咠 Q
+咢 E
+咨 Z
+咸 X
+哀 A
+品 P
+哉 Z
+哥 G
+唇 C
+唐 T
+唯 W
+商 S
+啇 D
+啚 B
+啬 S
+啻 C
+善 S
+喜 X
+喦 N
+單 D
+喲 Y
+喿 Z
+嘼 C
+噩 E
+嚣 X
+嚴 Y
+囊 N
+囗 W
+囙 Y
+囚 Q
+四 S
+回 H
+囟 X
+因 Y
+囧 J
+囪 C
+囬 H
+园 Y
+困 K
+囱 C
+围 W
+囷 Q
+固 G
+国 G
+圂 H
+圈 Q
+國 G
+圜 H
+土 T
+圡 T
+圣 S
+圥 L
+在 Z
+圭 G
+地 D
+圶 Q
+圼 N
+均 J
+坎 K
+坐 Z
+坒 B
+坚 J
+坴 L
+垂 C
+垒 L
+垔 Y
+埋 M
+埜 Y
+埶 Y
+基 J
+堂 T
+堅 J
+堇 J
+堯 Y
+報 B
+塗 T
+塞 S
+塵 C
+墙 Q
+墨 M
+壓 Y
+壘 L
+壞 H
+士 S
+壬 R
+壮 Z
+壯 Z
+声 S
+壳 K
+壴 Z
+壹 Y
+壽 S
+夂 Z
+夃 G
+处 C
+夅 J
+夆 F
+备 B
+夊 S
+夋 Q
+夌 L
+复 F
+夎 C
+夏 X
+夐 X
+夒 N
+夔 K
+夕 X
+外 W
+夗 Y
+夙 S
+多 D
+夜 Y
+夤 Y
+大 D
+夨 Z
+天 T
+太 T
+夫 F
+夬 G
+夭 Y
+央 Y
+夰 G
+失 S
+夲 T
+头 T
+夷 Y
+夸 K
+夹 J
+夺 D
+夾 J
+奁 L
+奂 H
+奄 Y
+奇 Q
+奈 N
+奉 F
+奎 K
+奏 Z
+奐 H
+契 Q
+奓 Z
+奔 B
+奕 Y
+奚 X
+奠 D
+奢 S
+奥 A
+奧 A
+奭 S
+女 N
+奴 N
+好 H
+如 R
+妙 M
+妟 Y
+妥 T
+妻 Q
+妾 Q
+姑 G
+委 W
+姚 Y
+姜 J
+姦 J
+威 W
+娄 L
+婆 P
+婪 L
+婴 Y
+媷 R
+嬴 Y
+子 Z
+孔 K
+字 Z
+存 C
+孙 S
+孚 F
+孛 B
+孝 X
+孟 M
+季 J
+孤 G
+学 X
+孨 Z
+孩 H
+孰 S
+孱 C
+宀 B
+宁 N
+宂 R
+它 T
+宅 Z
+守 S
+安 A
+宊 T
+宋 S
+完 W
+宏 H
+宓 M
+宕 D
+宗 Z
+官 G
+定 D
+宛 W
+宜 Y
+宝 B
+审 S
+客 K
+宣 X
+室 S
+宪 X
+宰 Z
+害 H
+家 J
+容 R
+宽 K
+宾 B
+宿 S
+寂 J
+寄 J
+寅 Y
+密 M
+寇 K
+察 C
+寸 C
+对 D
+寺 S
+寻 X
+寽 L
+寿 S
+封 F
+尃 F
+射 S
+将 J
+將 J
+尉 W
+尊 Z
+尌 S
+小 X
+少 S
+尒 E
+尓 E
+尔 E
+尗 S
+尚 S
+尝 C
+尞 L
+尢 Y
+尣 W
+尤 Y
+尧 Y
+尨 M
+就 J
+尸 S
+尹 Y
+尺 C
+尻 K
+尼 N
+尽 J
+尾 W
+尿 N
+局 J
+居 J
+屈 Q
+屋 W
+屏 P
+屑 X
+展 Z
+屖 X
+屚 L
+属 S
+屠 T
+屬 S
+屮 C
+屯 T
+屰 N
+山 S
+岁 S
+岂 Q
+岑 C
+岛 D
+岡 G
+岢 K
+岩 Y
+岳 Y
+岸 A
+崇 C
+崔 C
+崖 Y
+崩 B
+嶲 X
+巂 G
+巔 D
+巛 C
+巜 K
+川 C
+州 Z
+巟 H
+巢 C
+巤 L
+工 G
+左 Z
+巧 Q
+巨 J
+巩 G
+巫 W
+差 C
+己 J
+已 Y
+巳 S
+巴 B
+巵 Z
+巷 X
+巸 Y
+巽 X
+巾 J
+巿 F
+帀 Z
+市 S
+布 B
+师 S
+希 X
+帖 T
+帚 Z
+帛 B
+帝 D
+带 D
+席 X
+帶 D
+常 C
+幕 M
+干 G
+平 P
+年 N
+幵 J
+并 B
+幷 B
+幸 X
+幹 G
+幺 Y
+幻 H
+幼 Y
+幽 Y
+幾 J
+广 G
+庄 Z
+庆 Q
+序 X
+库 K
+底 D
+店 D
+庚 G
+府 F
+废 F
+度 D
+座 Z
+庭 T
+庳 B
+庵 A
+庶 S
+康 K
+庸 Y
+廂 X
+廆 G
+廉 L
+廌 Z
+廚 C
+廛 C
+廝 S
+廟 M
+廴 Y
+延 Y
+廷 T
+建 J
+廾 G
+廿 N
+开 K
+弁 B
+异 Y
+弃 Q
+弄 N
+弇 Y
+弋 Y
+式 S
+弒 S
+弓 G
+弔 D
+引 Y
+弗 F
+弘 H
+弜 J
+弟 D
+张 Z
+弥 M
+弦 X
+弭 M
+弯 W
+弱 R
+強 Q
+强 Q
+彐 J
+彑 J
+归 G
+当 D
+彔 L
+录 L
+彖 T
+彗 H
+彘 Z
+彡 S
+彣 W
+彤 T
+彥 Y
+彦 Y
+彧 Y
+彪 B
+彬 B
+彭 P
+彳 R
+役 Y
+往 W
+征 Z
+待 D
+律 L
+徐 X
+徒 T
+得 D
+徙 X
+徝 Z
+從 C
+御 Y
+復 F
+微 W
+徴 Z
+徵 Z
+徹 C
+心 X
+忄 X
+必 B
+忌 J
+忍 R
+忒 T
+志 Z
+忘 W
+忝 T
+忠 Z
+忡 C
+忧 Y
+忩 C
+快 K
+念 N
+忽 H
+忿 F
+思 S
+怠 D
+急 J
+怨 Y
+怱 C
+总 Z
+恆 H
+恋 L
+恒 H
+恝 J
+恣 Z
+恩 E
+恬 T
+恭 G
+息 X
+恶 E
+悉 X
+悘 Y
+悠 Y
+患 H
+悤 C
+悲 B
+惠 H
+惢 S
+惰 D
+愁 C
+意 Y
+感 G
+慈 C
+慝 T
+慧 H
+慰 W
+憂 Y
+憲 X
+懷 H
+戈 G
+戉 Y
+戊 W
+戋 J
+戌 X
+戍 S
+戎 R
+戏 X
+成 C
+我 W
+戒 J
+戔 J
+或 H
+戚 Q
+戛 J
+戟 J
+戠 Z
+戢 J
+截 J
+戴 D
+戶 H
+户 H
+戸 H
+戹 E
+戻 T
+戾 L
+房 F
+所 S
+扁 B
+扇 S
+扈 H
+手 S
+扌 S
+才 C
+扎 Z
+打 D
+扣 K
+执 Z
+扳 B
+扶 F
+承 C
+技 J
+抄 C
+把 B
+抖 D
+折 Z
+披 P
+抱 B
+抽 C
+拆 C
+拉 L
+拋 P
+拍 P
+拐 G
+拑 Q
+招 Z
+拜 B
+择 Z
+括 K
+拳 Q
+拾 S
+拿 N
+挐 N
+挛 L
+捕 B
+捭 B
+捷 J
+掌 Z
+推 T
+措 C
+掷 Z
+搆 G
+搴 Q
+搵 W
+摩 M
+攀 P
+支 Z
+攴 Z
+攵 Y
+收 S
+攸 Y
+放 F
+政 Z
+敃 M
+敄 W
+故 G
+敇 C
+敍 X
+敏 M
+救 J
+敕 C
+敖 A
+敘 X
+教 J
+敛 L
+敝 B
+敞 C
+敢 G
+散 S
+敦 D
+敫 J
+敬 J
+数 S
+敷 F
+文 W
+斉 Q
+斌 B
+斑 B
+斗 D
+料 L
+斛 H
+斡 W
+斤 J
+斥 C
+斩 Z
+斬 Z
+断 D
+斯 S
+新 X
+方 F
+於 Y
+施 S
+斿 Y
+旁 P
+旅 L
+旉 F
+旋 X
+族 Z
+旑 Y
+旖 Y
+无 W
+旡 J
+既 J
+旣 J
+日 R
+旦 D
+旧 J
+旨 Z
+早 Z
+旬 X
+旰 G
+旱 H
+时 S
+旻 M
+旾 C
+昆 K
+昇 S
+昊 H
+昌 C
+明 M
+昏 H
+易 Y
+昔 X
+昚 S
+昛 J
+昜 Y
+昝 Z
+星 X
+春 C
+昨 Z
+昫 X
+昬 H
+是 S
+昱 Y
+昷 W
+显 X
+晃 H
+晉 J
+晋 J
+晒 S
+晨 C
+普 P
+景 J
+晶 J
+晷 G
+晹 Y
+智 Z
+暑 S
+暨 J
+暴 B
+曅 Y
+曰 Y
+曲 Q
+曳 Y
+更 G
+曶 H
+曷 H
+曹 C
+曼 M
+曽 C
+曾 C
+替 T
+最 Z
+朁 C
+會 H
+月 Y
+有 Y
+朋 P
+服 F
+朐 Q
+朔 S
+朗 L
+朝 C
+木 M
+朩 M
+未 W
+末 M
+本 B
+札 Z
+朮 S
+术 S
+朱 Z
+朴 P
+朵 D
+朶 D
+朿 C
+杀 S
+杉 S
+杏 X
+杜 D
+束 S
+条 T
+来 L
+杨 Y
+杰 J
+杲 G
+松 S
+枀 S
+析 X
+林 L
+果 G
+枣 Z
+枭 X
+枯 K
+枲 X
+架 J
+枼 Y
+柏 B
+某 M
+染 R
+柔 R
+查 C
+柬 J
+柯 K
+柰 N
+柱 Z
+柴 C
+栈 Z
+栗 L
+格 G
+栽 Z
+栾 L
+桀 J
+桂 G
+桊 J
+桑 S
+桼 Q
+梁 L
+條 T
+梦 M
+梨 L
+梵 F
+棒 B
+棘 J
+棠 T
+棥 F
+森 S
+楙 M
+楚 C
+榴 L
+槀 G
+槖 T
+樵 Q
+橢 T
+橤 R
+檗 B
+櫐 L
+欠 Q
+次 C
+欣 X
+欮 J
+欲 Y
+欶 S
+欺 Q
+款 K
+歆 X
+歇 X
+歊 X
+歋 Y
+歎 T
+歛 H
+止 Z
+正 Z
+此 C
+步 B
+武 W
+歨 B
+歪 W
+歮 S
+歰 S
+歲 S
+歹 D
+歺 E
+死 S
+殄 T
+殳 S
+段 D
+殷 Y
+殸 Q
+殹 Y
+殺 S
+殿 D
+毀 H
+毅 Y
+毋 W
+母 M
+每 M
+毒 D
+比 B
+毕 B
+毚 C
+毛 M
+毳 C
+氏 S
+氐 D
+民 M
+气 Q
+氣 Q
+水 S
+氵 D
+氶 Z
+氷 B
+永 Y
+氾 F
+氿 G
+求 Q
+汇 H
+汎 F
+汙 W
+汞 G
+江 J
+池 C
+汤 T
+沂 Y
+沃 W
+沈 S
+沐 M
+沒 M
+沓 D
+沙 S
+沛 P
+沥 L
+沮 J
+河 H
+治 Z
+沼 Z
+沾 Z
+泉 Q
+泊 P
+泓 H
+法 F
+波 B
+泥 N
+注 Z
+泰 T
+泵 B
+泻 X
+洒 S
+洗 X
+洛 L
+洞 D
+津 J
+洪 H
+洰 J
+洴 P
+活 H
+派 P
+流 L
+浂 Y
+浦 P
+浧 Y
+浪 L
+海 H
+浸 J
+涂 T
+涅 N
+淑 S
+淩 L
+淵 Y
+添 T
+清 Q
+渊 Y
+渐 J
+渝 Y
+渠 Q
+温 W
+湛 Z
+湡 Y
+滂 P
+滈 H
+滑 H
+滕 T
+滞 Z
+满 M
+滥 L
+漂 P
+漅 C
+漸 J
+潔 J
+潘 P
+澡 Z
+火 H
+灬 D
+灭 M
+灰 H
+灵 L
+灾 Z
+炎 Y
+炙 Z
+炭 T
+点 D
+烏 W
+烕 M
+烝 Z
+烦 F
+热 R
+焄 X
+焉 Y
+焊 H
+焦 J
+焭 Q
+焱 Y
+然 R
+煔 S
+煖 N
+煞 S
+照 Z
+熏 X
+熙 X
+燕 Y
+燮 X
+爪 Z
+爫 Z
+爭 Z
+爯 C
+爰 Y
+爱 A
+爵 J
+父 F
+爹 D
+爻 Y
+爽 S
+爾 E
+爿 P
+片 P
+版 B
+牌 P
+牙 Y
+牚 C
+牛 N
+牜 N
+牟 M
+牢 L
+物 W
+牵 Q
+犀 X
+犬 Q
+犭 Q
+犮 B
+犹 Y
+狂 K
+狃 N
+狄 D
+狊 J
+狱 Y
+猄 J
+猋 B
+猪 Z
+献 X
+獻 X
+玄 X
+率 L
+玉 Y
+王 W
+琴 Q
+琶 P
+琺 F
+瑟 S
+瓜 G
+瓠 H
+瓦 W
+甄 Z
+甘 G
+甚 S
+甜 T
+生 S
+產 C
+用 Y
+甫 F
+甬 Y
+甯 N
+田 T
+由 Y
+甲 J
+申 S
+电 D
+男 N
+甸 D
+甹 P
+画 H
+甾 Z
+畀 B
+畁 B
+畇 Y
+界 J
+畎 Q
+畏 W
+畐 F
+畔 P
+留 L
+畚 B
+畜 C
+畟 C
+畣 D
+畧 L
+番 F
+異 Y
+畱 L
+畺 J
+畾 L
+疋 P
+疌 J
+疏 S
+疐 Z
+疑 Y
+疒 N
+疾 J
+病 B
+癶 B
+癸 G
+登 D
+白 B
+百 B
+皀 J
+皂 Z
+的 D
+皅 P
+皆 J
+皇 H
+皋 G
+皐 G
+皓 H
+皛 X
+皮 P
+皿 M
+盆 P
+盇 H
+盈 Y
+益 Y
+盍 H
+盎 A
+监 J
+盖 G
+盘 P
+盙 F
+盛 S
+盟 M
+盪 D
+目 M
+直 Z
+相 X
+盾 D
+省 S
+眇 M
+眉 M
+眔 D
+眘 S
+眞 Z
+真 Z
+眯 M
+眷 J
+眾 Z
+着 Z
+睘 Q
+睢 S
+睪 Y
+睽 K
+睿 R
+瞢 M
+瞿 Q
+矍 J
+矛 M
+矞 Y
+矢 S
+矣 Y
+矤 S
+知 Z
+矩 J
+石 S
+砉 H
+研 Y
+碯 N
+磊 L
+磨 M
+示 S
+礻 S
+神 S
+票 P
+祭 J
+祸 H
+祿 L
+禀 B
+禁 J
+禦 Y
+禸 R
+禹 Y
+禺 Y
+离 L
+禽 Q
+禾 H
+禿 T
+秀 X
+秃 T
+秉 B
+秋 Q
+科 K
+秝 L
+租 Z
+秦 Q
+移 Y
+稊 T
+稍 S
+稜 L
+稣 S
+稨 B
+稾 G
+穀 G
+穴 X
+穵 W
+穹 Q
+空 K
+穼 S
+穾 Y
+穿 C
+突 T
+窄 Z
+窊 W
+窒 Z
+窗 C
+窘 J
+窜 C
+窨 X
+窮 Q
+立 L
+竝 B
+竟 J
+章 Z
+童 T
+竹 Z
+笋 S
+笔 B
+笠 L
+笪 D
+筄 Y
+筍 S
+筑 Z
+答 D
+策 C
+筮 S
+箕 J
+算 S
+管 G
+箭 J
+箴 Z
+箸 Z
+簋 G
+米 M
+类 L
+粜 T
+粟 S
+粥 Z
+粦 L
+粲 C
+糜 M
+糞 F
+糸 M
+系 X
+素 S
+索 S
+紧 J
+累 L
+終 Z
+絜 J
+絭 J
+絮 X
+絲 S
+綦 Q
+縠 H
+縢 T
+縣 X
+縻 M
+繁 F
+纂 Z
+纍 L
+纟 S
+红 H
+纣 Z
+约 Y
+纯 C
+纳 N
+纷 F
+纺 F
+结 J
+绝 J
+绢 J
+绰 C
+维 W
+绵 M
+缊 Y
+缓 H
+缘 Y
+缚 F
+缶 F
+缺 Q
+罅 X
+网 W
+罒 W
+罓 G
+罔 W
+罕 H
+罗 L
+罙 S
+罚 F
+罡 G
+罢 B
+罪 Z
+署 S
+罽 J
+羊 Y
+羌 Q
+美 M
+羑 Y
+羔 G
+羕 Y
+羗 Q
+羞 X
+羨 X
+羲 X
+羴 S
+羽 Y
+翁 W
+翌 Y
+翏 L
+習 X
+翕 X
+翟 D
+翠 C
+翦 J
+翬 H
+翯 H
+翰 H
+翳 Y
+翼 Y
+老 L
+耂 L
+考 K
+者 Z
+耆 Q
+而 E
+耎 R
+耑 D
+耒 L
+耤 J
+耦 O
+耳 E
+耴 Y
+耶 Y
+耷 D
+耿 G
+聂 N
+聊 L
+职 Z
+联 L
+聚 J
+聶 N
+聿 Y
+肀 Y
+肃 S
+肆 S
+肉 R
+肋 L
+肎 K
+肖 X
+肙 Y
+肥 F
+肩 J
+肯 K
+育 Y
+肴 Y
+胃 W
+背 B
+胙 Z
+胡 H
+胤 Y
+胥 X
+胶 J
+能 N
+脅 X
+脈 M
+脉 M
+脊 J
+脓 N
+脔 L
+脣 C
+脩 X
+脾 P
+臣 C
+臤 Q
+臦 G
+臧 Z
+自 Z
+臬 N
+臭 C
+臯 G
+臱 M
+至 Z
+臺 T
+臼 J
+臽 X
+臾 Y
+臿 C
+舀 Y
+舂 C
+舃 X
+舄 X
+與 Y
+興 X
+舋 X
+舌 S
+舍 S
+舛 C
+舜 S
+舞 W
+舟 Z
+般 B
+艮 G
+良 L
+色 S
+艳 Y
+艸 C
+艹 C
+艺 Y
+艾 A
+节 J
+芈 M
+芒 M
+芬 F
+芮 R
+芯 X
+花 H
+芳 F
+芷 Z
+芻 C
+苑 Y
+苔 T
+苕 S
+苗 M
+苜 M
+苞 B
+若 R
+苦 K
+英 Y
+苴 J
+苻 F
+茁 Z
+茂 M
+茅 M
+茍 J
+茧 J
+茲 Z
+茶 C
+茸 R
+茹 R
+荀 X
+荃 Q
+荅 D
+草 C
+荐 J
+荒 H
+荣 R
+荥 X
+荧 Y
+荷 H
+荼 T
+莑 P
+莝 C
+莫 M
+莹 Y
+莽 M
+莾 M
+菐 P
+菞 L
+華 H
+菲 F
+萃 C
+萌 M
+萠 P
+营 Y
+萦 Y
+萧 X
+葉 Y
+著 Z
+葛 G
+董 D
+葱 C
+蒙 M
+蒦 H
+蒪 P
+蒿 H
+蓋 G
+蓝 L
+蓬 P
+蓺 Y
+蔑 M
+蔡 C
+蔺 L
+蔽 B
+蕇 D
+蕈 X
+蕉 J
+蕊 R
+蕩 D
+蕲 Q
+薄 B
+薛 X
+薦 J
+藉 J
+藏 C
+虍 H
+虎 H
+虏 L
+虐 N
+虑 L
+虒 S
+虔 Q
+虖 H
+虘 C
+虚 X
+虛 X
+虞 Y
+號 H
+虡 J
+虫 C
+虱 S
+虹 H
+虽 S
+虿 C
+蚉 W
+蚤 Z
+蚩 C
+蛮 M
+蜀 S
+蜜 M
+融 R
+蟲 C
+蟺 S
+蠆 C
+蠡 L
+血 X
+衆 Z
+行 X
+衍 Y
+衞 W
+衡 H
+衣 Y
+衤 Y
+表 B
+衮 G
+衰 S
+衾 Q
+袁 Y
+袅 N
+袲 C
+褰 Q
+褱 H
+襄 X
+襾 Y
+西 X
+覀 X
+要 Y
+覃 T
+見 J
+覞 Y
+親 Q
+见 J
+规 G
+觅 M
+览 L
+觉 J
+角 J
+觜 Z
+解 J
+言 Y
+訁 Y
+訂 D
+訇 H
+詹 Z
+讎 C
+讠 Y
+讨 T
+训 X
+许 X
+设 S
+诸 Z
+谒 Y
+谖 X
+谷 G
+豆 D
+豈 Q
+豊 L
+豐 F
+豔 Y
+豕 Z
+豖 C
+豙 Y
+豚 T
+象 X
+豦 J
+豩 B
+豪 H
+豫 Y
+豸 Z
+貌 M
+貍 L
+貝 B
+貞 Z
+責 Z
+貴 G
+貸 D
+賴 L
+贏 Y
+贝 B
+贞 Z
+负 F
+贠 Y
+贡 G
+责 Z
+贤 X
+败 B
+质 Z
+贪 T
+贯 G
+贰 E
+贱 J
+贲 B
+贳 S
+贵 G
+贸 M
+费 F
+贼 Z
+贾 J
+资 Z
+赏 S
+赐 C
+赖 L
+赘 Z
+赞 Z
+赤 C
+赦 S
+赫 H
+走 Z
+赵 Z
+越 Y
+足 Z
+路 L
+蹇 J
+身 S
+躬 G
+躳 G
+車 C
+軌 G
+軗 S
+輂 J
+车 C
+轧 Y
+轨 G
+轩 X
+转 Z
+软 R
+轻 Q
+载 Z
+辂 L
+辇 N
+辛 X
+辜 G
+辟 P
+辥 X
+辰 C
+辱 R
+辵 C
+辶 Z
+边 B
+达 D
+迁 Q
+过 G
+运 Y
+近 J
+进 J
+远 Y
+连 L
+述 S
+迶 Y
+迷 M
+迹 J
+追 Z
+退 T
+送 S
+适 S
+逆 N
+逐 Z
+通 T
+造 Z
+逢 F
+逮 D
+進 J
+遀 S
+遂 S
+遐 X
+道 D
+遗 Y
+遝 T
+遣 Q
+適 S
+遬 S
+遷 Q
+邑 Y
+邕 Y
+邛 Q
+那 N
+邦 B
+邪 X
+邵 S
+郁 Y
+郎 L
+郑 Z
+部 B
+郭 G
+都 D
+酉 Y
+酋 Q
+配 P
+酓 Y
+釁 X
+釆 B
+采 C
+里 L
+重 Z
+野 Y
+金 J
+釒 J
+釜 F
+鋶 L
+鍾 Z
+鐐 L
+钅 J
+钓 D
+钦 Q
+钧 J
+铦 X
+银 Y
+锡 X
+镸 C
+长 Z
+閵 L
+閻 Y
+门 M
+闪 S
+问 W
+闰 R
+闲 X
+间 J
+闵 M
+闷 M
+闾 L
+阁 G
+阎 Y
+阐 C
+阑 L
+阘 D
+阙 Q
+阚 H
+阜 F
+阝 D
+阞 L
+队 D
+防 F
+阳 Y
+阴 Y
+阵 Z
+阻 Z
+阿 A
+陈 C
+陏 D
+陟 Z
+除 C
+陰 Y
+陷 X
+隆 L
+隋 S
+随 S
+隐 Y
+隤 T
+隶 L
+隹 Z
+隺 H
+隻 Z
+隼 S
+隽 J
+难 N
+雀 Q
+雅 Y
+集 J
+雉 Z
+雋 J
+雍 Y
+雔 C
+雚 G
+雜 Z
+雝 Y
+離 L
+雨 Y
+雩 Y
+雪 X
+雲 Y
+零 L
+雷 L
+需 X
+霍 H
+霜 S
+霝 L
+露 L
+霸 B
+靑 Q
+青 Q
+靓 J
+靘 Q
+静 J
+非 F
+靡 M
+面 M
+革 G
+靴 X
+鞋 X
+鞠 J
+韋 W
+韦 W
+韭 J
+韯 X
+韰 X
+韱 X
+韲 J
+音 Y
+頁 Y
+頣 S
+頼 L
+顚 D
+顛 D
+页 Y
+顶 D
+顷 Q
+项 X
+须 X
+预 Y
+颇 P
+颉 J
+频 P
+颓 T
+颖 Y
+题 T
+颠 D
+颢 H
+风 F
+飛 F
+飞 F
+食 S
+飠 S
+飧 S
+飱 S
+養 Y
+餋 J
+饣 S
+首 S
+香 X
+馬 M
+马 M
+骨 G
+高 G
+髟 B
+鬥 D
+鬯 C
+鬲 G
+鬵 Q
+鬼 G
+魁 K
+魏 W
+鱼 Y
+鲁 L
+鲜 X
+鲞 X
+鳥 N
+鵭 Q
+鸟 N
+鸡 J
+鹝 Y
+鹤 H
+鹿 L
+麃 P
+麇 J
+麋 M
+麕 J
+麥 M
+麦 M
+麻 M
+麼 M
+麽 M
+黃 H
+黄 H
+黈 T
+黊 H
+黍 S
+黎 L
+黑 H
+黹 Z
+黽 M
+黾 M
+鼈 B
+鼎 D
+鼓 G
+鼠 S
+鼻 B
+齊 Q
+齐 Q
+齿 C
+龙 L
+龟 G
+龠 Y
+㐆 Y
+㐬 L
+㒼 M
+㓁 W
+㔾 X
+㚇 Z
+㝵 D
+㠯 Y
+㡀 B
+䇲 C
+𠂔 Z
+𠃊 Y
+𠄌 J
+𠔉 J
+𠤏 B
+𡿺 N
+𢦏 Z
+𢰌 G
+𤇾 Y
+𦥯 X
+龴 H
+㇆ G
