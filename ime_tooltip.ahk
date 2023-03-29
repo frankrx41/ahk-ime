@@ -163,7 +163,14 @@ ImeTooltipUpdate(tooltip_pos := "")
         split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
         extern_info := ""
         extern_info .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        extern_info .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
+        radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)))
+        radical_words := ""
+        loop, % radical_list.Length()
+        {
+            radical_word := radical_list[A_Index]
+            radical_words .= radical_word ;. PinyinRadicalGetPinyin(radical_word)
+        }
+        extern_info .= " {" radical_words "}"
         extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
 
         ; Debug info
