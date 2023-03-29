@@ -150,6 +150,7 @@ ImeTranslatorFilterResults(single_mode:=false)
     loop % search_result.Length()
     {
         test_result := search_result[A_Index]
+        PinyinResultFilterZeroWeight(test_result)
         if( radical_list ){
             PinyinResultFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)

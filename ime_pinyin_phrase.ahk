@@ -28,22 +28,6 @@ PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
     return
 }
 
-PinyinResultHideZeroWeight(ByRef search_result)
-{
-    local
-    if( search_result[1, 3]>0 )
-    {
-        loop % len := search_result.Length()
-        {
-            weight := search_result[len+1-A_Index, 3]
-            if( weight<=0 ) {
-                search_result.RemoveAt(len+1-A_Index)
-            }
-        }
-    }
-    return
-}
-
 PinyinResultRemoveZeroIndex(ByRef search_result)
 {
     ; [0] is store "pinyin"
@@ -67,9 +51,6 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
 
     ; 超级简拼 显示 4 字及以上简拼候选
     PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
-
-    ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-    PinyinResultHideZeroWeight(search_result)
 
 
     PinyinResultRemoveZeroIndex(search_result)

@@ -18,3 +18,26 @@ PinyinResultFilterSingleWord(ByRef search_result)
 
     ImeProfilerEnd(27)
 }
+
+PinyinResultFilterZeroWeight(ByRef search_result)
+{
+    local
+    ImeProfilerBegin(25)
+
+    index := 1
+    loop % search_result.Length()
+    {
+        weight := search_result[index, 3]
+        if( weight<=0 )
+        {
+            search_result.RemoveAt(index, search_result.Length() - index + 1)
+            break
+        }
+        else
+        {
+            index += 1
+        }
+    }
+    ImeProfilerEnd(25)
+    return
+}

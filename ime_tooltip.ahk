@@ -174,6 +174,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ImeTooltipDebugTipAdd(debug_tip, 16, 2000)    ; PinyinSqlGetResult
         ImeTooltipDebugTipAdd(debug_tip, 20)    ; PinyinGetTranslateResult
         ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
+        ImeTooltipDebugTipAdd(debug_tip, 25)    ; PinyinResultFilterZeroWeight
         ImeTooltipDebugTipAdd(debug_tip, 26)    ; PinyinResultFilterByRadical
         ImeTooltipDebugTipAdd(debug_tip, 27)    ; PinyinResultFilterSingleWord
         ImeTooltipDebugTipAdd(debug_tip, 28)    ; PinyinResultUniquify
