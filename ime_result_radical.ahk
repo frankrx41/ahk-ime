@@ -84,13 +84,19 @@ PinyinResultFilterByRadical(ByRef search_result, radical_list)
                 {
                     word := SubStr(word_value, A_Index, 1)
                     test_pinyin := RadicalGetPinyin(WordGetRadical(word))
-                    content_radical := InStr(test_pinyin, test_radical)
-                    same_as_radical := radical_list == word_value
-                    if( !content_radical && !same_as_radical )
+                    loop, Parse, test_radical
                     {
-                        sould_remove := true
-                        break
+                        test_char := A_LoopField
+                        if( SubStr(test_pinyin, 1, 1) == test_char || SubStr(test_pinyin, 0, 1) == test_char ) {
+                            test_pinyin := StrReplace(test_pinyin, test_char, "",, 1)
+                        } else {
+                            sould_remove := true
+                            break
+                        }
                     }
+                }
+                if( sould_remove ){
+                    break
                 }
             }
 
