@@ -46,7 +46,7 @@ PinyinRadicalGetPinyin(single_radical)
 ; "CCC" + "艹" -> "CC"
 PinyinRadicalGetRemoveUsedPart(test_radical, test_word, check_first:=false)
 {
-    radical_word_list := PinyinRadicalWordGetRadical(test_word)
+    radical_word_list := CopyObj(PinyinRadicalWordGetRadical(test_word))
     loop
     {
         if( radical_word_list.Length() == 0 || test_radical == ""){
