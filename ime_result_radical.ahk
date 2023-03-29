@@ -65,6 +65,49 @@ RadicalGetPinyin(radical)
     return result_pinyin
 }
 
+; "CR" + "幕" -> ""
+; "CCC" + "艹" -> "CC"
+PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
+{
+    radical_words := WordGetRadical(test_word)
+    loop
+    {
+        if( radical_words == "" || test_radical == ""){
+            return test_radical
+        }
+
+        first_word := SubStr(radical_words, 1, 1)
+        test_pinyin := RadicalGetPinyin(first_word)
+        radical_words := SubStr(radical_words, 2)
+
+        has_part_same := false
+        if( SubStr(test_radical, 1, 1) == test_pinyin || SubStr(test_radical, 0, 1) == test_pinyin ) {
+            test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
+            has_part_same := true
+        }
+
+        if( !has_part_same )
+        {
+            origin_test_radical := test_radical
+            test_radical := PinyinRadicalGetRemoveUsedPart(test_radical, first_word)
+            if( test_radical == origin_test_radical )
+            {
+                return test_radical
+            }
+        }
+    }
+}
+
+PinyinResultIsAllPartOfRadical(test_radical, test_word)
+{
+    if( PinyinRadicalGetRemoveUsedPart(test_radical, test_word) == "" )
+    {
+        return true
+    }
+    return false
+}
+
+; radical_list: ["SS", "YZ", "RE"]
 PinyinResultFilterByRadical(ByRef search_result, radical_list)
 {
     local
@@ -77,22 +120,20 @@ PinyinResultFilterByRadical(ByRef search_result, radical_list)
         {
             word_value := search_result[index, 2]
             sould_remove := false
-            loop % StrLen(word_value)
+            ; loop each character of "我爱你"
+            loop % search_result[index, 5]
             {
                 test_radical := radical_list[A_Index]
                 if( test_radical )
                 {
-                    word := SubStr(word_value, A_Index, 1)
-                    test_pinyin := RadicalGetPinyin(WordGetRadical(word))
-                    loop, Parse, test_radical
+                    test_word := SubStr(word_value, A_Index, 1)
+                    if( test_word == "荩" )
                     {
-                        test_char := A_LoopField
-                        if( SubStr(test_pinyin, 1, 1) == test_char || SubStr(test_pinyin, 0, 1) == test_char ) {
-                            test_pinyin := StrReplace(test_pinyin, test_char, "",, 1)
-                        } else {
-                            sould_remove := true
-                            break
-                        }
+                        foo := 1
+                    }
+                    if( !PinyinResultIsAllPartOfRadical(test_radical, test_word) )
+                    {
+                        sould_remove := true
                     }
                 }
                 if( sould_remove ){
