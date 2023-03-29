@@ -1,10 +1,9 @@
 IsCompletePinyin(initials, vowels, tone:="'")
 {
-    global zero_initials_table
     global pinyin_table
     static bad_tones
 
-    if( (zero_initials_table.HasKey(initials) && vowels == "") || (pinyin_table[initials, vowels]) )
+    if( (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) )
     {
         if( tone )
         {
@@ -99,6 +98,12 @@ IsInitials(initials)
     return pinyin_table.HasKey(initials)
 }
 
+IsZeroInitials(initials)
+{
+    global zero_initials_table
+    return zero_initials_table.HasKey(initials)
+}
+
 PinyinInitialize()
 {
     local
@@ -131,7 +136,9 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
-                "u":"u"
+                "u":"u",
+                "aio": "iao"
+
             },
             "m" :{
                 "1":"m",
@@ -139,7 +146,8 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
-                "u":"u"
+                "u":"u",
+                "aio": "iao"
             },
             "f" :{
                 "1":"f",
@@ -156,7 +164,8 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","ei":"ei","eg":"eng","eng":"eng",
                 "i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing","iu":"iu",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
+                "aio": "iao"
             },
             "t" :{
                 "1":"t",
@@ -164,7 +173,8 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","eg":"eng","eng":"eng","ei":"ei",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
+                "aio": "iao"
             },
             "n" :{
                 "1":"n",
@@ -173,7 +183,8 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","uo":"uo","un":"un",
-                "v":"v","ve":"ue"
+                "v":"v","ve":"ue",
+                "aio": "iao"
             },
             "l" :{
                 "1":"l",
@@ -183,7 +194,7 @@ PinyinInitialize()
                 "i":"i","ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un","uo":"uo",
                 "v":"v","ve":"ue"
-                },
+            },
             "g" :{
                 "1":"g",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
@@ -215,7 +226,8 @@ PinyinInitialize()
                 "iog":"iong","iong":"iong",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "v":"u","van":"uan","ve":"ue","vn":"un"
+                "v":"u","van":"uan","ve":"ue","vn":"un",
+                "aio": "iao"
             },
             "q" :{
                 "1":"q",
@@ -226,7 +238,8 @@ PinyinInitialize()
                 "in":"in","ig":"ing","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "van":"uan","ve":"ue","vn":"un","v":"u"
+                "van":"uan","ve":"ue","vn":"un","v":"u",
+                "aio": "iao"
             },
             "x" :{
                 "1":"x",
@@ -237,8 +250,9 @@ PinyinInitialize()
                 "in":"in","ig":"ing","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","un":"un","ue":"ue",
-                "van":"uan","ve":"ue","vn":"un","v":"u"
-                },
+                "van":"uan","ve":"ue","vn":"un","v":"u",
+                "aio": "iao"
+            },
             "zh":{
                 "1":"zh",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
