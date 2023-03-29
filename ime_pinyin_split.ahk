@@ -128,6 +128,9 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
                 if( next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) ) {
                     break
                 }
+                if( vowels_len == 1 ){
+                    break
+                }
                 if( IsInitials(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) ) {
                     break
                 }
