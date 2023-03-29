@@ -67,7 +67,7 @@ RadicalGetPinyin(radical)
 
 ; "CR" + "幕" -> ""
 ; "CCC" + "艹" -> "CC"
-PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
+PinyinRadicalGetRemoveUsedPart(test_radical, test_word, depth)
 {
     radical_words := WordGetRadical(test_word)
     loop
@@ -86,10 +86,10 @@ PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
             has_part_same := true
         }
 
-        if( !has_part_same )
+        if( !has_part_same && depth)
         {
             origin_test_radical := test_radical
-            test_radical := PinyinRadicalGetRemoveUsedPart(test_radical, first_word)
+            test_radical := PinyinRadicalGetRemoveUsedPart(test_radical, first_word, depth-1)
             if( test_radical == origin_test_radical )
             {
                 return test_radical
@@ -100,7 +100,7 @@ PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
 
 PinyinResultIsAllPartOfRadical(test_radical, test_word)
 {
-    if( PinyinRadicalGetRemoveUsedPart(test_radical, test_word) == "" )
+    if( PinyinRadicalGetRemoveUsedPart(test_radical, test_word, 1) == "" )
     {
         return true
     }
