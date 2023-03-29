@@ -1,10 +1,9 @@
 IsCompletePinyin(initials, vowels, tone:="'")
 {
-    global zero_initials_table
     global pinyin_table
     static bad_tones
 
-    if( (zero_initials_table.HasKey(initials) && vowels == "") || (pinyin_table[initials, vowels]) )
+    if( (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) )
     {
         if( tone )
         {
@@ -97,6 +96,12 @@ IsInitials(initials)
 {
     global pinyin_table
     return pinyin_table.HasKey(initials)
+}
+
+IsZeroInitials(initials)
+{
+    global zero_initials_table
+    return zero_initials_table.HasKey(initials)
 }
 
 PinyinInitialize()
