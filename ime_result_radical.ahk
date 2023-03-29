@@ -67,7 +67,7 @@ RadicalGetPinyin(radical)
 
 ; "CR" + "幕" -> ""
 ; "CCC" + "艹" -> "CC"
-PinyinRadicalGetRemoveUsedPart(test_radical, test_word, depth)
+PinyinRadicalGetRemoveUsedPart(test_radical, test_word, check_first:=false)
 {
     radical_words := WordGetRadical(test_word)
     loop
@@ -78,29 +78,50 @@ PinyinRadicalGetRemoveUsedPart(test_radical, test_word, depth)
 
         first_word := SubStr(radical_words, 1, 1)
         test_pinyin := RadicalGetPinyin(first_word)
-        radical_words := SubStr(radical_words, 2)
 
+        ; Check only first word
         has_part_same := false
+        if( check_first )
+        {
+            if( SubStr(test_radical, 1, 1) == test_pinyin )
+            {
+                test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
+            }
+            return test_radical
+        }
+
+        ; Check first word
         if( SubStr(test_radical, 1, 1) == test_pinyin || SubStr(test_radical, 0, 1) == test_pinyin ) {
             test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
             has_part_same := true
+            radical_words := SubStr(radical_words, 2)
         }
 
-        if( !has_part_same && depth)
+        ; Check last word
+        last_word := SubStr(radical_words, 0, 1)
+        test_pinyin := RadicalGetPinyin(last_word)
+        if( SubStr(test_radical, 1, 1) == test_pinyin || SubStr(test_radical, 0, 1) == test_pinyin ) {
+            test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
+            has_part_same := true
+            radical_words := SubStr(radical_words, 1, StrLen(radical_words)-1)
+        }
+
+        if( !has_part_same )
         {
             origin_test_radical := test_radical
-            test_radical := PinyinRadicalGetRemoveUsedPart(test_radical, first_word, depth-1)
+            test_radical := PinyinRadicalGetRemoveUsedPart(test_radical, first_word, true)
             if( test_radical == origin_test_radical )
             {
                 return test_radical
             }
+            radical_words := SubStr(radical_words, 2)
         }
     }
 }
 
 PinyinResultIsAllPartOfRadical(test_radical, test_word)
 {
-    if( PinyinRadicalGetRemoveUsedPart(test_radical, test_word, 1) == "" )
+    if( PinyinRadicalGetRemoveUsedPart(test_radical, test_word) == "" )
     {
         return true
     }
