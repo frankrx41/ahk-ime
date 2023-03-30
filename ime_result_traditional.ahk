@@ -52,17 +52,19 @@ PinyinResultCovertTraditional(ByRef search_result)
         }
     }
 
+    offset_index := 0
     loop, % insert_indexs.Length()
     {
-        index := insert_indexs[A_Index, 1]
+        index := insert_indexs[A_Index, 1] + offset_index
         result_word := insert_indexs[A_Index, 2]
         pinyin := insert_indexs[A_Index, 3]
         length := insert_indexs[A_Index, 4]
         loop, % ime_traditional_table[result_word].Length() - 1
         {
-            tranditional_word := ime_traditional_table[result_word, A_Index+1]
+            traditional_word := ime_traditional_table[result_word, A_Index+1]
             index += 1
-            search_result.InsertAt(index, [pinyin, tranditional_word, 0, "+", length])
+            offset_index += 1
+            search_result.InsertAt(index, [pinyin, traditional_word, 0, "+", length])
         }
     }
 }
