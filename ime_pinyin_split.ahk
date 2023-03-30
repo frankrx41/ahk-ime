@@ -188,8 +188,8 @@ PinyinSplitGetInitials(input_str, initials, ByRef index)
 ; "taNde1B" -> [ta'de1] + [3,7] + [N,B]
 ; "z?eyangz?i3" -> [z?e'yang'z?i3] + [3,7,11] + [,,]
 ;
-; See: `PinyinSplitInpuStringTest`
-PinyinSplitInpuString(origin_input, ByRef split_indexs, ByRef radical_list)
+; See: `PinyinSplitInputStringTest`
+PinyinSplitInputString(origin_input, ByRef split_indexs, ByRef radical_list)
 {
     local
     Critical
@@ -270,7 +270,7 @@ PinyinSplitInpuString(origin_input, ByRef split_indexs, ByRef radical_list)
     return separate_words
 }
 
-PinyinSplitInpuStringTest()
+PinyinSplitInputStringTest()
 {
     test_case := ["wo3ai4ni3", "woaini", "wo'ai'ni", "wo aini", "swalb1", "zhrmghg", "taNde1B", "z?eyangz?i3"]
     msg_string := ""
@@ -279,7 +279,7 @@ PinyinSplitInpuStringTest()
         input_str := test_case[A_Index]
         split_indexs := []
         radical_list := []
-        output_str := PinyinSplitInpuString(input_str, split_indexs, radical_list)
+        output_str := PinyinSplitInputString(input_str, split_indexs, radical_list)
         msg_string .= """" input_str """ -> [" output_str "] + ["
         loop % split_indexs.Length()
         {

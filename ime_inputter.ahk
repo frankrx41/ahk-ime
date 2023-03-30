@@ -125,7 +125,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     }
 
     debug_info := ""
-    input_split := PinyinSplitInpuString(ime_input_string, ime_inputter_split_indexs, radical_list)
+    input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
     if( should_update_result && ime_input_dirty )
     {
         debug_info .= "[UPDATE] "
