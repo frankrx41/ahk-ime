@@ -263,7 +263,9 @@ ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
     }
     last_input_string := input_string
 
-    input_split := PinyinSplit(input_string, split_indexs, radical_list)
-    ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
+    global ime_input_string
+    global ime_inputter_split_indexs
+    input_split := PinyinSplit(input_string, ime_inputter_split_indexs, radical_list)
+    ImeTranslatorUpdateResult(input_split, ime_inputter_split_indexs, radical_list)
     return true
 }
