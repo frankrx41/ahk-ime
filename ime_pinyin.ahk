@@ -71,13 +71,8 @@ IsBadTone(initials, vowels, tone)
 IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
-    ; Not suport check like j-an%
-    if( InStr(vowels, "%") ){
-        return true
-    }
-
     ; initials like z% c% s%
-    initials_has_miss_char := SubStr(initials, 0, 1 ) == "%"
+    initials_has_miss_char := SubStr(initials, 0, 1 ) == "?"
     if( initials_has_miss_char )
     {
         initials_without_h := SubStr(initials, 1, 1)

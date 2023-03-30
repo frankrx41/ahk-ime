@@ -2,10 +2,11 @@
 ; zhong'hua -> z_h_
 ; wo3ai4ni3 -> w3a4n3
 ; wo3ai4ni% -> w3a4n% or w3a4n_
+; s?u -> s_
 PinyinSqlSimpleKey(split_input, auto_comple:=false)
 {
     key_value := split_input
-    last_char := SubStr(key_value, 0, 1)
+    key_value := StrReplace(key_value, "?")
     key_value := StrReplace(key_value, "'", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
     if( auto_comple ){
@@ -21,6 +22,7 @@ PinyinSqlSimpleKey(split_input, auto_comple:=false)
 PinyinSqlFullKey(split_input, auto_comple:=false)
 {
     key_value := split_input
+    key_value := StrReplace(key_value, "?", "h?")
     key_value := StrReplace(key_value, "'", "_")
     last_char := SubStr(key_value, 0, 1)
 
@@ -46,6 +48,13 @@ PinyinSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
     sql_cmd := ""
     if( key_value )
     {
+        if( InStr(key_value, "[") || InStr(key_value, "?") )
+        {
+            key_value := StrReplace(key_value, "_", ".")
+            key_value := StrReplace(key_value, "%", "*")
+            sql_cmd := " REGEXP '" key_value "' "
+        }
+        else
         if( InStr(key_value, "_") || InStr(key_value, "%") )
         {
             sql_cmd := " LIKE '" key_value "' "

@@ -159,7 +159,7 @@ PinyinSplitGetInitials(input_str, initials, ByRef index)
     }
     if( InStr("csz", initials) && (SubStr(input_str, index, 1)=="?") ){
         index += 1
-        initials .= "%"
+        initials .= "?"
     }
     initials := Format("{:L}", initials)
     return initials
@@ -212,7 +212,6 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
             ; 转全拼显示
             else
             {
-                Assert(initials == GetFullInitials(initials))
                 vowels := full_vowels ? full_vowels : vowels
             }
 
