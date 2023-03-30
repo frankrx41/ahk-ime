@@ -204,6 +204,16 @@
         Sleep, 10
         ImeTooltipUpdatePos()
     return
+#if ; ime_input_string
+
+;*******************************************************************************
+; Is not English mode
+#if !ImeModeIsEnglish()
+    ; Create word gui
+    !`::
+        WordCreatorUI(GetSelectText())
+        PinyinHistoryClear()
+    return
 
     ; F5: reload
     F5::
@@ -228,15 +238,7 @@
     F12::
         ExitApp,
     return
-
-#if ; ime_input_string
-
-;*******************************************************************************
-; Create word gui
-!`::
-    WordCreatorUI(GetSelectText())
-    PinyinHistoryClear()
-return
+#if
 
 ; Win + Space: toggle cn and en
 #Space::
