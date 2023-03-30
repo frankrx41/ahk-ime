@@ -61,14 +61,18 @@ PinyinRadicalIsLastPart(test_radical, test_word)
 
 ; "CR" + "幕" -> ""
 ; "CCC" + "艹" -> "CC"
-PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
+PinyinResultIsAllPartOfRadical(test_radical, test_word)
 {
     radical_word_list := CopyObj(PinyinRadicalWordGetRadical(test_word))
     loop
     {
-        if( radical_word_list.Length() == 0 || test_radical == ""){
-            return test_radical
+        if( test_radical == "" ){
+            return true
         }
+        if( radical_word_list.Length() == 0 || ){
+            return false
+        }
+
         has_part_same := false
 
         ; Check first word
@@ -122,18 +126,9 @@ PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
 
         if( !has_part_same )
         {
-            return test_radical
+            return false
         }
     }
-}
-
-PinyinResultIsAllPartOfRadical(test_radical, test_word)
-{
-    if( PinyinRadicalGetRemoveUsedPart(test_radical, test_word) == "" )
-    {
-        return true
-    }
-    return false
 }
 
 ; radical_list: ["SS", "YZ", "RE"]
