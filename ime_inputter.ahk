@@ -63,10 +63,14 @@ ImeInputterProcessChar(input_char, try_puts := 0)
     global ime_input_string
 
     ImeProfilerClear()
-    if( ImeSelectorIsOpen() || IsSymbol(input_char) )
+    if( ImeSelectorIsOpen() )
     {
         input_char := Format("{:U}", input_char)
         ImeSelectorResetSelectIndex()
+    }
+    if( IsSymbol(input_char) )
+    {
+        ; TODO: We should update result when symbol, like ma？ -> 吗？ de。 -> 的。
     }
 
     caret_pos := ime_input_caret_pos
