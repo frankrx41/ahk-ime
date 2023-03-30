@@ -24,10 +24,30 @@ PinyinResultCovertTraditional(ByRef search_result)
             pinyin := search_result[A_Index, 1]
             length := search_result[A_Index, 5]
             search_result[A_Index, 2] := ime_traditional_table[result_word, 1]
-            search_result[A_Index, 4] := "*"
+            search_result[A_Index, 4] := "*" . search_result[A_Index, 4]
             if( ime_traditional_table[result_word].Length() > 1 )
             {
                 insert_indexs.Push([A_Index, result_word, pinyin, length])
+            }
+        }
+        else if( StrLen(result_word) > 1 )
+        {
+            traditional_result_word := ""
+            loop, Parse, result_word
+            {
+                traditional_word := ime_traditional_table[A_LoopField, 1]
+                if( traditional_word ) {
+                    ; traditional_result_word .= A_LoopField "(" traditional_word ")"
+                    traditional_result_word .= traditional_word
+                } else {
+                    traditional_result_word .= A_LoopField
+                    break
+                }
+            }
+            if( traditional_result_word != search_result[A_Index, 2] )
+            {
+                search_result[A_Index, 2] := traditional_result_word
+                search_result[A_Index, 4] := "*" . search_result[A_Index, 4]
             }
         }
     }
