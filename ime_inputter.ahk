@@ -187,7 +187,7 @@ ImeInputterCaretIsAtEnd()
 {
     global ime_input_string
     global ime_input_caret_pos
-    return ime_input_caret_pos != StrLen(ime_input_string)
+    return ime_input_caret_pos == StrLen(ime_input_string)
 }
 
 ;*******************************************************************************
