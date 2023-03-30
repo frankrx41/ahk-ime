@@ -1,6 +1,12 @@
 ;*******************************************************************************
 ; 当有输入字符时
 #if ime_input_string
+    ; Input char
+    %::
+    ?::
+        ImeInputterProcessChar("?")
+        ImeTooltipUpdate()
+    return
 
     ; Enter 上屏文字
     Enter::

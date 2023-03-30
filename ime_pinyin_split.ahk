@@ -157,6 +157,10 @@ PinyinSplitGetInitials(input_str, initials, ByRef index)
         index += 1
         initials .= "h"
     }
+    if( InStr("csz", initials) && (SubStr(input_str, index, 1)=="?") ){
+        index += 1
+        initials .= "%"
+    }
     initials := Format("{:L}", initials)
     return initials
 }
