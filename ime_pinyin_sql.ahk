@@ -12,10 +12,6 @@ PinyinSqlSimpleKey(split_input, auto_comple:=false)
     if( auto_comple ){
         key_value .= "%"
     }
-    else if( !InStr("_12345", SubStr(key_value, 0, 1)) ){
-        key_value .= "_"
-    }
-    ; key_value := StrReplace(key_value, "1", "_")
     return key_value
 }
 
@@ -25,8 +21,7 @@ PinyinSqlFullKey(split_input, auto_comple:=false)
     key_value := StrReplace(key_value, "?", "h?")
     key_value := StrReplace(key_value, "'", "_")
     last_char := SubStr(key_value, 0, 1)
-
-    if( !InStr("_%12345", last_char) ){
+    if( auto_comple ){
         key_value .= "%_"
     }
     return key_value
@@ -34,7 +29,7 @@ PinyinSqlFullKey(split_input, auto_comple:=false)
 
 PinyinSqlWhereKeyCommand(key_name, key_value, repalce_tone_1_5:=false)
 {
-    sql_cmd := ""
+    sql_where_cmd := ""
     if( key_value )
     {
         if( repalce_tone_1_5 ) {
@@ -47,32 +42,31 @@ PinyinSqlWhereKeyCommand(key_name, key_value, repalce_tone_1_5:=false)
         {
             key_value := StrReplace(key_value, "_", "[1-5]")
             key_value := StrReplace(key_value, "%", "[a-z]*")
-            sql_cmd := " REGEXP '^" key_value "$' "
+            sql_where_cmd := " REGEXP '^" key_value "$' "
         }
         else
         if( InStr(key_value, "_") || InStr(key_value, "%") )
         {
-            sql_cmd := " LIKE '" key_value "' "
+            sql_where_cmd := " LIKE '" key_value "' "
         }
         else
         {
-            sql_cmd := " = '" key_value "' "
+            sql_where_cmd := " = '" key_value "' "
         }
-        sql_cmd := key_name . sql_cmd
+        sql_where_cmd := key_name . sql_where_cmd
     }
-    return sql_cmd
+    return sql_where_cmd
 }
 
 PinyinSqlWhereCommand(sim_key, full_key)
 {
     Assert(sim_key,,,true)
-    sql_cmd := PinyinSqlWhereKeyCommand("sim", sim_key)
+    sql_where_cmd := PinyinSqlWhereKeyCommand("sim", sim_key)
 
-    if( full_key )
-    {
-        sql_cmd .= "AND " PinyinSqlWhereKeyCommand("key", full_key, true)
-    } 
-    return sql_cmd
+    if( full_key ) {
+        sql_where_cmd .= "AND " PinyinSqlWhereKeyCommand("key", full_key, true)
+    }
+    return sql_where_cmd
 }
 
 ; Get the reseult from database
@@ -92,22 +86,19 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
     Critical
     begin_tick := A_TickCount
     ImeProfilerBegin(15)
-    ; Get first char
+
     sql_sim_key     := PinyinSqlSimpleKey(split_input, auto_comple)
     sql_full_key    := PinyinSqlFullKey(split_input, auto_comple)
-    if( StrLen(sql_full_key) != 2 && StrReplace(sql_full_key, "%") == sql_sim_key ){
-        sql_full_key := ""
-    }
 
-    sql_cmd_where := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
+    sql_where_cmd := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
     ImeProfilerEnd(15)
 
-    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd_where
-    sql_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+    sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd
+    sql_full_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
 
     ImeProfilerBegin(16)
     result := []
-    if( DB.GetTable(sql_cmd, result_table) )
+    if( DB.GetTable(sql_full_cmd, result_table) )
     {
         length := SplitWordGetWordCount(split_input)
         loop % result_table.RowCount {
@@ -122,8 +113,7 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
         result := result_table.Rows
     }
 
-    ; "`n" origin_input "," full_key_1 ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
     ImeProfilerEnd(16, "`n  - [" split_input "] -> {" result.Length() "}")
-    ImeProfilerSetDebugInfo(15, "`n  - (" A_TickCount - begin_tick ") " . sql_cmd_where)
+    ImeProfilerSetDebugInfo(15, "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
     return result
 }
