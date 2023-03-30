@@ -13,7 +13,6 @@ ImeTranslatorClear()
 ImeTranslatorUpdateResult(input_split, radical_list)
 {
     local
-    global DB
     global ime_translator_result_const
     global ime_translator_radical_list
 
@@ -28,7 +27,7 @@ ImeTranslatorUpdateResult(input_split, radical_list)
             find_split_string := SplitWordGetPrevWords(test_split_string)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
-                translate_result := PinyinGetTranslateResult(find_split_string, DB)
+                translate_result := PinyinGetTranslateResult(find_split_string, ImeDBGet())
                 if( translate_result.Length() == 0 ){
                     first_word := SplitWordGetFirstWord(find_split_string)
                     translate_result := [[first_word, first_word]]

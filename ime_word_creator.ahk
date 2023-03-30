@@ -4,7 +4,6 @@ WordCreatorUI( input_text )
     static value, weight, comment
     global word_creator_ui_pinyin_key
     global word_creator_ui_pinyin_weight
-    global DB
 
     input_text := RegExReplace(input_text, "\s")
 
@@ -40,7 +39,7 @@ WordCreatorUI( input_text )
 
     createButtonWeight:
         Gui, create:Submit, NoHide
-        weight := WordCreatorDBGetWeight(DB, word_creator_ui_pinyin_key, value)
+        weight := WordCreatorDBGetWeight(ImeDBGet(), word_creator_ui_pinyin_key, value)
         ; Make 1234 -> "1,234"
         if( weight >= 1000 ){
             weight := Floor((weight / 1000)) "," Format("{:03}", Mod(weight, 1000))
@@ -61,7 +60,7 @@ WordCreatorUI( input_text )
         ; MsgBox, % word_creator_ui_pinyin_key "," value "," word_creator_ui_pinyin_weight "," comment
         if( word_creator_ui_pinyin_key && value && word_creator_ui_pinyin_weight ){
             weight := StrReplace(word_creator_ui_pinyin_weight, ",")
-            WordCreatorUpdateDB(DB, word_creator_ui_pinyin_key, value, weight, comment)
+            WordCreatorUpdateDB(ImeDBGet(), word_creator_ui_pinyin_key, value, weight, comment)
         } else {
             MsgBox, Please fill all value
         }

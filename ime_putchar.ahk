@@ -8,7 +8,6 @@ PutCandidateCharacter()
 {
     local
     global ime_input_caret_pos
-    global DB
 
     PutCharacter( ImeTranslatorGetOutputString() )
     ImeInputterClearString()
