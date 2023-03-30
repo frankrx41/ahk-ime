@@ -95,6 +95,28 @@ ImeInputterPinyinSplitPos()
     PinyinSplit(ime_input_string, ime_inputter_split_indexs, "")
 }
 
+ImeInputterGetPosSplitIndex()
+{
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_inputter_split_indexs
+    if( ime_inputter_split_indexs.Length() >= 1)
+    {
+        if( ime_inputter_split_indexs[ime_inputter_split_indexs.Length()] == ime_input_caret_pos )
+        {
+            return ime_inputter_split_indexs.Length()
+        }
+        loop % ime_inputter_split_indexs.Length()
+        {
+            if( ime_inputter_split_indexs[A_Index] > ime_input_caret_pos ){
+                return A_Index
+            }
+        }
+        Assert(false, ime_input_string "," ime_input_caret_pos)
+    }
+    return 1
+}
+
 ImeInputterGetLastWordPos()
 {
     global ime_inputter_split_indexs
@@ -103,7 +125,6 @@ ImeInputterGetLastWordPos()
     }
     return ime_inputter_split_indexs[ime_inputter_split_indexs.Length()-1]
 }
-
 
 ImeInputterGetLeftWordPos(start_index)
 {

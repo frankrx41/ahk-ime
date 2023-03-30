@@ -8,7 +8,6 @@ ImeTranslatorClear()
     global ime_translator_result_const      := []
     global ime_translator_result_filtered   := []
     global ime_translator_radical_list      := []
-    global ime_translator_split_indexs      := []
 }
 
 ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
@@ -16,12 +15,10 @@ ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
     local
     global DB
     global ime_translator_result_const
-    global ime_translator_split_indexs
     global ime_translator_radical_list
 
     if( input_split )
     {
-        ime_translator_split_indexs := split_indexs
         ime_translator_radical_list := radical_list
 
         ime_translator_result_const := []
@@ -51,27 +48,6 @@ ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
     } else {
         ImeTranslatorClear()
     }
-}
-
-ImeTranslatorGetPosSplitIndex(caret_pos)
-{
-    global ime_translator_split_indexs
-    global ime_input_string
-    if( ime_translator_split_indexs.Length() >= 1)
-    {
-        if( ime_translator_split_indexs[ime_translator_split_indexs.Length()] == caret_pos )
-        {
-            return ime_translator_split_indexs.Length()
-        }
-        loop % ime_translator_split_indexs.Length()
-        {
-            if( ime_translator_split_indexs[A_Index] > caret_pos ){
-                return A_Index
-            }
-        }
-        Assert(false, ime_input_string "," caret_pos)
-    }
-    return 1
 }
 
 ImeTranslatorFixupSelectIndex()
