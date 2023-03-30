@@ -42,9 +42,26 @@ PinyinRadicalGetPinyin(single_radical)
     return ime_radicals_pinyin[single_radical]
 }
 
+PinyinRadicalIsFirstPart(test_radical, test_word)
+{
+    radical_word_list := PinyinRadicalWordGetRadical(test_word)
+    first_word := radical_word_list[1]
+    test_pinyin := PinyinRadicalGetPinyin(first_word)
+    return SubStr(test_radical, 1, 1) == test_pinyin
+}
+
+PinyinRadicalIsLastPart(test_radical, test_word)
+{
+    radical_word_list := PinyinRadicalWordGetRadical(test_word)
+    last_word := radical_word_list[radical_word_list.Length()]
+    test_pinyin := PinyinRadicalGetPinyin(last_word)
+    return InStr(test_pinyin, SubStr(test_radical, 0, 1))
+}
+
+
 ; "CR" + "幕" -> ""
 ; "CCC" + "艹" -> "CC"
-PinyinRadicalGetRemoveUsedPart(test_radical, test_word, check_first:=false)
+PinyinRadicalGetRemoveUsedPart(test_radical, test_word)
 {
     radical_word_list := CopyObj(PinyinRadicalWordGetRadical(test_word))
     loop
@@ -52,48 +69,60 @@ PinyinRadicalGetRemoveUsedPart(test_radical, test_word, check_first:=false)
         if( radical_word_list.Length() == 0 || test_radical == ""){
             return test_radical
         }
-
-        first_word := radical_word_list[1]
-        test_pinyin := PinyinRadicalGetPinyin(first_word)
-
-        ; Check only first word
         has_part_same := false
-        if( check_first )
-        {
-            if( SubStr(test_radical, 1, 1) == test_pinyin )
-            {
-                test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
-            }
-            return test_radical
-        }
 
         ; Check first word
-        if( SubStr(test_radical, 1, 1) == test_pinyin || SubStr(test_radical, 0, 1) == test_pinyin ) {
-            test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
-            has_part_same := true
-            radical_word_list.RemoveAt(1)
+        if( !has_part_same )
+        {
+            first_word := radical_word_list[1]
+            test_pinyin := PinyinRadicalGetPinyin(first_word)
+            if( SubStr(test_radical, 1, 1) == test_pinyin || SubStr(test_radical, 0, 1) == test_pinyin ) {
+                test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
+                radical_word_list.RemoveAt(1)
+                has_part_same := true
+            }
         }
+
         ; Check last word
-        else
+        if( !has_part_same )
         {
             last_word := radical_word_list[radical_word_list.Length()]
             test_pinyin := PinyinRadicalGetPinyin(last_word)
             if( SubStr(test_radical, 1, 1) == test_pinyin || SubStr(test_radical, 0, 1) == test_pinyin ) {
                 test_radical := StrReplace(test_radical, test_pinyin, "",, 1)
-                has_part_same := true
                 radical_word_list.RemoveAt(radical_word_list.Length())
+                has_part_same := true
+            }
+        }
+
+        ; Check if is part of first char
+        ; e.g. 干 -> 二 丨, "一" H and "二" E both think match
+        if( !has_part_same )
+        {
+            first_word := radical_word_list[1]
+            if( PinyinRadicalIsFirstPart(test_radical, first_word) )
+            {
+                test_radical := SubStr(test_radical, 2)
+                radical_word_list.RemoveAt(1)
+                has_part_same := true
+            }
+        }
+
+        ; e.g. 肉 -> 冂 仌, "人" R will also be match
+        if( !has_part_same )
+        {
+            last_word := radical_word_list[radical_word_list.Length()]
+            if( PinyinRadicalIsLastPart(test_radical, last_word) )
+            {
+                test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
+                radical_word_list.RemoveAt(radical_word_list.Length())
+                has_part_same := true
             }
         }
 
         if( !has_part_same )
         {
-            origin_test_radical := test_radical
-            test_radical := PinyinRadicalGetRemoveUsedPart(test_radical, first_word, true)
-            if( test_radical == origin_test_radical )
-            {
-                return test_radical
-            }
-            radical_word_list.RemoveAt(1)
+            return test_radical
         }
     }
 }
