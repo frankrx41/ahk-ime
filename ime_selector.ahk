@@ -88,5 +88,11 @@ ImeSelectorToggleSingleMode()
 ; if last word select "泥", then update to ["我爱", "", "泥"]
 ImeSelectorFixupSelectIndex()
 {
+    local
+    split_index := ImeInputterGetPosSplitIndex()
+    select_index := ImeTranslatorResultGetSelectIndex(split_index)
+    word_length := ImeTranslatorResultGetLength(split_index, select_index)
     ImeTranslatorFixupSelectIndex()
+    ImeInputterCaretMoveByWord(word_length)
+    ; ImeProfilerSetDebugInfo(1, split_index "," select_index "," word_length)
 }

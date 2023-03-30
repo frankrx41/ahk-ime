@@ -19,6 +19,9 @@ ImeProfilerClear()
 ImeProfilerSetDebugInfo(index, debug_info)
 {
     global profiler
+    if( !profiler[index, 3] ){
+        profiler[index, 3] := 1
+    }
     profiler[index, 2] .= debug_info
 }
 

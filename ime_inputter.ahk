@@ -197,9 +197,10 @@ ImeInputterCaretMoveByWord(dir)
         if( ime_input_caret_pos == StrLen(ime_input_string) ){
             word_pos := 0
         } else {
+            word_pos := ime_input_caret_pos
             loop, % move_count
             {
-                word_pos := ImeInputterGetRightWordPos(ime_input_caret_pos)
+                word_pos := ImeInputterGetRightWordPos(word_pos)
             }
             ; if( word_pos == ime_input_caret_pos ){
             ;     word_pos := StrLen(ime_input_string)
@@ -209,9 +210,10 @@ ImeInputterCaretMoveByWord(dir)
         if( ime_input_caret_pos == 0 ){
             word_pos := StrLen(ime_input_string)
         } else {
+            word_pos := ime_input_caret_pos
             loop, % move_count
             {
-                word_pos := ImeInputterGetLeftWordPos(ime_input_caret_pos)
+                word_pos := ImeInputterGetLeftWordPos(word_pos)
             }
         }
     }
