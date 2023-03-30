@@ -197,52 +197,6 @@ ImeTranslatorGetOutputString()
     return result_string
 }
 
-ImeTranslatorGetLastWordPos()
-{
-    global ime_translator_split_indexs
-    if( ime_translator_split_indexs.Length() <= 1 ){
-        return 0
-    }
-    return ime_translator_split_indexs[ime_translator_split_indexs.Length()-1]
-}
-
-ImeTranslatorGetLeftWordPos(start_index)
-{
-    local
-    global ime_translator_split_indexs
-
-    if( start_index == 0 ){
-        return 0
-    }
-    last_index := 0
-    loop, % ime_translator_split_indexs.Length()
-    {
-        split_index := ime_translator_split_indexs[A_Index]
-        if( split_index >= start_index ){
-            break
-        }
-        last_index := split_index
-    }
-    return last_index
-}
-
-ImeTranslatorGetRightWordPos(start_index)
-{
-    local
-    global ime_translator_split_indexs
-
-    last_index := start_index
-    loop, % ime_translator_split_indexs.Length()
-    {
-        split_index := ime_translator_split_indexs[A_Index]
-        if( split_index > start_index ){
-            last_index := split_index
-            break
-        }
-    }
-    return last_index
-}
-
 ImeTranslatorResultSetSelectIndex(split_index, word_index, lock_select:=true)
 {
     global ime_translator_result_filtered
