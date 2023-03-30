@@ -176,8 +176,8 @@ ImeTooltipUpdate(tooltip_pos := "")
         debug_tip := ""
         ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
         ImeTooltipDebugTipAdd(debug_tip, 14, 0) ; PinyinHistoryHasKey
-        ImeTooltipDebugTipAdd(debug_tip, 15, 2000)    ; PinyinSqlGetResult
-        ImeTooltipDebugTipAdd(debug_tip, 16, 2000)    ; PinyinSqlGetResult
+        ImeTooltipDebugTipAdd(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
+        ImeTooltipDebugTipAdd(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result
         ImeTooltipDebugTipAdd(debug_tip, 20)    ; PinyinGetTranslateResult
         ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
         ImeTooltipDebugTipAdd(debug_tip, 25)    ; PinyinResultFilterZeroWeight
@@ -186,7 +186,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ImeTooltipDebugTipAdd(debug_tip, 28)    ; PinyinResultUniquify
         ImeTooltipDebugTipAdd(debug_tip, 1)     ; temp
         ImeTooltipDebugTipAdd(debug_tip, 2)     ; tick
-        ImeTooltipDebugTipAdd(debug_tip, 4)     ; assert info
+        ImeTooltipDebugTipAdd(debug_tip, 4, 2000)   ; assert info
 
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
