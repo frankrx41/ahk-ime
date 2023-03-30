@@ -247,6 +247,16 @@
 #if ; !ImeModeIsEnglish()
 
 ;*******************************************************************************
+; Reload script, debug only
+#if WinActive("AHK-Ime") && !ImeModeIsEnglish()
+    ~^S::
+        ToolTip, Reload %A_ScriptName%
+        Sleep, 500
+        Reload
+    return
+#if
+
+;*******************************************************************************
 ; Win + Space: toggle cn and en
 #Space::
 ImeToggleSuspend:
