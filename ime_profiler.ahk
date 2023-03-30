@@ -25,21 +25,24 @@ ImeProfilerSetDebugInfo(index, debug_info)
     ime_profiler[index, 2] .= debug_info
 }
 
-ImeProfilerBegin(index)
+ImeProfilerBegin(index, clear_info:=false)
 {
     global ime_profiler
     Assert(ime_profiler[index, 4] == 0,,,true)
+    if( clear_info ) {
+        ime_profiler[index, 2] := ""
+    }
     ime_profiler[index, 3] += 1
     ime_profiler[index, 4] := A_TickCount
 }
 
-ImeProfilerEnd(index, debug_info:="", no_reset:=false, msg_box:=false)
+ImeProfilerEnd(index, debug_info:="", no_reset_tick:=false, msg_box:=false)
 {
     global ime_profiler
     Assert(ime_profiler[index, 4] != 0,,,true)
     ime_profiler[index, 1] += A_TickCount - ime_profiler[index, 4]
     ime_profiler[index, 2] .= debug_info
-    if( !no_reset ){
+    if( !no_reset_tick ){
         ime_profiler[index, 4] := 0
     }
     if( msg_box )
