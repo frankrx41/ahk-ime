@@ -74,7 +74,6 @@ ImeHotkeyShiftSetMode(orgin_mode)
         }
     }
     ImeStateUpdateMode(orgin_mode)
-    ImeTooltipUpdate("")
 }
 
 ImeHotkeyRegisterShift(origin_state)

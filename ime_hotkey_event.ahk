@@ -1,6 +1,13 @@
 ;*******************************************************************************
 ; Hotkey
+; Normal input
 HotkeyOnAlphabet(char)
+{
+    ImeInputterProcessChar(char)
+    ImeTooltipUpdate()
+}
+
+HotkeyOnSplitMark(char)
 {
     ImeInputterProcessChar(char)
     ImeTooltipUpdate()
@@ -26,6 +33,17 @@ HotkeyOnNumber(char)
     ImeTooltipUpdate()
 }
 
+HotkeyOnSymbol(char)
+{
+    loop % StrLen(char)
+    {
+        ImeInputterProcessChar(SubStr(char, A_Index, 1), true)
+    }
+    ImeTooltipUpdate()
+}
+
+;*******************************************************************************
+; Function key
 HotkeyOnCtrlAlphabet(char, shift_down)
 {
     local
@@ -78,12 +96,12 @@ HotkeyOnShift(orgin_mode)
         return
     }
 
-    ImeHotkeyShiftSetMode(orgin_mode)
-}
-
-HotkeyOnSplitMark(char)
-{
-    ImeInputterProcessChar(char)
+    if( ImeSelectorIsOpen() ) {
+        ImeSelectorToggleSingleMode()
+    }
+    else {
+        ImeHotkeyShiftSetMode(orgin_mode)
+    }
     ImeTooltipUpdate()
 }
 
@@ -94,15 +112,6 @@ HotkeyOnSpace()
     }
     else {
         ImeInputterProcessChar(" ")
-    }
-    ImeTooltipUpdate()
-}
-
-HotkeyOnSymbol(char)
-{
-    loop % StrLen(char)
-    {
-        ImeInputterProcessChar(SubStr(char, A_Index, 1), true)
     }
     ImeTooltipUpdate()
 }
