@@ -7,8 +7,6 @@ PutCharacter(str, mode:=""){
 PutCandidateCharacter()
 {
     local
-    global ime_input_caret_pos
-
     PutCharacter( ImeTranslatorGetOutputString() )
     ImeInputterClearString()
 }
@@ -17,7 +15,6 @@ PutCandidateCharacter()
 PutCharacterWordByWord(select_index, offset)
 {
     local
-    global ime_input_caret_pos
     split_index := ImeInputterGetCaretSplitIndex()
     string := ImeTranslatorResultGetWord(split_index, select_index)
     PutCharacter( SubStr(string, offset, 1) )

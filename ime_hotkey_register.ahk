@@ -29,7 +29,8 @@ ImeHotkeyRegisterInitialize()
     }
     Hotkey, if,
 
-    Hotkey, if, ime_input_string
+    ime_has_any_input_fn := Func("ImeInputterHasAnyInput").Bind()
+    Hotkey, if, % ime_has_any_input_fn
     {
         ; Space and ' to spilt word
         func := Func("HotkeyOnSpace")

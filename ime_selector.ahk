@@ -13,8 +13,6 @@ ImeSelectorOpen(open, more := false)
     local
     global ime_selector_is_open
     global ime_selector_is_show_multiple
-    global ime_input_caret_pos
-    global ime_input_string
 
     ime_selector_is_open := open
     if( open )
@@ -89,10 +87,8 @@ ImeSelectorToggleSingleMode()
 ImeSelectorFixupSelectIndex()
 {
     local
-    global ime_input_caret_pos
-    global ime_input_string
     ImeTranslatorFixupSelectIndex()
-    if( ime_input_caret_pos != StrLen(ime_input_string) )
+    if( !ImeInputterCaretIsAtEnd() )
     {
         split_index := ImeInputterGetCaretSplitIndex()
         select_index := ImeTranslatorResultGetSelectIndex(split_index)

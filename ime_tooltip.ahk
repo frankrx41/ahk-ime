@@ -143,11 +143,8 @@ ImeTooltipUpdate(tooltip_pos := "")
     local
     static ime_tooltip_pos := ""
 
-    global ime_input_string
-    global ime_input_caret_pos
-
-    input_string := ime_input_string
-    caret_pos := ime_input_caret_pos
+    input_string    := ImeInputterGetInputString()
+    caret_pos       := ImeInputterGetCaretPos()
 
     if( !input_string )
     {

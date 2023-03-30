@@ -5,6 +5,7 @@ ImeInputterInitialize()
     global ime_input_string         ; 輸入字符
     global ime_input_caret_pos      ; 光标位置
     global ime_inputter_split_indexs := []
+    global ime_input_dirty
 
     ImeInputterClearString()
 }
@@ -156,6 +157,33 @@ ImeInputterGetCaretSplitIndex()
     global ime_inputter_split_indexs
 
     return ImeInputStringGetPosSplitIndex(ime_input_caret_pos, ime_inputter_split_indexs)
+}
+
+;*******************************************************************************
+;
+ImeInputterGetInputString()
+{
+    global ime_input_string
+    return ime_input_string
+}
+
+ImeInputterHasAnyInput()
+{
+    global ime_input_string
+    return ime_input_string != ""
+}
+
+ImeInputterGetCaretPos()
+{
+    global ime_input_caret_pos
+    return ime_input_caret_pos
+}
+
+ImeInputterCaretIsAtEnd()
+{
+    global ime_input_string
+    global ime_input_caret_pos
+    return ime_input_caret_pos != StrLen(ime_input_string)
 }
 
 ;*******************************************************************************

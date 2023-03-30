@@ -1,6 +1,6 @@
 ;*******************************************************************************
-; 当有输入字符时
-#if ime_input_string
+; In typing
+#if ImeInputterHasAnyInput()
     ; Input char
     %::
     ?::
@@ -212,7 +212,7 @@
         Sleep, 10
         ImeTooltipUpdatePos()
     return
-#if ; ime_input_string
+#if ; ImeInputterHasAnyInput()
 
 ;*******************************************************************************
 ; Is not English mode

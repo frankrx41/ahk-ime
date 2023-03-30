@@ -25,8 +25,7 @@ ImeInputStringGetPosSplitIndex(caret_pos, split_indexs)
                 return A_Index
             }
         }
-        global ime_input_string
-        Assert(false, ime_input_string "," caret_pos)
+        Assert(false, ImeInputterGetInputString() ": " split_indexs.Length() "," caret_pos)
     }
 }
 
