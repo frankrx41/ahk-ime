@@ -16,8 +16,9 @@ Menu, Tray, Tip, AHK IME `nv0.08 (dev)
 global DllFolder        := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 
 ImeProfilerInitialize()
+
 ImeInputterInitialize()
-ImeTranslatorClear()
+ImeTranslatorInitialize()
 ImeDBInitialize()
 PinyinInitialize()
 ImeSelectorInitialize()

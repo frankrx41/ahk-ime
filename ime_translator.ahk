@@ -1,3 +1,8 @@
+ImeTranslatorInitialize()
+{
+    ImeTranslatorClear()
+}
+
 ImeTranslatorClear()
 {
     global ime_translator_result_const      := []
