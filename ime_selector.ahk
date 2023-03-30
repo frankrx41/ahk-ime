@@ -20,8 +20,7 @@ ImeSelectorOpen(open, more := false)
         ImeInputterUpdateString("")
     }
     if( more ){
-        split_index := ImeInputterGetCaretSplitIndex()
-        more := ImeTranslatorResultGetListLength(split_index) > ImeSelectorGetColumn()
+        more := ImeSelectorCanShowMultiple()
     }
     ime_selector_is_show_multiple := more
     return
@@ -37,6 +36,12 @@ ImeSelectorShowMultiple()
 {
     global ime_selector_is_show_multiple
     return ime_selector_is_show_multiple
+}
+
+ImeSelectorCanShowMultiple()
+{
+    split_index := ImeInputterGetCaretSplitIndex()
+    return ImeTranslatorResultGetListLength(split_index) > ImeSelectorGetColumn()
 }
 
 ImeSelectorGetColumn()

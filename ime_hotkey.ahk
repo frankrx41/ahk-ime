@@ -39,7 +39,7 @@
     ; Tab: Show more select items
     Tab::
         if( ImeSelectorIsOpen() ){
-            if( !ImeSelectorShowMultiple() ) {
+            if( !ImeSelectorShowMultiple() && ImeSelectorCanShowMultiple() ) {
                 ImeSelectorOpen(true, true)
             } else {
                 ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
@@ -52,10 +52,10 @@
 
     +Tab::
         if( ImeSelectorIsOpen() ){
-            if( !ImeSelectorShowMultiple() ){
+            if( ImeSelectorGetSelectIndex() == 1 ){
                 ImeSelectorOpen(false)
             }
-            else { 
+            else {
                 ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
                 if( ImeSelectorGetColumn() >= ImeSelectorGetSelectIndex() ){
                     ImeSelectorOpen(true, false)
