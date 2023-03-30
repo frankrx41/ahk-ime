@@ -224,14 +224,20 @@
 
     F6::
         ImeStateUpdateMode("cn")
+        ImeInputterUpdateString(ime_input_string,,true)
+        ImeTooltipUpdate()
     return
 
     F7::
         ImeStateUpdateMode("tw")
+        ImeInputterUpdateString(ime_input_string,,true)
+        ImeTooltipUpdate()
     return
 
     F8::
         ImeStateUpdateMode("jp")
+        ImeInputterUpdateString(ime_input_string,,true)
+        ImeTooltipUpdate()
     return
 
     ; F12: exit

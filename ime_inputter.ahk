@@ -162,10 +162,10 @@ ImeInputterCaretMoveHome(move_home)
 
 ;*******************************************************************************
 ;
-ImeInputterUpdateString(input_string, on_backspace := false)
+ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
 {
     static last_input_string := ""
-    if( input_string == last_input_string ){
+    if( !force && input_string == last_input_string ){
         return false
     }
     if( on_backspace ) {

@@ -24,6 +24,7 @@ PinyinResultCovertTraditional(ByRef search_result)
             pinyin := search_result[A_Index, 1]
             length := search_result[A_Index, 5]
             search_result[A_Index, 2] := ime_traditional_table[result_word, 1]
+            search_result[A_Index, 4] := "*"
             if( ime_traditional_table[result_word].Length() > 1 )
             {
                 insert_indexs.Push([A_Index, result_word, pinyin, length])
