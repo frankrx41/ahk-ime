@@ -13,11 +13,11 @@ ImeInputterClearString()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global ime_input_result_dirty
+    global ime_input_dirty
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
-    ime_input_result_dirty := true
+    ime_input_dirty := true
     ImeProfilerClear()
     ImeInputterUpdateString("")
     return
@@ -96,48 +96,60 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     }
 }
 
+;*******************************************************************************
+; Update result
 ImeInputterUpdateString(input_char, is_delet:=false)
 {
     local
     global ime_input_caret_pos
     global ime_input_string
     global ime_inputter_split_indexs
-    global ime_input_result_dirty
+    global ime_input_dirty
 
+    ImeProfilerBegin(6, true)
     should_update_result := false
-    if( input_char )
-    {
-        ime_input_result_dirty := true
+    if( input_char ) {
+        ime_input_dirty := true
         should_update_result := IsRadical(input_char) || IsTone(input_char) || IsSymbol(input_char) || ime_input_caret_pos != StrLen(ime_input_string)
     }
     else
     {
+        ime_input_dirty := true
         should_update_result := true
     }
 
+    if( is_delet ) {
+        ime_input_dirty := true
+        should_update_result := true
+    }
+
+    debug_info := ""
     input_split := PinyinSplitInpuString(ime_input_string, ime_inputter_split_indexs, radical_list)
-    if( should_update_result && ime_input_result_dirty )
+    if( should_update_result && ime_input_dirty )
     {
         ; TODO: if is_delet , cut radical_list.Length() to ime_input_caret_pos
+        if( is_delet ){
+            index := ImeInputterGetCaretSplitIndex()
+            radical_list.RemoveAt(index, radical_list.Length() - index)
+        }
         ImeTranslatorUpdateResult(input_split, radical_list)
-        ime_input_result_dirty := false
+        ime_input_dirty := false
+        debug_info .= "[UPDATE] "
     }
+    debug_info .= "Dirty:" ime_input_dirty " "
+    debug_info .= "Delete:" is_delet " "
+    debug_info .= radical_list.Length() "/" ime_inputter_split_indexs.Length()
+    ImeProfilerEnd(6, debug_info)
 }
 
-ImeInputterIsResultDirty()
+ImeInputterIsInputDirty()
 {
-    global ime_input_result_dirty
-    return ime_input_result_dirty
-}
-
-ImeInputterSetResultDirty(dirty)
-{
-    global ime_input_result_dirty
-    ime_input_result_dirty := dirty
+    global ime_input_dirty
+    return ime_input_dirty
 }
 
 ;*******************************************************************************
-;
+; Get split index
 ImeInputterGetCaretSplitIndex()
 {
     global ime_input_caret_pos
@@ -147,7 +159,7 @@ ImeInputterGetCaretSplitIndex()
 }
 
 ;*******************************************************************************
-; Input caret
+; Move caret
 ImeInputterCaretMove(dir)
 {
     global ime_input_caret_pos

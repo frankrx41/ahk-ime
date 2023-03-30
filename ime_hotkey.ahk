@@ -15,7 +15,7 @@
             ImeSelectorFixupSelectIndex()
             ImeSelectorOpen(false)
         } else {
-            if( ImeInputterIsResultDirty() ) {
+            if( ImeInputterIsInputDirty() ) {
                 ImeInputterUpdateString("")
             } else {
                 PutCandidateCharacter()
@@ -165,7 +165,7 @@
         if( ImeSelectorIsOpen() ) {
             ImeSelectorOffsetSelectIndex(-1)
         } else {
-            if( ImeInputterIsResultDirty() ) {
+            if( ImeInputterIsInputDirty() ) {
                 ImeInputterUpdateString("")
             } else {
                 if( ImeSelectorGetSelectIndex() >= 4 ) {
