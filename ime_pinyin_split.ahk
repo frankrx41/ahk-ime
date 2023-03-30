@@ -242,6 +242,7 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
     if( has_skip_char ) {
         separate_words .= EscapeCharsGetMark(1)
         split_indexs.Push(index-1)
+        radical_list.Push("")
     }
 
     ImeProfilerEnd(11, """" origin_input """->[" separate_words "] ")

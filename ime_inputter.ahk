@@ -280,6 +280,6 @@ ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
     global ime_input_string
     global ime_inputter_split_indexs
     input_split := PinyinSplit(input_string, ime_inputter_split_indexs, radical_list)
-    ImeTranslatorUpdateResult(input_split, ime_inputter_split_indexs, radical_list)
+    ImeTranslatorUpdateResult(input_split, radical_list)
     return true
 }

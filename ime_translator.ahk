@@ -10,7 +10,7 @@ ImeTranslatorClear()
     global ime_translator_radical_list      := []
 }
 
-ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
+ImeTranslatorUpdateResult(input_split, radical_list)
 {
     local
     global DB
@@ -23,7 +23,7 @@ ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
 
         ime_translator_result_const := []
         test_split_string := input_split
-        loop % split_indexs.Length()
+        loop % radical_list.Length()
         {
             find_split_string := SplitWordGetPrevWords(test_split_string)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
