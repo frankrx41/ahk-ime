@@ -6,6 +6,7 @@
 ; "wo'xi3huan1ni3" -> "w%'o%'x%'i%3h%'u%'a%'n%1n%'i%3"
 SplitWordGetSimpleSpell(input_string)
 {
+    input_string := StrReplace(input_string, "?")
     input_string := RegExReplace(input_string, "([a-z])(?=[^%'12345])", "$1'")
     input_string := RegExReplace(input_string, "([^%])(['12345])", "$1%$2")
     return input_string
