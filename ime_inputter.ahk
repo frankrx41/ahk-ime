@@ -218,9 +218,15 @@ ImeInputterCaretMoveHome(move_home)
 ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
 {
     static last_input_string := ""
+    global ime_input_string
+    global ime_inputter_split_indexs
+
     if( !force && input_string == last_input_string ){
         return false
     }
+
+    input_split := PinyinSplitInpuString(input_string, ime_inputter_split_indexs, radical_list)
+
     if( on_backspace ) {
         ; Remove input string last string
         input_string := RegExReplace(input_string, "[12345' ]([^12345' ]+?)$", "", replace_count)
@@ -233,10 +239,6 @@ ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
         }
     }
     last_input_string := input_string
-
-    global ime_input_string
-    global ime_inputter_split_indexs
-    input_split := PinyinSplitInpuString(input_string, ime_inputter_split_indexs, radical_list)
     ImeTranslatorUpdateResult(input_split, radical_list)
     return true
 }
