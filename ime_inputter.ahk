@@ -102,7 +102,6 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 ImeInputterUpdateString(input_char, is_delet:=false)
 {
     local
-    global ime_input_caret_pos
     global ime_input_string
     global ime_inputter_split_indexs
     global ime_input_dirty
@@ -111,7 +110,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     should_update_result := false
     if( input_char ) {
         ime_input_dirty := true
-        should_update_result := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true) || ime_input_caret_pos != StrLen(ime_input_string)
+        should_update_result := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true)
     }
     else
     {
