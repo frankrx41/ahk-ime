@@ -53,9 +53,9 @@ ImeHotkeyRegisterInitialize()
             Hotkey, % "+" Chr(96+A_Index), %func%
 
             ; Ctrl + Shift + A-Z
-            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), false)
             Hotkey, % "^" Chr(96+A_Index), %func%
-            func := Func("HotkeyOnCtrlShiftAlphabet").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), true)
             Hotkey, % "^+" Chr(96+A_Index), %func%
         }
     }
@@ -63,12 +63,26 @@ ImeHotkeyRegisterInitialize()
     return
 }
 
+ImeHotkeyShiftSetMode(orgin_mode)
+{
+    global ime_input_string
+    if( orgin_mode == "en" ){
+        if ( ime_input_string ) {
+            PutCharacter(ime_input_string)
+            ImeInputterClearString()
+            ImeSelectorOpen(false)
+        }
+    }
+    ImeStateUpdateMode(orgin_mode)
+    ImeTooltipUpdate("")
+}
+
 ImeHotkeyRegisterShift(origin_state)
 {
     global ime_hotkey_on_shift_set_mode
     static ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
 
-    ime_hotkey_on_shift_set_mode := Func("HotkeyOnShiftSetMode").Bind(origin_state)
+    ime_hotkey_on_shift_set_mode := Func("HotkeyOnShift").Bind(origin_state)
     if( !ImeModeIsEnglish() ) {
         Hotkey, If, % ime_is_waiting_input_fn
         Hotkey, Shift, % ime_hotkey_on_shift_set_mode, On

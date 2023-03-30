@@ -213,6 +213,19 @@ ImeInputterCaretMoveHome(move_home)
     }
 }
 
+ImeInputterRemoveCurrentChar(remove_before := true)
+{
+    global ime_input_string
+    global ime_input_caret_pos
+    ; TODO: add remomve after for {DEL} key
+    if( ime_input_caret_pos != 0 )
+    {
+        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
+        ime_input_caret_pos := ime_input_caret_pos-1
+        ImeInputterUpdateString(SubStr(ime_input_string, 1, ime_input_caret_pos) , true)
+    }
+}
+
 ;*******************************************************************************
 ;
 ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)

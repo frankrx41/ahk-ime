@@ -9,45 +9,36 @@ HotkeyOnAlphabet(char)
 HotkeyOnNumber(char)
 {
     local
-    ; 选择相应的编号并上屏
-    if( ImeSelectorIsOpen() ) {
+    if( ImeSelectorIsOpen() )
+    {
+        ; Select index
         index := Floor((ImeSelectorGetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
         index += (char == 0 ? 10 : char)
         ImeSelectorSetSelectIndex(index)
         ImeSelectorOpen(false)
         ImeSelectorFixupSelectIndex()
-        ImeTooltipUpdate()
     }
-    else {
+    else
+    {
+        ; Input digit
         ImeInputterProcessChar(char)
-        ImeTooltipUpdate()
     }
-}
-
-HotkeyOnCtrlAlphabet(char)
-{
-    ImeInputterCaretFastMoveAt(char, true)
     ImeTooltipUpdate()
 }
 
-HotkeyOnCtrlShiftAlphabet(char)
+HotkeyOnCtrlAlphabet(char, shift_down)
 {
-    ImeInputterCaretFastMoveAt(char, false)
+    local
+    ; TODO: add rollback
+    back_to_front := shift_down ? false : true
+    ImeInputterCaretFastMoveAt(char, back_to_front)
     ImeTooltipUpdate()
 }
 
 HotkeyOnBackSpace()
 {
-    local
-    global ime_input_string
-    global ime_input_caret_pos
-
-    if( ime_input_caret_pos != 0 ){
-        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
-        ime_input_caret_pos := ime_input_caret_pos-1
-        ImeInputterUpdateString(SubStr(ime_input_string, 1, ime_input_caret_pos) , true)
-        ImeTooltipUpdate()
-    }
+    ImeInputterRemoveCurrentChar(true)
+    ImeTooltipUpdate()
 }
 
 HotkeyOnEsc()
@@ -62,6 +53,8 @@ HotkeyOnEsc()
             ImeSelectorOpen(false)
         }
     } else {
+        ; Double esc clear all input
+        ; else remove only last
         if( A_TickCount - last_esc_tick < 1000 ){
             ImeInputterClearString()
         } else {
@@ -72,29 +65,20 @@ HotkeyOnEsc()
     ImeTooltipUpdate()
 }
 
-HotkeyOnShiftSetMode(mode)
+HotkeyOnShift(orgin_mode)
 {
+    ; Fix when use {Shift} + {Numpad1} send {NumpadEnd}
+    ; system will set {Shift up} event
     static shift_down_tick := A_TickCount
-    if( GetKeyState("RShift", "P") )
-    {
+    if( GetKeyState("RShift", "P") ) {
         shift_down_tick := A_TickCount
         return
     }
-    if( A_TickCount - shift_down_tick < 1000 )
-    {
+    if( A_TickCount - shift_down_tick < 1000 ){
         return
     }
 
-    global ime_input_string
-    if( mode == "en" ){
-        if ( ime_input_string ) {
-            PutCharacter(ime_input_string)
-            ImeInputterClearString()
-            ImeSelectorOpen(false)
-        }
-    }
-    ImeStateUpdateMode(mode)
-    ImeTooltipUpdate("")
+    ImeHotkeyShiftSetMode(orgin_mode)
 }
 
 HotkeyOnSplitMark(char)
