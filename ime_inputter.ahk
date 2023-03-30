@@ -168,46 +168,54 @@ ImeInputterGetRightWordPos(start_index)
 
 ;*******************************************************************************
 ; Input caret
-ImeInputterCaretMove(dir, by_word:=false)
+ImeInputterCaretMove(dir)
 {
     global ime_input_caret_pos
     global ime_input_string
 
-    if( by_word )
+    input_string_len := StrLen(ime_input_string)
+    ime_input_caret_pos += dir
+
+    if( ime_input_caret_pos < 0 )
     {
-        if( dir > 0 ){
-            if( ime_input_caret_pos == StrLen(ime_input_string) ){
-                word_pos := 0
-            } else {
-                word_pos := ImeInputterGetRightWordPos(ime_input_caret_pos)
-                if( word_pos == ime_input_caret_pos ){
-                    word_pos := StrLen(ime_input_string)
-                }
-            }
+        ime_input_caret_pos := input_string_len
+    }
+    else
+    if( ime_input_caret_pos > input_string_len )
+    {
+        ime_input_caret_pos := 0
+    }
+}
+
+ImeInputterCaretMoveByWord(dir)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+
+    move_count := dir > 0 ? dir : (-1 * dir)
+    if( dir > 0 ){
+        if( ime_input_caret_pos == StrLen(ime_input_string) ){
+            word_pos := 0
         } else {
-            if( ime_input_caret_pos == 0 ){
-                word_pos := StrLen(ime_input_string)
-            } else {
+            loop, % move_count
+            {
+                word_pos := ImeInputterGetRightWordPos(ime_input_caret_pos)
+            }
+            ; if( word_pos == ime_input_caret_pos ){
+            ;     word_pos := StrLen(ime_input_string)
+            ; }
+        }
+    } else {
+        if( ime_input_caret_pos == 0 ){
+            word_pos := StrLen(ime_input_string)
+        } else {
+            loop, % move_count
+            {
                 word_pos := ImeInputterGetLeftWordPos(ime_input_caret_pos)
             }
         }
-        ime_input_caret_pos := word_pos
     }
-    else
-    {
-        input_string_len := StrLen(ime_input_string)
-        ime_input_caret_pos += dir
-
-        if( ime_input_caret_pos < 0 )
-        {
-            ime_input_caret_pos := input_string_len
-        }
-        else
-        if( ime_input_caret_pos > input_string_len )
-        {
-            ime_input_caret_pos := 0
-        }
-    }
+    ime_input_caret_pos := word_pos
 }
 
 ImeInputterCaretFastMoveAt(char, back_to_front)
