@@ -15,8 +15,9 @@
             ImeSelectorFixupSelectIndex()
             ImeSelectorOpen(false)
         } else {
-            if( !ImeInputterUpdateString(ime_input_string) )
-            {
+            if( ImeInputterIsResultDirty() ) {
+                ImeInputterUpdateString("")
+            } else {
                 PutCandidateCharacter()
             }
         }
@@ -164,8 +165,9 @@
         if( ImeSelectorIsOpen() ) {
             ImeSelectorOffsetSelectIndex(-1)
         } else {
-            if( !ImeInputterUpdateString(ime_input_string) )
-            {
+            if( ImeInputterIsResultDirty() ) {
+                ImeInputterUpdateString("")
+            } else {
                 if( ImeSelectorGetSelectIndex() >= 4 ) {
                     ImeSelectorResetSelectIndex()
                 } else {
@@ -193,13 +195,13 @@
 
     NumpadHome::
     Home::
-        ImeInputterCaretMoveHome(true)
+        ImeInputterCaretMoveToHome(true)
         ImeTooltipUpdate()
     return
 
     NumpadEnd::
     End::
-        ImeInputterCaretMoveHome(false)
+        ImeInputterCaretMoveToHome(false)
         ImeTooltipUpdate()
     return
 
@@ -230,19 +232,19 @@
 
     F6::
         ImeStateUpdateMode("cn")
-        ImeInputterUpdateString(ime_input_string,,true)
+        ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     F7::
         ImeStateUpdateMode("tw")
-        ImeInputterUpdateString(ime_input_string,,true)
+        ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     F8::
         ImeStateUpdateMode("jp")
-        ImeInputterUpdateString(ime_input_string,,true)
+        ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 

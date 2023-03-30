@@ -18,7 +18,7 @@ ImeTooltipGetDisplaySelectItems()
         if( select_index == 0 ){
             continue
         }
-        if( split_index != ImeInputterGetPosSplitIndex() )
+        if( split_index != ImeInputterGetCaretSplitIndex() )
         {
             continue
         }
@@ -170,7 +170,7 @@ ImeTooltipUpdate(tooltip_pos := "")
             ime_tooltip_pos := GetCaretPos()
         }
 
-        split_index := ImeInputterGetPosSplitIndex()
+        split_index := ImeInputterGetCaretSplitIndex()
         extern_info := ""
         extern_info .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
         radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)))

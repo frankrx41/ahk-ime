@@ -69,6 +69,7 @@ ImeStateUpdateMode(mode)
         } else {
             ImeHotkeyRegisterShift(last_mode)
         }
+        ImeInputterSetResultDirty(true)
     }
     ImeIconSetMode(mode)
 }

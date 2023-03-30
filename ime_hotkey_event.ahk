@@ -49,13 +49,13 @@ HotkeyOnCtrlAlphabet(char, shift_down)
     local
     ; TODO: add rollback
     back_to_front := shift_down ? false : true
-    ImeInputterCaretFastMoveAt(char, back_to_front)
+    ImeInputterCaretMoveToChar(char, back_to_front)
     ImeTooltipUpdate()
 }
 
 HotkeyOnBackSpace()
 {
-    ImeInputterRemoveCurrentChar(true)
+    ImeInputterDeleteAtCaret(true)
     ImeTooltipUpdate()
 }
 

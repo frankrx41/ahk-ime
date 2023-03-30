@@ -19,10 +19,10 @@ ImeSelectorOpen(open, more := false)
     ime_selector_is_open := open
     if( open )
     {
-        ImeInputterUpdateString(ime_input_string)
+        ImeInputterUpdateString("")
     }
     if( more ){
-        split_index := ImeInputterGetPosSplitIndex()
+        split_index := ImeInputterGetCaretSplitIndex()
         more := ImeTranslatorResultGetListLength(split_index) > ImeSelectorGetColumn()
     }
     ime_selector_is_show_multiple := more
@@ -50,7 +50,7 @@ ImeSelectorGetColumn()
 ImeSelectorGetSelectIndex()
 {
     local
-    split_index := ImeInputterGetPosSplitIndex()
+    split_index := ImeInputterGetCaretSplitIndex()
     return ImeTranslatorResultGetSelectIndex(split_index)
 }
 
@@ -62,7 +62,7 @@ ImeSelectorResetSelectIndex()
 ImeSelectorSetSelectIndex(index)
 {
     local
-    split_index := ImeInputterGetPosSplitIndex()
+    split_index := ImeInputterGetCaretSplitIndex()
     index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
     ImeTranslatorResultSetSelectIndex(split_index, index)
 }
@@ -70,7 +70,7 @@ ImeSelectorSetSelectIndex(index)
 ImeSelectorOffsetSelectIndex(offset)
 {
     local
-    split_index := ImeInputterGetPosSplitIndex()
+    split_index := ImeInputterGetCaretSplitIndex()
     index := ImeTranslatorResultGetSelectIndex(split_index) + offset
     index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
     ImeTranslatorResultSetSelectIndex(split_index, index)
@@ -94,7 +94,7 @@ ImeSelectorFixupSelectIndex()
     ImeTranslatorFixupSelectIndex()
     if( ime_input_caret_pos != StrLen(ime_input_string) )
     {
-        split_index := ImeInputterGetPosSplitIndex()
+        split_index := ImeInputterGetCaretSplitIndex()
         select_index := ImeTranslatorResultGetSelectIndex(split_index)
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeInputterCaretMoveByWord(word_length)

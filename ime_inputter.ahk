@@ -2,18 +2,22 @@
 ; Input string
 ImeInputterInitialize()
 {
-    global ime_input_string     := ""               ; 輸入字符
-    global ime_input_caret_pos  := 0                ; 光标位置
+    global ime_input_string         ; 輸入字符
+    global ime_input_caret_pos      ; 光标位置
     global ime_inputter_split_indexs := []
+
+    ImeInputterClearString()
 }
 
 ImeInputterClearString()
 {
     global ime_input_string
     global ime_input_caret_pos
+    global ime_input_result_dirty
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
+    ime_input_result_dirty := true
     ImeProfilerClear()
     ImeInputterUpdateString("")
     return
@@ -28,7 +32,7 @@ ImeInputterClearPrevSplitted()
     ime_input_string := ImeInputStringClearPrevSplitted(ime_input_string, ime_inputter_split_indexs, ime_input_caret_pos)
 
     ImeSelectorResetSelectIndex()
-    ImeInputterUpdateString(ime_input_string)
+    ImeInputterUpdateString("", true)
 }
 
 ImeInputterClearLastSplitted()
@@ -46,14 +50,28 @@ ImeInputterClearLastSplitted()
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos)
         ImeSelectorResetSelectIndex()
-        ImeInputterUpdateString(ime_input_string)
+        ImeInputterUpdateString("", true)
     }
 }
 
-ImeInputterProcessChar(input_char, try_puts := 0)
+ImeInputterDeleteAtCaret(delet_before := true)
+{
+    global ime_input_string
+    global ime_input_caret_pos
+    ; TODO: add remomve after for {DEL} key
+    if( ime_input_caret_pos != 0 )
+    {
+        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
+        ime_input_caret_pos := ime_input_caret_pos-1
+        ImeInputterUpdateString("", true)
+    }
+}
+
+ImeInputterProcessChar(input_char, immediate_put:=false)
 {
     global ime_input_caret_pos
     global ime_input_string
+    global ime_inputter_split_indexs
 
     ImeProfilerClear()
     if( ImeSelectorIsOpen() )
@@ -70,61 +88,62 @@ ImeInputterProcessChar(input_char, try_puts := 0)
     ime_input_string := SubStr(ime_input_string, 1, caret_pos) . input_char . SubStr(ime_input_string, caret_pos+1)
     ime_input_caret_pos := caret_pos + 1
 
-    if( try_puts && StrLen(ime_input_string) == 1 ) {
+    if( immediate_put && StrLen(ime_input_string) == 1 ) {
         PutCharacter(input_char)
         ImeInputterClearString()
     } else {
-        ImeSelectorResetSelectIndex()
-        if( IsRadical(input_char) || IsTone(input_char) || IsSymbol(input_char) || ime_input_caret_pos != StrLen(ime_input_string) )
-        {
-            ImeInputterUpdateString(ime_input_string)
-        }
-        else
-        {
-            ImeInputterPinyinSplitPos()
-        }
+        ImeInputterUpdateString(input_char)
     }
+}
+
+ImeInputterUpdateString(input_char, is_delet:=false)
+{
+    local
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_inputter_split_indexs
+    global ime_input_result_dirty
+
+    should_update_result := false
+    if( input_char )
+    {
+        ime_input_result_dirty := true
+        should_update_result := IsRadical(input_char) || IsTone(input_char) || IsSymbol(input_char) || ime_input_caret_pos != StrLen(ime_input_string)
+    }
+    else
+    {
+        should_update_result := true
+    }
+
+    input_split := PinyinSplitInpuString(ime_input_string, ime_inputter_split_indexs, radical_list)
+    if( should_update_result && ime_input_result_dirty )
+    {
+        ; TODO: if is_delet , cut radical_list.Length() to ime_input_caret_pos
+        ImeTranslatorUpdateResult(input_split, radical_list)
+        ime_input_result_dirty := false
+    }
+}
+
+ImeInputterIsResultDirty()
+{
+    global ime_input_result_dirty
+    return ime_input_result_dirty
+}
+
+ImeInputterSetResultDirty(dirty)
+{
+    global ime_input_result_dirty
+    ime_input_result_dirty := dirty
 }
 
 ;*******************************************************************************
 ;
-ImeInputterPinyinSplitPos()
-{
-    global ime_input_string
-    global ime_inputter_split_indexs
-    PinyinSplitInpuString(ime_input_string, ime_inputter_split_indexs, "")
-}
-
-ImeInputterGetPosSplitIndex()
+ImeInputterGetCaretSplitIndex()
 {
     global ime_input_caret_pos
     global ime_inputter_split_indexs
 
     return ImeInputStringGetPosSplitIndex(ime_input_caret_pos, ime_inputter_split_indexs)
-}
-
-ImeInputterGetLastWordPos()
-{
-    global ime_inputter_split_indexs
-    if( ime_inputter_split_indexs.Length() <= 1 ){
-        return 0
-    }
-    return ime_inputter_split_indexs[ime_inputter_split_indexs.Length()-1]
-}
-
-ImeInputterGetLeftWordPos(start_index)
-{
-    local
-    global ime_inputter_split_indexs
-    return ImeInputStringGetLeftWordPos(start_index, ime_inputter_split_indexs)
-}
-
-ImeInputterGetRightWordPos(start_index)
-{
-    local
-    global ime_inputter_split_indexs
-
-    return ImeInputStringGetRightWordPos(start_index, ime_inputter_split_indexs)
 }
 
 ;*******************************************************************************
@@ -181,7 +200,7 @@ ImeInputterCaretMoveByWord(dir)
     ime_input_caret_pos := word_pos
 }
 
-ImeInputterCaretFastMoveAt(char, back_to_front)
+ImeInputterCaretMoveToChar(char, back_to_front)
 {
     local
     global ime_input_caret_pos
@@ -201,7 +220,7 @@ ImeInputterCaretFastMoveAt(char, back_to_front)
     }
 }
 
-ImeInputterCaretMoveHome(move_home)
+ImeInputterCaretMoveToHome(move_home)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -213,45 +232,28 @@ ImeInputterCaretMoveHome(move_home)
     }
 }
 
-ImeInputterRemoveCurrentChar(remove_before := true)
+;*******************************************************************************
+; Static
+ImeInputterGetLastWordPos()
 {
-    global ime_input_string
-    global ime_input_caret_pos
-    ; TODO: add remomve after for {DEL} key
-    if( ime_input_caret_pos != 0 )
-    {
-        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
-        ime_input_caret_pos := ime_input_caret_pos-1
-        ImeInputterUpdateString(SubStr(ime_input_string, 1, ime_input_caret_pos) , true)
+    global ime_inputter_split_indexs
+    if( ime_inputter_split_indexs.Length() <= 1 ){
+        return 0
     }
+    return ime_inputter_split_indexs[ime_inputter_split_indexs.Length()-1]
 }
 
-;*******************************************************************************
-;
-ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
+ImeInputterGetLeftWordPos(start_index)
 {
-    static last_input_string := ""
-    global ime_input_string
+    local
+    global ime_inputter_split_indexs
+    return ImeInputStringGetLeftWordPos(start_index, ime_inputter_split_indexs)
+}
+
+ImeInputterGetRightWordPos(start_index)
+{
+    local
     global ime_inputter_split_indexs
 
-    if( !force && input_string == last_input_string ){
-        return false
-    }
-
-    input_split := PinyinSplitInpuString(input_string, ime_inputter_split_indexs, radical_list)
-
-    if( on_backspace ) {
-        ; Remove input string last string
-        input_string := RegExReplace(input_string, "[12345' ]([^12345' ]+?)$", "", replace_count)
-        if( replace_count != 1 ){
-            last_char := SubStr(input_string, 0, 1)
-            if( !IsTone(last_char) && !IsRadical(last_char) )
-            {
-                input_string := ""
-            }
-        }
-    }
-    last_input_string := input_string
-    ImeTranslatorUpdateResult(input_split, radical_list)
-    return true
+    return ImeInputStringGetRightWordPos(start_index, ime_inputter_split_indexs)
 }

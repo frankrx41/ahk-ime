@@ -6,9 +6,6 @@ ImeInputStringClearPrevSplitted(input_string, split_indexs, ByRef caret_pos)
     {
         left_pos := ImeInputStringGetLeftWordPos(check_index, split_indexs)
         input_string := SubStr(input_string, 1, left_pos) . SubStr(input_string, caret_pos+1)
-
-        ImeSelectorResetSelectIndex()
-        ImeInputterUpdateString(input_string)
         caret_pos := left_pos
     }
     return input_string
