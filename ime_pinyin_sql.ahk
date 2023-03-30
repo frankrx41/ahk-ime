@@ -10,7 +10,7 @@ PinyinSqlSimpleKey(split_input, auto_comple:=false)
     key_value := StrReplace(key_value, "'", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
     if( auto_comple ){
-        key_value .= "%"
+        key_value .= "%%"
     }
     return key_value
 }
@@ -22,7 +22,7 @@ PinyinSqlFullKey(split_input, auto_comple:=false)
     key_value := StrReplace(key_value, "'", "_")
     last_char := SubStr(key_value, 0, 1)
     if( auto_comple ){
-        key_value .= "%_"
+        key_value .= "%%"
     }
     return key_value
 }
@@ -40,6 +40,7 @@ PinyinSqlWhereKeyCommand(key_name, key_value, repalce_tone_1_5:=false)
         ; key_value := StrReplace(key_value, "_", ".")
         if( InStr(key_value, "[") || InStr(key_value, "?") || InStr(key_value, ".") )
         {
+            key_value := RegexReplace(key_value, "%%$", "[a-z1-5]*")
             key_value := StrReplace(key_value, "_", "[1-5]")
             key_value := StrReplace(key_value, "%", "[a-z]*")
             sql_where_cmd := " REGEXP '^" key_value "$' "
