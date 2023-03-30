@@ -345,4 +345,5 @@ PinyinInitialize()
     PinyinHistoryClear()
     PinyinRadicalInitialize()
     PinyinSplitTableInitialize()
+    PinyinTraditionalInitialize()
 }

@@ -52,6 +52,10 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     ; 超级简拼 显示 4 字及以上简拼候选
     PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
 
+    if( ImeModeGetLanguage() == "tw" )
+    {
+        PinyinResultCovertTraditional(search_result)
+    }
 
     PinyinResultRemoveZeroIndex(search_result)
     ; [

@@ -26,6 +26,7 @@
 #Include, ime_putchar.ahk
 
 #Include, ime_result_radical.ahk
+#Include, ime_result_traditional.ahk
 #Include, ime_result_single_word.ahk
 #Include, ime_result_uniquify.ahk
 
