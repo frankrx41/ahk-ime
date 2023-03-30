@@ -51,28 +51,31 @@ ImeTranslatorUpdateResult(input_split, radical_list)
 
 ImeTranslatorFixupSelectIndex()
 {
+    local
     global ime_translator_result_filtered
     search_result := ime_translator_result_filtered
 
-    skip_word := 0
+    debug_info := ""
+    ImeProfilerBegin(31, true)
+    skip_word_count := 0
+    skip_words := []
     loop % search_result.Length()
     {
         split_index := A_Index
 
-        if( skip_word )
+        if( skip_word_count )
         {
-            ImeTranslatorResultSetSelectIndex(split_index, 0, false)
-            skip_word -= 1
+            skip_word := SubStr(skip_words, 1, 1)
+            ImeTranslatorResultSetSelectIndex(split_index, 0, false, skip_word)
+            skip_word_count -= 1
+            skip_words := SubStr(skip_words, 2)
+            debug_info .= "[" skip_words "]"
         }
         else
         {
             select_index := ImeTranslatorResultGetSelectIndex(split_index)
             current_length := ImeTranslatorResultGetLength(split_index, select_index)
-            if( ImeTranslatorResultIsLock(split_index) )
-            {
-                skip_word := current_length-1
-            }
-            else
+            if( !ImeTranslatorResultIsLock(split_index) )
             {
                 max_length := 1
                 loop % ImeTranslatorResultGetLength(split_index, 1)-1
@@ -86,26 +89,28 @@ ImeTranslatorFixupSelectIndex()
                 }
 
                 ; Find a result the no longer than `max_length`
-                if( select_index != 0 && current_length <= max_length )
-                {
-                    skip_word := current_length-1
-                }
-                else
+                if( select_index == 0 || current_length > max_length )
                 {
                     loop % ImeTranslatorResultGetListLength(split_index)
                     {
                         test_len := ImeTranslatorResultGetLength(split_index, A_Index)
                         if( test_len <= max_length )
                         {
-                            ImeTranslatorResultSetSelectIndex(split_index, A_Index, false)
-                            skip_word := test_len-1
+                            select_index := A_Index
+                            current_length := test_len
+                            ImeTranslatorResultSetSelectIndex(split_index, select_index, false) 
                             break
                         }
                     }
                 }
             }
+            skip_word_count := current_length-1
+            skip_words .= SubStr(ImeTranslatorResultGetWord(split_index, select_index), 2)
+            debug_info .= "[" skip_word_count "," Asc(skip_words) "," skip_words "]"
         }
     }
+    ImeProfilerEnd(31, debug_info)
+    Assert(StrLen(skip_words) == 0, Asc(skip_words))
 }
 
 ImeTranslatorFilterResults(single_mode:=false)
@@ -163,10 +168,22 @@ ImeTranslatorGetOutputString()
     return result_string
 }
 
-ImeTranslatorResultSetSelectIndex(split_index, word_index, lock_select:=true)
+;*******************************************************************************
+; [split_index, 0] = select info
+;   - 1: select index, work for selector menu, 0 mark not select, should skip this
+;   - 2: is lock
+;   - 3: value
+;   - 4: length
+ImeTranslatorResultSetSelectIndex(split_index, word_index, lock_select:=true, select_word:="", word_length:=0)
 {
+    local
     global ime_translator_result_filtered
-    ime_translator_result_filtered[split_index, 0] := [word_index, lock_select]
+    if( word_index != 0 && select_word == "" && word_length == 0 )
+    {
+        select_word := ImeTranslatorResultGetWord(split_index, word_index)
+        word_length := ImeTranslatorResultGetLength(split_index, word_index)
+    }
+    ime_translator_result_filtered[split_index, 0] := [word_index, lock_select, select_word, word_length]
 }
 
 ImeTranslatorResultGetSelectIndex(split_index)
@@ -181,12 +198,28 @@ ImeTranslatorResultIsLock(split_index)
     return ime_translator_result_filtered[split_index, 0, 2]
 }
 
+ImeTranslatorResultGetSelectWord(split_index)
+{
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[split_index, 0, 3]
+}
+
+ImeTranslatorResultGetSelectLength(split_index)
+{
+    global ime_translator_result_filtered
+    return ime_translator_result_filtered[split_index, 0, 4]
+}
+
+;*******************************************************************************
+;
 ImeTranslatorGetWordCount()
 {
     global ime_translator_result_filtered
     return ime_translator_result_filtered.Length()
 }
 
+;*******************************************************************************
+;
 ImeTranslatorResultGetListLength(split_index)
 {
     global ime_translator_result_filtered
@@ -223,6 +256,8 @@ ImeTranslatorResultGetLength(split_index, word_index)
     return ime_translator_result_filtered[split_index, word_index, 5]
 }
 
+;*******************************************************************************
+;
 ImeTranslatorResultGetFormattedComment(split_index, word_index)
 {
     comment := ImeTranslatorResultGetComment(split_index, word_index)
