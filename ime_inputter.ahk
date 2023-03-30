@@ -111,7 +111,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     should_update_result := false
     if( input_char ) {
         ime_input_dirty := true
-        should_update_result := IsRadical(input_char) || IsTone(input_char) || IsSymbol(input_char) || ime_input_caret_pos != StrLen(ime_input_string)
+        should_update_result := !InStr("qwertyuiopasdfghjklzxcvbnm", input_char, true) || ime_input_caret_pos != StrLen(ime_input_string)
     }
     else
     {
