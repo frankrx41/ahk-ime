@@ -1,3 +1,9 @@
+IsTraditionalComment(comment)
+{
+    first_char := SubStr(comment, 1, 1)
+    return InStr("*+", first_char)
+}
+
 ImeTooltipGetDisplaySelectItems()
 {
     local
@@ -53,9 +59,14 @@ ImeTooltipGetDisplaySelectItems()
                         ; }
                     }
 
-                    end_str := select_index == word_index ? "]" : " "
+                    end_str_mark := " "
                     comment := ImeTranslatorResultGetFormattedComment(split_index, word_index)
-
+                    if( IsTraditionalComment(comment) )
+                    {
+                        end_str_mark := SubStr(comment, 1, 1)
+                        comment := SubStr(comment, 2)
+                    }
+                    end_str := select_index == word_index ? "]" : end_str_mark
                     item_str := begin_str . ImeTranslatorResultGetWord(split_index, word_index) . radical_code . end_str . comment
                     ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
                 } else {
