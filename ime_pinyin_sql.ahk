@@ -112,10 +112,10 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
         sql_full_key := ""
     }
 
-    sql_cmd := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
-    ImeProfilerEnd(15, "`n  - " . sql_cmd)
+    sql_cmd_where := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
+    ImeProfilerEnd(15)
 
-    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd
+    sql_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_cmd_where
     sql_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
 
     ImeProfilerBegin(16)
@@ -136,6 +136,7 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
     }
 
     ; "`n" origin_input "," full_key_1 ": " result_table.RowCount " (" origin_input ")" "`n" sql_cmd "`n" CallStack(1)
-    ImeProfilerEnd(16, "`n  - (" A_TickCount - begin_tick ") [" split_input "]" """->{" result.Length() "}")
+    ImeProfilerEnd(16, "`n  - [" split_input "] -> {" result.Length() "}")
+    ImeProfilerSetDebugInfo(15, "`n  - (" A_TickCount - begin_tick ") " . sql_cmd_where)
     return result
 }
