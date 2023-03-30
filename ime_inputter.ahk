@@ -128,18 +128,18 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     input_split := PinyinSplitInpuString(ime_input_string, ime_inputter_split_indexs, radical_list)
     if( should_update_result && ime_input_dirty )
     {
-        ; TODO: if is_delet , cut radical_list.Length() to ime_input_caret_pos
+        debug_info .= "[UPDATE] "
         if( is_delet ){
             index := ImeInputterGetCaretSplitIndex()
-            radical_list.RemoveAt(index, radical_list.Length() - index)
+            radical_list.RemoveAt(index, radical_list.Length() - index + 1)
+            debug_info .= "Index: " index " "
         }
         ImeTranslatorUpdateResult(input_split, radical_list)
         ime_input_dirty := false
-        debug_info .= "[UPDATE] "
     }
     debug_info .= "Dirty:" ime_input_dirty " "
     debug_info .= "Delete:" is_delet " "
-    debug_info .= radical_list.Length() "/" ime_inputter_split_indexs.Length()
+    debug_info .= "[" radical_list.Length() "/" ime_inputter_split_indexs.Length() "]"
     ImeProfilerEnd(6, debug_info)
 }
 
