@@ -42,6 +42,12 @@ PinyinRadicalGetPinyin(single_radical)
     return ime_radicals_pinyin[single_radical]
 }
 
+PinyinRadicalIsAtomic(single_word)
+{
+    static radical_atomic := "丨亅丿乛一乙乚丶匕冫丷厂刀刂儿阝几卩冂力冖凵人亻入厶亠匸讠廴又 艹屮彳巛川辶寸大飞工弓廾 己彐彑巾口马门宀女犭山彡尸饣士扌氵纟巳土囗兀夕小忄幺弋尢夂子 贝灬长车歹斗方风父戈卝户戶戸火见斤耂毛木肀牛牜爿片攴攵气欠犬日氏礻手殳水瓦王韦文毋心牙曰月爫支止爪 白癶甘瓜禾钅立龙矛皿母目疒鸟皮生石矢示罒田玄疋业衤 臣虫而耳缶艮虍臼米齐肉色舌覀页先血羊聿至舟衣竹自羽糸糹 貝采镸車辰赤辵豆谷見角克里卤麦身豕辛言邑酉酋豸走足 青靑雨齿長非阜金釒隶門靣飠鱼隹 風革骨鬼韭面首韋香頁音"
+    return InStr(radical_atomic, single_word)
+}
+
 PinyinRadicalIsFirstPart(test_radical, test_word)
 {
     radical_word_list := PinyinRadicalWordGetRadical(test_word)
@@ -104,7 +110,7 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         if( !has_part_same )
         {
             first_word := radical_word_list[1]
-            if( PinyinRadicalIsFirstPart(test_radical, first_word) )
+            if( !PinyinRadicalIsAtomic(first_word) && PinyinRadicalIsFirstPart(test_radical, first_word) )
             {
                 test_radical := SubStr(test_radical, 2)
                 radical_word_list.RemoveAt(1)
@@ -116,7 +122,7 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         if( !has_part_same )
         {
             last_word := radical_word_list[radical_word_list.Length()]
-            if( PinyinRadicalIsLastPart(test_radical, last_word) )
+            if( !PinyinRadicalIsAtomic(last_word) && PinyinRadicalIsLastPart(test_radical, last_word) )
             {
                 test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
                 radical_word_list.RemoveAt(radical_word_list.Length())
