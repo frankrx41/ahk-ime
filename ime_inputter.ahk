@@ -172,7 +172,8 @@ ImeInputterUpdateString(input_string, on_backspace:=false, force:=false)
         ; Remove input string last string
         input_string := RegExReplace(input_string, "[12345' ]([^12345' ]+?)$", "", replace_count)
         if( replace_count != 1 ){
-            if( !IsTone(SubStr(input_string, 0, 1)) )
+            last_char := SubStr(input_string, 0, 1)
+            if( !IsTone(last_char) && !IsRadical(last_char) )
             {
                 input_string := ""
             }
