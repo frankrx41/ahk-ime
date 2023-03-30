@@ -212,6 +212,18 @@
         Reload
     return
 
+    F6::
+        ImeStateUpdateMode("cn")
+    return
+
+    F7::
+        ImeStateUpdateMode("tw")
+    return
+
+    F8::
+        ImeStateUpdateMode("jp")
+    return
+
     ; F12: exit
     F12::
         ExitApp,
@@ -231,7 +243,7 @@ return
 ImeToggleSuspend:
     Suspend
     ; 英文状态下恢复成中文
-    if( A_ThisHotkey == "#Space" && A_IsSuspended && !ImeModeIsChinese() ){
+    if( A_ThisHotkey == "#Space" && A_IsSuspended && ImeModeIsEnglish() ){
         Gosub, ImeToggleSuspend
     }
     ImeStateUpdateMode("cn")

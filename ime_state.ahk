@@ -75,7 +75,7 @@ ImeStatePauseWindowActive()
 
 ImeStateWaitingInput()
 {
-    return ImeModeIsChinese() && !ImeStatePauseWindowActive()
+    return !ImeModeIsEnglish() && !ImeStatePauseWindowActive()
 }
 
 ;*******************************************************************************
@@ -84,16 +84,16 @@ ImeModeSetLanguage(mode)
 {
     global ime_mode_language
     switch (mode) {
-    case "cn", "en", "tw":  ime_mode_language := mode
-    default:                ime_mode_language := "en"
+    case "cn", "en", "tw", "jp":    ime_mode_language := mode
+    default:                        ime_mode_language := "en"
     }
     return
 }
 
-ImeModeIsChinese()
+ImeModeIsEnglish()
 {
     global ime_mode_language
-    return ime_mode_language == "cn" || ime_mode_language == "tw"
+    return ime_mode_language == "en"
 }
 
 ;*******************************************************************************
@@ -108,9 +108,10 @@ ImeIconSetMode(mode)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
         switch (mode) {
-        case "cn": info_text := "中", tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
         case "en": info_text := "英", tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
-        case "tw": info_text := "漢", tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
+        case "cn": info_text := "中", tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
+        case "tw": info_text := "漢", tooltip_option := tooltip_option . " Q1 B0033cc Tfefefe"
+        case "jp": info_text := "日", tooltip_option := tooltip_option . " Q1 B339933 Tfefefe"
         }
         ToolTip(4, info_text, tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 1, 1
