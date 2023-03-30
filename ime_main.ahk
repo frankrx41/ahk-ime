@@ -20,9 +20,8 @@ ImeInputterInitialize()
 ImeTranslatorClear()
 ImeDBInitialize()
 PinyinInitialize()
-ImeStateInitialize()
-ImeStateUpdateMode()
 ImeSelectorInitialize()
+ImeHotkeyInitialize()
 
 ; tooltip
 ime_tooltip_font_size           := 13
@@ -32,6 +31,7 @@ ime_tooltip_background_color    := "373832"
 ime_tooltip_text_color          := "d4d4d4"
 ToolTip(1, "", "Q0 B" ime_tooltip_background_color " T"  ime_tooltip_text_color " S" ime_tooltip_font_size, ime_tooltip_font_family, ime_tooltip_font_bold)
 
+ImeStateInitialize()
 ImeHotkeyRegisterInitialize()
 return
 ;*******************************************************************************

@@ -242,9 +242,9 @@ return
 #Space::
 ImeToggleSuspend:
     Suspend
-    ; 英文状态下恢复成中文
-    if( A_ThisHotkey == "#Space" && A_IsSuspended && ImeModeIsEnglish() ){
-        Gosub, ImeToggleSuspend
+    if( A_ThisHotkey == "#Space" && !A_IsSuspended && ImeModeIsEnglish() ){
+        ImeHotkeyShiftDown()
     }
-    ImeStateUpdateMode("cn")
+    ImeStateRefresh()
+    ImeTooltipUpdate("")
 return

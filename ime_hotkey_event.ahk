@@ -93,10 +93,8 @@ HotkeyOnShiftSetMode(mode)
             ImeSelectorOpen(false)
         }
     }
-    ImeModeSetLanguage(mode)
-    ImeHotkeyRegisterShift()
+    ImeStateUpdateMode(mode)
     ImeTooltipUpdate("")
-    ImeIconSetMode(mode)
 }
 
 HotkeyOnSplitMark(char)

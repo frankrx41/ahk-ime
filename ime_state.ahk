@@ -7,12 +7,14 @@ ImeStateInitialize()
     global ime_active_window_class
     global ime_opt_pause_window_name_list
     
-    ime_mode_language := "cn"       ; "cn", "en", "tw"
+    ime_mode_language := "en"       ; "cn", "en", "tw", "jp"
     ime_is_active_system_menu := 0  ; 是否打开菜单
     ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
 
     DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
+    ; Notice: if `ime_mode_language` same as here, state will not update
+    ImeStateUpdateMode("cn")
 }
 
 ImeStateEventProcHook(phook, msg, hwnd)
@@ -27,31 +29,47 @@ ImeStateEventProcHook(phook, msg, hwnd)
     case 0x03:                  ; EVENT_SYSTEM_FOREGROUND
         WinGetClass, win_class, ahk_id %hwnd%
         ime_active_window_class := win_class
-        ImeStateUpdateMode()
+        ImeStateRefresh()
+        ImeTooltipUpdate("")
     case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
-        ImeStateUpdateMode()
+        ImeStateRefresh()
+        ImeTooltipUpdate("")
     case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
-        ImeStateUpdateMode()
+        ImeStateRefresh()
+        ImeTooltipUpdate("")
     }
     return
 }
 
-ImeStateUpdateMode(mode := "")
+ImeStateRefresh()
 {
-    if(A_IsSuspended || ImeStatePauseWindowActive()){
-        mode := ""
+    if(A_IsSuspended || ImeStatePauseWindowActive())
+    {
         ImeInputterClearString()
         ImeSelectorOpen(false)
-    } else {
-        global ime_mode_language
-        mode := mode ? mode : ime_mode_language
-        ImeModeSetLanguage(mode)
-        ImeHotkeyRegisterShift()
+        ImeIconSetMode("")
     }
+    else
+    {
+        ImeStateUpdateMode(ImeModeGetLanguage())
+    }
+}
 
-    ImeTooltipUpdate("")
+ImeStateUpdateMode(mode)
+{
+    local
+    last_mode := ImeModeGetLanguage()
+    if( mode != last_mode )
+    {
+        ImeModeSetLanguage(mode)
+        if( mode != "en" ) {
+            ImeHotkeyRegisterShift("en")
+        } else {
+            ImeHotkeyRegisterShift(last_mode)
+        }
+    }
     ImeIconSetMode(mode)
 }
 
@@ -87,13 +105,18 @@ ImeModeSetLanguage(mode)
     case "cn", "en", "tw", "jp":    ime_mode_language := mode
     default:                        ime_mode_language := "en"
     }
-    return
 }
 
 ImeModeIsEnglish()
 {
     global ime_mode_language
     return ime_mode_language == "en"
+}
+
+ImeModeGetLanguage()
+{
+    global ime_mode_language
+    return ime_mode_language
 }
 
 ;*******************************************************************************

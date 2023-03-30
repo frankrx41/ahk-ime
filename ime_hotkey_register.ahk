@@ -63,18 +63,28 @@ ImeHotkeyRegisterInitialize()
     return
 }
 
-ImeHotkeyRegisterShift()
+ImeHotkeyRegisterShift(origin_state)
 {
-    func_to_cn := Func("HotkeyOnShiftSetMode").Bind("cn")
-    func_to_en := Func("HotkeyOnShiftSetMode").Bind("en")
+    global ime_hotkey_on_shift_set_mode
+    static ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
+
+    ime_hotkey_on_shift_set_mode := Func("HotkeyOnShiftSetMode").Bind(origin_state)
     if( !ImeModeIsEnglish() ) {
-        ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
-        Hotkey, Shift, % func_to_cn, Off
         Hotkey, If, % ime_is_waiting_input_fn
-        Hotkey, Shift, % func_to_en, On
+        Hotkey, Shift, % ime_hotkey_on_shift_set_mode, On
         Hotkey, If
     } else {
-        Hotkey, Shift, % func_to_en, Off
-        Hotkey, Shift, % func_to_cn, On
+        Hotkey, Shift, % ime_hotkey_on_shift_set_mode, On
     }
+}
+
+ImeHotkeyInitialize()
+{
+    global ime_hotkey_on_shift_set_mode := ""
+}
+
+ImeHotkeyShiftDown()
+{
+    global ime_hotkey_on_shift_set_mode
+    ime_hotkey_on_shift_set_mode.Call()
 }
