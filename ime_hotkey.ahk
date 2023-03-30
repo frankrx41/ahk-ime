@@ -238,8 +238,9 @@
     F12::
         ExitApp,
     return
-#if
+#if ; !ImeModeIsEnglish()
 
+;*******************************************************************************
 ; Win + Space: toggle cn and en
 #Space::
 ImeToggleSuspend:
