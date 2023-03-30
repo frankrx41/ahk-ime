@@ -21,21 +21,14 @@ ImeInputterClearString()
 
 ImeInputterClearPrevSplitted()
 {
-    local
     global ime_input_string
     global ime_input_caret_pos
+    global ime_inputter_split_indexs
 
-    check_index := ime_input_caret_pos
+    ime_input_string := ImeInputStringClearPrevSplitted(ime_input_string, ime_inputter_split_indexs, ime_input_caret_pos)
 
-    if( check_index != 0 )
-    {
-        left_pos := ImeInputterGetLeftWordPos(check_index)
-        ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
-
-        ImeSelectorResetSelectIndex()
-        ImeInputterUpdateString(ime_input_string)
-        ime_input_caret_pos := left_pos
-    }
+    ImeSelectorResetSelectIndex()
+    ImeInputterUpdateString(ime_input_string)
 }
 
 ImeInputterClearLastSplitted()
@@ -105,23 +98,9 @@ ImeInputterPinyinSplitPos()
 ImeInputterGetPosSplitIndex()
 {
     global ime_input_caret_pos
-    global ime_input_string
     global ime_inputter_split_indexs
-    if( ime_inputter_split_indexs.Length() >= 1)
-    {
-        if( ime_inputter_split_indexs[ime_inputter_split_indexs.Length()] == ime_input_caret_pos )
-        {
-            return ime_inputter_split_indexs.Length()
-        }
-        loop % ime_inputter_split_indexs.Length()
-        {
-            if( ime_inputter_split_indexs[A_Index] > ime_input_caret_pos ){
-                return A_Index
-            }
-        }
-        Assert(false, ime_input_string "," ime_input_caret_pos)
-    }
-    return 1
+
+    return ImeInputStringGetPosSplitIndex(ime_input_caret_pos, ime_inputter_split_indexs)
 }
 
 ImeInputterGetLastWordPos()
@@ -137,20 +116,7 @@ ImeInputterGetLeftWordPos(start_index)
 {
     local
     global ime_inputter_split_indexs
-
-    if( start_index == 0 ){
-        return 0
-    }
-    last_index := 0
-    loop, % ime_inputter_split_indexs.Length()
-    {
-        split_index := ime_inputter_split_indexs[A_Index]
-        if( split_index >= start_index ){
-            break
-        }
-        last_index := split_index
-    }
-    return last_index
+    return ImeInputStringGetLeftWordPos(start_index, ime_inputter_split_indexs)
 }
 
 ImeInputterGetRightWordPos(start_index)
@@ -158,16 +124,7 @@ ImeInputterGetRightWordPos(start_index)
     local
     global ime_inputter_split_indexs
 
-    last_index := start_index
-    loop, % ime_inputter_split_indexs.Length()
-    {
-        split_index := ime_inputter_split_indexs[A_Index]
-        if( split_index > start_index ){
-            last_index := split_index
-            break
-        }
-    }
-    return last_index
+    return ImeInputStringGetRightWordPos(start_index, ime_inputter_split_indexs)
 }
 
 ;*******************************************************************************

@@ -21,6 +21,8 @@
 #Include, ime_tooltip.ahk
 
 #Include, ime_inputter.ahk
+#Include, ime_input_string.ahk
+
 #Include, ime_selector.ahk
 #Include, ime_state.ahk
 #Include, ime_putchar.ahk
