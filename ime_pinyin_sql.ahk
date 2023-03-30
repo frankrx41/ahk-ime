@@ -32,27 +32,22 @@ PinyinSqlFullKey(split_input, auto_comple:=false)
     return key_value
 }
 
-StrReplaceLastTone1To5(split_input)
-{
-    tone_pos := InStr(split_input, "1",,0,1)
-    if( tone_pos != 0 ){
-        new_str := SubStr(split_input, 1, tone_pos-1) "5" SubStr(split_input, tone_pos+1)
-        return new_str
-    }else{
-        return ""
-    }
-}
-
-PinyinSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
+PinyinSqlWhereKeyCommand(key_name, key_value, repalce_tone_1_5:=false)
 {
     sql_cmd := ""
     if( key_value )
     {
-        if( InStr(key_value, "[") || InStr(key_value, "?") )
+        if( repalce_tone_1_5 ) {
+            key_value := StrReplace(key_value, "1", "[15]")
+        } else {
+            key_value := StrReplace(key_value, "1", "_")
+        }
+        ; key_value := StrReplace(key_value, "_", ".")
+        if( InStr(key_value, "[") || InStr(key_value, "?") || InStr(key_value, ".") )
         {
-            key_value := StrReplace(key_value, "_", ".")
-            key_value := StrReplace(key_value, "%", "*")
-            sql_cmd := " REGEXP '" key_value "' "
+            key_value := StrReplace(key_value, "_", "[1-5]")
+            key_value := StrReplace(key_value, "%", "[a-z]*")
+            sql_cmd := " REGEXP '^" key_value "$' "
         }
         else
         if( InStr(key_value, "_") || InStr(key_value, "%") )
@@ -64,14 +59,6 @@ PinyinSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
             sql_cmd := " = '" key_value "' "
         }
         sql_cmd := key_name . sql_cmd
-
-        if( repalce15 )
-        {
-            new_value := StrReplaceLastTone1To5(key_value)
-            if( new_value ){
-                sql_cmd := "( " sql_cmd "OR " . PinyinSqlWhereKeyCommand(key_name, new_value) ") "
-            }
-        }
     }
     return sql_cmd
 }
@@ -79,7 +66,7 @@ PinyinSqlWhereKeyCommand(key_name, key_value, repalce15:=false)
 PinyinSqlWhereCommand(sim_key, full_key)
 {
     Assert(sim_key,,,true)
-    sql_cmd := PinyinSqlWhereKeyCommand("sim", sim_key, true)
+    sql_cmd := PinyinSqlWhereKeyCommand("sim", sim_key)
 
     if( full_key )
     {
