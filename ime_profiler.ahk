@@ -30,13 +30,23 @@ ImeProfilerBegin(index)
     profiler[index, 4] := A_TickCount
 }
 
-ImeProfilerEnd(index, debug_info:="")
+ImeProfilerEnd(index, debug_info:="", no_reset:=false, msg_box:=false)
 {
     global profiler
     Assert(profiler[index, 4] != 0,,,true)
     profiler[index, 1] += A_TickCount - profiler[index, 4]
     profiler[index, 2] .= debug_info
-    profiler[index, 4] := 0
+    if( !no_reset ){
+        profiler[index, 4] := 0
+    }
+    if( msg_box )
+    {
+        debug_string := ""
+        debug_string .= "tick:" profiler[index, 1] "`n"
+        debug_string .= "info:" profiler[index, 2] "`n"
+        debug_string .= "count:" profiler[index, 3] "`n"
+        Msgbox, % debug_string
+    }
 }
 
 ImeProfilerGetTotalTick(index)
