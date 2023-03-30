@@ -7,34 +7,25 @@ ImeTranslatorClear()
 {
     global ime_translator_result_const      := []
     global ime_translator_result_filtered   := []
-    global ime_translator_radical_list      := ""
-    global ime_translator_input_string      := ""
-    global ime_translator_input_split       := ""
+    global ime_translator_radical_list      := []
     global ime_translator_split_indexs      := []
 }
 
-ImeTranslatorUpdateInputString(input_string)
+ImeTranslatorUpdateResult(input_split, split_indexs, radical_list)
 {
     local
     global DB
     global ime_translator_result_const
-    global ime_translator_input_string
-    global ime_translator_input_split
     global ime_translator_split_indexs
     global ime_translator_radical_list
 
-    input_string := LTrim(input_string, " ")
-    if( input_string )
+    if( input_split )
     {
-        ime_translator_input_string := input_string
-        split_indexs := []
-
-        ime_translator_input_split := PinyinSplit(ime_translator_input_string, split_indexs, radical_list)
         ime_translator_split_indexs := split_indexs
         ime_translator_radical_list := radical_list
 
         ime_translator_result_const := []
-        test_split_string := ime_translator_input_split
+        test_split_string := input_split
         loop % split_indexs.Length()
         {
             find_split_string := SplitWordGetPrevWords(test_split_string)
@@ -155,7 +146,7 @@ ImeTranslatorFilterResults(single_mode:=false)
     loop % search_result.Length()
     {
         test_result := search_result[A_Index]
-        PinyinResultFilterZeroWeight(test_result)
+        ; PinyinResultFilterZeroWeight(test_result)
         if( radical_list ){
             PinyinResultFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
