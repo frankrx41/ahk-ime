@@ -39,7 +39,7 @@ ImeProfilerBegin(index, clear_info:=false)
 ImeProfilerEnd(index, debug_info:="", no_reset_tick:=false, msg_box:=false)
 {
     global ime_profiler
-    Assert(ime_profiler[index, 4] != 0,,,true)
+    Assert(ime_profiler[index, 4] != 0,index,,true)
     ime_profiler[index, 1] += A_TickCount - ime_profiler[index, 4]
     ime_profiler[index, 2] .= debug_info
     if( !no_reset_tick ){
