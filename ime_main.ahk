@@ -38,12 +38,3 @@ return
 ;*******************************************************************************
 
 #Include, ime_include.ahk
-
-#if WinActive("AHK-Ime")
-~^S::
-Suspend
-ToolTip, Reload %A_ScriptName%
-Sleep, 500
-Reload
-return
-#if
