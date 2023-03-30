@@ -193,7 +193,7 @@ PinyinSplitInputString(origin_input, ByRef split_indexs, ByRef radical_list)
 {
     local
     Critical
-    ImeProfilerBegin(11)
+    ImeProfilerBegin(11, true)
 
     index           := 1
     separate_words  := ""

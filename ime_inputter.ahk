@@ -107,7 +107,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     global ime_inputter_split_indexs
     global ime_input_dirty
 
-    ImeProfilerBegin(6, true)
+    ImeProfilerBegin(12, true)
     should_update_result := false
     if( input_char ) {
         ime_input_dirty := true
@@ -144,7 +144,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
         ime_input_dirty := false
     }
     debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ")"
-    ImeProfilerEnd(6, debug_info)
+    ImeProfilerEnd(12, debug_info)
 }
 
 ImeInputterIsInputDirty()
