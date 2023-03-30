@@ -78,10 +78,13 @@ ImeInputterProcessChar(input_char, try_puts := 0)
         ImeInputterClearString()
     } else {
         ImeSelectorResetSelectIndex()
-        ImeInputterPinyinSplitPos()
         if( IsRadical(input_char) || IsTone(input_char) || IsSymbol(input_char) || ime_input_caret_pos != StrLen(ime_input_string) )
         {
             ImeInputterUpdateString(ime_input_string)
+        }
+        else
+        {
+            ImeInputterPinyinSplitPos()
         }
     }
 }
