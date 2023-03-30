@@ -41,7 +41,6 @@ PinyinResultCovertTraditional(ByRef search_result)
                     traditional_result_word .= traditional_word
                 } else {
                     traditional_result_word .= A_LoopField
-                    break
                 }
             }
             if( traditional_result_word != search_result[A_Index, 2] )
