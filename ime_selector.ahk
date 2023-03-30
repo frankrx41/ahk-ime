@@ -89,10 +89,14 @@ ImeSelectorToggleSingleMode()
 ImeSelectorFixupSelectIndex()
 {
     local
-    split_index := ImeInputterGetPosSplitIndex()
-    select_index := ImeTranslatorResultGetSelectIndex(split_index)
-    word_length := ImeTranslatorResultGetLength(split_index, select_index)
+    global ime_input_caret_pos
+    global ime_input_string
     ImeTranslatorFixupSelectIndex()
-    ImeInputterCaretMoveByWord(word_length)
-    ; ImeProfilerSetDebugInfo(1, split_index "," select_index "," word_length)
+    if( ime_input_caret_pos != StrLen(ime_input_string) )
+    {
+        split_index := ImeInputterGetPosSplitIndex()
+        select_index := ImeTranslatorResultGetSelectIndex(split_index)
+        word_length := ImeTranslatorResultGetLength(split_index, select_index)
+        ImeInputterCaretMoveByWord(word_length)
+    }
 }
