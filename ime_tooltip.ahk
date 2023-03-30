@@ -174,7 +174,7 @@ ImeTooltipUpdate(tooltip_pos := "")
 
         ; Debug info
         debug_tip := ""
-        ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplit
+        ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplitInpuString
         ImeTooltipDebugTipAdd(debug_tip, 14, 0) ; PinyinHistoryHasKey
         ImeTooltipDebugTipAdd(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
         ImeTooltipDebugTipAdd(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result

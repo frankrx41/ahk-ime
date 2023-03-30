@@ -165,10 +165,31 @@ PinyinSplitGetInitials(input_str, initials, ByRef index)
     return initials
 }
 
-; 拼音音节切分
-; ' 表示自动分词
-; 12345 空格 大写 表示手动分词
-PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
+; In:
+;   spell:              a-z
+;   tone:               "12345'" and {space}
+;   radical:            A-Z
+;   maybe has h sound:  ?
+; Out:
+;   spell:              a-z
+;   tone:               12345'
+;   auto complete:      %
+;   maybe has h sound:  ?
+;
+; Output always has a tone in last char
+;
+; e.g.
+; "wo3ai4ni3" -> [wo3ai4ni3] + [3,6,9] + [,,]
+; "woaini" -> [wo'ai'ni'] + [2,4,6] + [,,]
+; "wo'ai'ni" -> [wo'ai'ni'] + [3,6,8] + [,,]
+; "wo aini" -> [wo'ai'ni'] + [3,5,7] + [,,]
+; "swalb1" -> [s%'wa'l%'b%1] + [1,3,4,6] + [,,,]
+; "zhrmghg" -> [zh%'r%'m%'g%'h%'g%'] + [2,3,4,5,6,7] + [,,,,,]
+; "taNde1B" -> [ta'de1] + [3,7] + [N,B]
+; "z?eyangz?i3" -> [z?e'yang'z?i3] + [3,7,11] + [,,]
+;
+; See: `PinyinSplitInpuStringTest`
+PinyinSplitInpuString(origin_input, ByRef split_indexs, ByRef radical_list)
 {
     local
     Critical
@@ -245,6 +266,33 @@ PinyinSplit(origin_input, ByRef split_indexs, ByRef radical_list)
         radical_list.Push("")
     }
 
-    ImeProfilerEnd(11, """" origin_input """->[" separate_words "] ")
+    ImeProfilerEnd(11, """" origin_input """->[" separate_words "] " "(" split_indexs.Length() ")")
     return separate_words
+}
+
+PinyinSplitInpuStringTest()
+{
+    test_case := ["wo3ai4ni3", "woaini", "wo'ai'ni", "wo aini", "swalb1", "zhrmghg", "taNde1B", "z?eyangz?i3"]
+    msg_string := ""
+    loop, % test_case.Length()
+    {
+        input_str := test_case[A_Index]
+        split_indexs := []
+        radical_list := []
+        output_str := PinyinSplitInpuString(input_str, split_indexs, radical_list)
+        msg_string .= """" input_str """ -> [" output_str "] + ["
+        loop % split_indexs.Length()
+        {
+            msg_string .= split_indexs[A_Index] ","
+        }
+        msg_string := RegExReplace(msg_string, ",$")
+        msg_string .= "] + ["
+        loop % radical_list.Length()
+        {
+            msg_string .= radical_list[A_Index] ","
+        }
+        msg_string := RegExReplace(msg_string, ",$")
+        msg_string .= "]`n"
+    }
+    MsgBox, % msg_string
 }
