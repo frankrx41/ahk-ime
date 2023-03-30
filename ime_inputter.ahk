@@ -129,7 +129,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     if( should_update_result && ime_input_dirty )
     {
         debug_info .= "[" input_split "]"
-        if( is_delet )
+        if( is_delet && input_split )
         {
             index := ImeInputterGetCaretSplitIndex()
             remove_count := radical_list.Length() - index + 1
