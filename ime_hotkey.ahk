@@ -271,6 +271,7 @@ ImeToggleSuspend:
     if( A_ThisHotkey == "#Space" && !A_IsSuspended && ImeModeIsEnglish() ){
         ImeHotkeyShiftDown()
     }
+    ImeInputterClearString()
     ImeStateRefresh()
     ImeTooltipUpdate("")
 return

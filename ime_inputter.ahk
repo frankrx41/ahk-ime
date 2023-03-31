@@ -23,6 +23,7 @@ ImeInputterClearString()
     ime_inputter_split_indexs := []
     ImeProfilerClear()
     ImeSelectorClear()
+    ImeTranslatorClear()
     return
 }
 
