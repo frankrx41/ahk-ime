@@ -69,7 +69,7 @@ ImeSelectorSetSelectIndex(index)
     local
     split_index := ImeInputterGetCaretSplitIndex()
     index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
-    ImeTranslatorResultSetSelectIndex(split_index, index)
+    ImeTranslatorResultSetSelectIndex(split_index, index, false)
 }
 
 ImeSelectorOffsetSelectIndex(offset)
@@ -78,7 +78,7 @@ ImeSelectorOffsetSelectIndex(offset)
     split_index := ImeInputterGetCaretSplitIndex()
     index := ImeTranslatorResultGetSelectIndex(split_index) + offset
     index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
-    ImeTranslatorResultSetSelectIndex(split_index, index)
+    ImeTranslatorResultSetSelectIndex(split_index, index, false)
 }
 
 ImeSelectorToggleSingleMode()
@@ -108,7 +108,7 @@ ImeSelectorFixupSelectIndex(lock_result)
     }
     else
     {
-
+        ImeTranslatorFixupSelectIndex()
     }
     if( !ImeInputterCaretIsAtEnd() )
     {
