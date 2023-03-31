@@ -181,14 +181,14 @@
 
     ; 如果没有展开候选框则展开之，否则调整候选框的选项
     Down::
-        if( !ImeSelectorIsOpen() ) {
+        if( ImeSelectorIsOpen() ) {
+            ImeSelectorOffsetSelectIndex(+1)
+        } else {
+            ImeSelectorOpen()
             if( ImeSelectorGetSelectIndex() == 0 )
             {
                 ImeSelectorSetSelectIndex(1)
             }
-            ImeSelectorOpen()
-        } else {
-            ImeSelectorOffsetSelectIndex(+1)
         }
         ImeTooltipUpdate()
     return
