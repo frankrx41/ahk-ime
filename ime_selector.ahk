@@ -15,7 +15,7 @@ ImeSelectorOpen(open, more := false)
     global ime_selector_is_show_multiple
 
     ime_selector_is_open := open
-    if( open )
+    if( open && ImeInputterIsInputDirty() )
     {
         ImeInputterUpdateString("")
     }

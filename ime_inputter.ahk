@@ -141,7 +141,12 @@ ImeInputterUpdateString(input_char, is_delet:=false)
         ImeTranslatorUpdateResult(input_split, radical_list)
         ime_input_dirty := false
     }
-    debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ")"
+
+    ; Because `is_delet` only update prev string, it always be dirty
+    if( is_delet ) {
+        ime_input_dirty := true
+    }
+    debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ") dirty: " ime_input_dirty
     ImeProfilerEnd(12, debug_info)
 }
 

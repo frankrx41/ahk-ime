@@ -88,19 +88,20 @@ ImeTranslatorFixupSelectIndex()
             select_index := !select_index ? 0 : select_index
             current_length := ImeTranslatorResultGetLength(split_index, select_index)
             select_is_lock := ImeTranslatorResultIsLock(split_index)
+
+            ; `max_length` = this word until next unlock word
+            max_length := 1
+            loop % ImeTranslatorResultGetLength(split_index, 1)-1
+            {
+                check_index := split_index + A_Index
+                if( ImeTranslatorResultIsLock(check_index) ) {
+                    break
+                }
+                max_length += 1
+            }
+
             if( !select_is_lock )
             {
-                ; `max_length` = this word until next unlock word
-                max_length := 1
-                loop % ImeTranslatorResultGetLength(split_index, 1)-1
-                {
-                    check_index := split_index + A_Index
-                    if( ImeTranslatorResultIsLock(check_index) ) {
-                        break
-                    }
-                    max_length += 1
-                }
-
                 ; Find a result the no longer than `max_length`
                 if( select_index == 0 || current_length > max_length )
                 {
@@ -116,7 +117,17 @@ ImeTranslatorFixupSelectIndex()
                     }
                 }
             }
-
+            else
+            {
+                select_word := ImeTranslatorResultGetSelectWord(split_index)
+                if( select_word )
+                {
+                    select_index := ImeTranslatorResultFindIndex(split_index, select_word, max_length)
+                    Assert( select_index )
+                } else {
+                    select_index := 1
+                }
+            }
             ImeTranslatorResultSetSelectIndex(split_index, select_index, select_is_lock) 
             select_word := ImeTranslatorResultGetWord(split_index, select_index)
             skip_word_count := current_length-1
@@ -175,6 +186,8 @@ ImeTranslatorFilterResults(single_mode:=false)
     ImeProfilerEnd(31, "length: [" search_result.Length() "]")
 }
 
+;*******************************************************************************
+;
 ImeTranslatorGetOutputString()
 {
     global ime_translator_result_filtered
@@ -190,6 +203,29 @@ ImeTranslatorGetOutputString()
         }
     }
     return result_string
+}
+
+;*******************************************************************************
+; [1:"我爱你", 2:"我爱", 3:"我"]
+; find ["我"]
+;   - max_length == 1 return 3
+;   - max_length == 2 return 2
+; find ["你"]
+;   return 0
+ImeTranslatorResultFindIndex(split_index, find_words, max_length)
+{
+    local
+    global ime_translator_result_filtered
+    find_word_len := StrLen(find_words)
+    loop, % ImeTranslatorResultGetListLength(split_index)
+    {
+        select_index := A_Index
+        test_result := ImeTranslatorResultGetWord(split_index, select_index)
+        if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
+            return select_index
+        }
+    }
+    return 0
 }
 
 ;*******************************************************************************
