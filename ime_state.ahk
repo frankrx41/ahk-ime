@@ -7,12 +7,14 @@ ImeStateInitialize()
     global ime_active_window_class
     global ime_opt_pause_window_name_list
     
-    ime_mode_language := "cn"       ; "cn", "en", "tw"
+    ime_mode_language := "en"       ; "cn", "en", "tw", "jp"
     ime_is_active_system_menu := 0  ; 是否打开菜单
     ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
 
     DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
+    ; Notice: if `ime_mode_language` same as here, state will not update
+    ImeStateUpdateMode("cn")
 }
 
 ImeStateEventProcHook(phook, msg, hwnd)
@@ -27,31 +29,48 @@ ImeStateEventProcHook(phook, msg, hwnd)
     case 0x03:                  ; EVENT_SYSTEM_FOREGROUND
         WinGetClass, win_class, ahk_id %hwnd%
         ime_active_window_class := win_class
-        ImeStateUpdateMode()
+        ImeStateRefresh()
+        ImeTooltipUpdate("")
     case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
-        ImeStateUpdateMode()
+        ImeStateRefresh()
+        ImeTooltipUpdate("")
     case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
-        ImeStateUpdateMode()
+        ImeStateRefresh()
+        ImeTooltipUpdate("")
     }
     return
 }
 
-ImeStateUpdateMode(mode := "")
+ImeStateRefresh()
 {
-    if(A_IsSuspended || ImeStatePauseWindowActive()){
-        mode := ""
+    if(A_IsSuspended || ImeStatePauseWindowActive())
+    {
         ImeInputterClearString()
-        ImeSelectorOpen(false)
-    } else {
-        global ime_mode_language
-        mode := mode ? mode : ime_mode_language
-        ImeModeSetLanguage(mode)
-        ImeHotkeyRegisterShift()
+        ImeSelectMenuClose()
+        ImeSelectorApplyCaretSelectIndex(true)
+        ImeIconSetMode("")
     }
+    else
+    {
+        ImeStateUpdateMode(ImeModeGetLanguage())
+    }
+}
 
-    ImeTooltipUpdate("")
+ImeStateUpdateMode(mode)
+{
+    local
+    last_mode := ImeModeGetLanguage()
+    if( mode != last_mode )
+    {
+        ImeModeSetLanguage(mode)
+        if( mode != "en" ) {
+            ImeHotkeyRegisterShift("en")
+        } else {
+            ImeHotkeyRegisterShift(last_mode)
+        }
+    }
     ImeIconSetMode(mode)
 }
 
@@ -75,7 +94,7 @@ ImeStatePauseWindowActive()
 
 ImeStateWaitingInput()
 {
-    return ImeModeIsChinese() && !ImeStatePauseWindowActive()
+    return !ImeModeIsEnglish() && !ImeStatePauseWindowActive()
 }
 
 ;*******************************************************************************
@@ -84,16 +103,21 @@ ImeModeSetLanguage(mode)
 {
     global ime_mode_language
     switch (mode) {
-    case "cn", "en", "tw":  ime_mode_language := mode
-    default:                ime_mode_language := "en"
+    case "cn", "en", "tw", "jp":    ime_mode_language := mode
+    default:                        ime_mode_language := "en"
     }
-    return
 }
 
-ImeModeIsChinese()
+ImeModeIsEnglish()
 {
     global ime_mode_language
-    return ime_mode_language == "cn" || ime_mode_language == "tw"
+    return ime_mode_language == "en"
+}
+
+ImeModeGetLanguage()
+{
+    global ime_mode_language
+    return ime_mode_language
 }
 
 ;*******************************************************************************
@@ -108,9 +132,10 @@ ImeIconSetMode(mode)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
         switch (mode) {
-        case "cn": info_text := "中", tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
         case "en": info_text := "英", tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
-        case "tw": info_text := "漢", tooltip_option := tooltip_option . " Q1 B1e1e1e T4f4f4f"
+        case "cn": info_text := "中", tooltip_option := tooltip_option . " Q1 Bff4f4f Tfefefe"
+        case "tw": info_text := "漢", tooltip_option := tooltip_option . " Q1 B0033cc Tfefefe"
+        case "jp": info_text := "日", tooltip_option := tooltip_option . " Q1 B339933 Tfefefe"
         }
         ToolTip(4, info_text, tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 1, 1

@@ -1,28 +1,36 @@
-; 加载数据库
+;*******************************************************************************
+; Extern
 ImeDBInitialize()
 {
-    global DB := ""
-    LoadDB()
+    global ime_db := ""
+    ImeDBLoadDB("data\dictionary_tone.db")
 }
 
-LoadDB()
+ImeDBGet()
 {
-    global DB
+    global ime_db
+    return ime_db
+}
+
+;*******************************************************************************
+; Static
+ImeDBLoadDB(path)
+{
+    global ime_db
     global SQLiteDB
 
-    path := "data\dictionary_tone.db"
-    if( DB._Handle ){
-        DB.CloseDB()
+    if( ime_db._Handle ){
+        ime_db.CloseDB()
     }
 
-    DB := new SQLiteDB
-    if( !DB.OpenDB(path) )
+    ime_db := new SQLiteDB
+    if( !ime_db.OpenDB(path) )
     {
-        MsgBox, 16, DB Error, % "Msg:`t" DB.ErrorMsg "`nCode:`t" DB.ErrorCode
+        MsgBox, 16, ime_db Error, % "Msg:`t" ime_db.ErrorMsg "`nCode:`t" ime_db.ErrorCode
         ExitApp
     }
 
-    DB.CreateScalarFunc("REGEXP", 2, RegisterCallback("SQLiteDB_RegExp", "C"))
-    DB.Exec("DROP TABLE if EXISTS 'main'.''")
+    ime_db.CreateScalarFunc("REGEXP", 2, RegisterCallback("SQLiteDB_RegExp", "C"))
+    ime_db.Exec("DROP TABLE if EXISTS 'main'.''")
     return
 }

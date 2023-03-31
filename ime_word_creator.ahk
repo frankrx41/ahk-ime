@@ -4,7 +4,6 @@ WordCreatorUI( input_text )
     static value, weight, comment
     global word_creator_ui_pinyin_key
     global word_creator_ui_pinyin_weight
-    global DB
 
     input_text := RegExReplace(input_text, "\s")
 
@@ -40,7 +39,7 @@ WordCreatorUI( input_text )
 
     createButtonWeight:
         Gui, create:Submit, NoHide
-        weight := WordCreatorDBGetWeight(DB, word_creator_ui_pinyin_key, value)
+        weight := WordCreatorDBGetWeight(ImeDBGet(), word_creator_ui_pinyin_key, value)
         ; Make 1234 -> "1,234"
         if( weight >= 1000 ){
             weight := Floor((weight / 1000)) "," Format("{:03}", Mod(weight, 1000))
@@ -61,7 +60,7 @@ WordCreatorUI( input_text )
         ; MsgBox, % word_creator_ui_pinyin_key "," value "," word_creator_ui_pinyin_weight "," comment
         if( word_creator_ui_pinyin_key && value && word_creator_ui_pinyin_weight ){
             weight := StrReplace(word_creator_ui_pinyin_weight, ",")
-            WordCreatorUpdateDB(DB, word_creator_ui_pinyin_key, value, weight, comment)
+            WordCreatorUpdateDB(ImeDBGet(), word_creator_ui_pinyin_key, value, weight, comment)
         } else {
             MsgBox, Please fill all value
         }
@@ -89,7 +88,7 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
         if( DB.Exec(sql_cmd) ){
             Msgbox, 48, , % "Create success`nKey: " key "`nValue: " value
         } else {
-            Assert(0, DB.ErrorMsg,,true)
+            Assert(0, DB.ErrorMsg,true)
         }
     }
     else
@@ -100,7 +99,7 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
         if( DB.Exec(sql_cmd) ){
             Msgbox, 32, , % "Update success`nKey: " key "`nValue: " value
         } else {
-            Assert(0, DB.ErrorMsg,,true)
+            Assert(0, DB.ErrorMsg,true)
         }
     }
 }
@@ -114,12 +113,12 @@ WordCreatorDBGetWeight(DB, key, value)
     {
         if( result_table.RowCount != 0 )
         {
-            Assert(result_table.RowCount == 1, sql_cmd,,true)
+            Assert(result_table.RowCount == 1, sql_cmd,true)
             ; Msgbox, % result_table.Rows[1, 1]
             return result_table.Rows[1, 1]
         }
     } else {
-        Assert(0, DB.ErrorMsg,,true)
+        Assert(0, DB.ErrorMsg,true)
     }
     return -1
 }

@@ -12,8 +12,8 @@ PinyinHistoryHasResult(spilt_word)
 PinyinHistoryHasKey(spilt_word)
 {
     global history_field_array
-    global tooltip_debug
-    tooltip_debug[5] .= "`n[" spilt_word ": " history_field_array.HasKey(spilt_word) "]"
+    ImeProfilerBegin(14)
+    ImeProfilerEnd(14, "`n  - [" spilt_word "]: " history_field_array.HasKey(spilt_word))
     return history_field_array.HasKey(spilt_word)
 }
 

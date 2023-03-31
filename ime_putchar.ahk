@@ -7,10 +7,7 @@ PutCharacter(str, mode:=""){
 PutCandidateCharacter()
 {
     local
-    global ime_input_caret_pos
-    global DB
-
-    PutCharacter( ImeTranslatorGetOutputString() )
+    PutCharacter( ImeSelectorGetOutputString() )
     ImeInputterClearString()
 }
 
@@ -18,10 +15,10 @@ PutCandidateCharacter()
 PutCharacterWordByWord(select_index, offset)
 {
     local
-    global ime_input_caret_pos
-    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+    split_index := ImeInputterGetCaretSplitIndex()
     string := ImeTranslatorResultGetWord(split_index, select_index)
     PutCharacter( SubStr(string, offset, 1) )
     ImeInputterClearString()
-    ImeSelectorOpen(false)
+    ImeSelectMenuClose()
+    ImeSelectorApplyCaretSelectIndex(true)
 }

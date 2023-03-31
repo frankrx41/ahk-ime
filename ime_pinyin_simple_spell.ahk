@@ -6,6 +6,7 @@
 ; "wo'xi3huan1ni3" -> "w%'o%'x%'i%3h%'u%'a%'n%1n%'i%3"
 SplitWordGetSimpleSpell(input_string)
 {
+    input_string := StrReplace(input_string, "?")
     input_string := RegExReplace(input_string, "([a-z])(?=[^%'12345])", "$1'")
     input_string := RegExReplace(input_string, "([^%])(['12345])", "$1%$2")
     return input_string
@@ -46,8 +47,8 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
 {
     local
     global history_field_array
-    global tooltip_debug
-
+    ImeProfilerBegin(22)
+    debug_string := ""
     if( SplitWordGetWordCount(input_split) > 1 )
     {
         separate_string := SplitWordGetSimpleSpell(input_split)
@@ -55,8 +56,9 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
         {
             PinyinHistoryUpdateKey(DB, separate_string, true)
             PinyinResultInsertAtHistory(search_result, separate_string, 1)
-            tooltip_debug[8] .= """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
+            debug_string := """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
         }
     }
+    ImeProfilerEnd(22, debug_string)
     return
 }

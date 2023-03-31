@@ -21,16 +21,23 @@
 #Include, ime_tooltip.ahk
 
 #Include, ime_inputter.ahk
+#Include, ime_input_string.ahk
+
 #Include, ime_selector.ahk
+#Include, ime_select_menu.ahk
 #Include, ime_state.ahk
 #Include, ime_putchar.ahk
 
 #Include, ime_result_radical.ahk
+#Include, ime_result_traditional.ahk
 #Include, ime_result_single_word.ahk
 #Include, ime_result_uniquify.ahk
+
+#Include, ime_profiler.ahk
 
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk
 
 #Include, ime_word_creator.ahk
+#Include, ime_debug.ahk

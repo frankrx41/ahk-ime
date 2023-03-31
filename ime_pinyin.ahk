@@ -1,84 +1,91 @@
+IsBadTone(initials, vowels, tone)
+{
+    static pinyin_bad_tones
+    pinyin_bad_tones := { "a3": 1
+        ,"a4": 1
+        ,"ca2": 1
+        ,"ce1": 1
+        ,"ce2": 1
+        ,"ce3": 1
+        ,"de3": 1
+        ,"de4": 1
+        ,"er1": 1
+        ,"fo1": 1
+        ,"fo3": 1
+        ,"fo4": 1
+        ,"ɡa1": 1
+        ,"ɡa2": 1
+        ,"ɡa3": 1
+        ,"ɡa4": 1
+        ,"ɡe1": 1
+        ,"ɡe2": 1
+        ,"ɡe3": 1
+        ,"ɡe4": 1
+        ,"ɡu1": 1
+        ,"ɡu2": 1
+        ,"ɡu3": 1
+        ,"ɡu4": 1
+        ,"he3": 1
+        ,"ka2": 1
+        ,"ka4": 1
+        ,"ku2": 1
+        ,"le2": 1
+        ,"le3": 1
+        ,"lo1": 1
+        ,"lo2": 1
+        ,"lo3": 1
+        ,"lo4": 1
+        ,"lv1": 1
+        ,"me3": 1
+        ,"me4": 1
+        ,"mu1": 1
+        ,"ne1": 1
+        ,"ne3": 1
+        ,"nu1": 1
+        ,"nv1": 1
+        ,"nv2": 1
+        ,"ou2": 1
+        ,"pa3": 1
+        ,"re1": 1
+        ,"ri1": 1
+        ,"ri2": 1
+        ,"ri3": 1
+        ,"ru1": 1
+        ,"sa2": 1
+        ,"se2": 1
+        ,"se3": 1
+        ,"si2": 1
+        ,"su3": 1
+        ,"te1": 1
+        ,"te2": 1
+        ,"te3": 1
+        ,"wo2": 1
+        ,"yo2": 1
+        ,"yo3": 1
+        ,"yo4": 1
+        ,"ze1": 1
+        ,"ze3": 1 }
+    return pinyin_bad_tones.HasKey(initials . vowels . tone)
+}
+
 IsCompletePinyin(initials, vowels, tone:="'")
 {
-    global zero_initials_table
     global pinyin_table
-    static bad_tones
-
-    if( (zero_initials_table.HasKey(initials) && vowels == "") || (pinyin_table[initials, vowels]) )
+    ; initials like z% c% s%
+    initials_has_miss_char := SubStr(initials, 0, 1 ) == "?"
+    if( initials_has_miss_char )
     {
-        if( tone )
-        {
-            bad_tones := { "a3": 1
-                ,"a4": 1
-                ,"ca2": 1
-                ,"ce1": 1
-                ,"ce2": 1
-                ,"ce3": 1
-                ,"de3": 1
-                ,"de4": 1
-                ,"er1": 1
-                ,"fo1": 1
-                ,"fo3": 1
-                ,"fo4": 1
-                ,"ɡa1": 1
-                ,"ɡa2": 1
-                ,"ɡa3": 1
-                ,"ɡa4": 1
-                ,"ɡe1": 1
-                ,"ɡe2": 1
-                ,"ɡe3": 1
-                ,"ɡe4": 1
-                ,"ɡu1": 1
-                ,"ɡu2": 1
-                ,"ɡu3": 1
-                ,"ɡu4": 1
-                ,"he3": 1
-                ,"ka2": 1
-                ,"ka4": 1
-                ,"ku2": 1
-                ,"le2": 1
-                ,"le3": 1
-                ,"lo1": 1
-                ,"lo2": 1
-                ,"lo3": 1
-                ,"lo4": 1
-                ,"lv1": 1
-                ,"me3": 1
-                ,"me4": 1
-                ,"mu1": 1
-                ,"ne1": 1
-                ,"ne3": 1
-                ,"nu1": 1
-                ,"nv1": 1
-                ,"nv2": 1
-                ,"ou2": 1
-                ,"pa3": 1
-                ,"re1": 1
-                ,"ri1": 1
-                ,"ri2": 1
-                ,"ri3": 1
-                ,"ru1": 1
-                ,"sa2": 1
-                ,"se2": 1
-                ,"se3": 1
-                ,"si2": 1
-                ,"su3": 1
-                ,"te1": 1
-                ,"te2": 1
-                ,"te3": 1
-                ,"wo2": 1
-                ,"yo2": 1
-                ,"yo3": 1
-                ,"yo4": 1
-                ,"ze1": 1
-                ,"ze3": 1 }
-            if( bad_tones.HasKey(initials . vowels . tone) ){
-                return false
-            }
-        }
-        return true
+        initials_without_h := SubStr(initials, 1, 1)
+        initials_with_h := initials_without_h . "h"
+        return IsCompletePinyin(initials_with_h, vowels, tone) || IsCompletePinyin(initials_without_h, vowels, tone)
     }
-    return false
+
+    is_complete := is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels])
+    if( is_complete && tone )
+    {
+        is_complete := !IsBadTone(initials, vowels, tone)
+    }
+    return is_complete
 }
 
 GetFullVowels(initials, vowels)
@@ -97,6 +104,12 @@ IsInitials(initials)
 {
     global pinyin_table
     return pinyin_table.HasKey(initials)
+}
+
+IsZeroInitials(initials)
+{
+    global zero_initials_table
+    return zero_initials_table.HasKey(initials)
 }
 
 PinyinInitialize()
@@ -123,7 +136,8 @@ PinyinInitialize()
                 "o":"o",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
-                "u":"u","un":"un"
+                "u":"u","un":"un",
+                "ain": "ian"
             },
             "p" :{
                 "1":"p",
@@ -131,7 +145,9 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
-                "u":"u"
+                "u":"u",
+                "aio": "iao", "ain": "ian"
+
             },
             "m" :{
                 "1":"m",
@@ -139,7 +155,8 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
-                "u":"u"
+                "u":"u",
+                "aio": "iao", "ain": "ian"
             },
             "f" :{
                 "1":"f",
@@ -156,7 +173,8 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","ei":"ei","eg":"eng","eng":"eng",
                 "i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing","iu":"iu",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
+                "aio": "iao", "ain": "ian"
             },
             "t" :{
                 "1":"t",
@@ -164,7 +182,8 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","eg":"eng","eng":"eng","ei":"ei",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
+                "aio": "iao", "ain": "ian"
             },
             "n" :{
                 "1":"n",
@@ -173,7 +192,8 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","uo":"uo","un":"un",
-                "v":"v","ve":"ue"
+                "v":"v","ve":"ue",
+                "aio": "iao", "ain": "ian"
             },
             "l" :{
                 "1":"l",
@@ -183,7 +203,7 @@ PinyinInitialize()
                 "i":"i","ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un","uo":"uo",
                 "v":"v","ve":"ue"
-                },
+            },
             "g" :{
                 "1":"g",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
@@ -215,7 +235,8 @@ PinyinInitialize()
                 "iog":"iong","iong":"iong",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "v":"u","van":"uan","ve":"ue","vn":"un"
+                "v":"u","van":"uan","ve":"ue","vn":"un",
+                "aio": "iao", "ain": "ian"
             },
             "q" :{
                 "1":"q",
@@ -226,7 +247,8 @@ PinyinInitialize()
                 "in":"in","ig":"ing","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "van":"uan","ve":"ue","vn":"un","v":"u"
+                "van":"uan","ve":"ue","vn":"un","v":"u",
+                "aio": "iao", "ain": "ian"
             },
             "x" :{
                 "1":"x",
@@ -237,8 +259,9 @@ PinyinInitialize()
                 "in":"in","ig":"ing","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","un":"un","ue":"ue",
-                "van":"uan","ve":"ue","vn":"un","v":"u"
-                },
+                "van":"uan","ve":"ue","vn":"un","v":"u",
+                "aio": "iao", "ain": "ian"
+            },
             "zh":{
                 "1":"zh",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
@@ -331,4 +354,5 @@ PinyinInitialize()
     PinyinHistoryClear()
     PinyinRadicalInitialize()
     PinyinSplitTableInitialize()
+    PinyinTraditionalInitialize()
 }

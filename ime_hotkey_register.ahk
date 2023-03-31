@@ -29,7 +29,8 @@ ImeHotkeyRegisterInitialize()
     }
     Hotkey, if,
 
-    Hotkey, if, ime_input_string
+    ime_has_any_input_fn := Func("ImeInputterHasAnyInput").Bind()
+    Hotkey, if, % ime_has_any_input_fn
     {
         ; Space and ' to spilt word
         func := Func("HotkeyOnSpace")
@@ -53,9 +54,9 @@ ImeHotkeyRegisterInitialize()
             Hotkey, % "+" Chr(96+A_Index), %func%
 
             ; Ctrl + Shift + A-Z
-            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), false)
             Hotkey, % "^" Chr(96+A_Index), %func%
-            func := Func("HotkeyOnCtrlShiftAlphabet").Bind(Chr(96+A_Index))
+            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), true)
             Hotkey, % "^+" Chr(96+A_Index), %func%
         }
     }
@@ -63,18 +64,42 @@ ImeHotkeyRegisterInitialize()
     return
 }
 
-ImeHotkeyRegisterShift()
+ImeHotkeyShiftSetMode(orgin_mode)
 {
-    func_to_cn := Func("HotkeyOnShiftSetMode").Bind("cn")
-    func_to_en := Func("HotkeyOnShiftSetMode").Bind("en")
-    if( ImeModeIsChinese() ) {
-        ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
-        Hotkey, Shift, % func_to_cn, Off
+    global ime_input_string
+    if( orgin_mode == "en" ){
+        if ( ime_input_string ) {
+            PutCharacter(ime_input_string)
+            ImeInputterClearString()
+            ImeSelectMenuClose()
+            ImeSelectorApplyCaretSelectIndex(true)
+        }
+    }
+    ImeStateUpdateMode(orgin_mode)
+}
+
+ImeHotkeyRegisterShift(origin_state)
+{
+    global ime_hotkey_on_shift_set_mode
+    static ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
+
+    ime_hotkey_on_shift_set_mode := Func("HotkeyOnShift").Bind(origin_state)
+    if( !ImeModeIsEnglish() ) {
         Hotkey, If, % ime_is_waiting_input_fn
-        Hotkey, Shift, % func_to_en, On
+        Hotkey, Shift, % ime_hotkey_on_shift_set_mode, On
         Hotkey, If
     } else {
-        Hotkey, Shift, % func_to_en, Off
-        Hotkey, Shift, % func_to_cn, On
+        Hotkey, Shift, % ime_hotkey_on_shift_set_mode, On
     }
+}
+
+ImeHotkeyInitialize()
+{
+    global ime_hotkey_on_shift_set_mode := ""
+}
+
+ImeHotkeyShiftDown()
+{
+    global ime_hotkey_on_shift_set_mode
+    ime_hotkey_on_shift_set_mode.Call()
 }

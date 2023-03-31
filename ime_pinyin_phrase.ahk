@@ -28,22 +28,6 @@ PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
     return
 }
 
-PinyinResultHideZeroWeight(ByRef search_result)
-{
-    local
-    if( search_result[1, 3]>0 )
-    {
-        loop % len := search_result.Length()
-        {
-            weight := search_result[len+1-A_Index, 3]
-            if( weight<=0 ) {
-                search_result.RemoveAt(len+1-A_Index)
-            }
-        }
-    }
-    return
-}
-
 PinyinResultRemoveZeroIndex(ByRef search_result)
 {
     ; [0] is store "pinyin"
@@ -58,7 +42,8 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 PinyinGetTranslateResult(ime_input_split, DB:="")
 {
     local
-    ; static save_field_array := []
+    ImeProfilerBegin(20)
+
     search_result           := []
 
     ; 插入拼音所能组成的候选词
@@ -67,9 +52,10 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     ; 超级简拼 显示 4 字及以上简拼候选
     PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
 
-    ; 隐藏词频低于 0 的词条，仅在无其他候选项的时候出现
-    PinyinResultHideZeroWeight(search_result)
-
+    if( ImeModeGetLanguage() == "tw" )
+    {
+        PinyinResultCovertTraditional(search_result)
+    }
 
     PinyinResultRemoveZeroIndex(search_result)
     ; [
@@ -78,5 +64,7 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     ;     ["wo1", "窝", "30219", "", "1"]
     ;     ...
     ; ]
+
+    ImeProfilerEnd(20)
     return search_result
 }

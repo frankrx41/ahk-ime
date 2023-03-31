@@ -1,80 +1,213 @@
 ImeSelectorInitialize()
 {
-    global ime_selector_column              := 10       ; 最大候选词个数
-    global ime_selector_is_open             := 0        ; 是否打开选字窗口
-    global ime_selector_is_show_multiple    := 0        ; Show more column
-    global ime_selector_single_mode         := false
+    global ime_selector_select
+}
+
+ImeSelectorClear()
+{
+    global ime_selector_select
+    ime_selector_select := []
+}
+
+ImeSelectorClearAfter(split_index)
+{
+    global ime_selector_select
+    loop % ime_selector_select.Length()
+    {
+        test_index := A_Index
+        if( test_index > split_index )
+        {
+            ImeSelectorUnLockWord(test_index)
+        }
+    }
 }
 
 ;*******************************************************************************
-ImeSelectorOpen(open, more := false)
+;
+ImeSelectorGetCaretSelectIndex()
 {
-    global ime_selector_is_open
-    global ime_selector_is_show_multiple
-
-    ime_selector_is_open := open
-    ime_selector_is_show_multiple := more
-    return
+    local
+    split_index := ImeInputterGetCaretSplitIndex()
+    return ImeSelectorGetSelectIndex(split_index)
 }
 
-ImeSelectorIsOpen()
+ImeSelectorSetCaretSelectIndex(select_index)
 {
-    global ime_selector_is_open
-    return ime_selector_is_open
+    local
+    split_index := ImeInputterGetCaretSplitIndex()
+    select_index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), select_index))
+    ImeSelectorSetSelectIndex(split_index, select_index)
 }
 
-ImeSelectorShowMultiple()
+ImeSelectorOffsetCaretSelectIndex(offset)
 {
-    global ime_selector_is_show_multiple
-    return ime_selector_is_show_multiple
+    local
+    split_index := ImeInputterGetCaretSplitIndex()
+    select_index := ImeSelectorGetSelectIndex(split_index) + offset
+    select_index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), select_index))
+    ImeSelectorSetSelectIndex(split_index, select_index)
 }
 
-ImeSelectorGetColumn()
-{
-    global ime_selector_column
-    return ime_selector_column
-}
-
-ImeSelectorGetSelectIndex()
-{
-    global ime_input_caret_pos
-    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    return ImeTranslatorResultGetSelectIndex(split_index)
-}
-
-ImeSelectorResetSelectIndex()
-{
-    ImeTranslatorResultSetSelectIndex(1,1)
-}
-
-ImeSelectorSetSelectIndex(index)
-{
-    global ime_input_caret_pos
-    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
-    ImeTranslatorResultSetSelectIndex(split_index, index)
-}
-
-ImeSelectorOffsetSelectIndex(offset)
-{
-    global ime_input_caret_pos
-    split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
-    index := ImeTranslatorResultGetSelectIndex(split_index) + offset
-    index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
-    ImeTranslatorResultSetSelectIndex(split_index, index)
-}
-
+;*******************************************************************************
+;
 ImeSelectorToggleSingleMode()
 {
-    global ime_selector_single_mode
-    ime_selector_single_mode := !ime_selector_single_mode
-    ImeTranslatorFilterResults(ime_selector_single_mode)
+    Assert(false, "not implement!", true)
+    ; global ime_selector_single_mode
+    ; ime_selector_single_mode := !ime_selector_single_mode
+    ; ImeTranslatorFilterResults(ime_selector_single_mode)
 }
 
+;*******************************************************************************
 ; "woaini" => ["我爱你", "", ""]
 ; if first word select "卧", then update to ["卧", "爱你", ""]
 ; if last word select "泥", then update to ["我爱", "", "泥"]
-ImeSelectorFixupSelectIndex()
+ImeSelectorApplyCaretSelectIndex(lock_result)
 {
+    local
+    global ime_selector_select
+    ImeProfilerBegin(41, true)
+    debug_info := ""
+
+    split_index := ImeInputterGetCaretSplitIndex()
+    select_index := ImeSelectorGetSelectIndex(split_index)
+    word_length := ImeTranslatorResultGetLength(split_index, select_index)
+
+    if( lock_result )
+    {
+        ImeSelectorUnLockFrontLockWord(split_index)
+        ; Lock this
+        select_word := ImeTranslatorResultGetWord(split_index, select_index)
+        word_length := ImeTranslatorResultGetLength(split_index, select_index)
+        ImeSelectorLockWord(split_index, select_word, word_length)
+        loop, % word_length-1
+        {
+            test_index := split_index + A_Index
+            if( ImeSelectorIsSelectLock(test_index) ){
+                ImeSelectorUnLockWord(test_index)
+            }
+        }
+    }
+
     ImeTranslatorFixupSelectIndex()
+
+    if( !ImeInputterCaretIsAtEnd() )
+    {
+        ImeInputterCaretMoveByWord(word_length)
+    }
+
+    debug_info .= "[" split_index "]->[" lock_result "]"
+    ImeProfilerEnd(41, debug_info)
+}
+
+ImeSelectorUnLockFrontLockWord(split_index)
+{
+    local
+    ; Find if prev has a reuslt length include this
+    ; e.g. lock "我爱你", then can not change "爱你"
+    test_length := 0
+    loop
+    {
+        test_index := A_Index
+        if( test_index >= split_index ){
+            break
+        }
+        if( ImeSelectorIsSelectLock(test_index) )
+        {
+            if( test_length + ImeSelectorGetLockLength(test_index) >= split_index ){
+                ImeSelectorUnLockWord(test_index)
+                break
+            }
+        }
+        else {
+            test_length += 1
+        }
+    }
+}
+
+;*******************************************************************************
+; [split_index, 0] = select info
+;   - 1: select index, work for selector menu, 0 mark not select, should skip this
+;   - 2: is lock
+;   - lock use:
+;       - 3: word value
+;       - 4: length
+ImeSelectorUnLockWord(split_index)
+{
+    global ime_selector_select
+    ime_selector_select[split_index, 2] := false
+    ime_selector_select[split_index, 3] := ""
+    ime_selector_select[split_index, 4] := 0
+}
+
+ImeSelectorLockWord(split_index, select_word, word_length)
+{
+    local
+    global ime_selector_select
+    ime_selector_select[split_index, 2] := true
+    ime_selector_select[split_index, 3] := select_word
+    ime_selector_select[split_index, 4] := word_length
+    ImeProfilerBegin(43, true)
+    debug_info := "`n  - [" split_index "]->[" select_word "," word_length "] "
+    ImeProfilerEnd(43, debug_info)
+}
+
+ImeSelectorSetSelectIndex(split_index, select_index)
+{
+    local
+    global ime_selector_select
+
+    ime_selector_select[split_index, 1] := select_index
+
+    ImeProfilerBegin(42, true)
+    debug_info := "`n  - [" split_index "]->[" select_index "] " RegExReplace(CallStack(1), "^.*\\")
+    ImeProfilerEnd(42, debug_info)
+}
+
+ImeSelectorGetSelectIndex(split_index)
+{
+    global ime_selector_select
+    return ime_selector_select[split_index, 1] ? ime_selector_select[split_index, 1] : 0
+}
+
+ImeSelectorIsSelectLock(split_index)
+{
+    local
+    global ime_selector_select
+    ImeProfilerBegin(44, true)
+    debug_info := "`n  - [" split_index "]->[" ime_selector_select[split_index, 2] "] " RegExReplace(CallStack(1), "^.*\\")
+    ImeProfilerEnd(44, debug_info)
+    return ime_selector_select[split_index, 2] ? true : false
+}
+
+ImeSelectorGetLockWord(split_index)
+{
+    global ime_selector_select
+    return ime_selector_select[split_index, 3]
+}
+
+ImeSelectorGetLockLength(split_index)
+{
+    global ime_selector_select
+    return ime_selector_select[split_index, 4]
+}
+
+
+;*******************************************************************************
+;
+ImeSelectorGetOutputString()
+{
+    global ime_selector_select
+
+    result_string := ""
+    loop % ime_selector_select.Length()
+    {
+        split_index := A_Index
+        select_index := ImeSelectorGetSelectIndex(split_index)
+        if( select_index > 0 )
+        {
+            result_string .= ImeTranslatorResultGetWord(split_index, select_index)
+        }
+    }
+    return result_string
 }

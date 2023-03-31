@@ -1,24 +1,29 @@
-DisplaySelectItems()
+IsTraditionalComment(comment)
+{
+    first_char := SubStr(comment, 1, 1)
+    return InStr("*+", first_char)
+}
+
+ImeTooltipGetDisplaySelectItems()
 {
     local
-    global ime_input_caret_pos
-    column          := ImeSelectorGetColumn()
+    column          := ImeSelectMenuGetColumn()
     ime_select_str  := "----------------"
     max_column_loop := 6
 
     loop % ImeTranslatorGetWordCount()
     {
         split_index     := A_Index
-        select_index    := ImeTranslatorResultGetSelectIndex(split_index)
+        select_index    := ImeSelectorGetSelectIndex(split_index)
         if( select_index == 0 ){
             continue
         }
-        if( split_index != ImeTranslatorGetPosSplitIndex(ime_input_caret_pos) )
+        if( split_index != ImeInputterGetCaretSplitIndex() )
         {
             continue
         }
-        start_index     := ImeSelectorShowMultiple() ? 0 : Floor((select_index-1) / column) * column
-        column_loop     := ImeSelectorShowMultiple() ? Floor(ImeTranslatorResultGetListLength(split_index) / column) +1 : 1
+        start_index     := ImeSelectMenuIsMultiple() ? 0 : Floor((select_index-1) / column) * column
+        column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeTranslatorResultGetListLength(split_index) / column) +1 : 1
 
         max_item_len    := []
 
@@ -28,7 +33,7 @@ DisplaySelectItems()
             start_index := Min(start_index, (Floor((ImeTranslatorResultGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
         }
 
-        loop % Min(ImeTranslatorResultGetListLength(split_index), column) {
+        loop % Min(ImeTranslatorResultGetListLength(split_index)+1, column) {
             word_index      := start_index + A_Index
             ime_select_str  .= "`n"
             row_index       := A_Index
@@ -54,9 +59,14 @@ DisplaySelectItems()
                         ; }
                     }
 
-                    end_str := select_index == word_index ? "]" : " "
+                    end_str_mark := " "
                     comment := ImeTranslatorResultGetFormattedComment(split_index, word_index)
-
+                    if( IsTraditionalComment(comment) )
+                    {
+                        end_str_mark := SubStr(comment, 1, 1)
+                        comment := SubStr(comment, 2)
+                    }
+                    end_str := select_index == word_index ? "]" : end_str_mark
                     item_str := begin_str . ImeTranslatorResultGetWord(split_index, word_index) . radical_code . end_str . comment
                     ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
                 } else {
@@ -75,6 +85,42 @@ DisplaySelectItems()
             }
         }
     }
+    ime_select_str .= "`n----------------"
+    return ime_select_str
+}
+
+ImeTooltipGetDisplayInputString()
+{
+    ime_select_index := ""
+    ime_select_str := ""
+    loop % ImeTranslatorGetWordCount()
+    {
+        split_index     := A_Index
+        select_index    := ImeSelectorGetSelectIndex(split_index)
+        select_lock     := ImeSelectorIsSelectLock(split_index)
+        selected_word   := ImeTranslatorResultGetWord(split_index, select_index)
+        if( select_index != 0 )
+        {
+            if( SubStr(ime_select_str, 0, 1) != "/" ){
+                ime_select_str .= "/"
+                ime_select_index .= "/"
+            }
+            ime_select_str .= selected_word
+        }
+        select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
+        if( select_index != 0 && selected_word == ImeTranslatorResultGetPinyin(split_index, select_index) ) {
+            ime_select_index .= select_index_char
+            loop % StrPut(selected_word, "CP936") - 2 {
+                ime_select_index .= "-"
+            }
+        }
+        else
+        if(selected_word || select_index == 0) {
+            ime_select_index .= select_index_char . (select_lock ? "^" : "-")
+        }
+    }
+    ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
+    ime_select_str .= "`n"
     return ime_select_str
 }
 
@@ -87,53 +133,18 @@ ImeTooltipUpdate(tooltip_pos := "")
 {
     local
     static ime_tooltip_pos := ""
-    global tooltip_debug
 
-    global ime_input_string
-    global ime_input_caret_pos
-
-    input_string := ime_input_string
-    caret_pos := ime_input_caret_pos
-
-    if( !input_string )
+    if( !ImeInputterHasAnyInput() )
     {
         ToolTip(1, "")
         ime_tooltip_pos := ""
     }
     else
     {
-        if( ImeSelectorIsOpen() ){
-            ime_select_str := DisplaySelectItems()
+        if( ImeSelectMenuIsOpen() ){
+            ime_select_str := ImeTooltipGetDisplaySelectItems()
         } else {
-            ime_select_index := ""
-            ime_select_str := ""
-            loop % ImeTranslatorGetWordCount()
-            {
-                split_index     := A_Index
-                select_index    := ImeTranslatorResultGetSelectIndex(split_index)
-                select_lock     := ImeTranslatorResultIsLock(split_index)
-                selected_word   := ImeTranslatorResultGetWord(split_index, select_index)
-                if( select_index != 0 )
-                {
-                    if( SubStr(ime_select_str, 0, 1) != "/" ){
-                        ime_select_str .= "/"
-                        ime_select_index .= "/"
-                    }
-                    ime_select_str .= selected_word
-                }
-                select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
-                if( select_index != 0 && selected_word == ImeTranslatorResultGetPinyin(split_index, select_index) ) {
-                    ime_select_index .= select_index_char
-                    loop % StrPut(selected_word, "CP936") - 2 {
-                        ime_select_index .= "-"
-                    }
-                }
-                else
-                if(selected_word || select_index == 0) {
-                    ime_select_index .= select_index_char . (select_lock ? "^" : "-")
-                }
-            }
-            ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
+            ime_select_str := ImeTooltipGetDisplayInputString()
         }
 
         ; Update pos
@@ -144,28 +155,25 @@ ImeTooltipUpdate(tooltip_pos := "")
             ime_tooltip_pos := GetCaretPos()
         }
 
-        split_index := ImeTranslatorGetPosSplitIndex(ime_input_caret_pos)
+        split_index := ImeInputterGetCaretSplitIndex()
+        extern_info := ""
+        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
+        radical_words := ""
+        loop, % radical_list.Length()
+        {
+            radical_word := radical_list[A_Index]
+            radical_words .= radical_word ;. PinyinRadicalGetPinyin(radical_word)
+        }
+        extern_info .= " {" radical_words "}"
+        extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+
         ; Debug info
-        debug_tip := "`n----------------`n"
-        debug_tip .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        debug_tip .= " {" WordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)), 10) "}"
-        debug_tip .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        debug_tip .= "`n" tooltip_debug[1]  ; Spilt word
-        ; debug_tip .= "`n" tooltip_debug[3]  ; SQL
-        ; debug_tip .= "`n" tooltip_debug[4]  ; single word
-        ; debug_tip .= "`n" tooltip_debug[5]  ; PinyinHistoryHasKey
-        debug_tip .= "`n" tooltip_debug[6]  ; Radical
-        ; debug_tip .= "`n" tooltip_debug[7]  ; Check weight
-        ; debug_tip .= "`n" tooltip_debug[8]  ; Simple spell
-        debug_tip .= "`n" tooltip_debug[9]  ; temp
-        ; debug_tip .= "`n" tooltip_debug[11] ; Translator
-        debug_tip .= "`n" tooltip_debug[18] ; Assert info
+        debug_tip := ImeDebugGetDisplayText()
 
-
-        tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
-        tooltip_string := StrReplace(tooltip_string, " ", "_")
-        tooltip_string .= "(" caret_pos ")"
-        ToolTip(1, tooltip_string "`n" ime_select_str debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
+        tooltip_string := ImeInputterGetDisplayString()
+        ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
+        ; ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info , "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
 }
