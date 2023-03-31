@@ -129,20 +129,6 @@ ImeTooltipUpdatePos()
     ImeTooltipUpdate(GetCaretPos())
 }
 
-ImeTooltipDebugTipAdd(ByRef debug_tip, index, max_length := 50)
-{
-    if( ImeProfilerGetCount(index) >= 1 ){
-        debug_tip .= "`n" . index . "*" ImeProfilerGetCount(index) ":"
-        debug_tip .= "(" ImeProfilerGetTotalTick(index) ") "
-        debug_info := ImeProfilerGetDebugInfo(index)
-        if( StrLen(debug_info) > max_length ){
-            SubStr(debug_info, 1, max_length)
-            debug_info .= "..."
-        }
-        debug_tip .= debug_info
-    }
-}
-
 ImeTooltipUpdate(tooltip_pos := "")
 {
     local
@@ -186,29 +172,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
 
         ; Debug info
-        debug_tip := ""
-        ImeTooltipDebugTipAdd(debug_tip, 11)    ; PinyinSplitInputString
-        ImeTooltipDebugTipAdd(debug_tip, 12)    ; ImeInputterUpdateString
-        ImeTooltipDebugTipAdd(debug_tip, 14, 0) ; PinyinHistoryHasKey
-        ImeTooltipDebugTipAdd(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
-        ImeTooltipDebugTipAdd(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result
-        ImeTooltipDebugTipAdd(debug_tip, 20)    ; PinyinGetTranslateResult
-        ImeTooltipDebugTipAdd(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
-        ImeTooltipDebugTipAdd(debug_tip, 25)    ; PinyinResultFilterZeroWeight
-        ImeTooltipDebugTipAdd(debug_tip, 26)    ; PinyinResultFilterByRadical
-        ImeTooltipDebugTipAdd(debug_tip, 27)    ; PinyinResultFilterSingleWord
-        ImeTooltipDebugTipAdd(debug_tip, 28)    ; PinyinResultUniquify
-        ImeTooltipDebugTipAdd(debug_tip, 31)    ; ImeTranslatorFixupSelectIndex
-        ImeTooltipDebugTipAdd(debug_tip, 32, 2000)  ; ImeTranslatorFilterResults
-        
-        ImeTooltipDebugTipAdd(debug_tip, 30)    ; ImeTranslatorUpdateResult
-        ; ImeTooltipDebugTipAdd(debug_tip, 31, 2000)  ; ImeTranslatorFilterResults
-        ImeTooltipDebugTipAdd(debug_tip, 32, 2000)  ; ImeTranslatorFixupSelectIndex
-        ImeTooltipDebugTipAdd(debug_tip, 41)    ; ImeSelectorApplyCaretSelectIndex
-        ImeTooltipDebugTipAdd(debug_tip, 1)     ; temp
-        ImeTooltipDebugTipAdd(debug_tip, 2)     ; tick
-        ImeTooltipDebugTipAdd(debug_tip, 4, 2000)   ; assert info
-
+        debug_tip := ImeDebugGetDisplayText()
 
         tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
         tooltip_string := StrReplace(tooltip_string, " ", "_")

@@ -40,3 +40,4 @@
 #Include, lib\JSON.ahk
 
 #Include, ime_word_creator.ahk
+#Include, ime_debug.ahk
