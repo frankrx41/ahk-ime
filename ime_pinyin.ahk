@@ -136,7 +136,8 @@ PinyinInitialize()
                 "o":"o",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
-                "u":"u","un":"un"
+                "u":"u","un":"un",
+                "ain": "ian"
             },
             "p" :{
                 "1":"p",

@@ -9,6 +9,19 @@ ImeSelectorClear()
     ime_selector_select := []
 }
 
+ImeSelectorClearAfter(split_index)
+{
+    global ime_selector_select
+    loop % ime_selector_select.Length()
+    {
+        test_index := A_Index
+        if( test_index > split_index )
+        {
+            ImeSelectorUnLockWord(test_index)
+        }
+    }
+}
+
 ;*******************************************************************************
 ;
 ImeSelectorGetCaretSelectIndex()
