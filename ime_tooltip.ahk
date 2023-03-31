@@ -134,10 +134,7 @@ ImeTooltipUpdate(tooltip_pos := "")
     local
     static ime_tooltip_pos := ""
 
-    input_string    := ImeInputterGetInputString()
-    caret_pos       := ImeInputterGetCaretPos()
-
-    if( !input_string )
+    if( !ImeInputterHasAnyInput() )
     {
         ToolTip(1, "")
         ime_tooltip_pos := ""
@@ -174,9 +171,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
 
-        tooltip_string := SubStr(input_string, 1, caret_pos) "|" SubStr(input_string, caret_pos+1)
-        tooltip_string := StrReplace(tooltip_string, " ", "_")
-        tooltip_string .= "(" caret_pos ")"
+        tooltip_string := ImeInputterGetDisplayString()
         ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
         ; ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info , "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
