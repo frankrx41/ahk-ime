@@ -1,61 +1,6 @@
 ImeSelectorInitialize()
 {
-    global ime_selector_column              := 10       ; 最大候选词个数
-    global ime_selector_is_open             := 0        ; 是否打开选字窗口
-    global ime_selector_is_show_multiple    := 0        ; Show more column
-    global ime_selector_single_mode         := false
     global ime_selector_select              := []
-}
-
-;*******************************************************************************
-;
-ImeSelectorOpen(multiple:=false)
-{
-    local
-    global ime_selector_is_open
-    global ime_selector_is_show_multiple
-
-    ime_selector_is_open := true
-    if( ImeInputterIsInputDirty() )
-    {
-        ImeInputterUpdateString("")
-    }
-
-    if( multiple ){
-        multiple := ImeSelectorCanShowMultiple()
-    }
-    ime_selector_is_show_multiple := multiple
-}
-
-ImeSelectorClose(lock_result:=true)
-{
-    global ime_selector_is_open
-    ime_selector_is_open := false
-    ImeSelectorApplyCaretSelectIndex(lock_result)
-}
-
-ImeSelectorIsOpen()
-{
-    global ime_selector_is_open
-    return ime_selector_is_open
-}
-
-ImeSelectorShowMultiple()
-{
-    global ime_selector_is_show_multiple
-    return ime_selector_is_show_multiple
-}
-
-ImeSelectorCanShowMultiple()
-{
-    split_index := ImeInputterGetCaretSplitIndex()
-    return ImeTranslatorResultGetListLength(split_index) > ImeSelectorGetColumn()
-}
-
-ImeSelectorGetColumn()
-{
-    global ime_selector_column
-    return ime_selector_column
 }
 
 ;*******************************************************************************

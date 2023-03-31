@@ -16,13 +16,14 @@ HotkeyOnSplitMark(char)
 HotkeyOnNumber(char)
 {
     local
-    if( ImeSelectorIsOpen() )
+    if( ImeSelectMenuIsOpen() )
     {
         ; Select index
-        index := Floor((ImeSelectorGetCaretSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
+        index := Floor((ImeSelectorGetCaretSelectIndex()-1) / ImeSelectMenuGetColumn()) * ImeSelectMenuGetColumn()
         index += (char == 0 ? 10 : char)
         ImeSelectorSetCaretSelectIndex(index)
-        ImeSelectorClose()
+        ImeSelectMenuClose()
+        ImeSelectorApplyCaretSelectIndex(true)
     }
     else
     {
@@ -62,11 +63,11 @@ HotkeyOnEsc()
 {
     static last_esc_tick := 0
 
-    if( ImeSelectorIsOpen() ) {
-        if( ImeSelectorShowMultiple() ) {
-            ImeSelectorOpen()
+    if( ImeSelectMenuIsOpen() ) {
+        if( ImeSelectMenuIsMultiple() ) {
+            ImeSelectMenuOpen()
         } else {
-            ImeSelectorClose(false)
+            ImeSelectMenuClose()
         }
     } else {
         ; Double esc clear all input
@@ -94,7 +95,7 @@ HotkeyOnShift(orgin_mode)
         return
     }
 
-    if( ImeSelectorIsOpen() ) {
+    if( ImeSelectMenuIsOpen() ) {
         ImeSelectorToggleSingleMode()
     }
     else {
@@ -105,7 +106,7 @@ HotkeyOnShift(orgin_mode)
 
 HotkeyOnSpace()
 {
-    if( ImeSelectorIsOpen() ) {
+    if( ImeSelectMenuIsOpen() ) {
         ImeSelectorToggleSingleMode()
     }
     else {

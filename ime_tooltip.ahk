@@ -7,7 +7,7 @@ IsTraditionalComment(comment)
 ImeTooltipGetDisplaySelectItems()
 {
     local
-    column          := ImeSelectorGetColumn()
+    column          := ImeSelectMenuGetColumn()
     ime_select_str  := "----------------"
     max_column_loop := 6
 
@@ -22,8 +22,8 @@ ImeTooltipGetDisplaySelectItems()
         {
             continue
         }
-        start_index     := ImeSelectorShowMultiple() ? 0 : Floor((select_index-1) / column) * column
-        column_loop     := ImeSelectorShowMultiple() ? Floor(ImeTranslatorResultGetListLength(split_index) / column) +1 : 1
+        start_index     := ImeSelectMenuIsMultiple() ? 0 : Floor((select_index-1) / column) * column
+        column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeTranslatorResultGetListLength(split_index) / column) +1 : 1
 
         max_item_len    := []
 
@@ -158,7 +158,7 @@ ImeTooltipUpdate(tooltip_pos := "")
     }
     else
     {
-        if( ImeSelectorIsOpen() ){
+        if( ImeSelectMenuIsOpen() ){
             ime_select_str := ImeTooltipGetDisplaySelectItems()
         } else {
             ime_select_str := ImeTooltipGetDisplayInputString()

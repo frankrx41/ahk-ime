@@ -44,7 +44,8 @@ ImeInputterClearLastSplitted()
     if( ime_input_caret_pos == 0 )
     {
         ImeInputterClearString()
-        ImeSelectorClose()
+        ImeSelectMenuClose()
+        ImeSelectorApplyCaretSelectIndex(true)
     }
     else
     {
@@ -74,7 +75,7 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     global ime_inputter_split_indexs
 
     ImeProfilerClear()
-    if( ImeSelectorIsOpen() )
+    if( ImeSelectMenuIsOpen() )
     {
         input_char := Format("{:U}", input_char)
         ImeSelectorSetCaretSelectIndex(1)

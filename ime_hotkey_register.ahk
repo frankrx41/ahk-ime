@@ -71,7 +71,8 @@ ImeHotkeyShiftSetMode(orgin_mode)
         if ( ime_input_string ) {
             PutCharacter(ime_input_string)
             ImeInputterClearString()
-            ImeSelectorClose()
+            ImeSelectMenuClose()
+            ImeSelectorApplyCaretSelectIndex(true)
         }
     }
     ImeStateUpdateMode(orgin_mode)

@@ -17,6 +17,7 @@ global DllFolder        := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 
 ImeProfilerInitialize()
 
+ImeSelectMenuInitialize()
 ImeInputterInitialize()
 ImeTranslatorInitialize()
 ImeDBInitialize()
