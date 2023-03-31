@@ -196,6 +196,7 @@ ImeInputterCaretIsAtEnd()
 
 ;*******************************************************************************
 ; Move caret
+; -1 <- | -> +1
 ImeInputterCaretMove(dir)
 {
     global ime_input_caret_pos

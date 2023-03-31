@@ -12,21 +12,21 @@ ImeSelectorGetCaretSelectIndex()
     return ImeSelectorGetSelectIndex(split_index)
 }
 
-ImeSelectorSetCaretSelectIndex(index)
+ImeSelectorSetCaretSelectIndex(select_index)
 {
     local
     split_index := ImeInputterGetCaretSplitIndex()
-    index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
-    ImeSelectorSetSelectIndex(split_index, index, false)
+    select_index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), select_index))
+    ImeSelectorSetSelectIndex(split_index, select_index)
 }
 
 ImeSelectorOffsetCaretSelectIndex(offset)
 {
     local
     split_index := ImeInputterGetCaretSplitIndex()
-    index := ImeSelectorGetSelectIndex(split_index) + offset
-    index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), index))
-    ImeSelectorSetSelectIndex(split_index, index, false)
+    select_index := ImeSelectorGetSelectIndex(split_index) + offset
+    select_index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), select_index))
+    ImeSelectorSetSelectIndex(split_index, select_index)
 }
 
 ;*******************************************************************************
@@ -58,24 +58,22 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
     ImeProfilerBegin(41, true)
     debug_info := ""
 
+    split_index := ImeInputterGetCaretSplitIndex()
+    select_index := ImeSelectorGetSelectIndex(split_index)
+    word_length := ImeTranslatorResultGetLength(split_index, select_index)
+
     if( lock_result )
     {
-        split_index := ImeInputterGetCaretSplitIndex()
-        select_index := ImeSelectorGetSelectIndex(split_index)
-        lock_word := ImeTranslatorResultGetWord(split_index, select_index)
-        lock_word_length := ImeTranslatorResultGetLength(split_index, select_index)
-        ImeTranslatorFixupSelectIndex(split_index, lock_word, lock_word_length)
-        debug_info .= "Lock: [" split_index "," select_index "]:""" lock_word """"
+        ImeSelectorSetSelectIndex(split_index, select_index)
+        select_word := ImeTranslatorResultGetWord(split_index, select_index)
+        word_length := ImeTranslatorResultGetLength(split_index, select_index)
+        ImeSelectorLockWord(split_index, select_word, word_length)
     }
-    else
-    {
-        ImeTranslatorFixupSelectIndex()
-    }
+
+    ImeTranslatorFixupSelectIndex()
+
     if( !ImeInputterCaretIsAtEnd() )
     {
-        split_index := ImeInputterGetCaretSplitIndex()
-        select_index := ImeSelectorGetSelectIndex(split_index)
-        word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeInputterCaretMoveByWord(word_length)
     }
     ImeProfilerEnd(41, debug_info)
@@ -85,43 +83,56 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 ; [split_index, 0] = select info
 ;   - 1: select index, work for selector menu, 0 mark not select, should skip this
 ;   - 2: is lock
-;   - 3: value
-;   - 4: length
-ImeSelectorSetSelectIndex(split_index, word_index, lock_select:=true, select_word:="", word_length:=0)
+;   - lock use:
+;       - 3: word value
+;       - 4: length
+ImeSelectorUnLockWord(split_index)
+{
+    global ime_selector_select
+    ime_selector_select[split_index, 2] := false
+    ime_selector_select[split_index, 3] := ""
+    ime_selector_select[split_index, 4] := 0
+}
+
+ImeSelectorLockWord(split_index, select_word, word_length)
+{
+    global ime_selector_select
+    ime_selector_select[split_index, 2] := true
+    ime_selector_select[split_index, 3] := select_word
+    ime_selector_select[split_index, 4] := word_length
+}
+
+ImeSelectorSetSelectIndex(split_index, select_index)
 {
     local
     global ime_selector_select
-    if( word_index != 0 )
-    {
-        if( select_word == "" ) {
-            select_word := ImeTranslatorResultGetWord(split_index, word_index)
-        }
-        if( word_length == 0 ) {
-            word_length := ImeTranslatorResultGetLength(split_index, word_index)
-        }
-    }
-    ime_selector_select[split_index] := [word_index, lock_select, select_word, word_length]
+
+    ime_selector_select[split_index, 1] := select_index
+
+    ImeProfilerBegin(42)
+    debug_info := "`n  - [" split_index "]->[" select_index "]"
+    ImeProfilerEnd(42, debug_info)
 }
 
 ImeSelectorGetSelectIndex(split_index)
 {
     global ime_selector_select
-    return ime_selector_select[split_index, 1]
+    return ime_selector_select[split_index, 1] ? ime_selector_select[split_index, 1] : 0
 }
 
 ImeSelectorIsSelectLock(split_index)
 {
     global ime_selector_select
-    return ime_selector_select[split_index, 0, 2]
+    return ime_selector_select[split_index, 0, 2] ? true : false
 }
 
-ImeSelectorGetSelectWord(split_index)
+ImeSelectorGetLockWord(split_index)
 {
     global ime_selector_select
     return ime_selector_select[split_index, 0, 3]
 }
 
-ImeSelectorGetSelectLength(split_index)
+ImeSelectorGetLockLength(split_index)
 {
     global ime_selector_select
     return ime_selector_select[split_index, 0, 4]
