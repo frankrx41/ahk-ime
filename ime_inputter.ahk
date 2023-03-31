@@ -128,6 +128,12 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     }
     else
     {
+        if( is_delet )
+        {
+            split_index := ImeInputterGetCaretSplitIndex()
+            ImeSelectorUnLockFrontLockWord(split_index)
+        }
+
         ImeProfilerBegin(12, true)
         debug_info := ""
         Assert(ime_input_string)
