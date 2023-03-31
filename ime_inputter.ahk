@@ -47,7 +47,6 @@ ImeInputterClearLastSplitted()
     {
         ImeInputterClearString()
         ImeSelectMenuClose()
-        ImeSelectorApplyCaretSelectIndex(true)
     }
     else
     {
