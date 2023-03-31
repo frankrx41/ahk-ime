@@ -204,7 +204,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ImeTooltipDebugTipAdd(debug_tip, 30)    ; ImeTranslatorUpdateResult
         ; ImeTooltipDebugTipAdd(debug_tip, 31, 2000)  ; ImeTranslatorFilterResults
         ImeTooltipDebugTipAdd(debug_tip, 32, 2000)  ; ImeTranslatorFixupSelectIndex
-        ImeTooltipDebugTipAdd(debug_tip, 41)    ; ImeSelectorFixupSelectIndex
+        ImeTooltipDebugTipAdd(debug_tip, 41)    ; ImeSelectorApplyCaretSelectIndex
         ImeTooltipDebugTipAdd(debug_tip, 1)     ; temp
         ImeTooltipDebugTipAdd(debug_tip, 2)     ; tick
         ImeTooltipDebugTipAdd(debug_tip, 4, 2000)   ; assert info

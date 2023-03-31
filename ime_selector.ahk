@@ -31,7 +31,7 @@ ImeSelectorClose(lock_result:=true)
 {
     global ime_selector_is_open
     ime_selector_is_open := false
-    ImeSelectorFixupSelectIndex(lock_result)
+    ImeSelectorApplyCaretSelectIndex(lock_result)
 }
 
 ImeSelectorIsOpen()
@@ -88,16 +88,26 @@ ImeSelectorOffsetCaretSelectIndex(offset)
 ;
 ImeSelectorToggleSingleMode()
 {
-    global ime_selector_single_mode
-    ime_selector_single_mode := !ime_selector_single_mode
-    ImeTranslatorFilterResults(ime_selector_single_mode)
+    Assert(false, "not implement!", true)
+    ; global ime_selector_single_mode
+    ; ime_selector_single_mode := !ime_selector_single_mode
+    ; ImeTranslatorFilterResults(ime_selector_single_mode)
+}
+
+;*******************************************************************************
+;
+ImeSelectorResetSelectIndexs()
+{
+    global ime_selector_select
+    ime_selector_select[A_Index] := []
+    ImeTranslatorFixupSelectIndex()
 }
 
 ;*******************************************************************************
 ; "woaini" => ["我爱你", "", ""]
 ; if first word select "卧", then update to ["卧", "爱你", ""]
 ; if last word select "泥", then update to ["我爱", "", "泥"]
-ImeSelectorFixupSelectIndex(lock_result)
+ImeSelectorApplyCaretSelectIndex(lock_result)
 {
     local
     ImeProfilerBegin(41, true)

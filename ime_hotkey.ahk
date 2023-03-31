@@ -172,8 +172,7 @@
                 } else {
                     ImeSelectorOffsetCaretSelectIndex(+1)
                 }
-                ; We call it for `ImeSelectorFixupSelectIndex`
-                ImeSelectorClose()
+                ImeSelectorApplyCaretSelectIndex(true)
             }
         }
         ImeTooltipUpdate()

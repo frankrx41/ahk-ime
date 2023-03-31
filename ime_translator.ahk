@@ -10,16 +10,6 @@ ImeTranslatorClear()
     global ime_translator_radical_list      := []
 }
 
-ImeTranslatorResetSelectIndexs()
-{
-    global ime_translator_result_filtered
-    loop % ime_translator_result_filtered.Length()
-    {
-        ime_translator_result_filtered[A_Index, 0] := []
-    }
-    ImeTranslatorFixupSelectIndex()
-}
-
 ImeTranslatorUpdateResult(input_split, radical_list)
 {
     local
@@ -84,6 +74,7 @@ ImeTranslatorFindPossibleMaxLength(split_index, lock_split_index, ByRef next_wor
     {
         check_index := split_index + A_Index
         if( ImeSelectorIsSelectLock(check_index) || check_index == lock_split_index ) {
+            ; TODO: fill next_words
             next_words := "???"
             break
         }
