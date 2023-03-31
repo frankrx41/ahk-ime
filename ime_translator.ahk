@@ -10,6 +10,16 @@ ImeTranslatorClear()
     global ime_translator_radical_list      := []
 }
 
+ImeTranslatorResetSelectIndexs()
+{
+    global ime_translator_result_filtered
+    loop % ime_translator_result_filtered.Length()
+    {
+        ime_translator_result_filtered[A_Index, 0] := []
+    }
+    ImeTranslatorFixupSelectIndex()
+}
+
 ImeTranslatorUpdateResult(input_split, radical_list)
 {
     local
