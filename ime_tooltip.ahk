@@ -199,6 +199,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         ImeTooltipDebugTipAdd(debug_tip, 27)    ; PinyinResultFilterSingleWord
         ImeTooltipDebugTipAdd(debug_tip, 28)    ; PinyinResultUniquify
         ImeTooltipDebugTipAdd(debug_tip, 31)    ; ImeTranslatorFixupSelectIndex
+        ImeTooltipDebugTipAdd(debug_tip, 32, 2000)  ; ImeTranslatorFilterResults
         ImeTooltipDebugTipAdd(debug_tip, 1)     ; temp
         ImeTooltipDebugTipAdd(debug_tip, 2)     ; tick
         ImeTooltipDebugTipAdd(debug_tip, 4, 2000)   ; assert info

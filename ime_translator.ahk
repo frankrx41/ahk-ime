@@ -19,8 +19,8 @@ ImeTranslatorUpdateResult(input_split, radical_list)
     if( input_split )
     {
         ime_translator_radical_list := radical_list
-
         ime_translator_result_const := []
+
         test_split_string := input_split
         loop % radical_list.Length()
         {
@@ -123,10 +123,16 @@ ImeTranslatorFilterResults(single_mode:=false)
     search_result := CopyObj(ime_translator_result_const)
     radical_list := CopyObj(ime_translator_radical_list)
     skip_word := 0
+    ImeProfilerBegin(32, true)
+    ImeProfilerEnd(32, "length: [" search_result.Length() "]", true)
     loop % search_result.Length()
     {
-        test_result := search_result[A_Index]
-        ; PinyinResultFilterZeroWeight(test_result)
+        split_index := A_Index
+        test_result := search_result[split_index]
+        
+        if( true ){
+            ; PinyinResultFilterZeroWeight(test_result)
+        }
         if( radical_list ){
             PinyinResultFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
@@ -134,20 +140,33 @@ ImeTranslatorFilterResults(single_mode:=false)
         if( single_mode ){
             PinyinResultFilterSingleWord(test_result)
         }
-        PinyinResultUniquify(test_result)
-        ; if prev length > 1, this[0] := 0
-        ; [select_index, lock]
-        ; Can not use `ImeTranslatorResultSetSelectIndex`
-        if( skip_word ) {
-            test_result[0] := [0, false]
-            skip_word -= 1
-        }
-        else {
-            test_result[0] := [1, false]
-            skip_word := test_result[1,5]-1
+        if( true ){
+            PinyinResultUniquify(test_result)
         }
     }
     ime_translator_result_filtered := search_result
+
+    ; Update result select index
+    loop % search_result.Length()
+    {
+        split_index := A_Index
+        if( skip_word ) {
+            ImeTranslatorResultSetSelectIndex(split_index, 0, false, "", 0)
+            test_result[0] := [0, false]
+            skip_word -= 1
+            ImeProfilerEnd(32, "`n  - Skp: [" split_index "]", true)
+        }
+        else {
+            select_index := 1
+            select_index := ImeTranslatorResultGetSelectIndex(split_index)
+            select_index := !select_index ? 1 : select_index
+            ImeTranslatorResultSetSelectIndex(split_index, select_index, false)
+            word_length := ImeTranslatorResultGetLength(split_index, select_index)
+            skip_word := word_length-1
+            ImeProfilerEnd(32, "`n  - Set: [" split_index "]->" select_index "," word_length " " "(" skip_word ")", true)
+        }
+    }
+    ImeProfilerEnd(32)
 }
 
 ImeTranslatorGetOutputString()
