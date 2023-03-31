@@ -94,8 +94,22 @@ ImeSelectorToggleSingleMode()
 ImeSelectorFixupSelectIndex(lock_result)
 {
     local
-    ImeProfilerBegin(41)
-    ImeTranslatorFixupSelectIndex()
+    ImeProfilerBegin(41, true)
+    debug_info := ""
+
+    if( lock_result )
+    {
+        split_index := ImeInputterGetCaretSplitIndex()
+        select_index := ImeTranslatorResultGetSelectIndex(split_index)
+        lock_word := ImeTranslatorResultGetWord(split_index, select_index)
+        lock_word_length := ImeTranslatorResultGetLength(split_index, select_index)
+        ImeTranslatorFixupSelectIndex(split_index, lock_word, lock_word_length)
+        debug_info .= "Lock: [" split_index "]:""" lock_word """"
+    }
+    else
+    {
+
+    }
     if( !ImeInputterCaretIsAtEnd() )
     {
         split_index := ImeInputterGetCaretSplitIndex()
@@ -103,5 +117,5 @@ ImeSelectorFixupSelectIndex(lock_result)
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeInputterCaretMoveByWord(word_length)
     }
-    ImeProfilerEnd(41)
+    ImeProfilerEnd(41, debug_info)
 }
