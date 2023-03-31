@@ -134,7 +134,12 @@ ImeTooltipDebugTipAdd(ByRef debug_tip, index, max_length := 50)
     if( ImeProfilerGetCount(index) >= 1 ){
         debug_tip .= "`n" . index . "*" ImeProfilerGetCount(index) ":"
         debug_tip .= "(" ImeProfilerGetTotalTick(index) ") "
-        debug_tip .= SubStr(ImeProfilerGetDebugInfo(index), 1, max_length)
+        debug_info := ImeProfilerGetDebugInfo(index)
+        if( StrLen(debug_info) > max_length ){
+            SubStr(debug_info, 1, max_length)
+            debug_info .= "..."
+        }
+        debug_tip .= debug_info
     }
 }
 
