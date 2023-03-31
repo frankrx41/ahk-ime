@@ -228,9 +228,7 @@
 
     ; F5: reload
     F5::
-        ToolTip, Reload %A_ScriptName%
-        Sleep, 500
-        Reload
+        ImeRestart()
     return
 
     F6::
@@ -261,9 +259,7 @@
 ; Reload script, debug only
 #if WinActive("AHK-Ime") && !ImeModeIsEnglish()
     ~^S::
-        ToolTip, Reload %A_ScriptName%
-        Sleep, 500
-        Reload
+        ImeRestart()
     return
 #if
 

@@ -39,3 +39,11 @@ return
 ;*******************************************************************************
 
 #Include, ime_include.ahk
+
+ImeRestart()
+{
+    ToolTip, Reload %A_ScriptName%
+    Sleep, 500
+    ToolTip,
+    Reload
+}
