@@ -108,12 +108,11 @@ ImeInputterUpdateString(input_char, is_delet:=false)
 
     ImeProfilerBegin(12, true)
     should_update_result := false
+    ; If no input_char or input_char is not alphabet, try update
     if( input_char ) {
         ime_input_dirty := true
         should_update_result := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true)
-    }
-    else
-    {
+    } else {
         ime_input_dirty := true
         should_update_result := true
     }
@@ -125,6 +124,7 @@ ImeInputterUpdateString(input_char, is_delet:=false)
 
     debug_info := ""
     input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
+    ; Update result
     if( should_update_result && ime_input_dirty )
     {
         debug_info .= "[" input_split "]"
