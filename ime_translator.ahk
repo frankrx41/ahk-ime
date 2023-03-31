@@ -73,16 +73,23 @@ ImeTranslatorFindPossibleMaxLength(split_index, ByRef next_words)
 {
     local
     ; `max_length` = this word until next unlock word
-    max_length := 1
-    loop % ImeTranslatorResultGetLength(split_index, 1)-1
+    if( ImeSelectorIsSelectLock(split_index) )
     {
-        check_index := split_index + A_Index
-        if( ImeSelectorIsSelectLock(check_index) ) {
-            ; TODO: fill next_words
-            next_words := "???"
-            break
+        max_length := ImeTranslatorResultGetLength(split_index, 1)
+    }
+    else
+    {
+        max_length := 1
+        loop % ImeTranslatorResultGetLength(split_index, 1)-1
+        {
+            check_index := split_index + A_Index
+            if( ImeSelectorIsSelectLock(check_index) ) {
+                ; TODO: fill next_words
+                next_words := "???"
+                break
+            }
+            max_length += 1
         }
-        max_length += 1
     }
     return max_length
 }
@@ -111,7 +118,9 @@ ImeTranslatorFixupSelectIndex()
 
         ; `max_length` = this word until next unlock word
         max_length := ImeTranslatorFindPossibleMaxLength(split_index, next_words)
-        debug_info .= "`n  - skip: " skip_word_count ", lock: " select_is_lock ", max_len: " max_length " "
+
+        debug_info .= "`n  - [" split_index "] "
+        debug_info .= "skip: " skip_word_count ", lock: " select_is_lock ", max_len: " max_length " "
 
         if( skip_word_count )
         {
@@ -126,8 +135,8 @@ ImeTranslatorFixupSelectIndex()
             ; TODO: use `lock_length`
             lock_length := ImeSelectorGetLockLength(split_index)
             select_index := ImeTranslatorResultFindIndex(split_index, lock_word, max_length)
-            Assert(select_index)
-            Assert(ImeTranslatorResultGetLength(split_index, select_index) >= lock_length)
+            Assert(select_index, lock_word)
+            ; Assert(ImeTranslatorResultGetLength(split_index, select_index) >= lock_length)
         }
         else
         {
@@ -141,9 +150,9 @@ ImeTranslatorFixupSelectIndex()
         if( origin_select_index != select_index )
         {
             ImeSelectorSetSelectIndex(split_index, select_index)
-            debug_info .= "[" split_index "]->[" select_index "] "
         }
 
+        debug_info .= "[" origin_select_index "]->[" select_index "] "
         if( select_index )
         {
             select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
