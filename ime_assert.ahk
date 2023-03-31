@@ -15,22 +15,20 @@ CallStack(deepness = 5, printLines = 0)
     return stack
 }
 
-Assert(bool, str:="", deepness:=5, show_msg:=false)
+Assert(bool, str:="", show_msgbox:=false)
 {
     local
     if( !bool )
     {
         git_hash := RTrim(CmdRet("git rev-parse --short HEAD"), "`n")
         time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
-        deepness := Max(1, deepness)
 
-        debug_info := time_string " [" git_hash "]"
-        debug_info .= (deepness == 1) ? " " : "`n"
-        debug_info .= CallStack(deepness)
+        debug_info := time_string " [" git_hash "]`n"
+        debug_info .= CallStack()
         debug_info .= " """ str """`n"
 
         FileAppend, %debug_info%, .\debug.log
-        if( show_msg ){
+        if( show_msgbox ){
             Msgbox, % debug_info
         }
         call_stack_str := RegExReplace(CallStack(1), "^.*\\")

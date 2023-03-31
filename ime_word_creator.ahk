@@ -88,7 +88,7 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
         if( DB.Exec(sql_cmd) ){
             Msgbox, 48, , % "Create success`nKey: " key "`nValue: " value
         } else {
-            Assert(0, DB.ErrorMsg,,true)
+            Assert(0, DB.ErrorMsg,true)
         }
     }
     else
@@ -99,7 +99,7 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
         if( DB.Exec(sql_cmd) ){
             Msgbox, 32, , % "Update success`nKey: " key "`nValue: " value
         } else {
-            Assert(0, DB.ErrorMsg,,true)
+            Assert(0, DB.ErrorMsg,true)
         }
     }
 }
@@ -113,12 +113,12 @@ WordCreatorDBGetWeight(DB, key, value)
     {
         if( result_table.RowCount != 0 )
         {
-            Assert(result_table.RowCount == 1, sql_cmd,,true)
+            Assert(result_table.RowCount == 1, sql_cmd,true)
             ; Msgbox, % result_table.Rows[1, 1]
             return result_table.Rows[1, 1]
         }
     } else {
-        Assert(0, DB.ErrorMsg,,true)
+        Assert(0, DB.ErrorMsg,true)
     }
     return -1
 }

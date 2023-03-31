@@ -126,7 +126,7 @@ ImeTranslatorFixupSelectIndex()
         }
     }
     ImeProfilerEnd(32, debug_info)
-    Assert(StrLen(skip_words) == 0, Asc(skip_words),,true)
+    Assert(StrLen(skip_words) == 0, Asc(skip_words),true)
 }
 
 ImeTranslatorFilterResults(single_mode:=false)

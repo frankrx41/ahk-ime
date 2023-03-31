@@ -61,7 +61,7 @@ PinyinSqlWhereKeyCommand(key_name, key_value, repalce_tone_1_5:=false)
 
 PinyinSqlWhereCommand(sim_key, full_key)
 {
-    Assert(sim_key,,,true)
+    Assert(sim_key,sim_key,true)
     sql_where_cmd := PinyinSqlWhereKeyCommand("sim", sim_key)
 
     if( full_key ) {
