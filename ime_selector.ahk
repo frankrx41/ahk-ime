@@ -67,13 +67,14 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         test_length := 0
         loop
         {
-            if( A_Index >= split_index ){
+            test_index := A_Index
+            if( test_index >= split_index ){
                 break
             }
-            if( ImeSelectorIsSelectLock(A_Index) )
+            if( ImeSelectorIsSelectLock(test_index) )
             {
-                if( test_length + ImeSelectorGetLockLength(A_Index) >= split_index ){
-                    ImeSelectorUnLockWord(A_Index)
+                if( test_length + ImeSelectorGetLockLength(test_index) >= split_index ){
+                    ImeSelectorUnLockWord(test_index)
                     break
                 }
             }
@@ -85,6 +86,13 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         select_word := ImeTranslatorResultGetWord(split_index, select_index)
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeSelectorLockWord(split_index, select_word, word_length)
+        loop, % word_length-1
+        {
+            test_index := split_index + A_Index
+            if( ImeSelectorIsSelectLock(test_index) ){
+                ImeSelectorUnLockWord(test_index)
+            }
+        }
     }
 
     ImeTranslatorFixupSelectIndex()
