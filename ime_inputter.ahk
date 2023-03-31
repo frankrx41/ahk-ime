@@ -128,6 +128,11 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     }
     else
     {
+        ImeProfilerBegin(12, true)
+        debug_info := ""
+        Assert(ime_input_string)
+        input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
+
         split_index := ImeInputterGetCaretSplitIndex()
         if( is_delet )
         {
@@ -136,10 +141,6 @@ ImeInputterUpdateString(input_char, is_delet:=false)
             ImeSelectorClearAfter(split_index)
         }
 
-        ImeProfilerBegin(12, true)
-        debug_info := ""
-        Assert(ime_input_string)
-        input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
         ; Update result
         if( should_update_result && ime_input_dirty )
         {
