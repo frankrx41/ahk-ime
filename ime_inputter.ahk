@@ -44,7 +44,7 @@ ImeInputterClearLastSplitted()
     if( ime_input_caret_pos == 0 )
     {
         ImeInputterClearString()
-        ImeSelectorOpen(false)
+        ImeSelectorClose()
     }
     else
     {

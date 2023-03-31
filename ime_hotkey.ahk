@@ -12,8 +12,7 @@
     Enter::
     NumpadEnter::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorFixupSelectIndex()
-            ImeSelectorOpen(false)
+            ImeSelectorClose()
         } else {
             if( ImeInputterIsInputDirty() ) {
                 ImeInputterUpdateString("")
@@ -26,13 +25,13 @@
 
     ]::
         PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 0)
-        ImeSelectorOpen(false)
+        ImeSelectorClose()
         ImeTooltipUpdate()
     return
 
     [::
         PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 1)
-        ImeSelectorOpen(false)
+        ImeSelectorClose()
         ImeTooltipUpdate()
     return
 
@@ -40,12 +39,12 @@
     Tab::
         if( ImeSelectorIsOpen() ){
             if( !ImeSelectorShowMultiple() && ImeSelectorCanShowMultiple() ) {
-                ImeSelectorOpen(true, true)
+                ImeSelectorOpen(true)
             } else {
                 ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
             }
         } else {
-            ImeSelectorOpen(true, false)
+            ImeSelectorOpen()
         }
         ImeTooltipUpdate()
     return
@@ -53,12 +52,12 @@
     +Tab::
         if( ImeSelectorIsOpen() ){
             if( ImeSelectorGetSelectIndex() == 1 ){
-                ImeSelectorOpen(false)
+                ImeSelectorClose()
             }
             else {
                 ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
                 if( ImeSelectorGetColumn() >= ImeSelectorGetSelectIndex() ){
-                    ImeSelectorOpen(true, false)
+                    ImeSelectorOpen()
                 }
             }
             ImeTooltipUpdate()
@@ -104,7 +103,7 @@
 
     -::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorOpen(true, true)
+            ImeSelectorOpen(true)
             ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
         }
         ImeTooltipUpdate()
@@ -112,7 +111,7 @@
 
     =::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorOpen(true, true)
+            ImeSelectorOpen(true)
             ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
         }
         ImeTooltipUpdate()
@@ -174,7 +173,8 @@
                     ImeSelectorOffsetSelectIndex(+1)
                 }
             }
-            ImeSelectorFixupSelectIndex()
+            ; We call it for `ImeSelectorFixupSelectIndex`
+            ImeSelectorClose()
         }
         ImeTooltipUpdate()
     return
@@ -186,7 +186,7 @@
             {
                 ImeSelectorSetSelectIndex(1)
             }
-            ImeSelectorOpen(true, false)
+            ImeSelectorOpen()
         } else {
             ImeSelectorOffsetSelectIndex(+1)
         }

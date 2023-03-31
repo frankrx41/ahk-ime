@@ -19,5 +19,5 @@ PutCharacterWordByWord(select_index, offset)
     string := ImeTranslatorResultGetWord(split_index, select_index)
     PutCharacter( SubStr(string, offset, 1) )
     ImeInputterClearString()
-    ImeSelectorOpen(false)
+    ImeSelectorClose()
 }

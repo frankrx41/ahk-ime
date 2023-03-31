@@ -8,22 +8,29 @@ ImeSelectorInitialize()
 
 ;*******************************************************************************
 ;
-ImeSelectorOpen(open, more := false)
+ImeSelectorOpen(multiple:=false)
 {
     local
     global ime_selector_is_open
     global ime_selector_is_show_multiple
 
-    ime_selector_is_open := open
-    if( open && ImeInputterIsInputDirty() )
+    ime_selector_is_open := true
+    if( ImeInputterIsInputDirty() )
     {
         ImeInputterUpdateString("")
     }
-    if( more ){
-        more := ImeSelectorCanShowMultiple()
+
+    if( multiple ){
+        multiple := ImeSelectorCanShowMultiple()
     }
-    ime_selector_is_show_multiple := more
-    return
+    ime_selector_is_show_multiple := multiple
+}
+
+ImeSelectorClose(lock_result:=true)
+{
+    global ime_selector_is_open
+    ime_selector_is_open := false
+    ImeSelectorFixupSelectIndex(lock_result)
 }
 
 ImeSelectorIsOpen()
@@ -84,7 +91,7 @@ ImeSelectorToggleSingleMode()
 ; "woaini" => ["我爱你", "", ""]
 ; if first word select "卧", then update to ["卧", "爱你", ""]
 ; if last word select "泥", then update to ["我爱", "", "泥"]
-ImeSelectorFixupSelectIndex()
+ImeSelectorFixupSelectIndex(lock_result)
 {
     local
     ImeProfilerBegin(41)

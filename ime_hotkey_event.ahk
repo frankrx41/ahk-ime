@@ -22,8 +22,7 @@ HotkeyOnNumber(char)
         index := Floor((ImeSelectorGetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
         index += (char == 0 ? 10 : char)
         ImeSelectorSetSelectIndex(index)
-        ImeSelectorOpen(false)
-        ImeSelectorFixupSelectIndex()
+        ImeSelectorClose()
     }
     else
     {
@@ -65,10 +64,9 @@ HotkeyOnEsc()
 
     if( ImeSelectorIsOpen() ) {
         if( ImeSelectorShowMultiple() ) {
-            ImeSelectorOpen(true, false)
+            ImeSelectorOpen()
         } else {
-            ImeSelectorFixupSelectIndex()
-            ImeSelectorOpen(false)
+            ImeSelectorClose(false)
         }
     } else {
         ; Double esc clear all input
