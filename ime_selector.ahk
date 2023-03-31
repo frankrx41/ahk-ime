@@ -52,6 +52,7 @@ ImeSelectorToggleSingleMode()
 ImeSelectorApplyCaretSelectIndex(lock_result)
 {
     local
+    global ime_selector_select
     ImeProfilerBegin(41, true)
     debug_info := ""
 
@@ -61,6 +62,26 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 
     if( lock_result )
     {
+        ; Find if prev has a reuslt length include this
+        ; e.g. lock "我爱你", then can not change "爱你"
+        test_length := 0
+        loop
+        {
+            if( A_Index >= split_index ){
+                break
+            }
+            if( ImeSelectorIsSelectLock(A_Index) )
+            {
+                if( test_length + ImeSelectorGetLockLength(A_Index) >= split_index ){
+                    ImeSelectorUnLockWord(A_Index)
+                    break
+                }
+            }
+            else {
+                test_length += 1
+            }
+        }
+        ; Lock this
         select_word := ImeTranslatorResultGetWord(split_index, select_index)
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeSelectorLockWord(split_index, select_word, word_length)
@@ -73,7 +94,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         ImeInputterCaretMoveByWord(word_length)
     }
 
-    debug_info := "[" split_index "]->[" lock_result "]"
+    debug_info .= "[" split_index "]->[" lock_result "]"
     ImeProfilerEnd(41, debug_info)
 }
 
