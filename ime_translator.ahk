@@ -75,6 +75,23 @@ ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
     return 0
 }
 
+ImeTranslatorFindPossibleMaxLength(split_index, lock_split_index, ByRef next_words)
+{
+    local
+    ; `max_length` = this word until next unlock word
+    max_length := 1
+    loop % ImeTranslatorResultGetLength(split_index, 1)-1
+    {
+        check_index := split_index + A_Index
+        if( ImeTranslatorResultIsLock(check_index) || check_index == lock_split_index ) {
+            next_words := "???"
+            break
+        }
+        max_length += 1
+    }
+    return max_length
+}
+
 ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_length := 0)
 {
     local
@@ -87,7 +104,7 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
     loop % ime_translator_result_filtered.Length()
     {
         split_index := A_Index
-
+        debug_info .= "`n  - (" skip_word_count ") "
         if( skip_word_count )
         {
             Assert( split_index != lock_split_index )
@@ -95,7 +112,8 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
             ImeTranslatorResultSetSelectIndex(split_index, 0, false, skip_word, 1)
             skip_word_count -= 1
             skip_words := SubStr(skip_words, 2)
-            debug_info .= "`n  - Skp: [" split_index "]->[" 0 "]+""" skip_word """+[" skip_words "]"
+            select_index := 0
+            first_select_word := "  "
         }
         else
         {
@@ -105,15 +123,7 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
             select_is_lock := ImeTranslatorResultIsLock(split_index)
 
             ; `max_length` = this word until next unlock word
-            max_length := 1
-            loop % ImeTranslatorResultGetLength(split_index, 1)-1
-            {
-                check_index := split_index + A_Index
-                if( ImeTranslatorResultIsLock(check_index) || check_index == lock_split_index ) {
-                    break
-                }
-                max_length += 1
-            }
+            max_length := ImeTranslatorFindPossibleMaxLength(split_index, lock_split_index, next_words)
 
             if( split_index == lock_split_index )
             {
@@ -132,15 +142,9 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
                 {
                     select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
                 }
-                else
-                {
-                    select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
-                    ; select_index := ImeTranslatorFindStartWithResultIndex(split_index, max_length)
-                }
                 select_word := ImeTranslatorResultGetWord(split_index, select_index)
                 select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
                 update_word_length := select_word_length
-                debug_info .= "`n    - " max_length
             }
             else
             {
@@ -165,8 +169,8 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
             skip_word_count := select_word_length-1
             skip_words .= SubStr(select_word, 2)
             first_select_word := SubStr(select_word, 1, 1)
-            debug_info .= "`n  - Set: [" split_index "]->[" select_index "]+""" first_select_word """+[" skip_words "(" skip_word_count ")] max: " max_length
         }
+        debug_info .= "[" split_index "]->[" select_index "]+""" first_select_word """+[" skip_words "(" skip_word_count ")]"
     }
     ImeProfilerEnd(32, debug_info)
     Assert(StrLen(skip_words) == 0, skip_words "(" Asc(skip_words) ")")
