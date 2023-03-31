@@ -169,7 +169,7 @@
                 ImeInputterUpdateString("")
             } else {
                 if( ImeSelectorGetSelectIndex() >= 4 ) {
-                    ImeSelectorResetSelectIndex()
+                    ImeSelectorSetSelectIndex(1)
                 } else {
                     ImeSelectorOffsetSelectIndex(+1)
                 }

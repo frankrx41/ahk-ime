@@ -57,11 +57,6 @@ ImeSelectorGetSelectIndex()
     return ImeTranslatorResultGetSelectIndex(split_index)
 }
 
-ImeSelectorResetSelectIndex()
-{
-    ImeTranslatorResultSetSelectIndex(1,1)
-}
-
 ImeSelectorSetSelectIndex(index)
 {
     local
