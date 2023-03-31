@@ -33,6 +33,8 @@ Assert(bool, str:="", deepness:=5, show_msg:=false)
         if( show_msg ){
             Msgbox, % debug_info
         }
-        ImeProfilerSetDebugInfo(4, "Assert: " CallStack(1) ": """ str """")
+        call_stack_str := RegExReplace(CallStack(1), "^.*\\")
+        ImeProfilerBegin(4)
+        ImeProfilerEnd(4, "`n  - " call_stack_str " """ str """")
     }
 }
