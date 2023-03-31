@@ -61,6 +61,20 @@ ImeTranslatorUpdateResult(input_split, radical_list)
     }
 }
 
+ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
+{
+    local
+    loop % ImeTranslatorResultGetListLength(split_index)
+    {
+        test_len := ImeTranslatorResultGetLength(split_index, A_Index)
+        if( test_len <= max_length )
+        {
+            return A_Index
+        }
+    }
+    return 0
+}
+
 ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_length := 0)
 {
     local
@@ -116,18 +130,10 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
                 ; Find a result the no longer than `max_length`
                 if( select_index == 0 || select_word_length > max_length )
                 {
-                    loop % ImeTranslatorResultGetListLength(split_index)
-                    {
-                        test_len := ImeTranslatorResultGetLength(split_index, A_Index)
-                        if( test_len <= max_length )
-                        {
-                            select_index := A_Index
-                            select_word_length := test_len
-                            update_word_length := test_len
-                            select_word := ImeTranslatorResultGetWord(split_index, select_index)
-                            break
-                        }
-                    }
+                    select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
+                    select_word := ImeTranslatorResultGetWord(split_index, select_index)
+                    select_word_length := test_len
+                    update_word_length := select_word_length
                 }
             }
             else
@@ -135,10 +141,14 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
                 select_word := ImeTranslatorResultGetSelectWord(split_index)
                 if( select_word )
                 {
+                    select_word := SubStr(select_word, 1, max_length)
                     select_index := ImeTranslatorResultFindIndex(split_index, select_word, max_length)
-                    Assert( select_index, select_word "," lock_word )
-                } else {
-                    select_index := 1
+                    ; "h" "红红火火" change and lock last "h" cause miss "红红火"
+                    ; Assert( select_index, select_index "," select_word )
+                }
+                if( !select_index )
+                {
+                    select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
                     select_word := ImeTranslatorResultGetWord(split_index, select_index)
                 }
                 select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
