@@ -125,16 +125,16 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
                 update_word_length := lock_word_length
             }
             else
-            if( !select_is_lock && )
+            if( !select_is_lock )
             {
                 ; Find a result the no longer than `max_length`
                 if( select_index == 0 || select_word_length > max_length )
                 {
                     select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
-                    select_word := ImeTranslatorResultGetWord(split_index, select_index)
-                    select_word_length := test_len
-                    update_word_length := select_word_length
                 }
+                select_word := ImeTranslatorResultGetWord(split_index, select_index)
+                select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
+                update_word_length := select_word_length
             }
             else
             {
