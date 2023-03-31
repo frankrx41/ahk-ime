@@ -31,7 +31,7 @@ ImeInputterClearPrevSplitted()
     global ime_inputter_split_indexs
 
     ime_input_string := ImeInputStringClearPrevSplitted(ime_input_string, ime_inputter_split_indexs, ime_input_caret_pos)
-    ImeSelectorSetSelectIndex(1)
+    ImeSelectorSetCaretSelectIndex(1)
     ImeInputterUpdateString("", true)
 }
 
@@ -49,7 +49,7 @@ ImeInputterClearLastSplitted()
     else
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos)
-        ImeSelectorSetSelectIndex(1)
+        ImeSelectorSetCaretSelectIndex(1)
         ImeInputterUpdateString("", true)
     }
 }
@@ -77,7 +77,7 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     if( ImeSelectorIsOpen() )
     {
         input_char := Format("{:U}", input_char)
-        ImeSelectorSetSelectIndex(1)
+        ImeSelectorSetCaretSelectIndex(1)
     }
     if( IsSymbol(input_char) )
     {

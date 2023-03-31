@@ -19,9 +19,9 @@ HotkeyOnNumber(char)
     if( ImeSelectorIsOpen() )
     {
         ; Select index
-        index := Floor((ImeSelectorGetSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
+        index := Floor((ImeSelectorGetCaretSelectIndex()-1) / ImeSelectorGetColumn()) * ImeSelectorGetColumn()
         index += (char == 0 ? 10 : char)
-        ImeSelectorSetSelectIndex(index)
+        ImeSelectorSetCaretSelectIndex(index)
         ImeSelectorClose()
     }
     else

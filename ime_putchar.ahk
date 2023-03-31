@@ -7,7 +7,7 @@ PutCharacter(str, mode:=""){
 PutCandidateCharacter()
 {
     local
-    PutCharacter( ImeTranslatorGetOutputString() )
+    PutCharacter( ImeSelectorGetOutputString() )
     ImeInputterClearString()
 }
 

@@ -24,13 +24,13 @@
     return
 
     ]::
-        PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 0)
+        PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 0)
         ImeSelectorClose()
         ImeTooltipUpdate()
     return
 
     [::
-        PutCharacterWordByWord(ImeSelectorGetSelectIndex(), 1)
+        PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 1)
         ImeSelectorClose()
         ImeTooltipUpdate()
     return
@@ -41,7 +41,7 @@
             if( !ImeSelectorShowMultiple() && ImeSelectorCanShowMultiple() ) {
                 ImeSelectorOpen(true)
             } else {
-                ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
+                ImeSelectorOffsetCaretSelectIndex(+ImeSelectorGetColumn())
             }
         } else {
             ImeSelectorOpen()
@@ -51,12 +51,12 @@
 
     +Tab::
         if( ImeSelectorIsOpen() ){
-            if( ImeSelectorGetSelectIndex() == 1 ){
+            if( ImeSelectorGetCaretSelectIndex() == 1 ){
                 ImeSelectorClose()
             }
             else {
-                ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
-                if( ImeSelectorGetColumn() >= ImeSelectorGetSelectIndex() ){
+                ImeSelectorOffsetCaretSelectIndex(-ImeSelectorGetColumn())
+                if( ImeSelectorGetColumn() >= ImeSelectorGetCaretSelectIndex() ){
                     ImeSelectorOpen()
                 }
             }
@@ -85,18 +85,18 @@
 
     ,::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
+            ImeSelectorOffsetCaretSelectIndex(-ImeSelectorGetColumn())
         } else {
-            ImeSelectorOffsetSelectIndex(-1)
+            ImeSelectorOffsetCaretSelectIndex(-1)
         }
         ImeTooltipUpdate()
     return
 
     .::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
+            ImeSelectorOffsetCaretSelectIndex(+ImeSelectorGetColumn())
         } else {
-            ImeSelectorOffsetSelectIndex(+1)
+            ImeSelectorOffsetCaretSelectIndex(+1)
         }
         ImeTooltipUpdate()
     return
@@ -104,7 +104,7 @@
     -::
         if( ImeSelectorIsOpen() ){
             ImeSelectorOpen(true)
-            ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
+            ImeSelectorOffsetCaretSelectIndex(-ImeSelectorGetColumn())
         }
         ImeTooltipUpdate()
     return
@@ -112,7 +112,7 @@
     =::
         if( ImeSelectorIsOpen() ){
             ImeSelectorOpen(true)
-            ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
+            ImeSelectorOffsetCaretSelectIndex(+ImeSelectorGetColumn())
         }
         ImeTooltipUpdate()
     return
@@ -120,7 +120,7 @@
     ; 左右键移动光标
     Left::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorOffsetSelectIndex(-ImeSelectorGetColumn())
+            ImeSelectorOffsetCaretSelectIndex(-ImeSelectorGetColumn())
         } else {
             ImeInputterCaretMoveByWord(-1)
         }
@@ -129,7 +129,7 @@
 
     Right::
         if( ImeSelectorIsOpen() ){
-            ImeSelectorOffsetSelectIndex(+ImeSelectorGetColumn())
+            ImeSelectorOffsetCaretSelectIndex(+ImeSelectorGetColumn())
         } else {
             ImeInputterCaretMoveByWord(+1)
         }
@@ -162,15 +162,15 @@
     ; 上下选择
     Up::
         if( ImeSelectorIsOpen() ) {
-            ImeSelectorOffsetSelectIndex(-1)
+            ImeSelectorOffsetCaretSelectIndex(-1)
         } else {
             if( ImeInputterIsInputDirty() ) {
                 ImeInputterUpdateString("")
             } else {
-                if( ImeSelectorGetSelectIndex() >= 4 ) {
-                    ImeSelectorSetSelectIndex(1)
+                if( ImeSelectorGetCaretSelectIndex() >= 4 ) {
+                    ImeSelectorSetCaretSelectIndex(1)
                 } else {
-                    ImeSelectorOffsetSelectIndex(+1)
+                    ImeSelectorOffsetCaretSelectIndex(+1)
                 }
                 ; We call it for `ImeSelectorFixupSelectIndex`
                 ImeSelectorClose()
@@ -182,12 +182,12 @@
     ; 如果没有展开候选框则展开之，否则调整候选框的选项
     Down::
         if( ImeSelectorIsOpen() ) {
-            ImeSelectorOffsetSelectIndex(+1)
+            ImeSelectorOffsetCaretSelectIndex(+1)
         } else {
             ImeSelectorOpen()
-            if( ImeSelectorGetSelectIndex() == 0 )
+            if( ImeSelectorGetCaretSelectIndex() == 0 )
             {
-                ImeSelectorSetSelectIndex(1)
+                ImeSelectorSetCaretSelectIndex(1)
             }
         }
         ImeTooltipUpdate()

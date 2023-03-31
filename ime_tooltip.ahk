@@ -14,7 +14,7 @@ ImeTooltipGetDisplaySelectItems()
     loop % ImeTranslatorGetWordCount()
     {
         split_index     := A_Index
-        select_index    := ImeTranslatorResultGetSelectIndex(split_index)
+        select_index    := ImeSelectorGetSelectIndex(split_index)
         if( select_index == 0 ){
             continue
         }
@@ -96,8 +96,8 @@ ImeTooltipGetDisplayInputString()
     loop % ImeTranslatorGetWordCount()
     {
         split_index     := A_Index
-        select_index    := ImeTranslatorResultGetSelectIndex(split_index)
-        select_lock     := ImeTranslatorResultIsLock(split_index)
+        select_index    := ImeSelectorGetSelectIndex(split_index)
+        select_lock     := ImeSelectorIsSelectLock(split_index)
         selected_word   := ImeTranslatorResultGetWord(split_index, select_index)
         if( select_index != 0 )
         {
@@ -174,8 +174,8 @@ ImeTooltipUpdate(tooltip_pos := "")
 
         split_index := ImeInputterGetCaretSplitIndex()
         extern_info := ""
-        extern_info .= "[" ImeTranslatorResultGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
-        radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeTranslatorResultGetSelectIndex(split_index)))
+        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
         radical_words := ""
         loop, % radical_list.Length()
         {
@@ -183,7 +183,7 @@ ImeTooltipUpdate(tooltip_pos := "")
             radical_words .= radical_word ;. PinyinRadicalGetPinyin(radical_word)
         }
         extern_info .= " {" radical_words "}"
-        extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeTranslatorResultGetSelectIndex(split_index)) ")"
+        extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
 
         ; Debug info
         debug_tip := ""
