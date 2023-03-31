@@ -30,7 +30,7 @@ ImeProfilerBegin(index, clear_info:=false)
 ImeProfilerEnd(index, debug_info:="")
 {
     global ime_profiler
-    Assert(ime_profiler[index, 4] != 0,index,true)
+    Assert(ime_profiler[index, 4] != 0, "`nCall ``ImeProfilerEnd`` without ``ImeProfilerBegin``: " index,true)
     ime_profiler[index, 1] += A_TickCount - ime_profiler[index, 4]
     ime_profiler[index, 2] .= debug_info
     ime_profiler[index, 4] := 0

@@ -18,11 +18,14 @@ global DllFolder        := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
 ImeProfilerInitialize()
 
 ImeSelectMenuInitialize()
-ImeInputterInitialize()
+
+ImeSelectorInitialize()
 ImeTranslatorInitialize()
+
+ImeInputterInitialize()
+
 ImeDBInitialize()
 PinyinInitialize()
-ImeSelectorInitialize()
 ImeHotkeyInitialize()
 
 ; tooltip

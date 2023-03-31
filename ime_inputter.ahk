@@ -15,12 +15,14 @@ ImeInputterClearString()
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_dirty
+    global ime_inputter_split_indexs
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
     ime_input_dirty := true
+    ime_inputter_split_indexs := []
     ImeProfilerClear()
-    ImeInputterUpdateString("")
+    ImeSelectorClear()
     return
 }
 
@@ -106,7 +108,6 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     global ime_inputter_split_indexs
     global ime_input_dirty
 
-    ImeProfilerBegin(12, true)
     should_update_result := false
     ; If no input_char or input_char is not alphabet, try update
     if( input_char ) {
@@ -122,33 +123,41 @@ ImeInputterUpdateString(input_char, is_delet:=false)
         should_update_result := true
     }
 
-    debug_info := ""
-    input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
-    ; Update result
-    if( should_update_result && ime_input_dirty )
+    if( !ime_input_string && is_delet )
     {
-        debug_info .= "[" input_split "]"
-        if( is_delet && input_split )
+        ImeInputterClearString()
+    }
+    else
+    {
+        ImeProfilerBegin(12, true)
+        debug_info := ""
+        Assert(ime_input_string)
+        input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
+        ; Update result
+        if( should_update_result && ime_input_dirty )
         {
-            index := ImeInputterGetCaretSplitIndex()
-            remove_count := radical_list.Length() - index + 1
-            radical_list.RemoveAt(index, remove_count)
-            loop, % remove_count
+            debug_info .= "[" input_split "]"
+            if( is_delet && input_split )
             {
-                input_split := SplitWordRemoveLastWord(input_split)
+                index := ImeInputterGetCaretSplitIndex()
+                remove_count := radical_list.Length() - index + 1
+                radical_list.RemoveAt(index, remove_count)
+                loop, % remove_count
+                {
+                    input_split := SplitWordRemoveLastWord(input_split)
+                }
+                debug_info .= "->[" input_split "]"
             }
-            debug_info .= "->[" input_split "]"
+            ImeTranslatorUpdateResult(input_split, radical_list)
+            ime_input_dirty := false
         }
-        ImeTranslatorUpdateResult(input_split, radical_list)
-        ime_input_dirty := false
+        ; Because `is_delet` only update prev string, it always be dirty
+        if( is_delet ) {
+            ime_input_dirty := true
+        }
+        debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ") dirty: " ime_input_dirty
+        ImeProfilerEnd(12, debug_info)
     }
-
-    ; Because `is_delet` only update prev string, it always be dirty
-    if( is_delet ) {
-        ime_input_dirty := true
-    }
-    debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ") dirty: " ime_input_dirty
-    ImeProfilerEnd(12, debug_info)
 }
 
 ImeInputterIsInputDirty()

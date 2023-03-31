@@ -1,5 +1,9 @@
 ImeTranslatorInitialize()
 {
+    global ime_translator_result_const
+    global ime_translator_result_filtered
+    global ime_translator_radical_list
+
     ImeTranslatorClear()
 }
 
@@ -91,14 +95,13 @@ ImeTranslatorFixupSelectIndex()
     debug_info := ""
     ImeProfilerBegin(32, true)
     skip_word_count := 0
-    skip_words := ""
     loop % ime_translator_result_filtered.Length()
     {
         split_index := A_Index
-        debug_info .= "`n  - (" skip_word_count ") "
 
-        select_index := ImeSelectorGetSelectIndex(split_index)
-        select_index := !select_index ? 0 : select_index
+        origin_select_index := ImeSelectorGetSelectIndex(split_index)
+        select_index := !origin_select_index ? 0 : origin_select_index
+
         if( select_index ) {
             select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
         } else {
@@ -108,13 +111,13 @@ ImeTranslatorFixupSelectIndex()
 
         ; `max_length` = this word until next unlock word
         max_length := ImeTranslatorFindPossibleMaxLength(split_index, next_words)
+        debug_info .= "`n  - skip: " skip_word_count ", lock: " select_is_lock ", max_len: " max_length " "
 
         if( skip_word_count )
         {
             Assert( !ImeSelectorIsSelectLock(split_index) )
             select_index := 0
             skip_word_count -= 1
-            skip_words := SubStr(skip_words, 2)
         }
         else
         if( select_is_lock )
@@ -122,7 +125,7 @@ ImeTranslatorFixupSelectIndex()
             lock_word := ImeSelectorGetLockWord(split_index)
             ; TODO: use `lock_length`
             lock_length := ImeSelectorGetLockLength(split_index)
-            select_index := ImeTranslatorResultFindIndex(split_index, select_word, max_length)
+            select_index := ImeTranslatorResultFindIndex(split_index, lock_word, max_length)
             Assert(select_index)
             Assert(ImeTranslatorResultGetLength(split_index, select_index) >= lock_length)
         }
@@ -135,21 +138,21 @@ ImeTranslatorFixupSelectIndex()
             }
         }
 
-        ImeSelectorSetSelectIndex(split_index, select_index)
+        if( origin_select_index != select_index )
+        {
+            ImeSelectorSetSelectIndex(split_index, select_index)
+            debug_info .= "[" split_index "]->[" select_index "] "
+        }
 
         if( select_index )
         {
-            select_word := ImeTranslatorResultGetWord(split_index, select_index)
             select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
             skip_word_count := select_word_length-1
-            skip_words .= SubStr(select_word, 2)
-            first_select_word := SubStr(select_word, 1, 1)
+            debug_info .= "skip: " skip_word_count " "
         }
-
-        debug_info .= "[" split_index "]->[" select_index "]+""" first_select_word """+[" skip_words "(" skip_word_count ")]"
     }
     ImeProfilerEnd(32, debug_info)
-    Assert(StrLen(skip_words) == 0, skip_words "(" Asc(skip_words) ")")
+    Assert(skip_word_count == 0)
 }
 
 ImeTranslatorFilterResults(single_mode:=false)
