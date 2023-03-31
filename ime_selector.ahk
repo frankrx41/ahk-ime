@@ -104,7 +104,7 @@ ImeSelectorFixupSelectIndex(lock_result)
         lock_word := ImeTranslatorResultGetWord(split_index, select_index)
         lock_word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeTranslatorFixupSelectIndex(split_index, lock_word, lock_word_length)
-        debug_info .= "Lock: [" split_index "]:""" lock_word """"
+        debug_info .= "Lock: [" split_index "," select_index "]:""" lock_word """"
     }
     else
     {

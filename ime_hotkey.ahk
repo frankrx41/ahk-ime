@@ -172,9 +172,9 @@
                 } else {
                     ImeSelectorOffsetSelectIndex(+1)
                 }
+                ; We call it for `ImeSelectorFixupSelectIndex`
+                ImeSelectorClose()
             }
-            ; We call it for `ImeSelectorFixupSelectIndex`
-            ImeSelectorClose()
         }
         ImeTooltipUpdate()
     return
