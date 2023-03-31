@@ -127,17 +127,18 @@ ImeTranslatorFixupSelectIndex()
                 } else {
                     select_index := 1
                 }
+                current_length := ImeTranslatorResultGetLength(split_index, select_index)
             }
             ImeTranslatorResultSetSelectIndex(split_index, select_index, select_is_lock) 
             select_word := ImeTranslatorResultGetWord(split_index, select_index)
             skip_word_count := current_length-1
             skip_words .= SubStr(select_word, 2)
             first_select_word := SubStr(select_word, 1, 1)
-            debug_info .= "`n  - Set: [" split_index "]->[" select_index "]+""" first_select_word """+[" skip_words "(" skip_word_count ")]"
+            debug_info .= "`n  - Set: [" split_index "]->[" select_index "]+""" first_select_word """+[" skip_words "(" skip_word_count ")] max: " max_length
         }
     }
     ImeProfilerEnd(32, debug_info)
-    Assert(StrLen(skip_words) == 0, Asc(skip_words),true)
+    Assert(StrLen(skip_words) == 0, skip_words "(" Asc(skip_words) ")")
 }
 
 ImeTranslatorFilterResults(single_mode:=false)
