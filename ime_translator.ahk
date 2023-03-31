@@ -132,9 +132,15 @@ ImeTranslatorFixupSelectIndex(lock_split_index := 0, lock_word := "", lock_word_
                 {
                     select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
                 }
+                else
+                {
+                    select_index := ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
+                    ; select_index := ImeTranslatorFindStartWithResultIndex(split_index, max_length)
+                }
                 select_word := ImeTranslatorResultGetWord(split_index, select_index)
                 select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
                 update_word_length := select_word_length
+                debug_info .= "`n    - " max_length
             }
             else
             {
