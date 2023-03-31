@@ -18,6 +18,7 @@ ImeTranslatorUpdateResult(input_split, radical_list)
 
     if( input_split )
     {
+        ImeProfilerBegin(30)
         ime_translator_radical_list := radical_list
         ime_translator_result_const := []
 
@@ -43,6 +44,7 @@ ImeTranslatorUpdateResult(input_split, radical_list)
             ime_translator_result_const.Push(translate_result)
             test_split_string := SplitWordRemoveFirstWord(test_split_string)
         }
+        ImeProfilerEnd(30)
         ImeTranslatorFilterResults()
     } else {
         ImeTranslatorClear()

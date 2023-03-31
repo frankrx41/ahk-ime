@@ -92,6 +92,7 @@ ImeSelectorToggleSingleMode()
 ImeSelectorFixupSelectIndex()
 {
     local
+    ImeProfilerBegin(41)
     ImeTranslatorFixupSelectIndex()
     if( !ImeInputterCaretIsAtEnd() )
     {
@@ -100,4 +101,5 @@ ImeSelectorFixupSelectIndex()
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
         ImeInputterCaretMoveByWord(word_length)
     }
+    ImeProfilerEnd(41)
 }
