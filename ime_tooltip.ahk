@@ -1,9 +1,24 @@
+ImeTooltipInitialize()
+{
+    local
+    font_size           := 13
+    font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
+    font_bold           := false
+    background_color    := "373832"
+    text_color          := "d4d4d4"
+    ToolTip(1, "", "Q0 B" background_color " T"  text_color " S" font_size, font_family, font_bold)
+}
+
+;*******************************************************************************
+;
 IsTraditionalComment(comment)
 {
     first_char := SubStr(comment, 1, 1)
     return InStr("*+", first_char)
 }
 
+;*******************************************************************************
+;
 ImeTooltipGetDisplaySelectItems()
 {
     local

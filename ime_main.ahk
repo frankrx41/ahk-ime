@@ -9,6 +9,7 @@ if not A_IsAdmin
     Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
+
 ;*******************************************************************************
 ; Global variable
 global DllFolder    := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
@@ -17,29 +18,29 @@ global ime_version  := 0.10
 ;*******************************************************************************
 ; Initialize
 ImeProfilerInitialize()
-
-ImeSelectMenuInitialize()
-
-ImeSelectorInitialize()
-ImeTranslatorInitialize()
-
 ImeInputterInitialize()
+
+; Selector
+ImeSelectMenuInitialize()
+ImeSelectorInitialize()
+
+; Translator
+ImeTranslatorInitialize()
 
 ImeDBInitialize()
 PinyinInitialize()
+
+ImeTooltipInitialize()
+
 ImeHotkeyInitialize()
-
-; tooltip
-ime_tooltip_font_size           := 13
-ime_tooltip_font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
-ime_tooltip_font_bold           := false
-ime_tooltip_background_color    := "373832"
-ime_tooltip_text_color          := "d4d4d4"
-ToolTip(1, "", "Q0 B" ime_tooltip_background_color " T"  ime_tooltip_text_color " S" ime_tooltip_font_size, ime_tooltip_font_family, ime_tooltip_font_bold)
-
+; We need to declare some variables then `ImeStateUpdateMode` used
+; `ImeStateUpdateMode` is call inside `ImeStateInitialize`
 ImeStateInitialize()
+
+; We should register hotkey after other modules are initialized
 ImeHotkeyRegisterInitialize()
 return
-;*******************************************************************************
 
+;*******************************************************************************
+;
 #Include, ime_include.ahk
