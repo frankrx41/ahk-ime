@@ -31,6 +31,12 @@ ImeSelectorGetCaretSelectIndex()
     return ImeSelectorGetSelectIndex(split_index)
 }
 
+ImeSelectorCancelCaretSelectIndex()
+{
+    split_index := ImeInputterGetCaretSplitIndex()
+    ImeSelectorSetSelectIndex(split_index, 0)
+}
+
 ImeSelectorSetCaretSelectIndex(select_index)
 {
     local

@@ -68,6 +68,7 @@ HotkeyOnEsc()
             ImeSelectMenuOpen()
         } else {
             ImeSelectMenuClose()
+            ImeSelectorCancelCaretSelectIndex()
         }
     } else {
         ; Double esc clear all input
