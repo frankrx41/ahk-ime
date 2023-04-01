@@ -4,8 +4,9 @@
 PinyinRadicalInitialize()
 {
     local
-    global ime_radical_table := {}
-    global ime_radicals_pinyin := {}
+    global ime_radical_table    := {}
+    global ime_radicals_pinyin  := {}
+    global ime_radical_atomic   := ""
 
     FileRead, file_content, data\radicals.txt
     Loop, Parse, file_content, `n, `r
@@ -22,12 +23,24 @@ PinyinRadicalInitialize()
 
     FileRead, file_content, data\radicals-pinyin.txt
     index := 0
+    radical_atomic_start := false
     Loop, Parse, file_content, `n, `r
     {
-        if( SubStr(A_LoopField, 1, 1) != ";" )
+        line := A_LoopField
+        if( line == "#radical_atomic_start" ) {
+            radical_atomic_start := true
+        }
+        if( line == "#radical_atomic_end" ) {
+            radical_atomic_start := false
+        }
+        if( line && SubStr(line, 1, 1) != ";" )
         {
-            arr := StrSplit(A_LoopField, " ")
+            arr := StrSplit(line, " ")
             ime_radicals_pinyin[arr[1]] := arr[2]
+            if( radical_atomic_start )
+            {
+                ime_radical_atomic .= arr[1]
+            }
         }
     }
     Assert(ime_radicals_pinyin.Count() != 0)
@@ -50,8 +63,8 @@ PinyinRadicalGetPinyin(single_radical)
 
 PinyinRadicalIsAtomic(single_word)
 {
-    static radical_atomic := "丨亅丿乛一乙乚丶匕冫丷厂刀刂儿阝几卩冂力冖凵人亻入厶亠匸讠廴又艹屮彳巛川辶寸大飞工弓廾己彐彑巾口马门宀女犭山彡尸饣士扌氵纟巳土囗兀夕小忄幺弋尢夂子贝灬长车歹斗方风父戈卝户戶戸火见斤耂毛木肀牛牜爿片攴攵气欠犬日氏礻手殳水瓦王韦文毋心牙曰月爫支止爪白癶甘瓜禾钅立龙矛皿母目疒鸟皮生石矢示罒田玄疋业衤臣虫而耳缶艮虍臼米齐肉色舌覀页先血羊聿至舟衣竹自羽糸糹貝采镸車辰赤辵豆谷見角克里卤麦身豕辛言邑酉酋豸走足靑雨齿長非阜金釒隶門靣飠鱼隹風革骨鬼韭面首韋香頁音"
-    return InStr(radical_atomic, single_word)
+    global ime_radical_atomic
+    return InStr(ime_radical_atomic, single_word)
 }
 
 PinyinRadicalIsFirstPart(test_radical, test_word)
