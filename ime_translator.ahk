@@ -32,19 +32,21 @@ ImeTranslatorUpdateResult(input_split, radical_list)
             find_split_string := SplitWordGetPrevWords(test_split_string)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
+                ; Get translate result
                 translate_result := PinyinGetTranslateResult(find_split_string, ImeDBGet())
                 if( translate_result.Length() == 0 ){
                     first_word := SplitWordGetFirstWord(find_split_string)
                     translate_result := [[first_word, first_word]]
                 }
             } else {
+                ; Add legacy text
                 find_split_string := EscapeCharsGetContent(find_split_string)
-                if( !RegexMatch(find_split_string, "^\s+$") ) {
-                    translate_result := [[find_split_string, find_split_string]]
-                } else {
-                    translate_result := [[find_split_string, ""]]
+                translate_result := [[find_split_string, find_split_string, 0, "", 1]]
+                if( RegexMatch(find_split_string, "^\s+$") ) {
+                    translate_result[1,2] := ""
                 }
             }
+            ; Insert result
             ime_translator_result_const.Push(translate_result)
             test_split_string := SplitWordRemoveFirstWord(test_split_string)
         }
@@ -161,7 +163,7 @@ ImeTranslatorFixupSelectIndex()
         }
     }
     ImeProfilerEnd(32, debug_info)
-    Assert(skip_word_count == 0)
+    Assert(skip_word_count == 0, skip_word_count)
 }
 
 ImeTranslatorFilterResults(single_mode:=false)
