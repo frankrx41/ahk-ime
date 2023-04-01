@@ -69,11 +69,15 @@ PinyinRadicalIsAtomic(single_word)
 
 PinyinRadicalIsFirstPart(test_radical, test_word, ByRef remain_radicals)
 {
+    if( PinyinRadicalIsAtomic(test_word) )
+    {
+        return false
+    }
     radical_word_list := PinyinRadicalWordGetRadical(test_word)
     first_word := radical_word_list[1]
     test_pinyin := PinyinRadicalGetPinyin(first_word)
 
-    if( SubStr(test_radical, 1, 1) == test_pinyin )
+    if( test_pinyin == SubStr(test_radical, 1, 1) )
     {
         remain_radicals := []
         loop, % radical_word_list.Length()-1
@@ -82,15 +86,33 @@ PinyinRadicalIsFirstPart(test_radical, test_word, ByRef remain_radicals)
         }
         return true
     }
-    return false
+    else
+    {
+        Assert(first_word != test_word, test_word, true)
+        return PinyinRadicalIsFirstPart(test_radical, first_word, remain_radicals)
+    }
 }
 
 PinyinRadicalIsLastPart(test_radical, test_word)
 {
+    if( PinyinRadicalIsAtomic(test_word) )
+    {
+        return false
+    }
+
     radical_word_list := PinyinRadicalWordGetRadical(test_word)
     last_word := radical_word_list[radical_word_list.Length()]
     test_pinyin := PinyinRadicalGetPinyin(last_word)
-    return InStr(test_pinyin, SubStr(test_radical, 0, 1))
+
+    if( InStr(test_pinyin, SubStr(test_radical, 0, 1)) )
+    {
+        return true
+    }
+    else
+    {
+        Assert(last_word != test_word, test_word, true)
+        return PinyinRadicalIsLastPart(test_radical, last_word)
+    }
 }
 
 
@@ -140,7 +162,7 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         {
             first_word := radical_word_list[1]
             ; remain_radicals := []
-            if( !PinyinRadicalIsAtomic(first_word) && PinyinRadicalIsFirstPart(test_radical, first_word, remain_radicals) )
+            if( PinyinRadicalIsFirstPart(test_radical, first_word, remain_radicals) )
             {
                 test_radical := SubStr(test_radical, 2)
                 radical_word_list.RemoveAt(1)
@@ -156,7 +178,7 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         if( !has_part_same )
         {
             last_word := radical_word_list[radical_word_list.Length()]
-            if( !PinyinRadicalIsAtomic(last_word) && PinyinRadicalIsLastPart(test_radical, last_word) )
+            if( PinyinRadicalIsLastPart(test_radical, last_word) )
             {
                 test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
                 radical_word_list.RemoveAt(radical_word_list.Length())
