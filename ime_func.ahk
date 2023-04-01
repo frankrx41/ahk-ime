@@ -94,3 +94,11 @@ GetSelectText(timeout := 0.5)
         return copyboard
     }
 }
+
+ScriptRestart()
+{
+    ToolTip, Reload %A_ScriptName%
+    Sleep, 500
+    ToolTip,
+    Reload
+}
