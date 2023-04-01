@@ -9,12 +9,13 @@ if not A_IsAdmin
     Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
-Menu, Tray, Tip, AHK IME `nv0.09 (dev)
+;*******************************************************************************
+; Global variable
+global DllFolder    := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
+global ime_version  := 0.10
 
 ;*******************************************************************************
-; Ime Initialize
-global DllFolder        := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-
+; Initialize
 ImeProfilerInitialize()
 
 ImeSelectMenuInitialize()

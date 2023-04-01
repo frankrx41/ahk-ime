@@ -1,6 +1,10 @@
 
-#Include, ime_assert.ahk
 #Include, ime_func.ahk
+#Include, ime_assert.ahk
+#Include, ime_profiler.ahk
+#Include, ime_debug.ahk
+
+#Include, ime_version.ahk
 
 #Include, ime_hotkey.ahk
 #Include, ime_hotkey_event.ahk
@@ -33,11 +37,9 @@
 #Include, ime_result_single_word.ahk
 #Include, ime_result_uniquify.ahk
 
-#Include, ime_profiler.ahk
 
 #Include, lib\ToolTip.ahk
 #Include, lib\SQLiteDB.ahk
 #Include, lib\JSON.ahk
 
 #Include, ime_word_creator.ahk
-#Include, ime_debug.ahk

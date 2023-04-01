@@ -24,7 +24,7 @@ ImeDebugTipAppend(ByRef debug_tip, index, max_length := 100)
 ImeDebugGetDisplayText()
 {
     local debug_tip := ""
-    if( A_IsCompiled )
+    if( !IsDebugVersion() )
     {
         return debug_tip
     }

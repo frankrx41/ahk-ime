@@ -15,6 +15,8 @@ ImeStateInitialize()
     DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
     ; Notice: if `ime_mode_language` same as here, state will not update
     ImeStateUpdateMode("cn")
+
+    Menu, Tray, Tip, % "AHK IME `n" GetVersionText()
 }
 
 ImeStateEventProcHook(phook, msg, hwnd)
