@@ -223,7 +223,6 @@
     ; Create word gui
     !`::
         WordCreatorUI(GetSelectText())
-        PinyinHistoryClear()
     return
 
     ; F5: reload
