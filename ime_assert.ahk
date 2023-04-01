@@ -52,4 +52,3 @@ CallerName(lv := 1)
     msg := file_name " (" oEx.Line ") : " oExPrev.What
     return msg
 }
-

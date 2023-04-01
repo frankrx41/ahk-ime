@@ -16,6 +16,7 @@ ImeStateInitialize()
     ; Notice: if `ime_mode_language` same as here, state will not update
     ImeStateUpdateMode("cn")
 
+    ; Update system tray
     Menu, Tray, Tip, % "AHK IME `n" GetVersionText()
 }
 
