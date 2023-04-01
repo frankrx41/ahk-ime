@@ -127,13 +127,15 @@ ImeInputterUpdateString(input_char, is_delet:=false)
     if( is_delet ) {
         ime_input_dirty := true
         should_update_result := true
+
+        if( !ime_input_string ) {
+            ImeInputterClearString()
+        } else {
+            ImeProfilerClear()
+        }
     }
 
-    if( !ime_input_string && is_delet )
-    {
-        ImeInputterClearString()
-    }
-    else
+    if( ime_input_string || is_delet )
     {
         ImeProfilerBegin(12, true)
         debug_info := ""
