@@ -20,11 +20,10 @@ PinyinSplitTableInitialize()
 {
     global split_weight_table := {}
     FileRead, file_content, data\pinyin-split.txt
-    Loop, Parse, file_content, `n
+    Loop, Parse, file_content, `n, `r
     {
-        key := RTrim(A_LoopField, "`r")
-        if( key ){
-            split_weight_table[key] := 1
+        if( A_LoopField ){
+            split_weight_table[A_LoopField] := 1
         }
     }
     Assert(split_weight_table.Count() != 0)

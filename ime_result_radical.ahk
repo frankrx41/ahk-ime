@@ -8,21 +8,27 @@ PinyinRadicalInitialize()
     global ime_radicals_pinyin := {}
 
     FileRead, file_content, data\radicals.txt
-    Loop, Parse, file_content, `n
+    Loop, Parse, file_content, `n, `r
     {
-        ; Split each line by the tab character
-        arr := StrSplit(StrReplace(A_LoopField, "`r"), A_Tab,, 2)
-        data := StrSplit(arr[2], " ")
-        ime_radical_table[arr[1]] := data
+        if( SubStr(A_LoopField, 1, 1) != ";" )
+        {
+            ; Split each line by the tab character
+            arr := StrSplit(A_LoopField, A_Tab,, 2)
+            data := StrSplit(arr[2], " ")
+            ime_radical_table[arr[1]] := data
+        }
     }
     Assert(ime_radical_table.Count() != 0)
 
     FileRead, file_content, data\radicals-pinyin.txt
     index := 0
-    Loop, Parse, file_content, `n
+    Loop, Parse, file_content, `n, `r
     {
-        arr := StrSplit(StrReplace(A_LoopField, "`r"), " ")
-        ime_radicals_pinyin[arr[1]] := arr[2]
+        if( SubStr(A_LoopField, 1, 1) != ";" )
+        {
+            arr := StrSplit(A_LoopField, " ")
+            ime_radicals_pinyin[arr[1]] := arr[2]
+        }
     }
     Assert(ime_radicals_pinyin.Count() != 0)
 }
