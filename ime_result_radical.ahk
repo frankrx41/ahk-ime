@@ -67,12 +67,22 @@ PinyinRadicalIsAtomic(single_word)
     return InStr(ime_radical_atomic, single_word)
 }
 
-PinyinRadicalIsFirstPart(test_radical, test_word)
+PinyinRadicalIsFirstPart(test_radical, test_word, ByRef remain_radicals)
 {
     radical_word_list := PinyinRadicalWordGetRadical(test_word)
     first_word := radical_word_list[1]
     test_pinyin := PinyinRadicalGetPinyin(first_word)
-    return SubStr(test_radical, 1, 1) == test_pinyin
+
+    if( SubStr(test_radical, 1, 1) == test_pinyin )
+    {
+        remain_radicals := []
+        loop, % radical_word_list.Length()-1
+        {
+            remain_radicals[A_Index] := radical_word_list[A_Index+1]
+        }
+        return true
+    }
+    return false
 }
 
 PinyinRadicalIsLastPart(test_radical, test_word)
@@ -129,10 +139,15 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         if( !has_part_same )
         {
             first_word := radical_word_list[1]
-            if( !PinyinRadicalIsAtomic(first_word) && PinyinRadicalIsFirstPart(test_radical, first_word) )
+            ; remain_radicals := []
+            if( !PinyinRadicalIsAtomic(first_word) && PinyinRadicalIsFirstPart(test_radical, first_word, remain_radicals) )
             {
                 test_radical := SubStr(test_radical, 2)
                 radical_word_list.RemoveAt(1)
+                loop, % remain_radicals.Length()
+                {
+                    radical_word_list.InsertAt(1, remain_radicals[A_Index])
+                }
                 has_part_same := true
             }
         }
