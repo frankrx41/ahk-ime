@@ -246,11 +246,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
         if( ime_input_caret_pos == StrLen(ime_input_string) ){
             word_pos := 0
         }
-        else
-        if( SubStr(ime_input_string, ime_input_caret_pos-1, 1) == " " )
-        {
-            word_pos := ime_input_caret_pos-1
-        } else {
+        else {
             word_pos := ime_input_caret_pos
             index := 0
             loop
