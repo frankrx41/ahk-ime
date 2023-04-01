@@ -261,8 +261,6 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
                 index += 1
                 begin_pos := word_pos
                 word_pos := ImeInputterGetRightWordPos(word_pos)
-                ; ImeProfilerBegin(1)
-                ; ImeProfilerEnd(1, "`n  - " begin_pos "," word_pos ",""" SubStr(ime_input_string, ime_input_caret_pos, 1) """")
                 if( graceful && SubStr(ime_input_string, word_pos, 1) == " " && begin_pos+1 != word_pos ) {
                     word_pos := word_pos-1
                 }
