@@ -15,6 +15,16 @@ CallStack(deepness = 5, printLines = 0)
     return stack
 }
 
+; lv == 1 should only work when use in `Assert`
+CallerName(lv := 1)
+{
+    oEx := Exception("", lv-2)
+    oExPrev := Exception("", lv-3)
+    file_name := RegExReplace(oEx.File, "^.*\\")
+    msg := file_name " (" oEx.Line ") : " oExPrev.What
+    return msg
+}
+
 Assert(bool, str:="", show_msgbox:=false)
 {
     local
@@ -31,8 +41,7 @@ Assert(bool, str:="", show_msgbox:=false)
         if( show_msgbox ){
             Msgbox, 18, Assert, % debug_info "`n" """" str """"
         }
-        call_stack_str := RegExReplace(CallStack(1), "^.*\\")
         ImeProfilerBegin(4)
-        ImeProfilerEnd(4, "`n  - " call_stack_str " """ str """")
+        ImeProfilerEnd(4, "`n  - " CallerName(0) " """ str """")
     }
 }
