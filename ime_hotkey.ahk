@@ -126,7 +126,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(-1)
+            ImeInputterCaretMoveByWord(-1, true)
         }
         ImeTooltipUpdate()
     return
@@ -135,7 +135,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(+1)
+            ImeInputterCaretMoveByWord(+1, true)
         }
         ImeTooltipUpdate()
     return
@@ -143,12 +143,12 @@
     ; Ctrl + Left/Right
     ; Move caret by a word
     ^Left::
-        ImeInputterCaretMoveByWord(-1)
+        ImeInputterCaretMoveByWord(-1, true)
         ImeTooltipUpdate()
     return
 
     ^Right::
-        ImeInputterCaretMoveByWord(+1)
+        ImeInputterCaretMoveByWord(+1, true)
         ImeTooltipUpdate()
     return
 

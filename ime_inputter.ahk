@@ -235,7 +235,8 @@ ImeInputterCaretMove(dir)
     }
 }
 
-ImeInputterCaretMoveByWord(dir)
+; graceful: take a white space move as a step
+ImeInputterCaretMoveByWord(dir, graceful:=false)
 {
     global ime_input_caret_pos
     global ime_input_string
@@ -244,24 +245,47 @@ ImeInputterCaretMoveByWord(dir)
     if( dir > 0 ){
         if( ime_input_caret_pos == StrLen(ime_input_string) ){
             word_pos := 0
+        }
+        else
+        if( SubStr(ime_input_string, ime_input_caret_pos-1, 1) == " " )
+        {
+            word_pos := ime_input_caret_pos-1
         } else {
             word_pos := ime_input_caret_pos
-            loop, % move_count
+            index := 0
+            loop
             {
+                if( index == move_count ) {
+                    break
+                }
+                index += 1
+                begin_pos := word_pos
                 word_pos := ImeInputterGetRightWordPos(word_pos)
+                ; ImeProfilerBegin(1)
+                ; ImeProfilerEnd(1, "`n  - " begin_pos "," word_pos ",""" SubStr(ime_input_string, ime_input_caret_pos, 1) """")
+                if( graceful && SubStr(ime_input_string, word_pos, 1) == " " && begin_pos+1 != word_pos ) {
+                    word_pos := word_pos-1
+                }
             }
-            ; if( word_pos == ime_input_caret_pos ){
-            ;     word_pos := StrLen(ime_input_string)
-            ; }
         }
     } else {
         if( ime_input_caret_pos == 0 ){
             word_pos := StrLen(ime_input_string)
         } else {
             word_pos := ime_input_caret_pos
-            loop, % move_count
+            index := 0
+            loop
             {
-                word_pos := ImeInputterGetLeftWordPos(word_pos)
+                if( index == move_count ) {
+                    break
+                }
+                if( graceful && SubStr(ime_input_string, word_pos, 1) == " " ) {
+                    index += 1
+                    word_pos := word_pos-1
+                } else {
+                    index += 1
+                    word_pos := ImeInputterGetLeftWordPos(word_pos)
+                }
             }
         }
     }
