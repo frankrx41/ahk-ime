@@ -33,7 +33,13 @@ ImeInputterClearPrevSplitted()
     global ime_input_caret_pos
     global ime_inputter_split_indexs
 
-    ime_input_string := ImeInputStringClearPrevSplitted(ime_input_string, ime_inputter_split_indexs, ime_input_caret_pos)
+    if( ime_input_caret_pos != 0 )
+    {
+        left_pos := SplittedIndexsGetLeftWordPos(split_indexs, ime_input_caret_pos)
+        ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, caret_pos+1)
+        ime_input_caret_pos := left_pos
+    }
+
     ImeSelectorSetCaretSelectIndex(1)
     ImeInputterUpdateString("", true)
 }
@@ -182,7 +188,7 @@ ImeInputterGetCaretSplitIndex()
     global ime_input_caret_pos
     global ime_inputter_split_indexs
 
-    return ImeInputStringGetPosSplitIndex(ime_input_caret_pos, ime_inputter_split_indexs)
+    return SplittedIndexsGetPosIndex(ime_inputter_split_indexs, ime_input_caret_pos)
 }
 
 ;*******************************************************************************
@@ -333,7 +339,7 @@ ImeInputterGetLeftWordPos(start_index)
 {
     local
     global ime_inputter_split_indexs
-    return ImeInputStringGetLeftWordPos(start_index, ime_inputter_split_indexs)
+    return SplittedIndexsGetLeftWordPos(ime_inputter_split_indexs, start_index)
 }
 
 ImeInputterGetRightWordPos(start_index)
@@ -341,5 +347,5 @@ ImeInputterGetRightWordPos(start_index)
     local
     global ime_inputter_split_indexs
 
-    return ImeInputStringGetRightWordPos(start_index, ime_inputter_split_indexs)
+    return SplittedIndexsGetRightWordPos(ime_inputter_split_indexs, start_index)
 }

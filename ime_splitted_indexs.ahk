@@ -1,17 +1,5 @@
-ImeInputStringClearPrevSplitted(input_string, split_indexs, ByRef caret_pos)
-{
-    check_index := caret_pos
-
-    if( check_index != 0 )
-    {
-        left_pos := ImeInputStringGetLeftWordPos(check_index, split_indexs)
-        input_string := SubStr(input_string, 1, left_pos) . SubStr(input_string, caret_pos+1)
-        caret_pos := left_pos
-    }
-    return input_string
-}
-
-ImeInputStringGetPosSplitIndex(caret_pos, split_indexs)
+; Action about splitted indexs
+SplittedIndexsGetPosIndex(split_indexs, caret_pos)
 {
     if( split_indexs.Length() >= 1)
     {
@@ -27,19 +15,20 @@ ImeInputStringGetPosSplitIndex(caret_pos, split_indexs)
         }
         Assert(false, split_indexs.Length() "," caret_pos)
     }
+    return 1
 }
 
-ImeInputStringGetLeftWordPos(start_index, split_indexs)
+SplittedIndexsGetLeftWordPos(split_indexs, start_pos)
 {
     local
-    if( start_index == 0 ){
+    if( start_pos == 0 ){
         return 0
     }
     last_index := 0
     loop, % split_indexs.Length()
     {
         split_index := split_indexs[A_Index]
-        if( split_index >= start_index ){
+        if( split_index >= start_pos ){
             break
         }
         last_index := split_index
@@ -47,14 +36,14 @@ ImeInputStringGetLeftWordPos(start_index, split_indexs)
     return last_index
 }
 
-ImeInputStringGetRightWordPos(start_index, split_indexs)
+SplittedIndexsGetRightWordPos(split_indexs, start_pos)
 {
     local
-    last_index := start_index
+    last_index := start_pos
     loop, % split_indexs.Length()
     {
         split_index := split_indexs[A_Index]
-        if( split_index > start_index ){
+        if( split_index > start_pos ){
             last_index := split_index
             break
         }
