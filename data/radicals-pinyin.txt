@@ -65,7 +65,7 @@
 歺 E
 辵 C
 尢 Y
-夂 Z
+夂 Y
 ; 下面这行标记原子字开始
 #radical_atomic_start
 ; 上
@@ -111,8 +111,8 @@
 豸 Z
 ; 右
 刂 D
-卩 J
-卪 J
+卩 D
+卪 D
 ; 上左
 厂 C
 广 G
