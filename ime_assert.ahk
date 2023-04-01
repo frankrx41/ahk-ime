@@ -29,7 +29,7 @@ Assert(bool, str:="", show_msgbox:=false)
 
         FileAppend, %debug_info%, .\debug.log
         if( show_msgbox ){
-            Msgbox, % debug_info
+            Msgbox, 18, Assert, % debug_info "`n" """" str """"
         }
         call_stack_str := RegExReplace(CallStack(1), "^.*\\")
         ImeProfilerBegin(4)
