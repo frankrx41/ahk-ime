@@ -2,15 +2,15 @@
 ; Initialize
 PinyinSplitterTableInitialize()
 {
-    global split_weight_table := {}
+    global splitted_string_weight_table := {}
     FileRead, file_content, data\pinyin-split.txt
     Loop, Parse, file_content, `n, `r
     {
         if( A_LoopField ){
-            split_weight_table[A_LoopField] := 1
+            splitted_string_weight_table[A_LoopField] := 1
         }
     }
-    Assert(split_weight_table.Count() != 0)
+    Assert(splitted_string_weight_table.Count() != 0)
 }
 
 ;*******************************************************************************
@@ -55,12 +55,12 @@ PinyinSplitterMaxVowelsLength(input_str, index)
 
 PinyinSplitterIsInTable(left_initials, left_vowels, right_string)
 {
-    global split_weight_table
+    global splitted_string_weight_table
     right_string_len := StrLen(right_string)
     loop, 5
     {
         key := left_initials . left_vowels . "'" . SubStr(right_string, 1, A_Index)
-        if( split_weight_table.HasKey(Key) ){
+        if( splitted_string_weight_table.HasKey(Key) ){
             return true
         }
         if( A_Index >= right_string_len ){
