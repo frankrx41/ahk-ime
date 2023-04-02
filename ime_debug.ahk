@@ -47,8 +47,8 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 27)    ; TranslatorResultFilterSingleWord
     ImeDebugTipAppend(debug_tip, 28)    ; TranslatorResultUniquify
     ImeDebugTipAppend(debug_tip, 30)    ; ImeTranslatorUpdateResult
-    ImeDebugTipAppend(debug_tip, 31, 2000)  ; ImeTranslatorFilterResults
-    ImeDebugTipAppend(debug_tip, 32, 2000)  ; ImeTranslatorFixupSelectIndex
+    ImeDebugTipAppend(debug_tip, 31, 2000)  ; TranslatorResultListFilterResult
+    ImeDebugTipAppend(debug_tip, 32, 2000)  ; ImeSelectorFixupSelectIndex
     ImeDebugTipAppend(debug_tip, 41)    ; ImeSelectorApplyCaretSelectIndex
     ImeDebugTipAppend(debug_tip, 42, 2000)  ; SelectorResultSetSelectIndex
     ImeDebugTipAppend(debug_tip, 43)    ; SelectorResultLockWord
