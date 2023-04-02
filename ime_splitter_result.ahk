@@ -47,6 +47,61 @@ SplitterResultIsSkip(ByRef splitter_result, index)
 
 ;*******************************************************************************
 ;
+; Action about splitted indexs
+SplittedIndexsGetPosIndex(splitter_result, caret_pos)
+{
+    if( splitter_result.Length() >= 1)
+    {
+        if( SplitterResultGetEndPos(splitter_result, splitter_result.Length()) == caret_pos )
+        {
+            return splitter_result.Length()
+        }
+        loop % splitter_result.Length()
+        {
+            if( SplitterResultGetEndPos(splitter_result, A_Index) > caret_pos ){
+                return A_Index
+            }
+        }
+        Assert(false, SplitterResultGetDisplayText(splitter_result) "," caret_pos)
+    }
+    return 1
+}
+
+SplittedIndexsGetLeftWordPos(splitter_result, start_pos)
+{
+    local
+    if( start_pos == 0 ){
+        return 0
+    }
+    last_index := 0
+    loop, % splitter_result.Length()
+    {
+        split_index := SplitterResultGetEndPos(splitter_result, A_Index)
+        if( split_index >= start_pos ){
+            break
+        }
+        last_index := split_index
+    }
+    return last_index
+}
+
+SplittedIndexsGetRightWordPos(splitter_result, start_pos)
+{
+    local
+    last_index := start_pos
+    loop, % splitter_result.Length()
+    {
+        split_index := SplitterResultGetEndPos(splitter_result, A_Index)
+        if( split_index > start_pos ){
+            last_index := split_index
+            break
+        }
+    }
+    return last_index
+}
+
+;*******************************************************************************
+;
 SplitterResultGetDisplayText(splitter_result)
 {
     local

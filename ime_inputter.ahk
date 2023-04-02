@@ -4,8 +4,8 @@ ImeInputterInitialize()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global ime_inputter_splitted_indexs := []
     global ime_input_dirty
+    global ime_inputter_splitter_result := []
 
     ImeInputterClearString()
 }
@@ -17,12 +17,12 @@ ImeInputterClearString()
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_dirty
-    global ime_inputter_splitted_indexs
+    global ime_inputter_splitter_result
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
     ime_input_dirty     := true
-    ime_inputter_splitted_indexs := []
+    ime_inputter_splitter_result := []
     ImeSelectorClear()
     ImeTranslatorClear()
     return
@@ -32,11 +32,11 @@ ImeInputterClearPrevSplitted()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global ime_inputter_splitted_indexs
+    global ime_inputter_splitter_result
 
     if( ime_input_caret_pos != 0 )
     {
-        left_pos := SplittedIndexsGetLeftWordPos(ime_inputter_splitted_indexs, ime_input_caret_pos)
+        left_pos := SplittedIndexsGetLeftWordPos(ime_inputter_splitter_result, ime_input_caret_pos)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := left_pos
     }
@@ -86,7 +86,6 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 {
     global ime_input_caret_pos
     global ime_input_string
-    global ime_inputter_splitted_indexs
 
     if( ImeSelectMenuIsOpen() )
     {
@@ -116,7 +115,7 @@ ImeInputterUpdateString(input_char, is_delete:=false)
 {
     local
     global ime_input_string
-    global ime_inputter_splitted_indexs
+    global ime_inputter_splitter_result
 
     ImeProfilerClear()
 
@@ -135,10 +134,10 @@ ImeInputterUpdateString(input_char, is_delete:=false)
         }
 
         ; Splitter
-        ; splitted_input := PinyinSplitterInputString(ime_input_string, ime_inputter_splitted_indexs, radical_list)
+        ime_inputter_splitter_result := PinyinSplitterInputString(ime_input_string)
         ; Translator
         if( should_update ) {
-            ImeInputterCallTranslator(splitted_input, radical_list, is_delete)
+            ImeInputterCallTranslator(is_delete)
         }
     }
     else
@@ -153,9 +152,9 @@ ImeInputterUpdateString(input_char, is_delete:=false)
     }
 }
 
-ImeInputterCallTranslator(splitted_input, radical_list, is_delete)
+ImeInputterCallTranslator(is_delete)
 {
-    global ime_inputter_splitted_indexs
+    global ime_inputter_splitter_result
     global ime_input_string
     global ime_input_dirty
 
@@ -169,21 +168,34 @@ ImeInputterCallTranslator(splitted_input, radical_list, is_delete)
         ImeSelectorUnLockAfterWords(caret_splitted_index)
     }
     
-    debug_info .= "[" splitted_input "]"
-    Assert(splitted_input)
-    if( is_delete )
+    splitted_input := ""
+    radical_list := []
+    loop,% ime_inputter_splitter_result.Length()
     {
-        ; If is delete, update `radical_list` size and remove `splitted_input` after caret word
-        ; Translator use size of `radical_list` to check need update size
-        remove_count := ime_inputter_splitted_indexs.Length() - caret_splitted_index + 1
-        radical_list.RemoveAt(caret_splitted_index, remove_count)
-        splitted_input := SplittedInputRemoveLastWord(splitted_input, remove_count)
-        debug_info .= "->[" splitted_input "]"
+        splitted_input .= SplitterResultGetPinyin(ime_inputter_splitter_result, A_Index)
+        tone := SplitterResultGetTone(ime_inputter_splitter_result, A_Index)
+        if( tone == 0 ){
+            splitted_input .= "'"
+        } else {
+            splitted_input := tone
+        }
+        radical_list.Push(SplitterResultGetRadical(ime_inputter_splitter_result, A_Index))
     }
+    ; if( is_delete )
+    ; {
+    ;     ; If is delete, update `radical_list` size and remove `splitted_input` after caret word
+    ;     ; Translator use size of `radical_list` to check need update size
+    ;     ; TODO: Fix
+    ;     remove_count := ime_inputter_splitter_result.Length() - caret_splitted_index + 1
+    ;     radical_list.RemoveAt(caret_splitted_index, remove_count)
+    ;     splitted_input := SplittedInputRemoveLastWord(splitted_input, remove_count)
+    ;     debug_info .= "->[" splitted_input "]"
+    ; }
     ImeTranslatorUpdateResult(splitted_input, radical_list)
     ime_input_dirty := false
     
-    debug_info .= " (" radical_list.Length() "/" ime_inputter_splitted_indexs.Length() ") dirty: " ime_input_dirty
+    debug_info .= "[" splitted_input "]"
+    debug_info .= " (" radical_list.Length() "/" ime_inputter_splitter_result.Length() ") dirty: " ime_input_dirty
     ImeProfilerEnd(12, debug_info)
 }
 
@@ -198,9 +210,9 @@ ImeInputterIsInputDirty()
 ImeInputterGetCaretSplitIndex()
 {
     global ime_input_caret_pos
-    global ime_inputter_splitted_indexs
+    global ime_inputter_splitter_result
 
-    return SplittedIndexsGetPosIndex(ime_inputter_splitted_indexs, ime_input_caret_pos)
+    return SplittedIndexsGetPosIndex(ime_inputter_splitter_result, ime_input_caret_pos)
 }
 
 ;*******************************************************************************
@@ -340,24 +352,24 @@ ImeInputterCaretMoveToHome(move_home)
 ; Static
 ImeInputterGetLastWordPos()
 {
-    global ime_inputter_splitted_indexs
-    if( ime_inputter_splitted_indexs.Length() <= 1 ){
+    global ime_inputter_splitter_result
+    if( ime_inputter_splitter_result.Length() <= 1 ){
         return 0
     }
-    return ime_inputter_splitted_indexs[ime_inputter_splitted_indexs.Length()-1]
+    return SplitterResultGetEndPos(ime_inputter_splitter_result, ime_inputter_splitter_result.Length()-1)
 }
 
 ImeInputterGetLeftWordPos(start_index)
 {
     local
-    global ime_inputter_splitted_indexs
-    return SplittedIndexsGetLeftWordPos(ime_inputter_splitted_indexs, start_index)
+    global ime_inputter_splitter_result
+    return SplittedIndexsGetLeftWordPos(ime_inputter_splitter_result, start_index)
 }
 
 ImeInputterGetRightWordPos(start_index)
 {
     local
-    global ime_inputter_splitted_indexs
+    global ime_inputter_splitter_result
 
-    return SplittedIndexsGetRightWordPos(ime_inputter_splitted_indexs, start_index)
+    return SplittedIndexsGetRightWordPos(ime_inputter_splitter_result, start_index)
 }

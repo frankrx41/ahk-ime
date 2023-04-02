@@ -33,8 +33,6 @@
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk
 
-#Include, ime_splitted_indexs.ahk
-
 #Include, ime_selector.ahk
 #Include, ime_select_menu.ahk
 #Include, ime_state.ahk
