@@ -172,6 +172,9 @@ ImeInputterCallTranslator(is_delete)
     radical_list := []
     loop,% ime_inputter_splitter_result.Length()
     {
+        if( is_delete && A_Index >= caret_splitted_index ){
+            break
+        }
         splitted_input .= SplitterResultGetPinyin(ime_inputter_splitter_result, A_Index)
         tone := SplitterResultGetTone(ime_inputter_splitter_result, A_Index)
         if( tone == 0 ){
@@ -181,16 +184,6 @@ ImeInputterCallTranslator(is_delete)
         }
         radical_list.Push(SplitterResultGetRadical(ime_inputter_splitter_result, A_Index))
     }
-    ; if( is_delete )
-    ; {
-    ;     ; If is delete, update `radical_list` size and remove `splitted_input` after caret word
-    ;     ; Translator use size of `radical_list` to check need update size
-    ;     ; TODO: Fix
-    ;     remove_count := ime_inputter_splitter_result.Length() - caret_splitted_index + 1
-    ;     radical_list.RemoveAt(caret_splitted_index, remove_count)
-    ;     splitted_input := SplittedInputRemoveLastWord(splitted_input, remove_count)
-    ;     debug_info .= "->[" splitted_input "]"
-    ; }
     ImeTranslatorUpdateResult(splitted_input, radical_list)
     ime_input_dirty := false
     
