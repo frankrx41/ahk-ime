@@ -13,8 +13,6 @@ TranslatorHistoryHasResult(splitted_string)
 TranslatorHistoryHasKey(splitted_string)
 {
     global translator_history_result
-    ImeProfilerBegin(14)
-    ImeProfilerEnd(14, "`n  - [" splitted_string "]: " translator_history_result.HasKey(splitted_string))
     return translator_history_result.HasKey(splitted_string)
 }
 

@@ -1,14 +1,13 @@
 ;*******************************************************************************
-; 超级简拼
+; Simple Spell
 ;
-; "wo3xi3huan'ni'" -> "w%'o%3x%'i%3h%'u%'a%'n%'n%'i%'"
-; "wo3ai4ni'" -> "w%'o%3a%'i%4n%'i%'"
-; "wo'xi3huan1ni3" -> "w%'o%'x%'i%3h%'u%'a%'n%1n%'i%3"
+
+; TODO: Add example input output
 SplittedInputGetSimpleSpell(input_string)
 {
     input_string := StrReplace(input_string, "?")
-    input_string := RegExReplace(input_string, "([a-z])(?=[^%'12345])", "$1'")
-    input_string := RegExReplace(input_string, "([^%])(['12345])", "$1%$2")
+    input_string := RegExReplace(input_string, "([a-z])(?=[^%012345])", "$10")
+    input_string := RegExReplace(input_string, "([^%])([012345])", "$1%$2")
     return input_string
 }
 
@@ -31,7 +30,7 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
         return false
     }
 
-    if( simple_spell_list.HasKey(RegExReplace(splitted_string, "%['12345]")) )
+    if( simple_spell_list.HasKey(RegExReplace(splitted_string, "%[012345]")) )
     {
         return true
     }
@@ -56,7 +55,7 @@ PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitted_input)
         {
             TranslatorHistoryUpdateKey(splitted_string, true)
             TranslatorHistoryInsertResult(search_result, splitted_string, 1)
-            debug_string := """" splitted_string """->(" TranslatorHistoryGetKeyResultLength(splitted_string) ")"
+            debug_string := "[""" splitted_string """] -> (" TranslatorHistoryGetKeyResultLength(splitted_string) ")"
         }
     }
     ImeProfilerEnd(22, debug_string)

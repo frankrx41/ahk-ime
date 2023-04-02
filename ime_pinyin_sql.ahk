@@ -114,6 +114,6 @@ PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
     ImeProfilerEnd(15, "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
 
     ImeProfilerBegin(16)
-    ImeProfilerEnd(16, "`n  - [" splitted_input "] -> {" result.Length() "}")
+    ImeProfilerEnd(16, "`n  - [""" splitted_input """] -> (" result.Length() ")")
     return result
 }

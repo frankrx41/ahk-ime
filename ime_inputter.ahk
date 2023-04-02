@@ -116,12 +116,10 @@ ImeInputterUpdateString(input_char, is_delete:=false)
     local
     global ime_input_string
     global ime_inputter_splitter_result
+    global ime_input_dirty
 
+    ime_input_dirty := true
     ImeProfilerClear()
-
-    if( input_char || is_delete ) {
-        ime_input_dirty := true
-    }
 
     if( ime_input_string )
     {
@@ -176,11 +174,11 @@ ImeInputterCallTranslator(is_delete)
         }
         splitter_result[A_Index] := ime_inputter_splitter_result[A_Index]
     }
+    debug_info .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
+    ImeProfilerEnd(12, debug_info)
+
     ImeTranslatorUpdateResult(splitter_result)
     ime_input_dirty := false
-
-    debug_info .= " (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ") dirty: " ime_input_dirty
-    ImeProfilerEnd(12, debug_info)
 }
 
 ImeInputterIsInputDirty()

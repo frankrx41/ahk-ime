@@ -237,7 +237,7 @@ PinyinSplitterInputString(input_string)
         escape_string := ""
     }
 
-    ImeProfilerEnd(11, """" input_string """->[" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
+    ImeProfilerEnd(11, """" input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
     return splitter_result
 }
 

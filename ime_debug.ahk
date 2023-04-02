@@ -36,13 +36,12 @@ ImeDebugGetDisplayText()
     ;   ImeProfilerEnd(1, "Your debug info")
     ; ```
     ; See ime_profiler.ahk for detail.
-    ImeDebugTipAppend(debug_tip, 11)    ; PinyinSplitInputString
-    ImeDebugTipAppend(debug_tip, 12)    ; ImeInputterUpdateString
-    ImeDebugTipAppend(debug_tip, 14, 0) ; PinyinHistoryHasKey
+    ImeDebugTipAppend(debug_tip, 11)    ; PinyinSplitterInputString
+    ImeDebugTipAppend(debug_tip, 12)    ; ImeInputterCallTranslator
     ImeDebugTipAppend(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
     ImeDebugTipAppend(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result
     ImeDebugTipAppend(debug_tip, 20)    ; PinyinGetTranslateResult
-    ImeDebugTipAppend(debug_tip, 22)    ; PinyinResultInsertSimpleSpell
+    ImeDebugTipAppend(debug_tip, 22)    ; PinyinTranslatorInsertSimpleSpell
     ImeDebugTipAppend(debug_tip, 25)    ; PinyinResultFilterZeroWeight
     ImeDebugTipAppend(debug_tip, 26)    ; PinyinResultFilterByRadical
     ImeDebugTipAppend(debug_tip, 27)    ; PinyinResultFilterSingleWord
@@ -51,7 +50,7 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 31, 2000)  ; ImeTranslatorFilterResults
     ImeDebugTipAppend(debug_tip, 32, 2000)  ; ImeTranslatorFixupSelectIndex
     ImeDebugTipAppend(debug_tip, 41)    ; ImeSelectorApplyCaretSelectIndex
-    ImeDebugTipAppend(debug_tip, 42, 2000)  ; ImeSelectorApplyCaretSelectIndex
+    ImeDebugTipAppend(debug_tip, 42, 2000)  ; ImeSelectorSetSelectIndex
     ImeDebugTipAppend(debug_tip, 43)    ; ImeSelectorLockWord
     ImeDebugTipAppend(debug_tip, 44)    ; ImeSelectorIsSelectLock
     ImeDebugTipAppend(debug_tip, 1)     ; temp

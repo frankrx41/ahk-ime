@@ -29,7 +29,7 @@ ImeTranslatorUpdateResult(splitter_result)
         {
             ime_translator_radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
             find_split_string := SplitterResultCovertToStringUntilSkip(splitter_result, A_Index)
-            debug_text .= find_split_string ","
+            debug_text .= find_split_string ", "
             if( SplitterResultIsSkip(splitter_result, A_Index) )
             {
                 ; Add legacy text

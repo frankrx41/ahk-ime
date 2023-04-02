@@ -41,6 +41,6 @@ PinyinResultFilterZeroWeight(ByRef search_result)
             index += 1
         }
     }
-    ImeProfilerEnd(25)
+    ImeProfilerEnd(25, "remove at: " index)
     return
 }

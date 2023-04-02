@@ -59,6 +59,6 @@ PinyinTranslateFindResult(splitted_input)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20)
+    ImeProfilerEnd(20, "`n  - [""" splitted_input """] -> ("  search_result.Length() ")" )
     return search_result
 }

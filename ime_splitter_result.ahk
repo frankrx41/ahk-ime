@@ -168,7 +168,7 @@ SplitterResultGetDisplayText(splitter_result)
         ; dsiplay_text .= SplitterResultGetEndPos(splitter_result, index)
         ; dsiplay_text .= ")"
 
-        dsiplay_text .= ", "
+        dsiplay_text .= ","
     }
-    return SubStr(dsiplay_text, 1, StrLen(dsiplay_text)-2)
+    return SubStr(dsiplay_text, 1, StrLen(dsiplay_text)-1)
 }
