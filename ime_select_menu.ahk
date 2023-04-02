@@ -47,7 +47,7 @@ ImeSelectMenuIsMultiple()
 ImeSelectMenuCanShowMultiple()
 {
     split_index := ImeInputterGetCaretSplitIndex()
-    return ImeTranslatorResultGetListLength(split_index) > ImeSelectMenuGetColumn()
+    return ImeTranslatorResultListGetListLength(split_index) > ImeSelectMenuGetColumn()
 }
 
 ImeSelectMenuGetColumn()

@@ -20,7 +20,7 @@ TranslatorResultGetComment(ByRef translator_result, word_index)
     return translator_result[word_index, 4]
 }
 
-TranslatorResultGetLength(ByRef translator_result, word_index)
+TranslatorResultGetWordLength(ByRef translator_result, word_index)
 {
     return translator_result[word_index, 5]
 }
@@ -34,12 +34,12 @@ TranslatorResultListFindPossibleMaxLength(ByRef translator_result, split_index)
     ; TODO: Fix
     if( ImeSelectorIsSelectLock(split_index) )
     {
-        max_length := TranslatorResultGetLength(translator_result, 1)
+        max_length := TranslatorResultGetWordLength(translator_result, 1)
     }
     else
     {
         max_length := 1
-        loop % TranslatorResultGetLength(translator_result, 1)-1
+        loop % TranslatorResultGetWordLength(translator_result, 1)-1
         {
             check_index := split_index + A_Index
             if( ImeSelectorIsSelectLock(check_index) ) {
@@ -56,7 +56,7 @@ TranslatorResultListFindMaxLengthResultIndex(ByRef translator_result, split_inde
     local
     loop % translator_result[split_index].Length()
     {
-        test_len := TranslatorResultGetLength(translator_result[A_Index], A_Index)
+        test_len := TranslatorResultGetWordLength(translator_result[A_Index], A_Index)
         if( test_len <= max_length )
         {
             return A_Index

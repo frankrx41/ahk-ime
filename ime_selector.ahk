@@ -31,7 +31,7 @@ ImeSelectorSetCaretSelectIndex(select_index)
     local
     global ime_selector_select
     split_index := ImeInputterGetCaretSplitIndex()
-    select_index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), select_index))
+    select_index := Max(1, Min(ImeTranslatorResultListGetListLength(split_index), select_index))
     SelectorResultSetSelectIndex(ime_selector_select, split_index, select_index)
 }
 
@@ -41,7 +41,7 @@ ImeSelectorOffsetCaretSelectIndex(offset)
     global ime_selector_select
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index) + offset
-    select_index := Max(1, Min(ImeTranslatorResultGetListLength(split_index), select_index))
+    select_index := Max(1, Min(ImeTranslatorResultListGetListLength(split_index), select_index))
     SelectorResultSetSelectIndex(ime_selector_select, split_index, select_index)
 }
 
@@ -68,14 +68,14 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index)
-    word_length := ImeTranslatorResultGetLength(split_index, select_index)
+    word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
 
     if( lock_result )
     {
         SelectorResultUnLockFrontWords(ime_selector_select, split_index)
         ; Lock this
-        select_word := ImeTranslatorResultGetWord(split_index, select_index)
-        word_length := ImeTranslatorResultGetLength(split_index, select_index)
+        select_word := ImeTranslatorResultListGetWord(split_index, select_index)
+        word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
         SelectorResultLockWord(ime_selector_select, split_index, select_word, word_length)
         loop, % word_length-1
         {
@@ -158,7 +158,7 @@ ImeSelectorGetOutputString()
         select_index := ImeSelectorGetSelectIndex(split_index)
         if( select_index > 0 )
         {
-            result_string .= ImeTranslatorResultGetWord(split_index, select_index)
+            result_string .= ImeTranslatorResultListGetWord(split_index, select_index)
         }
     }
     return result_string

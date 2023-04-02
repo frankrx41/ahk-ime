@@ -1,33 +1,30 @@
 ImeTranslatorInitialize()
 {
-    global ime_translator_result_const
-    global ime_translator_result_filtered
-    global ime_translator_radical_list
+    global ime_translator_result_list_origin
+    global ime_translator_result_list_filtered
     ImeTranslatorClear()
 }
 
 ImeTranslatorClear()
 {
-    global ime_translator_result_const      := []
-    global ime_translator_result_filtered   := []
-    global ime_translator_radical_list      := []
+    global ime_translator_result_list_origin    := []
+    global ime_translator_result_list_filtered  := []
 }
 
 ImeTranslatorUpdateResult(splitter_result)
 {
     local
-    global ime_translator_result_const
-    global ime_translator_radical_list
+    global ime_translator_result_list_origin
 
     if( splitter_result.Length() )
     {
         ImeProfilerBegin(30)
-        ime_translator_radical_list := []
-        ime_translator_result_const := []
+        ime_translator_result_list_origin := []
+        radical_list := []
         debug_text := "["
         loop % splitter_result.Length()
         {
-            ime_translator_radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
+            radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
             find_split_string := SplitterResultConvertToStringUntilSkip(splitter_result, A_Index)
             debug_text .= """" find_split_string ""","
             if( SplitterResultIsSkip(splitter_result, A_Index) )
@@ -49,11 +46,11 @@ ImeTranslatorUpdateResult(splitter_result)
                 }
             }
             ; Insert result
-            ime_translator_result_const.Push(translate_result)
+            ime_translator_result_list_origin.Push(translate_result)
         }
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
-        ImeTranslatorFilterResults()
+        ImeTranslatorFilterResults(radical_list)
     } else {
         ImeTranslatorClear()
     }
@@ -62,9 +59,9 @@ ImeTranslatorUpdateResult(splitter_result)
 ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
 {
     local
-    loop % ImeTranslatorResultGetListLength(split_index)
+    loop % ImeTranslatorResultListGetListLength(split_index)
     {
-        test_len := ImeTranslatorResultGetLength(split_index, A_Index)
+        test_len := ImeTranslatorResultListGetWordLength(split_index, A_Index)
         if( test_len <= max_length )
         {
             return A_Index
@@ -79,12 +76,12 @@ ImeTranslatorFindPossibleMaxLength(split_index, ByRef next_words)
     ; `max_length` = this word until next unlock word
     if( ImeSelectorIsSelectLock(split_index) )
     {
-        max_length := ImeTranslatorResultGetLength(split_index, 1)
+        max_length := ImeTranslatorResultListGetWordLength(split_index, 1)
     }
     else
     {
         max_length := 1
-        loop % ImeTranslatorResultGetLength(split_index, 1)-1
+        loop % ImeTranslatorResultListGetWordLength(split_index, 1)-1
         {
             check_index := split_index + A_Index
             if( ImeSelectorIsSelectLock(check_index) ) {
@@ -101,12 +98,12 @@ ImeTranslatorFindPossibleMaxLength(split_index, ByRef next_words)
 ImeTranslatorFixupSelectIndex()
 {
     local
-    global ime_translator_result_filtered
+    global ime_translator_result_list_filtered
 
     debug_info := ""
     ImeProfilerBegin(32, true)
     skip_word_count := 0
-    loop % ime_translator_result_filtered.Length()
+    loop % ime_translator_result_list_filtered.Length()
     {
         split_index := A_Index
 
@@ -114,7 +111,7 @@ ImeTranslatorFixupSelectIndex()
         select_index := !origin_select_index ? 0 : origin_select_index
 
         if( select_index ) {
-            select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
+            select_word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
         } else {
             select_word_length := 0
         }
@@ -140,7 +137,7 @@ ImeTranslatorFixupSelectIndex()
             lock_length := ImeSelectorGetLockLength(split_index)
             select_index := ImeTranslatorResultFindIndex(split_index, lock_word, max_length)
             Assert(select_index, lock_word)
-            ; Assert(ImeTranslatorResultGetLength(split_index, select_index) >= lock_length)
+            ; Assert(ImeTranslatorResultListGetWordLength(split_index, select_index) >= lock_length)
         }
         else
         {
@@ -159,7 +156,7 @@ ImeTranslatorFixupSelectIndex()
         debug_info .= "[" origin_select_index "]->[" select_index "] "
         if( select_index )
         {
-            select_word_length := ImeTranslatorResultGetLength(split_index, select_index)
+            select_word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
             skip_word_count := select_word_length-1
             debug_info .= "skip: " skip_word_count " "
         }
@@ -168,15 +165,14 @@ ImeTranslatorFixupSelectIndex()
     Assert(skip_word_count == 0, skip_word_count)
 }
 
-ImeTranslatorFilterResults(single_mode:=false)
+ImeTranslatorFilterResults(input_radical_list, single_mode:=false)
 {
     local
-    global ime_translator_result_const
-    global ime_translator_radical_list
-    global ime_translator_result_filtered
+    global ime_translator_result_list_origin
+    global ime_translator_result_list_filtered
 
-    search_result := CopyObj(ime_translator_result_const)
-    radical_list := CopyObj(ime_translator_radical_list)
+    search_result := CopyObj(ime_translator_result_list_origin)
+    radical_list := CopyObj(input_radical_list)
     skip_word := 0
     ImeProfilerBegin(31, true)
     loop % search_result.Length()
@@ -203,12 +199,12 @@ ImeTranslatorFilterResults(single_mode:=false)
     store_select_index := []
     loop % search_result.Length()
     {
-        store_select_index[A_Index] := ime_translator_result_filtered[A_Index, 0]
+        store_select_index[A_Index] := ime_translator_result_list_filtered[A_Index, 0]
     }
-    ime_translator_result_filtered := search_result
+    ime_translator_result_list_filtered := search_result
     loop % search_result.Length()
     {
-        ime_translator_result_filtered[A_Index, 0] := store_select_index[A_Index]
+        ime_translator_result_list_filtered[A_Index, 0] := store_select_index[A_Index]
     }
     ImeTranslatorFixupSelectIndex()
     ImeProfilerEnd(31, "length: (" search_result.Length() ")")
@@ -224,12 +220,12 @@ ImeTranslatorFilterResults(single_mode:=false)
 ImeTranslatorResultFindIndex(split_index, find_words, max_length)
 {
     local
-    global ime_translator_result_filtered
+    global ime_translator_result_list_filtered
     find_word_len := StrLen(find_words)
-    loop, % ImeTranslatorResultGetListLength(split_index)
+    loop, % ImeTranslatorResultListGetListLength(split_index)
     {
         select_index := A_Index
-        test_result := ImeTranslatorResultGetWord(split_index, select_index)
+        test_result := ImeTranslatorResultListGetWord(split_index, select_index)
         if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
             return select_index
         }
@@ -239,60 +235,55 @@ ImeTranslatorResultFindIndex(split_index, find_words, max_length)
 
 ;*******************************************************************************
 ;
-ImeTranslatorGetWordCount()
+ImeTranslatorResultListGetLength()
 {
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered.Length()
+    global ime_translator_result_list_filtered
+    return ime_translator_result_list_filtered.Length()
 }
 
 ;*******************************************************************************
 ;
-ImeTranslatorResultGetListLength(split_index)
+ImeTranslatorResultListGetListLength(split_index)
 {
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index].Length()
+    global ime_translator_result_list_filtered
+    return ime_translator_result_list_filtered[split_index].Length()
 }
 
-ImeTranslatorResultGetPinyin(split_index, word_index)
+ImeTranslatorResultListGetPinyin(split_index, word_index)
 {
-    ; Assert(word_index > 0 && word_index <= ImeTranslatorResultGetListLength(split_index))
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index, word_index, 1]
+    global ime_translator_result_list_filtered
+    return TranslatorResultGetPinyin(ime_translator_result_list_filtered[split_index], word_index)
 }
 
-ImeTranslatorResultGetWord(split_index, word_index)
+ImeTranslatorResultListGetWord(split_index, word_index)
 {
-    ; Assert(word_index > 0 && word_index <= ImeTranslatorResultGetListLength(split_index))
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index, word_index, 2]
+    global ime_translator_result_list_filtered
+    return TranslatorResultGetWord(ime_translator_result_list_filtered[split_index], word_index)
 }
 
-ImeTranslatorResultGetWeight(split_index, word_index)
+ImeTranslatorResultListGetWeight(split_index, word_index)
 {
-    ; Assert(word_index > 0 && word_index <= ImeTranslatorResultGetListLength(split_index))
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index, word_index, 3]
+    global ime_translator_result_list_filtered
+    return TranslatorResultGetWeight(ime_translator_result_list_filtered[split_index], word_index)
 }
 
-ImeTranslatorResultGetComment(split_index, word_index)
+ImeTranslatorResultListGetComment(split_index, word_index)
 {
-    ; Assert(word_index > 0 && word_index <= ImeTranslatorResultGetListLength(split_index))
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index, word_index, 4]
+    global ime_translator_result_list_filtered
+    return TranslatorResultGetComment(ime_translator_result_list_filtered[split_index], word_index)
 }
 
-ImeTranslatorResultGetLength(split_index, word_index)
+ImeTranslatorResultListGetWordLength(split_index, word_index)
 {
-    ; Assert(word_index > 0 && word_index <= ImeTranslatorResultGetListLength(split_index))
-    global ime_translator_result_filtered
-    return ime_translator_result_filtered[split_index, word_index, 5]
+    global ime_translator_result_list_filtered
+    return TranslatorResultGetWordLength(ime_translator_result_list_filtered[split_index], word_index)
 }
 
 ;*******************************************************************************
 ;
 ImeTranslatorResultGetFormattedComment(split_index, word_index)
 {
-    comment := ImeTranslatorResultGetComment(split_index, word_index)
+    comment := ImeTranslatorResultListGetComment(split_index, word_index)
     if( comment ){
         if( comment == "name" ){
             return "名"
