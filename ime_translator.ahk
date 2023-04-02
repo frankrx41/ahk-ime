@@ -24,12 +24,12 @@ ImeTranslatorUpdateResult(splitter_result)
         ImeProfilerBegin(30)
         ime_translator_radical_list := []
         ime_translator_result_const := []
-        debug_text := ""
+        debug_text := "["
         loop % splitter_result.Length()
         {
             ime_translator_radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
             find_split_string := SplitterResultConvertToStringUntilSkip(splitter_result, A_Index)
-            debug_text .= find_split_string ", "
+            debug_text .= """" find_split_string ""","
             if( SplitterResultIsSkip(splitter_result, A_Index) )
             {
                 ; Add legacy text
@@ -51,6 +51,7 @@ ImeTranslatorUpdateResult(splitter_result)
             ; Insert result
             ime_translator_result_const.Push(translate_result)
         }
+        debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
         ImeTranslatorFilterResults()
     } else {
@@ -210,7 +211,7 @@ ImeTranslatorFilterResults(single_mode:=false)
         ime_translator_result_filtered[A_Index, 0] := store_select_index[A_Index]
     }
     ImeTranslatorFixupSelectIndex()
-    ImeProfilerEnd(31, "length: [" search_result.Length() "]")
+    ImeProfilerEnd(31, "length: (" search_result.Length() ")")
 }
 
 ;*******************************************************************************

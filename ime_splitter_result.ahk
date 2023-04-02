@@ -155,8 +155,11 @@ SplitterResultGetDisplayText(splitter_result)
     {
         index := A_Index
         dsiplay_text .= SplitterResultGetPinyin(splitter_result, index)
-        dsiplay_text .= SplitterResultGetTone(splitter_result, index)
-        
+        if( !SplitterResultIsSkip(splitter_result, index) )
+        {
+            dsiplay_text .= SplitterResultGetTone(splitter_result, index)
+        }
+
         radical := SplitterResultGetRadical(splitter_result, index)
         if( radical ) {
             dsiplay_text .= "{" radical "}"
