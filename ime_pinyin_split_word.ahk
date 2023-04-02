@@ -31,16 +31,20 @@ SplitWordRemoveFirstWord(split_input)
     }
 }
 
-SplitWordRemoveLastWord(split_input)
+SplitWordRemoveLastWord(split_input, repeat_count:=1)
 {
-    if( EscapeCharsIsMark(SubStr(split_input, 0, 1)) ){
-        return EscapeCharsRemoveLast(split_input)
+    loop, % repeat_count
+    {
+        if( EscapeCharsIsMark(SubStr(split_input, 0, 1)) ){
+            split_input := EscapeCharsRemoveLast(split_input)
+        }
+        else{
+            ; "kai'xin'a'" -> "kai'xin'"
+            ; "wo'" -> ""
+            split_input := RegExReplace(split_input, "([^'12345]+['12345])$")
+        }
     }
-    else{
-        ; "kai'xin'a'" -> "kai'xin'"
-        ; "wo'" -> ""
-        return RegExReplace(split_input, "([^'12345]+['12345])$")
-    }
+    return split_input
 }
 
 SplitWordGetPrevWords(split_input)

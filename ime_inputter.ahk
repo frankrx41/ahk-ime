@@ -2,14 +2,16 @@
 ; Input string
 ImeInputterInitialize()
 {
-    global ime_input_string         ; 輸入字符
-    global ime_input_caret_pos      ; 光标位置
+    global ime_input_string
+    global ime_input_caret_pos
     global ime_inputter_split_indexs := []
     global ime_input_dirty
 
     ImeInputterClearString()
 }
 
+;*******************************************************************************
+; Enter port
 ImeInputterClearString()
 {
     global ime_input_string
@@ -21,7 +23,6 @@ ImeInputterClearString()
     ime_input_caret_pos := 0
     ime_input_dirty := true
     ime_inputter_split_indexs := []
-    ImeProfilerClear()
     ImeSelectorClear()
     ImeTranslatorClear()
     return
@@ -87,7 +88,6 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     global ime_input_string
     global ime_inputter_split_indexs
 
-    ImeProfilerClear()
     if( ImeSelectMenuIsOpen() )
     {
         input_char := Format("{:U}", input_char)
@@ -112,74 +112,79 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 
 ;*******************************************************************************
 ; Update result
-ImeInputterUpdateString(input_char, is_delet:=false)
+ImeInputterUpdateString(input_char, is_delete:=false)
 {
     local
     global ime_input_string
     global ime_inputter_split_indexs
+
+    ImeProfilerClear()
+
+    if( input_char || is_delete ) {
+        ime_input_dirty := true
+    }
+
+    if( ime_input_string )
+    {
+        ; If no input_char or input_char is not alphabet, try update
+        ; no input_char and not is_delete means caller what force call translator
+        if( input_char ) {
+            should_update := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true)
+        } else {
+            should_update := true
+        }
+
+        ; Splitter
+        splitted_input := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
+        ; Translator
+        if( should_update ) {
+            ImeInputterCallTranslator(splitted_input, radical_list, is_delete)
+        }
+    }
+    else
+    {
+        ImeInputterClearString()
+    }
+
+    ; Because `is_delete` only update prev string, it always be dirty
+    if( is_delete ) {
+        ime_input_dirty := true
+        Assert(input_char == "")
+    }
+}
+
+ImeInputterCallTranslator(splitted_input, radical_list, is_delete)
+{
+    global ime_inputter_split_indexs
+    global ime_input_string
     global ime_input_dirty
 
-    should_update_result := false
-    ; If no input_char or input_char is not alphabet, try update
-    if( input_char ) {
-        ime_input_dirty := true
-        should_update_result := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true)
+    ImeProfilerBegin(12, true)
+    debug_info := ""
+
+    caret_splitted_index := ImeInputterGetCaretSplitIndex()
+    if( is_delete ) {
+        ImeSelectorUnLockFrontLockWords(caret_splitted_index)
     } else {
-        ime_input_dirty := true
-        should_update_result := true
+        ImeSelectorUnLockAfterWords(caret_splitted_index)
     }
-
-    if( is_delet ) {
-        ime_input_dirty := true
-        should_update_result := true
-
-        if( !ime_input_string ) {
-            ImeInputterClearString()
-        } else {
-            ImeProfilerClear()
-        }
-    }
-
-    if( ime_input_string || is_delet )
+    
+    debug_info .= "[" splitted_input "]"
+    Assert(splitted_input)
+    if( is_delete )
     {
-        ImeProfilerBegin(12, true)
-        debug_info := ""
-        Assert(ime_input_string)
-        input_split := PinyinSplitInputString(ime_input_string, ime_inputter_split_indexs, radical_list)
-
-        split_index := ImeInputterGetCaretSplitIndex()
-        if( is_delet )
-        {
-            ImeSelectorUnLockFrontLockWord(split_index)
-        } else {
-            ImeSelectorClearAfter(split_index)
-        }
-
-        ; Update result
-        if( should_update_result && ime_input_dirty )
-        {
-            debug_info .= "[" input_split "]"
-            if( is_delet && input_split )
-            {
-                index := ImeInputterGetCaretSplitIndex()
-                remove_count := radical_list.Length() - index + 1
-                radical_list.RemoveAt(index, remove_count)
-                loop, % remove_count
-                {
-                    input_split := SplitWordRemoveLastWord(input_split)
-                }
-                debug_info .= "->[" input_split "]"
-            }
-            ImeTranslatorUpdateResult(input_split, radical_list)
-            ime_input_dirty := false
-        }
-        ; Because `is_delet` only update prev string, it always be dirty
-        if( is_delet ) {
-            ime_input_dirty := true
-        }
-        debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ") dirty: " ime_input_dirty
-        ImeProfilerEnd(12, debug_info)
+        ; If is delete, update `radical_list` size and remove `splitted_input` after caret word
+        ; Translator use size of `radical_list` to check need update size
+        remove_count := ime_inputter_split_indexs.Length() - caret_splitted_index + 1
+        radical_list.RemoveAt(caret_splitted_index, remove_count)
+        splitted_input := SplitWordRemoveLastWord(splitted_input, remove_count)
+        debug_info .= "->[" splitted_input "]"
     }
+    ImeTranslatorUpdateResult(splitted_input, radical_list)
+    ime_input_dirty := false
+    
+    debug_info .= " (" radical_list.Length() "/" ime_inputter_split_indexs.Length() ") dirty: " ime_input_dirty
+    ImeProfilerEnd(12, debug_info)
 }
 
 ImeInputterIsInputDirty()
