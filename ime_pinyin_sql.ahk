@@ -3,9 +3,9 @@
 ; wo3ai4ni3 -> w3a4n3
 ; wo3ai4ni% -> w3a4n% or w3a4n_
 ; s?u -> s_
-PinyinSqlSimpleKey(split_input, auto_comple:=false)
+PinyinSqlSimpleKey(splitted_input, auto_comple:=false)
 {
-    key_value := split_input
+    key_value := splitted_input
     key_value := StrReplace(key_value, "?")
     key_value := StrReplace(key_value, "'", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
@@ -15,9 +15,9 @@ PinyinSqlSimpleKey(split_input, auto_comple:=false)
     return key_value
 }
 
-PinyinSqlFullKey(split_input, auto_comple:=false)
+PinyinSqlFullKey(splitted_input, auto_comple:=false)
 {
-    key_value := split_input
+    key_value := splitted_input
     key_value := StrReplace(key_value, "?", "h?")
     key_value := StrReplace(key_value, "'", "_")
     last_char := SubStr(key_value, 0, 1)
@@ -81,14 +81,14 @@ PinyinSqlWhereCommand(sim_key, full_key)
 ; wo3ai4ni3 -> wo3ai4ni3
 ; kannid -> kan'ni'd%
 ; kannide -> kan'ni'de'
-PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
+PinyinSqlGetResult(DB, splitted_input, auto_comple:=false, limit_num:=100)
 {
     local
     Critical
     begin_tick := A_TickCount
 
-    sql_sim_key     := PinyinSqlSimpleKey(split_input, auto_comple)
-    sql_full_key    := PinyinSqlFullKey(split_input, auto_comple)
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_comple)
+    sql_full_key    := PinyinSqlFullKey(splitted_input, auto_comple)
 
     sql_where_cmd := PinyinSqlWhereCommand(sql_sim_key, sql_full_key)
     sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd
@@ -98,11 +98,11 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
     result := []
     if( DB.GetTable(sql_full_cmd, result_table) )
     {
-        length := SplitWordGetWordCount(split_input)
+        length := SplittedInputGetWordCount(splitted_input)
         loop % result_table.RowCount {
             result_table.Rows[A_Index, 5] := length
         }
-        result_table.Rows[0] := split_input
+        result_table.Rows[0] := splitted_input
         ; result_table.Rows = [
         ;   [0]: "wu'hui'"
         ;   [1]: ["wu3hui4", "舞会", "30000", "", 2]
@@ -113,6 +113,6 @@ PinyinSqlGetResult(DB, split_input, auto_comple:=false, limit_num:=100)
     ImeProfilerEnd(15, "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
 
     ImeProfilerBegin(16)
-    ImeProfilerEnd(16, "`n  - [" split_input "] -> {" result.Length() "}")
+    ImeProfilerEnd(16, "`n  - [" splitted_input "] -> {" result.Length() "}")
     return result
 }

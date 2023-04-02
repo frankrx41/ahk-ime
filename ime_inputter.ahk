@@ -36,8 +36,8 @@ ImeInputterClearPrevSplitted()
 
     if( ime_input_caret_pos != 0 )
     {
-        left_pos := SplittedIndexsGetLeftWordPos(split_indexs, ime_input_caret_pos)
-        ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, caret_pos+1)
+        left_pos := SplittedIndexsGetLeftWordPos(ime_inputter_split_indexs, ime_input_caret_pos)
+        ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := left_pos
     }
 
@@ -177,7 +177,7 @@ ImeInputterCallTranslator(splitted_input, radical_list, is_delete)
         ; Translator use size of `radical_list` to check need update size
         remove_count := ime_inputter_split_indexs.Length() - caret_splitted_index + 1
         radical_list.RemoveAt(caret_splitted_index, remove_count)
-        splitted_input := SplitWordRemoveLastWord(splitted_input, remove_count)
+        splitted_input := SplittedInputRemoveLastWord(splitted_input, remove_count)
         debug_info .= "->[" splitted_input "]"
     }
     ImeTranslatorUpdateResult(splitted_input, radical_list)

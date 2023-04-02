@@ -29,13 +29,13 @@ ImeTranslatorUpdateResult(input_split, radical_list)
         test_split_string := input_split
         loop % radical_list.Length()
         {
-            find_split_string := SplitWordGetPrevWords(test_split_string)
+            find_split_string := SplittedInputGetPrevWords(test_split_string)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
                 ; Get translate result
                 translate_result := PinyinGetTranslateResult(find_split_string, ImeDBGet())
                 if( translate_result.Length() == 0 ){
-                    first_word := SplitWordGetFirstWord(find_split_string)
+                    first_word := SplittedInputGetFirstWord(find_split_string)
                     translate_result := [[first_word, first_word]]
                 }
             } else {
@@ -48,7 +48,7 @@ ImeTranslatorUpdateResult(input_split, radical_list)
             }
             ; Insert result
             ime_translator_result_const.Push(translate_result)
-            test_split_string := SplitWordRemoveFirstWord(test_split_string)
+            test_split_string := SplittedInputRemoveFirstWord(test_split_string)
         }
         ImeProfilerEnd(30)
         ImeTranslatorFilterResults()

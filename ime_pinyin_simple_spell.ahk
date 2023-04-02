@@ -49,7 +49,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
     global history_field_array
     ImeProfilerBegin(22)
     debug_string := ""
-    if( SplitWordGetWordCount(input_split) > 1 )
+    if( SplittedInputGetWordCount(input_split) > 1 )
     {
         separate_string := SplitWordGetSimpleSpell(input_split)
         if( SeparateStringShouldProcess(separate_string, input_split) )

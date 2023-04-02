@@ -1,22 +1,4 @@
 ;*******************************************************************************
-; 
-IsTone(char)
-{
-    return char && InStr("12345' ", char)
-}
-
-IsRadical(char)
-{
-    return InStr("AEOBPMFDTNLGKHJQXZCSRYW", char, true)
-}
-
-IsSymbol(char)
-{
-    global symbol_list_string
-    return InStr(symbol_list_string, char)
-}
-
-;*******************************************************************************
 ; Initialize
 PinyinSplitterTableInitialize()
 {
@@ -192,7 +174,7 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; "z?eyangz?i3" -> [z?e'yang'z?i3] + [3,7,11] + [,,]
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(origin_input, ByRef split_indexs, ByRef radical_list)
+PinyinSplitterInputString(origin_input, ByRef splitted_indexs, ByRef radical_list)
 {
     local
     Critical
@@ -202,7 +184,7 @@ PinyinSplitterInputString(origin_input, ByRef split_indexs, ByRef radical_list)
     separate_words  := ""
     input_str       := origin_input
     strlen          := StrLen(input_str)
-    split_indexs    := []
+    splitted_indexs := []
     radical_list    := []
     has_skip_char   := false
 
@@ -219,7 +201,7 @@ PinyinSplitterInputString(origin_input, ByRef split_indexs, ByRef radical_list)
             if( has_skip_char ) {
                 has_skip_char := false
                 separate_words .= EscapeCharsGetMark(1)
-                split_indexs.Push(index-1)
+                splitted_indexs.Push(index-1)
                 radical_list.Push("")
             }
 
@@ -247,7 +229,7 @@ PinyinSplitterInputString(origin_input, ByRef split_indexs, ByRef radical_list)
             radical_list.Push(radical)
 
             ; Store index
-            split_indexs.Push(index-1)
+            splitted_indexs.Push(index-1)
         }
         ; 忽略
         else
@@ -265,11 +247,11 @@ PinyinSplitterInputString(origin_input, ByRef split_indexs, ByRef radical_list)
 
     if( has_skip_char ) {
         separate_words .= EscapeCharsGetMark(1)
-        split_indexs.Push(index-1)
+        splitted_indexs.Push(index-1)
         radical_list.Push("")
     }
 
-    ImeProfilerEnd(11, """" origin_input """->[" separate_words "] " "(" split_indexs.Length() ")")
+    ImeProfilerEnd(11, """" origin_input """->[" separate_words "] " "(" splitted_indexs.Length() ")")
     return separate_words
 }
 
@@ -282,13 +264,13 @@ PinyinSplitterInputStringTest()
     loop, % test_case.Length()
     {
         input_str := test_case[A_Index]
-        split_indexs := []
+        splitted_indexs := []
         radical_list := []
-        output_str := PinyinSplitterInputString(input_str, split_indexs, radical_list)
+        output_str := PinyinSplitterInputString(input_str, splitted_indexs, radical_list)
         msg_string .= """" input_str """ -> [" output_str "] + ["
-        loop % split_indexs.Length()
+        loop % splitted_indexs.Length()
         {
-            msg_string .= split_indexs[A_Index] ","
+            msg_string .= splitted_indexs[A_Index] ","
         }
         msg_string := RegExReplace(msg_string, ",$")
         msg_string .= "] + ["

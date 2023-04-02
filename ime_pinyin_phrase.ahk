@@ -12,14 +12,14 @@ PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
             if( PinyinHistoryHasResult(spilt_word) ){
                 break
             }
-            spilt_word := SplitWordRemoveLastWord(spilt_word)
+            spilt_word := SplittedInputRemoveLastWord(spilt_word)
         }
         if( spilt_word )
         {
             PinyinResultPushHistory(search_result, spilt_word)
         }
 
-        spilt_word := SplitWordRemoveLastWord(spilt_word)
+        spilt_word := SplittedInputRemoveLastWord(spilt_word)
         if( spilt_word == "" )
         {
             break

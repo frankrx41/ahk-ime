@@ -1,3 +1,5 @@
+;*******************************************************************************
+;
 IsBadTone(initials, vowels, tone)
 {
     static pinyin_bad_tones
@@ -112,6 +114,26 @@ IsZeroInitials(initials)
     return zero_initials_table.HasKey(initials)
 }
 
+;*******************************************************************************
+;
+IsTone(char)
+{
+    return char && InStr("12345' ", char)
+}
+
+IsRadical(char)
+{
+    return InStr("AEOBPMFDTNLGKHJQXZCSRYW", char, true)
+}
+
+IsSymbol(char)
+{
+    global symbol_list_string
+    return InStr(symbol_list_string, char)
+}
+
+;*******************************************************************************
+; Initialize
 PinyinInitialize()
 {
     local

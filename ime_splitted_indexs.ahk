@@ -1,33 +1,33 @@
 ; Action about splitted indexs
-SplittedIndexsGetPosIndex(split_indexs, caret_pos)
+SplittedIndexsGetPosIndex(splitted_indexs, caret_pos)
 {
-    if( split_indexs.Length() >= 1)
+    if( splitted_indexs.Length() >= 1)
     {
-        if( split_indexs[split_indexs.Length()] == caret_pos )
+        if( splitted_indexs[splitted_indexs.Length()] == caret_pos )
         {
-            return split_indexs.Length()
+            return splitted_indexs.Length()
         }
-        loop % split_indexs.Length()
+        loop % splitted_indexs.Length()
         {
-            if( split_indexs[A_Index] > caret_pos ){
+            if( splitted_indexs[A_Index] > caret_pos ){
                 return A_Index
             }
         }
-        Assert(false, split_indexs.Length() "," caret_pos)
+        Assert(false, splitted_indexs.Length() "," caret_pos)
     }
     return 1
 }
 
-SplittedIndexsGetLeftWordPos(split_indexs, start_pos)
+SplittedIndexsGetLeftWordPos(splitted_indexs, start_pos)
 {
     local
     if( start_pos == 0 ){
         return 0
     }
     last_index := 0
-    loop, % split_indexs.Length()
+    loop, % splitted_indexs.Length()
     {
-        split_index := split_indexs[A_Index]
+        split_index := splitted_indexs[A_Index]
         if( split_index >= start_pos ){
             break
         }
@@ -36,13 +36,13 @@ SplittedIndexsGetLeftWordPos(split_indexs, start_pos)
     return last_index
 }
 
-SplittedIndexsGetRightWordPos(split_indexs, start_pos)
+SplittedIndexsGetRightWordPos(splitted_indexs, start_pos)
 {
     local
     last_index := start_pos
-    loop, % split_indexs.Length()
+    loop, % splitted_indexs.Length()
     {
-        split_index := split_indexs[A_Index]
+        split_index := splitted_indexs[A_Index]
         if( split_index > start_pos ){
             last_index := split_index
             break
