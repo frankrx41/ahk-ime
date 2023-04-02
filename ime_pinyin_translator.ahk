@@ -1,6 +1,6 @@
 ;*******************************************************************************
 ;
-PinyinResultInsertWords(ByRef search_result, splitted_input)
+PinyinTranslateInsertResult(ByRef search_result, splitted_input)
 {
     local
     splitted_string := splitted_input
@@ -28,18 +28,9 @@ PinyinResultInsertWords(ByRef search_result, splitted_input)
     }
 }
 
-PinyinResultRemoveZeroIndex(ByRef search_result)
-{
-    ; [0] is store "pinyin"
-    if( search_result.HasKey(0) ){
-        search_result.Delete(0)
-    }
-    return
-}
-
 ;*******************************************************************************
 ; 拼音取词
-PinyinGetTranslateResult(ime_input_split)
+PinyinTranslateFindResult(splitted_input)
 {
     local
     ImeProfilerBegin(20)
@@ -47,17 +38,20 @@ PinyinGetTranslateResult(ime_input_split)
     search_result           := []
 
     ; 插入拼音所能组成的候选词
-    PinyinResultInsertWords(search_result, ime_input_split)
+    PinyinTranslateInsertResult(search_result, splitted_input)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    PinyinResultInsertSimpleSpell(search_result, ime_input_split)
+    PinyinTranslateInsertSimpleSpell(search_result, splitted_input)
 
     if( ImeModeGetLanguage() == "tw" )
     {
         PinyinResultCovertTraditional(search_result)
     }
 
-    PinyinResultRemoveZeroIndex(search_result)
+    ; TODO: remove this
+    if( search_result.HasKey(0) ){
+        search_result.Delete(0)
+    }
     ; [
     ;     ; 1   , 2   , 3      , 4 , 5  
     ;     ["wo3", "我", "30233", "", "1"]

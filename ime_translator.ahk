@@ -33,7 +33,7 @@ ImeTranslatorUpdateResult(splitted_input, radical_list)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
                 ; Get translate result
-                translate_result := PinyinGetTranslateResult(find_split_string)
+                translate_result := PinyinTranslateFindResult(find_split_string)
                 if( translate_result.Length() == 0 ){
                     first_word := SplittedInputGetFirstWord(find_split_string)
                     translate_result := [[first_word, first_word]]
