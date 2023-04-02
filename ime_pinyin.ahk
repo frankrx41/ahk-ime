@@ -364,6 +364,6 @@ PinyinInitialize()
 
     PinyinHistoryClear()
     PinyinRadicalInitialize()
-    PinyinSplitTableInitialize()
+    PinyinSplitterTableInitialize()
     PinyinTraditionalInitialize()
 }

@@ -18,7 +18,7 @@ IsSymbol(char)
 
 ;*******************************************************************************
 ; Initialize
-PinyinSplitTableInitialize()
+PinyinSplitterTableInitialize()
 {
     global split_weight_table := {}
     FileRead, file_content, data\pinyin-split.txt
@@ -33,7 +33,7 @@ PinyinSplitTableInitialize()
 
 ;*******************************************************************************
 ; Static
-PinyinSplitGetTone(input_str, initials, vowels, ByRef index)
+PinyinSplitterGetTone(input_str, initials, vowels, ByRef index)
 {
     local
     strlen := StrLen(input_str)
@@ -49,7 +49,7 @@ PinyinSplitGetTone(input_str, initials, vowels, ByRef index)
     return tone
 }
 
-PinyinSplitMaxVowelsLength(input_str, index)
+PinyinSplitterMaxVowelsLength(input_str, index)
 {
     local
     strlen := StrLen(input_str)
@@ -71,7 +71,7 @@ PinyinSplitMaxVowelsLength(input_str, index)
     return vowels_max_len
 }
 
-PinyinSplitIsInTable(left_initials, left_vowels, right_string)
+PinyinSplitterIsInTable(left_initials, left_vowels, right_string)
 {
     global split_weight_table
     right_string_len := StrLen(right_string)
@@ -88,7 +88,7 @@ PinyinSplitIsInTable(left_initials, left_vowels, right_string)
     return false
 }
 
-PinyinSplitIsGraceful(left_initials, left_vowels, right_string)
+PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
 {
     next_char := SubStr(right_string, 1, 1)
     if( !right_string || IsTone(next_char) ){
@@ -103,7 +103,7 @@ PinyinSplitIsGraceful(left_initials, left_vowels, right_string)
 
     if( is_complete || IsCompletePinyin(right_initials, next_char) )
     {
-        return PinyinSplitIsInTable(left_initials, left_vowels, right_string)
+        return PinyinSplitterIsInTable(left_initials, left_vowels, right_string)
     }
     else
     {
@@ -111,11 +111,11 @@ PinyinSplitIsGraceful(left_initials, left_vowels, right_string)
     }
 }
 
-PinyinSplitGetVowels(input_str, initials, ByRef index)
+PinyinSplitterGetVowels(input_str, initials, ByRef index)
 {
     local
     ; 最长是4个
-    vowels_max_len := PinyinSplitMaxVowelsLength(input_str, index)
+    vowels_max_len := PinyinSplitterMaxVowelsLength(input_str, index)
     vowels      := ""
     vowels_len  := 0
     if( vowels_max_len > 0 )
@@ -133,7 +133,7 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
                 if( !IsZeroInitials(initials) && vowels_len == 1 ){
                     break
                 }
-                if( IsInitials(next_char) && PinyinSplitIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) ) {
+                if( IsInitials(next_char) && PinyinSplitterIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len)) ) {
                     break
                 }
             }
@@ -150,7 +150,7 @@ PinyinSplitGetVowels(input_str, initials, ByRef index)
     return vowels
 }
 
-PinyinSplitGetInitials(input_str, initials, ByRef index)
+PinyinSplitterGetInitials(input_str, initials, ByRef index)
 {
     local
     index += 1
@@ -191,8 +191,8 @@ PinyinSplitGetInitials(input_str, initials, ByRef index)
 ; "taNde1B" -> [ta'de1] + [3,7] + [N,B]
 ; "z?eyangz?i3" -> [z?e'yang'z?i3] + [3,7,11] + [,,]
 ;
-; See: `PinyinSplitInputStringTest`
-PinyinSplitInputString(origin_input, ByRef split_indexs, ByRef radical_list)
+; See: `PinyinSplitterInputStringTest`
+PinyinSplitterInputString(origin_input, ByRef split_indexs, ByRef radical_list)
 {
     local
     Critical
@@ -225,10 +225,10 @@ PinyinSplitInputString(origin_input, ByRef split_indexs, ByRef radical_list)
 
             start_index := index
 
-            initials    := PinyinSplitGetInitials(input_str, initials, index)
-            vowels      := PinyinSplitGetVowels(input_str, initials, index)
+            initials    := PinyinSplitterGetInitials(input_str, initials, index)
+            vowels      := PinyinSplitterGetVowels(input_str, initials, index)
             full_vowels := GetFullVowels(initials, vowels)
-            tone        := PinyinSplitGetTone(input_str, initials, vowels, index)
+            tone        := PinyinSplitterGetTone(input_str, initials, vowels, index)
 
             if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
                 vowels .= "%"
@@ -275,7 +275,7 @@ PinyinSplitInputString(origin_input, ByRef split_indexs, ByRef radical_list)
 
 ;*******************************************************************************
 ; Unit Test
-PinyinSplitInputStringTest()
+PinyinSplitterInputStringTest()
 {
     test_case := ["wo3ai4ni3", "woaini", "wo'ai'ni", "wo aini", "swalb1", "zhrmghg", "taNde1B", "z?eyangz?i3"]
     msg_string := ""
@@ -284,7 +284,7 @@ PinyinSplitInputStringTest()
         input_str := test_case[A_Index]
         split_indexs := []
         radical_list := []
-        output_str := PinyinSplitInputString(input_str, split_indexs, radical_list)
+        output_str := PinyinSplitterInputString(input_str, split_indexs, radical_list)
         msg_string .= """" input_str """ -> [" output_str "] + ["
         loop % split_indexs.Length()
         {
