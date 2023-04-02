@@ -1,9 +1,10 @@
 WordCreatorUI( input_text )
 {
     local
-    static value, weight, comment
+    static value, weight
     global word_creator_ui_pinyin_key
     global word_creator_ui_pinyin_weight
+    global word_creator_ui_pinyin_comment
 
     input_text := RegExReplace(input_text, "\s")
 
@@ -19,32 +20,33 @@ WordCreatorUI( input_text )
     Gui, create:Add, Edit, x80 yp w400 -Multi r1 vvalue, %input_text%
 
     Gui, create:Add, Text, xm, Comment:
-    Gui, create:Add, Edit, x80 yp w400 -Multi r1 vcomment,
+    Gui, create:Add, Edit, x80 yp w400 -Multi r1 vword_creator_ui_pinyin_comment,
 
     Gui, create:Add, Text, xm, Weight:
-    Gui, create:Add, Edit, x80 yp w100 Number vword_creator_ui_pinyin_weight
+    Gui, create:Add, Edit, x80 yp w80 Number vword_creator_ui_pinyin_weight
     Gui, create:Add, UpDown, x160 yp w400 Range-1-65000, 28000
 
-    Gui, create:Add, Button, x+5 w60, Weight
-    Gui, create:Add, Button, x+5 w60, WReset
-    Gui, create:Add, Button, x+15 Default w70, OK
-    Gui, create:Add, Button, yp x+5 w70, Cancel
+    Gui, create:Add, Button, x+5 w60, Reset
+    Gui, create:Add, Button, x+5 w60, GetDB
+    Gui, create:Add, Button, x+45 Default w70, Update
+    Gui, create:Add, Button, yp x+5 w70, Exit
     Gui, create:Show, , Create Word
     Gosub, createButtonPinyin
     return
 
-    createButtonWReset:
+    createButtonReset:
         GuiControl, create:, word_creator_ui_pinyin_weight, 28,000
     return
 
-    createButtonWeight:
+    createButtonGetDB:
         Gui, create:Submit, NoHide
-        weight := WordCreatorDBGetWeight(ImeDBGet(), word_creator_ui_pinyin_key, value)
+        WordCreatorDBGetInfo(ImeDBGet(), word_creator_ui_pinyin_key, value, weight, comment)
         ; Make 1234 -> "1,234"
         if( weight >= 1000 ){
             weight := Floor((weight / 1000)) "," Format("{:03}", Mod(weight, 1000))
         }
         GuiControl, create:, word_creator_ui_pinyin_weight, %weight%
+        GuiControl, create:, word_creator_ui_pinyin_comment, %comment%
     return
 
     createButtonPinyin:
@@ -55,12 +57,12 @@ WordCreatorUI( input_text )
         GuiControl, create:, word_creator_ui_pinyin_key, %pinyin%
     return
 
-    createButtonOk:
+    createButtonUpdate:
         Gui, create:Submit, NoHide
         ; MsgBox, % word_creator_ui_pinyin_key "," value "," word_creator_ui_pinyin_weight "," comment
         if( word_creator_ui_pinyin_key && value && word_creator_ui_pinyin_weight ){
             weight := StrReplace(word_creator_ui_pinyin_weight, ",")
-            WordCreatorUpdateDB(ImeDBGet(), word_creator_ui_pinyin_key, value, weight, comment)
+            WordCreatorUpdateDB(ImeDBGet(), word_creator_ui_pinyin_key, value, weight, word_creator_ui_pinyin_comment)
         } else {
             MsgBox, Please fill all value
         }
@@ -68,7 +70,7 @@ WordCreatorUI( input_text )
 
     createGuiEscape:
     createGuiClose:
-    createButtonCancel:
+    createButtonExit:
         Gui, create:Destroy
     return
 }
@@ -80,47 +82,54 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
     weight := Max(0, weight)
     sim := PinyinSqlSimpleKey(key)
 
-    if( WordCreatorDBGetWeight(DB, key, value) == -1 )
+    WordCreatorDBGetInfo(DB, key, value, load_weight, load_comment)
+    is_create_new_key := (load_weight == -1)
+    if( is_create_new_key )
     {
         sql_cmd := "INSERT INTO pinyin ( sim, [key], value, weight, comment ) "
         sql_cmd .= "VALUES ( '" sim "', '" key "', '" value "', " weight ", '" comment "' );"
-
-        if( DB.Exec(sql_cmd) ){
-            Msgbox, 48, , % "Create success`nKey: " key "`nValue: " value
-        } else {
-            Assert(0, DB.ErrorMsg,true)
-        }
     }
     else
     {
         sql_cmd := "UPDATE pinyin SET sim = '" sim "', [key] = '" key "', value = '" value "', weight = '" weight "', comment = '" comment "' "
         sql_cmd .= "WHERE sim = '" sim "' AND ""key"" = '" key "' AND value = '" value "';"
-        
-        if( DB.Exec(sql_cmd) ){
-            Msgbox, 32, , % "Update success`nKey: " key "`nValue: " value
+    }
+
+    if( DB.Exec(sql_cmd) ){
+        msgbox_info := "Key:`t" key "`nValue:`t" value "`nWeight:`t" weight "`nComment: """ comment """ (" Asc(comment) ")"
+        if( is_create_new_key ) {
+            msgbox_style := 48
+            msgbox_title := "Create Success"
         } else {
-            Assert(0, DB.ErrorMsg,true)
+            msgbox_style := 32
+            msgbox_title := "Update Success"
         }
+        Msgbox, % msgbox_style, % msgbox_title, % msgbox_info
+        TranslatorHistoryClear()
+    } else {
+        Assert(0, DB.ErrorMsg, true)
     }
 }
 
-WordCreatorDBGetWeight(DB, key, value)
+WordCreatorDBGetInfo(DB, key, value, ByRef weight, ByRef comment)
 {
     sim := PinyinSqlSimpleKey(key)
-    sql_cmd := "SELECT weight FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
+    sql_cmd := "SELECT weight,comment FROM 'pinyin' WHERE sim='" sim "' AND key='" key "' AND value='" value "'"
 
+    weight := -1
+    comment := ""
     if( DB.GetTable(sql_cmd, result_table) )
     {
         if( result_table.RowCount != 0 )
         {
-            Assert(result_table.RowCount == 1, sql_cmd,true)
+            Assert(result_table.RowCount == 1, sql_cmd, true)
             ; Msgbox, % result_table.Rows[1, 1]
-            return result_table.Rows[1, 1]
+            weight := result_table.Rows[1, 1]
+            comment := result_table.Rows[1, 2]
         }
     } else {
-        Assert(0, DB.ErrorMsg,true)
+        Assert(0, DB.ErrorMsg, true)
     }
-    return -1
 }
 
 WordCreatorGetPinyin(word)

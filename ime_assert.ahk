@@ -1,3 +1,29 @@
+;*******************************************************************************
+; Assert
+; Process will auto store failed assert in "".\debug.log"
+;*******************************************************************************
+;
+Assert(bool, debug_msg:="", show_msgbox:=false)
+{
+    local
+    if( IsDebugVersion() && !bool )
+    {
+        git_hash := GetGitHash()
+        time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
+
+        debug_info := time_string " [" git_hash "]`n"
+        debug_info .= CallStack()
+        debug_info .= " """ debug_msg """`n"
+
+        FileAppend, %debug_info%, .\debug.log
+        if( show_msgbox ){
+            Msgbox, 18, Assert, % debug_info "`n" """" debug_msg """"
+        }
+        ImeProfilerBegin(4)
+        ImeProfilerEnd(4, "`n  - " CallerName(0) " """ debug_msg """")
+    }
+}
+
 ; https://www.autohotkey.com/board/topic/76062-ahk-l-how-to-get-callstack-solution/
 CallStack(deepness = 5, printLines = 0)
 {
@@ -15,24 +41,14 @@ CallStack(deepness = 5, printLines = 0)
     return stack
 }
 
-Assert(bool, str:="", show_msgbox:=false)
+;*******************************************************************************
+; return caller function name
+; lv == 1 should only work when use in `Assert`
+CallerName(lv := 1)
 {
-    local
-    if( !bool )
-    {
-        git_hash := RTrim(CmdRet("git rev-parse --short HEAD"), "`n")
-        time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
-
-        debug_info := time_string " [" git_hash "]`n"
-        debug_info .= CallStack()
-        debug_info .= " """ str """`n"
-
-        FileAppend, %debug_info%, .\debug.log
-        if( show_msgbox ){
-            Msgbox, % debug_info
-        }
-        call_stack_str := RegExReplace(CallStack(1), "^.*\\")
-        ImeProfilerBegin(4)
-        ImeProfilerEnd(4, "`n  - " call_stack_str " """ str """")
-    }
+    oEx := Exception("", lv-2)
+    oExPrev := Exception("", lv-3)
+    file_name := RegExReplace(oEx.File, "^.*\\")
+    msg := file_name " (" oEx.Line ") : " oExPrev.What
+    return msg
 }

@@ -9,19 +9,6 @@ ImeSelectorClear()
     ime_selector_select := []
 }
 
-ImeSelectorClearAfter(split_index)
-{
-    global ime_selector_select
-    loop % ime_selector_select.Length()
-    {
-        test_index := A_Index
-        if( test_index > split_index )
-        {
-            ImeSelectorUnLockWord(test_index)
-        }
-    }
-}
-
 ;*******************************************************************************
 ;
 ImeSelectorGetCaretSelectIndex()
@@ -29,6 +16,12 @@ ImeSelectorGetCaretSelectIndex()
     local
     split_index := ImeInputterGetCaretSplitIndex()
     return ImeSelectorGetSelectIndex(split_index)
+}
+
+ImeSelectorCancelCaretSelectIndex()
+{
+    split_index := ImeInputterGetCaretSplitIndex()
+    ImeSelectorSetSelectIndex(split_index, 0)
 }
 
 ImeSelectorSetCaretSelectIndex(select_index)
@@ -75,7 +68,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 
     if( lock_result )
     {
-        ImeSelectorUnLockFrontLockWord(split_index)
+        ImeSelectorUnLockFrontLockWords(split_index)
         ; Lock this
         select_word := ImeTranslatorResultGetWord(split_index, select_index)
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
@@ -100,7 +93,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
     ImeProfilerEnd(41, debug_info)
 }
 
-ImeSelectorUnLockFrontLockWord(split_index)
+ImeSelectorUnLockFrontLockWords(split_index)
 {
     local
     ; Find if prev has a reuslt length include this
@@ -121,6 +114,19 @@ ImeSelectorUnLockFrontLockWord(split_index)
         }
         else {
             test_length += 1
+        }
+    }
+}
+
+ImeSelectorUnLockAfterWords(split_index)
+{
+    global ime_selector_select
+    loop % ime_selector_select.Length()
+    {
+        test_index := A_Index
+        if( test_index > split_index )
+        {
+            ImeSelectorUnLockWord(test_index)
         }
     }
 }
@@ -160,7 +166,7 @@ ImeSelectorSetSelectIndex(split_index, select_index)
     ime_selector_select[split_index, 1] := select_index
 
     ImeProfilerBegin(42, true)
-    debug_info := "`n  - [" split_index "]->[" select_index "] " RegExReplace(CallStack(1), "^.*\\")
+    debug_info := "`n  - [" split_index "]->[" select_index "] " CallerName()
     ImeProfilerEnd(42, debug_info)
 }
 
@@ -175,7 +181,7 @@ ImeSelectorIsSelectLock(split_index)
     local
     global ime_selector_select
     ImeProfilerBegin(44, true)
-    debug_info := "`n  - [" split_index "]->[" ime_selector_select[split_index, 2] "] " RegExReplace(CallStack(1), "^.*\\")
+    debug_info := "`n  - [" split_index "]->[" ime_selector_select[split_index, 2] "] " CallerName()
     ImeProfilerEnd(44, debug_info)
     return ime_selector_select[split_index, 2] ? true : false
 }

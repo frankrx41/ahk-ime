@@ -3,7 +3,6 @@ ImeTranslatorInitialize()
     global ime_translator_result_const
     global ime_translator_result_filtered
     global ime_translator_radical_list
-
     ImeTranslatorClear()
 }
 
@@ -14,41 +13,45 @@ ImeTranslatorClear()
     global ime_translator_radical_list      := []
 }
 
-ImeTranslatorUpdateResult(input_split, radical_list)
+ImeTranslatorUpdateResult(splitter_result)
 {
     local
     global ime_translator_result_const
     global ime_translator_radical_list
 
-    if( input_split )
+    if( splitter_result.Length() )
     {
         ImeProfilerBegin(30)
-        ime_translator_radical_list := radical_list
+        ime_translator_radical_list := []
         ime_translator_result_const := []
-
-        test_split_string := input_split
-        loop % radical_list.Length()
+        debug_text := ""
+        loop % splitter_result.Length()
         {
-            find_split_string := SplitWordGetPrevWords(test_split_string)
-            if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
+            ime_translator_radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
+            find_split_string := SplitterResultConvertToStringUntilSkip(splitter_result, A_Index)
+            debug_text .= find_split_string ", "
+            if( SplitterResultIsSkip(splitter_result, A_Index) )
             {
-                translate_result := PinyinGetTranslateResult(find_split_string, ImeDBGet())
-                if( translate_result.Length() == 0 ){
-                    first_word := SplitWordGetFirstWord(find_split_string)
-                    translate_result := [[first_word, first_word]]
-                }
-            } else {
-                find_split_string := EscapeCharsGetContent(find_split_string)
-                if( !RegexMatch(find_split_string, "^\s+$") ) {
-                    translate_result := [[find_split_string, find_split_string]]
-                } else {
-                    translate_result := [[find_split_string, ""]]
+                ; Add legacy text
+                translate_result := [[find_split_string, find_split_string, 0, "", 1]]
+                if( RegexMatch(find_split_string, "^\s+$") ) {
+                    translate_result[1,2] := ""
                 }
             }
+            else
+            {
+                Assert(find_split_string)
+                ; Get translate result
+                translate_result := PinyinTranslateFindResult(find_split_string)
+                if( translate_result.Length() == 0 ){
+                    first_word := SplitterResultConvertToString(splitter_result, A_Index)
+                    translate_result := [[first_word, first_word, 0, "", 1]]
+                }
+            }
+            ; Insert result
             ime_translator_result_const.Push(translate_result)
-            test_split_string := SplitWordRemoveFirstWord(test_split_string)
         }
-        ImeProfilerEnd(30)
+        ImeProfilerEnd(30, debug_text)
         ImeTranslatorFilterResults()
     } else {
         ImeTranslatorClear()
@@ -161,7 +164,7 @@ ImeTranslatorFixupSelectIndex()
         }
     }
     ImeProfilerEnd(32, debug_info)
-    Assert(skip_word_count == 0)
+    Assert(skip_word_count == 0, skip_word_count)
 }
 
 ImeTranslatorFilterResults(single_mode:=false)
@@ -181,17 +184,17 @@ ImeTranslatorFilterResults(single_mode:=false)
         test_result := search_result[split_index]
         
         if( true ){
-            ; PinyinResultFilterZeroWeight(test_result)
+            ; TranslatorResultFilterZeroWeight(test_result)
         }
         if( radical_list ){
-            PinyinResultFilterByRadical(test_result, radical_list)
+            TranslatorResultFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
         }
         if( single_mode ){
-            PinyinResultFilterSingleWord(test_result)
+            TranslatorResultFilterSingleWord(test_result)
         }
         if( true ){
-            PinyinResultUniquify(test_result)
+            TranslatorResultUniquify(test_result)
         }
     }
 

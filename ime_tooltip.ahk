@@ -1,9 +1,24 @@
+ImeTooltipInitialize()
+{
+    local
+    font_size           := 13
+    font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
+    font_bold           := false
+    background_color    := "373832"
+    text_color          := "d4d4d4"
+    ToolTip(1, "", "Q0 B" background_color " T"  text_color " S" font_size, font_family, font_bold)
+}
+
+;*******************************************************************************
+;
 IsTraditionalComment(comment)
 {
     first_char := SubStr(comment, 1, 1)
     return InStr("*+", first_char)
 }
 
+;*******************************************************************************
+;
 ImeTooltipGetDisplaySelectItems()
 {
     local
@@ -158,12 +173,12 @@ ImeTooltipUpdate(tooltip_pos := "")
         split_index := ImeInputterGetCaretSplitIndex()
         extern_info := ""
         extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
-        radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
+        radical_list := RadicalWordSplit(ImeTranslatorResultGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
         radical_words := ""
         loop, % radical_list.Length()
         {
             radical_word := radical_list[A_Index]
-            radical_words .= radical_word ;. PinyinRadicalGetPinyin(radical_word)
+            radical_words .= radical_word ;. RadicalGetPinyin(radical_word)
         }
         extern_info .= " {" radical_words "}"
         extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"

@@ -68,9 +68,15 @@
         }
     return
 
-    ; BackSpace 删除光标前面的空格
+    ; Delete before and after char
+    Delete::
+        ImeInputterDeleteCharAtCaret(false)
+        ImeTooltipUpdate()
+    return
+
     BackSpace::
-        HotkeyOnBackSpace()
+        ImeInputterDeleteCharAtCaret(true)
+        ImeTooltipUpdate()
     return
 
     ; Ctrl + Backspace
@@ -126,7 +132,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(-1)
+            ImeInputterCaretMoveByWord(-1, true)
         }
         ImeTooltipUpdate()
     return
@@ -135,7 +141,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(+1)
+            ImeInputterCaretMoveByWord(+1, true)
         }
         ImeTooltipUpdate()
     return
@@ -143,12 +149,12 @@
     ; Ctrl + Left/Right
     ; Move caret by a word
     ^Left::
-        ImeInputterCaretMoveByWord(-1)
+        ImeInputterCaretMoveByWord(-1, true)
         ImeTooltipUpdate()
     return
 
     ^Right::
-        ImeInputterCaretMoveByWord(+1)
+        ImeInputterCaretMoveByWord(+1, true)
         ImeTooltipUpdate()
     return
 
@@ -223,12 +229,11 @@
     ; Create word gui
     !`::
         WordCreatorUI(GetSelectText())
-        PinyinHistoryClear()
     return
 
     ; F5: reload
     F5::
-        ImeRestart()
+        ScriptRestart()
     return
 
     F6::
@@ -259,7 +264,7 @@
 ; Reload script, debug only
 #if WinActive("AHK-Ime") && !ImeModeIsEnglish()
     ~^S::
-        ImeRestart()
+        ScriptRestart()
     return
 #if
 
@@ -271,6 +276,7 @@ ImeToggleSuspend:
     if( A_ThisHotkey == "#Space" && !A_IsSuspended && ImeModeIsEnglish() ){
         ImeHotkeyShiftDown()
     }
+    ImeInputterClearString()
     ImeStateRefresh()
     ImeTooltipUpdate("")
 return
