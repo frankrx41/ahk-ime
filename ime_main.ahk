@@ -28,7 +28,9 @@ ImeSelectorInitialize()
 ImeTranslatorInitialize()
 TranslatorHistoryClear()
 
-ImeDBInitialize()
+; Radical
+RadicalInitialize()
+
 PinyinInitialize()
 
 ImeTooltipInitialize()
@@ -37,6 +39,8 @@ ImeHotkeyInitialize()
 ; We need to declare some variables then `ImeStateUpdateMode` used
 ; `ImeStateUpdateMode` is call inside `ImeStateInitialize`
 ImeStateInitialize()
+
+ImeDBInitialize()
 
 ; We should register hotkey after other modules are initialized
 ImeHotkeyRegisterInitialize()

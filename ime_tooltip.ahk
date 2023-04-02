@@ -173,12 +173,12 @@ ImeTooltipUpdate(tooltip_pos := "")
         split_index := ImeInputterGetCaretSplitIndex()
         extern_info := ""
         extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultGetListLength(split_index) "] (" ImeTranslatorResultGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
-        radical_list := PinyinRadicalWordGetRadical(ImeTranslatorResultGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
+        radical_list := RadicalWordSplit(ImeTranslatorResultGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
         radical_words := ""
         loop, % radical_list.Length()
         {
             radical_word := radical_list[A_Index]
-            radical_words .= radical_word ;. PinyinRadicalGetPinyin(radical_word)
+            radical_words .= radical_word ;. RadicalGetPinyin(radical_word)
         }
         extern_info .= " {" radical_words "}"
         extern_info .= " (" ImeTranslatorResultGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"

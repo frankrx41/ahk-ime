@@ -187,7 +187,7 @@ ImeTranslatorFilterResults(single_mode:=false)
             ; PinyinResultFilterZeroWeight(test_result)
         }
         if( radical_list ){
-            PinyinResultFilterByRadical(test_result, radical_list)
+            TranslatorResultFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
         }
         if( single_mode ){

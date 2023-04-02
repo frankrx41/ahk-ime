@@ -1,7 +1,7 @@
 ;*******************************************************************************
-; 辅助码相关
+; Radical
 ;
-PinyinRadicalInitialize()
+RadicalInitialize()
 {
     local
     global ime_radical_table    := {}
@@ -46,30 +46,33 @@ PinyinRadicalInitialize()
     Assert(ime_radicals_pinyin.Count() != 0)
 }
 
-; 辅助码构成反查
+;*******************************************************************************
 ; "派" -> ["氵", "𠂢"]
-PinyinRadicalWordGetRadical(single_word)
+RadicalWordSplit(single_word)
 {
     global ime_radical_table
     return ime_radical_table[single_word]
 }
 
-PinyinRadicalGetPinyin(single_radical)
+RadicalGetPinyin(single_radical)
 {
     local
     global ime_radicals_pinyin
     return ime_radicals_pinyin[single_radical]
 }
 
-PinyinRadicalIsAtomic(single_word)
+; Atomic radical should no continue split
+RadicalIsAtomic(single_word)
 {
     global ime_radical_atomic
     return InStr(ime_radical_atomic, single_word)
 }
 
-PinyinRadicalIsFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
+;*******************************************************************************
+;
+RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 {
-    test_pinyin := PinyinRadicalGetPinyin(test_word)
+    test_pinyin := RadicalGetPinyin(test_word)
     if( test_pinyin == SubStr(test_radical, 1, 1) ) {
         test_radical := SubStr(test_radical, 2)
         return true
@@ -78,11 +81,11 @@ PinyinRadicalIsFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
         return true
     }
-    if( PinyinRadicalIsAtomic(test_word) ){
+    if( RadicalIsAtomic(test_word) ){
         return false
     }
 
-    radical_word_list := PinyinRadicalWordGetRadical(test_word)
+    radical_word_list := RadicalWordSplit(test_word)
     first_word := radical_word_list[1]
 
     loop, % radical_word_list.Length()-1
@@ -91,12 +94,12 @@ PinyinRadicalIsFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     }
 
     Assert(first_word != test_word, test_word, true)
-    return PinyinRadicalIsFirstPart(first_word, test_radical, remain_radicals)
+    return RadicalMatchFirstPart(first_word, test_radical, remain_radicals)
 }
 
-PinyinRadicalIsLastPart(test_word, ByRef test_radical)
+RadicalMatchLastPart(test_word, ByRef test_radical)
 {
-    test_pinyin := PinyinRadicalGetPinyin(test_word)
+    test_pinyin := RadicalGetPinyin(test_word)
     if( test_pinyin == SubStr(test_radical, 0, 1) ) {
         test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
         return true
@@ -105,23 +108,22 @@ PinyinRadicalIsLastPart(test_word, ByRef test_radical)
         test_radical := SubStr(test_radical, 2)
         return true
     }
-    if( PinyinRadicalIsAtomic(test_word) ){
+    if( RadicalIsAtomic(test_word) ){
         return false
     }
 
-    radical_word_list := PinyinRadicalWordGetRadical(test_word)
+    radical_word_list := RadicalWordSplit(test_word)
     last_word := radical_word_list[radical_word_list.Length()]
 
     Assert(last_word != test_word, test_word, true)
-    return PinyinRadicalIsLastPart(last_word, test_radical)
+    return RadicalMatchLastPart(last_word, test_radical)
 }
 
-
-; "CR" + "幕" -> ""
-; "CCC" + "艹" -> "CC"
-PinyinResultIsAllPartOfRadical(test_radical, test_word)
+;*******************************************************************************
+;
+RadicalIsFullMatch(test_word, test_radical)
 {
-    radical_word_list := CopyObj(PinyinRadicalWordGetRadical(test_word))
+    radical_word_list := CopyObj(RadicalWordSplit(test_word))
     loop
     {
         if( test_radical == "" ){
@@ -139,7 +141,7 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         {
             first_word := radical_word_list[1]
             remain_radicals := []
-            if( PinyinRadicalIsFirstPart(first_word, test_radical, remain_radicals) )
+            if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
             {
                 radical_word_list.RemoveAt(1)
                 loop, % remain_radicals.Length()
@@ -154,7 +156,7 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
         if( !has_part_same )
         {
             last_word := radical_word_list[radical_word_list.Length()]
-            if( PinyinRadicalIsLastPart(last_word, test_radical) )
+            if( RadicalMatchLastPart(last_word, test_radical) )
             {
                 radical_word_list.RemoveAt(radical_word_list.Length())
                 has_part_same := true
@@ -168,8 +170,9 @@ PinyinResultIsAllPartOfRadical(test_radical, test_word)
     }
 }
 
+;*******************************************************************************
 ; radical_list: ["SS", "YZ", "RE"]
-PinyinResultFilterByRadical(ByRef search_result, radical_list)
+TranslatorResultFilterByRadical(ByRef search_result, radical_list)
 {
     local
 
@@ -188,7 +191,7 @@ PinyinResultFilterByRadical(ByRef search_result, radical_list)
                 if( test_radical )
                 {
                     test_word := SubStr(word_value, A_Index, 1)
-                    if( !PinyinResultIsAllPartOfRadical(test_radical, test_word) )
+                    if( !RadicalIsFullMatch(test_word, test_radical) )
                     {
                         sould_remove := true
                     }
