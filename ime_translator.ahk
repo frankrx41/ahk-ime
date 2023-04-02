@@ -15,6 +15,7 @@ ImeTranslatorUpdateResult(splitter_result)
 {
     local
     global ime_translator_result_list_origin
+    global ime_translator_result_list_filtered
 
     if( splitter_result.Length() )
     {
@@ -50,12 +51,15 @@ ImeTranslatorUpdateResult(splitter_result)
         }
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
-        ImeTranslatorFilterResults(radical_list)
+        ime_translator_result_list_filtered := TranslatorResultListFilterResults(ime_translator_result_list_origin, radical_list)
+        ImeTranslatorFixupSelectIndex()
     } else {
         ImeTranslatorClear()
     }
 }
 
+;*******************************************************************************
+;
 ImeTranslatorFindMaxLengthResultIndex(split_index, max_length)
 {
     local
@@ -165,51 +169,6 @@ ImeTranslatorFixupSelectIndex()
     Assert(skip_word_count == 0, skip_word_count)
 }
 
-ImeTranslatorFilterResults(input_radical_list, single_mode:=false)
-{
-    local
-    global ime_translator_result_list_origin
-    global ime_translator_result_list_filtered
-
-    search_result := CopyObj(ime_translator_result_list_origin)
-    radical_list := CopyObj(input_radical_list)
-    skip_word := 0
-    ImeProfilerBegin(31, true)
-    loop % search_result.Length()
-    {
-        split_index := A_Index
-        test_result := search_result[split_index]
-        
-        if( true ){
-            ; TranslatorResultFilterZeroWeight(test_result)
-        }
-        if( radical_list ){
-            TranslatorResultFilterByRadical(test_result, radical_list)
-            radical_list.RemoveAt(1)
-        }
-        if( single_mode ){
-            TranslatorResultFilterSingleWord(test_result)
-        }
-        if( true ){
-            TranslatorResultUniquify(test_result)
-        }
-    }
-
-    ; Store last select
-    store_select_index := []
-    loop % search_result.Length()
-    {
-        store_select_index[A_Index] := ime_translator_result_list_filtered[A_Index, 0]
-    }
-    ime_translator_result_list_filtered := search_result
-    loop % search_result.Length()
-    {
-        ime_translator_result_list_filtered[A_Index, 0] := store_select_index[A_Index]
-    }
-    ImeTranslatorFixupSelectIndex()
-    ImeProfilerEnd(31, "length: (" search_result.Length() ")")
-}
-
 ;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]
 ; find ["我"]
@@ -258,6 +217,8 @@ ImeTranslatorResultListGetPinyin(split_index, word_index)
 ImeTranslatorResultListGetWord(split_index, word_index)
 {
     global ime_translator_result_list_filtered
+    ImeProfilerBegin(1)
+    ImeProfilerEnd(1, split_index "," word_index)
     return TranslatorResultGetWord(ime_translator_result_list_filtered[split_index], word_index)
 }
 

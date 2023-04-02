@@ -52,7 +52,7 @@ ImeSelectorToggleSingleMode()
     Assert(false, "not implement!", true)
     ; global ime_selector_single_mode
     ; ime_selector_single_mode := !ime_selector_single_mode
-    ; ImeTranslatorFilterResults(ime_selector_single_mode)
+    ; TranslatorResultListFilterResults(ime_selector_single_mode)
 }
 
 ;*******************************************************************************

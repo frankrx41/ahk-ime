@@ -89,18 +89,19 @@ TranslatorResultListFindIndex(ByRef translator_result, split_index, find_words, 
 
 ;*******************************************************************************
 ;
-TranslatorResultListFilterResults(ByRef translator_result, radical_list, single_mode:=false)
+TranslatorResultListFilterResults(ByRef translator_result_list, input_radical_list, single_mode:=false)
 {
     local
-    search_result   := CopyObj(translator_result)
-    radical_list    := CopyObj(radical_list)
+    search_result   := CopyObj(translator_result_list)
+    radical_list    := CopyObj(input_radical_list)
 
+    debug_text := ""
     ImeProfilerBegin(31, true)
     loop % search_result.Length()
     {
         split_index := A_Index
         test_result := search_result[split_index]
-
+        debug_text .= "`n  - [" split_index "] (" test_result.Length() ")"
         if( true ){
             ; TranslatorResultFilterZeroWeight(test_result)
         }
@@ -114,10 +115,11 @@ TranslatorResultListFilterResults(ByRef translator_result, radical_list, single_
         if( true ){
             TranslatorResultUniquify(test_result)
         }
+        debug_text .= " -> (" test_result.Length() ")"
     }
 
     ; ImeSelectorFixupSelectIndex()
-    ImeProfilerEnd(31, "length: (" search_result.Length() ")")
+    ImeProfilerEnd(31, "[" search_result.Length() "]: " . debug_text)
     return search_result
 }
 
