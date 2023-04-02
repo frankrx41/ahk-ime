@@ -43,7 +43,7 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
     return true
 }
 
-PinyinTranslateInsertSimpleSpell(ByRef search_result, splitted_input)
+PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitted_input)
 {
     local
     global history_field_array
@@ -54,9 +54,9 @@ PinyinTranslateInsertSimpleSpell(ByRef search_result, splitted_input)
         splitted_string := SplittedInputGetSimpleSpell(splitted_input)
         if( SeparateStringShouldProcess(splitted_string, splitted_input) )
         {
-            PinyinHistoryUpdateKey(splitted_string, true)
-            PinyinResultInsertAtHistory(search_result, splitted_string, 1)
-            debug_string := """" splitted_string """->(" PinyinHistoryGetResultLength(splitted_string) ")"
+            TranslatorHistoryUpdateKey(splitted_string, true)
+            TranslatorHistoryInsertResult(search_result, splitted_string, 1)
+            debug_string := """" splitted_string """->(" TranslatorHistoryGetKeyResultLength(splitted_string) ")"
         }
     }
     ImeProfilerEnd(22, debug_string)

@@ -105,7 +105,7 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
             msgbox_title := "Update Success"
         }
         Msgbox, % msgbox_style, % msgbox_title, % msgbox_info
-        PinyinHistoryClear()
+        TranslatorHistoryClear()
     } else {
         Assert(0, DB.ErrorMsg, true)
     }

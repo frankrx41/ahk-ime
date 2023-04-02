@@ -21,10 +21,11 @@
 
 ; Translator
 #Include, ime_translator.ahk
+#Include, ime_translator_history.ahk
+
 #Include, ime_pinyin_translator.ahk
 #Include, ime_pinyin_translator_simple_spell.ahk
 
-#Include, ime_pinyin_history.ahk
 #Include, ime_pinyin_sql.ahk
 #Include, ime_pinyin_split_escape.ahk
 

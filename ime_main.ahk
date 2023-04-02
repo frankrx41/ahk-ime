@@ -26,6 +26,7 @@ ImeSelectorInitialize()
 
 ; Translator
 ImeTranslatorInitialize()
+TranslatorHistoryClear()
 
 ImeDBInitialize()
 PinyinInitialize()

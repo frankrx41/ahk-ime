@@ -1,23 +1,23 @@
 ;*******************************************************************************
 ;
-PinyinTranslateInsertResult(ByRef search_result, splitted_input)
+PinyinTranslatorInsertResult(ByRef search_result, splitted_input)
 {
     local
     splitted_string := splitted_input
 
     loop, 8
     {
-        While( splitted_string && !PinyinHistoryHasResult(splitted_string) )
+        While( splitted_string && !TranslatorHistoryHasResult(splitted_string) )
         {
-            PinyinHistoryUpdateKey(splitted_string)
-            if( PinyinHistoryHasResult(splitted_string) ){
+            TranslatorHistoryUpdateKey(splitted_string)
+            if( TranslatorHistoryHasResult(splitted_string) ){
                 break
             }
             splitted_string := SplittedInputRemoveLastWord(splitted_string)
         }
         if( splitted_string )
         {
-            PinyinResultPushHistory(search_result, splitted_string)
+            TranslatorHistoryPushResult(search_result, splitted_string)
         }
 
         splitted_string := SplittedInputRemoveLastWord(splitted_string)
@@ -38,10 +38,10 @@ PinyinTranslateFindResult(splitted_input)
     search_result           := []
 
     ; 插入拼音所能组成的候选词
-    PinyinTranslateInsertResult(search_result, splitted_input)
+    PinyinTranslatorInsertResult(search_result, splitted_input)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    PinyinTranslateInsertSimpleSpell(search_result, splitted_input)
+    PinyinTranslatorInsertSimpleSpell(search_result, splitted_input)
 
     if( ImeModeGetLanguage() == "tw" )
     {
