@@ -1,4 +1,4 @@
-PinyinResultFilterSingleWord(ByRef search_result)
+TranslatorResultFilterSingleWord(ByRef search_result)
 {
     local
     ImeProfilerBegin(27)
@@ -19,7 +19,7 @@ PinyinResultFilterSingleWord(ByRef search_result)
     ImeProfilerEnd(27)
 }
 
-PinyinResultFilterZeroWeight(ByRef search_result)
+TranslatorResultFilterZeroWeight(ByRef search_result)
 {
     local
     ImeProfilerBegin(25)

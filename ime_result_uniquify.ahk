@@ -1,4 +1,4 @@
-PinyinResultUniquify(ByRef search_result)
+TranslatorResultUniquify(ByRef search_result)
 {
     local
     ImeProfilerBegin(28)

@@ -184,17 +184,17 @@ ImeTranslatorFilterResults(single_mode:=false)
         test_result := search_result[split_index]
         
         if( true ){
-            ; PinyinResultFilterZeroWeight(test_result)
+            ; TranslatorResultFilterZeroWeight(test_result)
         }
         if( radical_list ){
             TranslatorResultFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
         }
         if( single_mode ){
-            PinyinResultFilterSingleWord(test_result)
+            TranslatorResultFilterSingleWord(test_result)
         }
         if( true ){
-            PinyinResultUniquify(test_result)
+            TranslatorResultUniquify(test_result)
         }
     }
 

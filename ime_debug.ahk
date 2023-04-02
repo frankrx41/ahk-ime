@@ -42,10 +42,10 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result
     ImeDebugTipAppend(debug_tip, 20)    ; PinyinGetTranslateResult
     ImeDebugTipAppend(debug_tip, 22)    ; PinyinTranslatorInsertSimpleSpell
-    ImeDebugTipAppend(debug_tip, 25)    ; PinyinResultFilterZeroWeight
+    ImeDebugTipAppend(debug_tip, 25)    ; TranslatorResultFilterZeroWeight
     ImeDebugTipAppend(debug_tip, 26)    ; TranslatorResultFilterByRadical
-    ImeDebugTipAppend(debug_tip, 27)    ; PinyinResultFilterSingleWord
-    ImeDebugTipAppend(debug_tip, 28)    ; PinyinResultUniquify
+    ImeDebugTipAppend(debug_tip, 27)    ; TranslatorResultFilterSingleWord
+    ImeDebugTipAppend(debug_tip, 28)    ; TranslatorResultUniquify
     ImeDebugTipAppend(debug_tip, 30)    ; ImeTranslatorUpdateResult
     ImeDebugTipAppend(debug_tip, 31, 2000)  ; ImeTranslatorFilterResults
     ImeDebugTipAppend(debug_tip, 32, 2000)  ; ImeTranslatorFixupSelectIndex
