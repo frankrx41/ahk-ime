@@ -122,4 +122,3 @@ TranslatorResultListFilterResults(ByRef translator_result_list, input_radical_li
     ImeProfilerEnd(31, "[" search_result.Length() "]: " . debug_text)
     return search_result
 }
-

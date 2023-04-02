@@ -174,6 +174,8 @@ ImeInputterCallTranslator(is_delete)
     ImeProfilerEnd(12, debug_info)
 
     ImeTranslatorUpdateResult(splitter_result)
+    ImeSelectorFixupSelectIndex()
+
     ime_input_dirty := false
 }
 

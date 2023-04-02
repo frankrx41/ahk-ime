@@ -41,6 +41,8 @@
 #Include, ime_select_menu.ahk
 #Include, ime_selector_result.ahk
 
+#Include, ime_selector_fixup.ahk
+
 #Include, ime_state.ahk
 #Include, ime_putchar.ahk
 

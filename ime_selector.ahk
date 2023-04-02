@@ -86,7 +86,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         }
     }
 
-    ImeTranslatorFixupSelectIndex()
+    ImeSelectorFixupSelectIndex()
 
     if( !ImeInputterCaretIsAtEnd() )
     {
