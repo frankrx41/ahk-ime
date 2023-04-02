@@ -1,31 +1,31 @@
-PinyinResultInsertWords(ByRef DB, ByRef search_result, input_spilt_string)
+;*******************************************************************************
+;
+PinyinResultInsertWords(ByRef search_result, splitted_input)
 {
     local
-    ; 插入候选词部分
-    spilt_word := input_spilt_string
+    splitted_string := splitted_input
 
     loop, 8
     {
-        While( spilt_word && !PinyinHistoryHasResult(spilt_word) )
+        While( splitted_string && !PinyinHistoryHasResult(splitted_string) )
         {
-            PinyinHistoryUpdateKey(DB, spilt_word)
-            if( PinyinHistoryHasResult(spilt_word) ){
+            PinyinHistoryUpdateKey(splitted_string)
+            if( PinyinHistoryHasResult(splitted_string) ){
                 break
             }
-            spilt_word := SplittedInputRemoveLastWord(spilt_word)
+            splitted_string := SplittedInputRemoveLastWord(splitted_string)
         }
-        if( spilt_word )
+        if( splitted_string )
         {
-            PinyinResultPushHistory(search_result, spilt_word)
+            PinyinResultPushHistory(search_result, splitted_string)
         }
 
-        spilt_word := SplittedInputRemoveLastWord(spilt_word)
-        if( spilt_word == "" )
+        splitted_string := SplittedInputRemoveLastWord(splitted_string)
+        if( splitted_string == "" )
         {
             break
         }
     }
-    return
 }
 
 PinyinResultRemoveZeroIndex(ByRef search_result)
@@ -39,7 +39,7 @@ PinyinResultRemoveZeroIndex(ByRef search_result)
 
 ;*******************************************************************************
 ; 拼音取词
-PinyinGetTranslateResult(ime_input_split, DB:="")
+PinyinGetTranslateResult(ime_input_split)
 {
     local
     ImeProfilerBegin(20)
@@ -47,10 +47,10 @@ PinyinGetTranslateResult(ime_input_split, DB:="")
     search_result           := []
 
     ; 插入拼音所能组成的候选词
-    PinyinResultInsertWords(DB, search_result, ime_input_split)
+    PinyinResultInsertWords(search_result, ime_input_split)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    PinyinResultInsertSimpleSpell(DB, search_result, ime_input_split)
+    PinyinResultInsertSimpleSpell(search_result, ime_input_split)
 
     if( ImeModeGetLanguage() == "tw" )
     {

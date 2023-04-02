@@ -43,7 +43,7 @@ SeparateStringShouldProcess(separate_string, input_split)
     return true
 }
 
-PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
+PinyinResultInsertSimpleSpell(ByRef search_result, input_split)
 {
     local
     global history_field_array
@@ -54,7 +54,7 @@ PinyinResultInsertSimpleSpell(ByRef DB, ByRef search_result, input_split)
         separate_string := SplitWordGetSimpleSpell(input_split)
         if( SeparateStringShouldProcess(separate_string, input_split) )
         {
-            PinyinHistoryUpdateKey(DB, separate_string, true)
+            PinyinHistoryUpdateKey(separate_string, true)
             PinyinResultInsertAtHistory(search_result, separate_string, 1)
             debug_string := """" separate_string """->(" PinyinHistoryGetResultLength(separate_string) ")"
         }

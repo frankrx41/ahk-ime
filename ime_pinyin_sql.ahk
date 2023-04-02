@@ -81,7 +81,7 @@ PinyinSqlWhereCommand(sim_key, full_key)
 ; wo3ai4ni3 -> wo3ai4ni3
 ; kannid -> kan'ni'd%
 ; kannide -> kan'ni'de'
-PinyinSqlGetResult(DB, splitted_input, auto_comple:=false, limit_num:=100)
+PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
 {
     local
     Critical
@@ -96,7 +96,8 @@ PinyinSqlGetResult(DB, splitted_input, auto_comple:=false, limit_num:=100)
 
     ImeProfilerBegin(15)
     result := []
-    if( DB.GetTable(sql_full_cmd, result_table) )
+    pinyin_db := ImeDBGet()
+    if( pinyin_db.GetTable(sql_full_cmd, result_table) )
     {
         length := SplittedInputGetWordCount(splitted_input)
         loop % result_table.RowCount {

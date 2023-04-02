@@ -14,26 +14,26 @@ ImeTranslatorClear()
     global ime_translator_radical_list      := []
 }
 
-ImeTranslatorUpdateResult(input_split, radical_list)
+ImeTranslatorUpdateResult(splitted_input, radical_list)
 {
     local
     global ime_translator_result_const
     global ime_translator_radical_list
 
-    if( input_split )
+    if( splitted_input )
     {
         ImeProfilerBegin(30)
         ime_translator_radical_list := radical_list
         ime_translator_result_const := []
 
-        test_split_string := input_split
+        test_splitted_string := splitted_input
         loop % radical_list.Length()
         {
-            find_split_string := SplittedInputGetPrevWords(test_split_string)
+            find_split_string := SplittedInputGetPrevWords(test_splitted_string)
             if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
             {
                 ; Get translate result
-                translate_result := PinyinGetTranslateResult(find_split_string, ImeDBGet())
+                translate_result := PinyinGetTranslateResult(find_split_string)
                 if( translate_result.Length() == 0 ){
                     first_word := SplittedInputGetFirstWord(find_split_string)
                     translate_result := [[first_word, first_word]]
@@ -48,7 +48,7 @@ ImeTranslatorUpdateResult(input_split, radical_list)
             }
             ; Insert result
             ime_translator_result_const.Push(translate_result)
-            test_split_string := SplittedInputRemoveFirstWord(test_split_string)
+            test_splitted_string := SplittedInputRemoveFirstWord(test_splitted_string)
         }
         ImeProfilerEnd(30)
         ImeTranslatorFilterResults()
