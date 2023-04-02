@@ -50,9 +50,9 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 31, 2000)  ; ImeTranslatorFilterResults
     ImeDebugTipAppend(debug_tip, 32, 2000)  ; ImeTranslatorFixupSelectIndex
     ImeDebugTipAppend(debug_tip, 41)    ; ImeSelectorApplyCaretSelectIndex
-    ImeDebugTipAppend(debug_tip, 42, 2000)  ; ImeSelectorSetSelectIndex
-    ImeDebugTipAppend(debug_tip, 43)    ; ImeSelectorLockWord
-    ImeDebugTipAppend(debug_tip, 44)    ; ImeSelectorIsSelectLock
+    ImeDebugTipAppend(debug_tip, 42, 2000)  ; SelectorResultSetSelectIndex
+    ImeDebugTipAppend(debug_tip, 43)    ; SelectorResultLockWord
+    ImeDebugTipAppend(debug_tip, 44)    ; SelectorResultIsSelectLock
     ImeDebugTipAppend(debug_tip, 1)     ; temp
     ImeDebugTipAppend(debug_tip, 2)     ; tick
     debug_tip .= "`n----------------"

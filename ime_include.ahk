@@ -23,25 +23,30 @@
 ; Translator
 #Include, ime_translator.ahk
 #Include, ime_translator_history.ahk
+#Include, ime_translator_result.ahk
 
 #Include, ime_pinyin_translator.ahk
 #Include, ime_pinyin_translator_simple_spell.ahk
 
 #Include, ime_pinyin_sql.ahk
 
-#Include, ime_db.ahk
-#Include, ime_tooltip.ahk
-
-#Include, ime_selector.ahk
-#Include, ime_select_menu.ahk
-#Include, ime_state.ahk
-#Include, ime_putchar.ahk
-
 ; Filter
 #Include, ime_result_filter.ahk
 #Include, ime_result_radical.ahk
 #Include, ime_result_traditional.ahk
 #Include, ime_result_uniquify.ahk
+
+; Selector
+#Include, ime_selector.ahk
+#Include, ime_select_menu.ahk
+#Include, ime_selector_result.ahk
+
+#Include, ime_state.ahk
+#Include, ime_putchar.ahk
+
+
+#Include, ime_db.ahk
+#Include, ime_tooltip.ahk
 
 #Include, ime_word_creator.ahk
 
