@@ -105,10 +105,6 @@ PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
     pinyin_db := ImeDBGet()
     if( pinyin_db.GetTable(sql_full_cmd, result_table) )
     {
-        length := SplittedInputGetWordCount(splitted_input)
-        loop % result_table.RowCount {
-            result_table.Rows[A_Index, 5] := length
-        }
         result_table.Rows[0] := splitted_input
         ; result_table.Rows = [
         ;   [0]: "wu'hui'"

@@ -16,12 +16,15 @@ TranslatorHistoryHasKey(splitted_string)
     return translator_history_result.HasKey(splitted_string)
 }
 
-TranslatorHistoryUpdateKey(splitted_string, auto_comple:=false, limit_num:=100)
+TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, limit_num:=100)
 {
     global translator_history_result
     if( !TranslatorHistoryHasKey(splitted_string) || translator_history_result[splitted_string].Length()==2 && translator_history_result[splitted_string,2,2]=="" )
     {
         translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, auto_comple, limit_num)
+        loop % translator_history_result[splitted_string].Length() {
+            translator_history_result[splitted_string, A_Index, 5] := word_length
+        }
     }
 }
 

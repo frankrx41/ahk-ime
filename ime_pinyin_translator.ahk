@@ -8,7 +8,7 @@ PinyinTranslatorInsertResult(ByRef search_result, splitter_result)
         length_count := 9-A_Index
         splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
 
-        TranslatorHistoryUpdateKey(splitted_string)
+        TranslatorHistoryUpdateKey(splitted_string, length_count)
         if( TranslatorHistoryHasResult(splitted_string) )
         {
             TranslatorHistoryPushResult(search_result, splitted_string)
@@ -29,7 +29,7 @@ PinyinTranslateFindResult(splitter_result)
     PinyinTranslatorInsertResult(search_result, splitter_result)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    ; PinyinTranslatorInsertSimpleSpell(search_result, splitter_result)
+    PinyinTranslatorInsertSimpleSpell(search_result, splitter_result)
 
     if( ImeModeGetLanguage() == "tw" )
     {

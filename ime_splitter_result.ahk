@@ -127,9 +127,10 @@ SplitterResultGetUntilSkip(splitter_result, start_count := 1)
     return return_splitter_result
 }
 
-SplitterResultConvertToString(splitter_result, start_count, length_count := 1)
+SplitterResultConvertToString(splitter_result, start_count, ByRef length_count := 1)
 {
     find_string := ""
+    word_length := 0
     loop, % splitter_result.Length()
     {
         if( A_Index < start_count ) {
@@ -139,9 +140,11 @@ SplitterResultConvertToString(splitter_result, start_count, length_count := 1)
             break
         }
         length_count -= 1
+        word_length += 1
         find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
         find_string .= SplitterResultGetTone(splitter_result, A_Index)
     }
+    length_count := word_length
     return find_string
 }
 
