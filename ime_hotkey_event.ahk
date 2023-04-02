@@ -53,12 +53,6 @@ HotkeyOnCtrlAlphabet(char, shift_down)
     ImeTooltipUpdate()
 }
 
-HotkeyOnBackSpace()
-{
-    ImeInputterDeleteAtCaret(true)
-    ImeTooltipUpdate()
-}
-
 HotkeyOnEsc()
 {
     static last_esc_tick := 0

@@ -63,15 +63,20 @@ ImeInputterClearLastSplitted()
     }
 }
 
-ImeInputterDeleteAtCaret(delet_before := true)
+ImeInputterDeleteCharAtCaret(delet_before := true)
 {
     global ime_input_string
     global ime_input_caret_pos
-    ; TODO: add remomve after for {DEL} key
-    if( ime_input_caret_pos != 0 )
+
+    if( delet_before && ime_input_caret_pos != 0 )
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
+        ImeInputterUpdateString("", true)
+    }
+    if( !delet_before && ime_input_caret_pos != StrLen(ime_input_string) )
+    {
+        ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos) . SubStr(ime_input_string, ime_input_caret_pos+2)
         ImeInputterUpdateString("", true)
     }
 }

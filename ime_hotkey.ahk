@@ -68,9 +68,15 @@
         }
     return
 
-    ; BackSpace 删除光标前面的空格
+    ; Delete before and after char
+    Delete::
+        ImeInputterDeleteCharAtCaret(false)
+        ImeTooltipUpdate()
+    return
+
     BackSpace::
-        HotkeyOnBackSpace()
+        ImeInputterDeleteCharAtCaret(true)
+        ImeTooltipUpdate()
     return
 
     ; Ctrl + Backspace
