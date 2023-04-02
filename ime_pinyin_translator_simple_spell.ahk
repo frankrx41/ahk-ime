@@ -33,7 +33,8 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
     return true
 }
 
-PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitted_input)
+; TODO: fix with splitter_result
+PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitter_result)
 {
     local
     global history_field_array

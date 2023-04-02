@@ -26,21 +26,22 @@ ImeTranslatorUpdateResult(splitter_result)
         loop % splitter_result.Length()
         {
             radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
-            find_split_string := SplitterResultConvertToStringUntilSkip(splitter_result, A_Index)
-            debug_text .= """" find_split_string ""","
+            test_splitter_result := SplitterResultGetUntilSkip(splitter_result, A_Index)
+            debug_text .= """" SplitterResultGetDisplayText(test_splitter_result) ""","
             if( SplitterResultIsSkip(splitter_result, A_Index) )
             {
                 ; Add legacy text
-                translate_result := [[find_split_string, find_split_string, 0, "", 1]]
-                if( RegexMatch(find_split_string, "^\s+$") ) {
+                test_string := SplitterResultGetPinyin(test_splitter_result, 1)
+                translate_result := [[test_string, test_string, 0, "", 1]]
+                if( RegexMatch(test_string, "^\s+$") ) {
                     translate_result[1,2] := ""
                 }
             }
             else
             {
-                Assert(find_split_string)
+                Assert(test_splitter_result.Length() >= 1)
                 ; Get translate result
-                translate_result := PinyinTranslateFindResult(find_split_string)
+                translate_result := PinyinTranslateFindResult(test_splitter_result)
                 if( translate_result.Length() == 0 ){
                     first_word := SplitterResultConvertToString(splitter_result, A_Index)
                     translate_result := [[first_word, first_word, 0, "", 1]]

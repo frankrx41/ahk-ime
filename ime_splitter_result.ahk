@@ -102,11 +102,12 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
 
 ;*******************************************************************************
 ;
-SplitterResultConvertToStringUntilSkip(splitter_result, start_count := 1)
+SplitterResultGetUntilSkip(splitter_result, start_count := 1)
 {
+    return_splitter_result := []
     if( SplitterResultIsSkip(splitter_result, start_count) )
     {
-        return SplitterResultGetPinyin(splitter_result, start_count)
+        return_splitter_result[1] := splitter_result[start_count]
     }
     find_string := ""
     loop, % splitter_result.Length()
@@ -116,15 +117,14 @@ SplitterResultConvertToStringUntilSkip(splitter_result, start_count := 1)
         }
         if( !SplitterResultIsSkip(splitter_result, A_Index) )
         {
-            find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
-            find_string .= SplitterResultGetTone(splitter_result, A_Index)
+            return_splitter_result.Push(splitter_result[A_Index])
         }
         else
         {
             break
         }
     }
-    return find_string
+    return return_splitter_result
 }
 
 SplitterResultConvertToString(splitter_result, start_count, length_count := 1)

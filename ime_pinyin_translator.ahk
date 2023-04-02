@@ -1,36 +1,24 @@
 ;*******************************************************************************
 ;
-PinyinTranslatorInsertResult(ByRef search_result, splitted_input)
+PinyinTranslatorInsertResult(ByRef search_result, splitter_result)
 {
     local
-    splitted_string := splitted_input
-
     loop, 8
     {
-        While( splitted_string && !TranslatorHistoryHasResult(splitted_string) )
-        {
-            TranslatorHistoryUpdateKey(splitted_string)
-            if( TranslatorHistoryHasResult(splitted_string) ){
-                break
-            }
-            splitted_string := SplittedInputRemoveLastWord(splitted_string)
-        }
-        if( splitted_string )
+        length_count := 9-A_Index
+        splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
+
+        TranslatorHistoryUpdateKey(splitted_string)
+        if( TranslatorHistoryHasResult(splitted_string) )
         {
             TranslatorHistoryPushResult(search_result, splitted_string)
-        }
-
-        splitted_string := SplittedInputRemoveLastWord(splitted_string)
-        if( splitted_string == "" )
-        {
-            break
         }
     }
 }
 
 ;*******************************************************************************
 ; 拼音取词
-PinyinTranslateFindResult(splitted_input)
+PinyinTranslateFindResult(splitter_result)
 {
     local
     ImeProfilerBegin(20)
@@ -38,10 +26,10 @@ PinyinTranslateFindResult(splitted_input)
     search_result           := []
 
     ; 插入拼音所能组成的候选词
-    PinyinTranslatorInsertResult(search_result, splitted_input)
+    PinyinTranslatorInsertResult(search_result, splitter_result)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    PinyinTranslatorInsertSimpleSpell(search_result, splitted_input)
+    ; PinyinTranslatorInsertSimpleSpell(search_result, splitter_result)
 
     if( ImeModeGetLanguage() == "tw" )
     {
@@ -59,6 +47,6 @@ PinyinTranslateFindResult(splitted_input)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20, "`n  - [""" splitted_input """] -> ("  search_result.Length() ")" )
+    ImeProfilerEnd(20, "`n  - [" SplitterResultGetDisplayText(splitter_result) "] -> ("  search_result.Length() ")" )
     return search_result
 }
