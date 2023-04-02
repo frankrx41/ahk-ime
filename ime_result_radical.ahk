@@ -183,7 +183,7 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
         loop % search_result.Length()
         {
             word_value := search_result[index, 2]
-            sould_remove := false
+            should_remove := false
             ; loop each character of "我爱你"
             loop % search_result[index, 5]
             {
@@ -193,15 +193,15 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
                     test_word := SubStr(word_value, A_Index, 1)
                     if( !RadicalIsFullMatch(test_word, test_radical) )
                     {
-                        sould_remove := true
+                        should_remove := true
                     }
                 }
-                if( sould_remove ){
+                if( should_remove ){
                     break
                 }
             }
 
-            if( sould_remove ) {
+            if( should_remove ) {
                 search_result.RemoveAt(index)
             } else {
                 index += 1
