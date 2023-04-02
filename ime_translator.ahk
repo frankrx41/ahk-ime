@@ -89,8 +89,6 @@ ImeTranslatorResultListGetPinyin(split_index, word_index)
 ImeTranslatorResultListGetWord(split_index, word_index)
 {
     global ime_translator_result_list_filtered
-    ImeProfilerBegin(1)
-    ImeProfilerEnd(1, split_index "," word_index)
     return TranslatorResultGetWord(ime_translator_result_list_filtered[split_index], word_index)
 }
 
