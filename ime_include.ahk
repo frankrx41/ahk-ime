@@ -28,7 +28,6 @@
 #Include, ime_pinyin_translator_simple_spell.ahk
 
 #Include, ime_pinyin_sql.ahk
-#Include, ime_pinyin_split_escape.ahk
 
 #Include, ime_db.ahk
 #Include, ime_tooltip.ahk

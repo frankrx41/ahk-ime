@@ -3,7 +3,6 @@ ImeTranslatorInitialize()
     global ime_translator_result_const
     global ime_translator_result_filtered
     global ime_translator_radical_list
-
     ImeTranslatorClear()
 }
 
@@ -14,43 +13,45 @@ ImeTranslatorClear()
     global ime_translator_radical_list      := []
 }
 
-ImeTranslatorUpdateResult(splitted_input, radical_list)
+ImeTranslatorUpdateResult(splitter_result)
 {
     local
     global ime_translator_result_const
     global ime_translator_radical_list
 
-    if( splitted_input )
+    if( splitter_result.Length() )
     {
         ImeProfilerBegin(30)
-        ime_translator_radical_list := radical_list
+        ime_translator_radical_list := []
         ime_translator_result_const := []
-
-        test_splitted_string := splitted_input
-        loop % radical_list.Length()
+        debug_text := ""
+        loop % splitter_result.Length()
         {
-            find_split_string := SplittedInputGetPrevWords(test_splitted_string)
-            if( find_split_string && !EscapeCharsIsMark(SubStr(find_split_string, 1, 1)) )
+            ime_translator_radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
+            find_split_string := SplitterResultCovertToStringUntilSkip(splitter_result, A_Index)
+            debug_text .= find_split_string ","
+            if( SplitterResultIsSkip(splitter_result, A_Index) )
             {
-                ; Get translate result
-                translate_result := PinyinTranslateFindResult(find_split_string)
-                if( translate_result.Length() == 0 ){
-                    first_word := SplittedInputGetFirstWord(find_split_string)
-                    translate_result := [[first_word, first_word]]
-                }
-            } else {
                 ; Add legacy text
-                find_split_string := EscapeCharsGetContent(find_split_string)
                 translate_result := [[find_split_string, find_split_string, 0, "", 1]]
                 if( RegexMatch(find_split_string, "^\s+$") ) {
                     translate_result[1,2] := ""
                 }
             }
+            else
+            {
+                Assert(find_split_string)
+                ; Get translate result
+                translate_result := PinyinTranslateFindResult(find_split_string)
+                if( translate_result.Length() == 0 ){
+                    first_word := SplitterResultCovertToString(splitter_result, A_Index)
+                    translate_result := [[first_word, first_word, 0, "", 1]]
+                }
+            }
             ; Insert result
             ime_translator_result_const.Push(translate_result)
-            test_splitted_string := SplittedInputRemoveFirstWord(test_splitted_string)
         }
-        ImeProfilerEnd(30)
+        ImeProfilerEnd(30, debug_text)
         ImeTranslatorFilterResults()
     } else {
         ImeTranslatorClear()

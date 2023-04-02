@@ -102,6 +102,51 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
 
 ;*******************************************************************************
 ;
+SplitterResultCovertToStringUntilSkip(splitter_result, start_count := 1)
+{
+    if( SplitterResultIsSkip(splitter_result, start_count) )
+    {
+        return SplitterResultGetPinyin(splitter_result, start_count)
+    }
+    find_string := ""
+    loop, % splitter_result.Length()
+    {
+        if( A_Index < start_count ) {
+            continue
+        }
+        if( !SplitterResultIsSkip(splitter_result, A_Index) )
+        {
+            find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
+            find_string .= SplitterResultGetTone(splitter_result, A_Index)
+        }
+        else
+        {
+            break
+        }
+    }
+    return find_string
+}
+
+SplitterResultCovertToString(splitter_result, start_count, length_count := 1)
+{
+    find_string := ""
+    loop, % splitter_result.Length()
+    {
+        if( A_Index < start_count ) {
+            continue
+        }
+        if( length_count <= 0 ){
+            break
+        }
+        length_count -= 1
+        find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
+        find_string .= SplitterResultGetTone(splitter_result, A_Index)
+    }
+    return find_string
+}
+
+;*******************************************************************************
+;
 SplitterResultGetDisplayText(splitter_result)
 {
     local

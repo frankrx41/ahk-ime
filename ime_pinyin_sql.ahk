@@ -7,7 +7,7 @@ PinyinSqlSimpleKey(splitted_input, auto_comple:=false)
 {
     key_value := splitted_input
     key_value := StrReplace(key_value, "?")
-    key_value := StrReplace(key_value, "'", "_")
+    key_value := StrReplace(key_value, "0", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
     if( auto_comple ){
         key_value .= "%%"
@@ -19,7 +19,7 @@ PinyinSqlFullKey(splitted_input, auto_comple:=false)
 {
     key_value := splitted_input
     key_value := StrReplace(key_value, "?", "h?")
-    key_value := StrReplace(key_value, "'", "_")
+    key_value := StrReplace(key_value, "0", "_")
     last_char := SubStr(key_value, 0, 1)
     if( auto_comple ){
         key_value .= "%%"

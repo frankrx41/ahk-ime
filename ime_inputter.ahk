@@ -167,28 +167,19 @@ ImeInputterCallTranslator(is_delete)
     } else {
         ImeSelectorUnLockAfterWords(caret_splitted_index)
     }
-    
-    splitted_input := ""
-    radical_list := []
+
+    splitter_result := []
     loop,% ime_inputter_splitter_result.Length()
     {
         if( is_delete && A_Index >= caret_splitted_index ){
             break
         }
-        splitted_input .= SplitterResultGetPinyin(ime_inputter_splitter_result, A_Index)
-        tone := SplitterResultGetTone(ime_inputter_splitter_result, A_Index)
-        if( tone == 0 ){
-            splitted_input .= "'"
-        } else {
-            splitted_input := tone
-        }
-        radical_list.Push(SplitterResultGetRadical(ime_inputter_splitter_result, A_Index))
+        splitter_result[A_Index] := ime_inputter_splitter_result[A_Index]
     }
-    ImeTranslatorUpdateResult(splitted_input, radical_list)
+    ImeTranslatorUpdateResult(splitter_result)
     ime_input_dirty := false
-    
-    debug_info .= "[" splitted_input "]"
-    debug_info .= " (" radical_list.Length() "/" ime_inputter_splitter_result.Length() ") dirty: " ime_input_dirty
+
+    debug_info .= " (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ") dirty: " ime_input_dirty
     ImeProfilerEnd(12, debug_info)
 }
 
