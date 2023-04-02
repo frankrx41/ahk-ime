@@ -72,7 +72,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 
     if( lock_result )
     {
-        ImeSelectorUnLockFrontLockWords(split_index)
+        SelectorResultUnLockFrontWords(ime_selector_select, split_index)
         ; Lock this
         select_word := ImeTranslatorResultGetWord(split_index, select_index)
         word_length := ImeTranslatorResultGetLength(split_index, select_index)
@@ -97,41 +97,13 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
     ImeProfilerEnd(41, debug_info)
 }
 
-ImeSelectorUnLockFrontLockWords(split_index)
-{
-    local
-    ; Find if prev has a reuslt length include this
-    ; e.g. lock "我爱你", then can not change "爱你"
-    test_length := 0
-    loop
-    {
-        test_index := A_Index
-        if( test_index >= split_index ){
-            break
-        }
-        if( ImeSelectorIsSelectLock(test_index) )
-        {
-            if( test_length + ImeSelectorGetLockLength(test_index) >= split_index ){
-                SelectorResultUnLockWord(ime_selector_select, test_index)
-                break
-            }
-        }
-        else {
-            test_length += 1
-        }
-    }
-}
-
-ImeSelectorUnLockAfterWords(split_index)
+ImeSelectorUnlockWords(split_index, unlock_front)
 {
     global ime_selector_select
-    loop % ime_selector_select.Length()
-    {
-        test_index := A_Index
-        if( test_index > split_index )
-        {
-            SelectorResultUnLockWord(ime_selector_select, test_index)
-        }
+    if( unlock_front ) {
+        SelectorResultUnLockFrontWords(ime_selector_select, split_index)
+    } else {
+        SelectorResultUnLockAfterWords(ime_selector_select, split_index)
     }
 }
 

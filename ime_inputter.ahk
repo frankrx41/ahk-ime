@@ -160,11 +160,7 @@ ImeInputterCallTranslator(is_delete)
     debug_info := ""
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
-    if( is_delete ) {
-        ImeSelectorUnLockFrontLockWords(caret_splitted_index)
-    } else {
-        ImeSelectorUnLockAfterWords(caret_splitted_index)
-    }
+    ImeSelectorUnlockWords(caret_splitted_index, is_delete ? 1 : 0)
 
     splitter_result := []
     loop,% ime_inputter_splitter_result.Length()
