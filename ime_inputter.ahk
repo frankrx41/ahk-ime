@@ -135,7 +135,7 @@ ImeInputterUpdateString(input_char, is_delete:=false)
         }
 
         ; Splitter
-        splitted_input := PinyinSplitterInputString(ime_input_string, ime_inputter_splitted_indexs, radical_list)
+        ; splitted_input := PinyinSplitterInputString(ime_input_string, ime_inputter_splitted_indexs, radical_list)
         ; Translator
         if( should_update ) {
             ImeInputterCallTranslator(splitted_input, radical_list, is_delete)

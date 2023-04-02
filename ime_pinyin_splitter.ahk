@@ -22,11 +22,11 @@ PinyinSplitterGetTone(input_str, initials, vowels, ByRef index)
     tone := SubStr(input_str, index, 1)
     if( IsTone(tone) ) {
         index += 1
-        if( tone == " " ){
-            tone := "'"
+        if( tone == " " || tone == "'" ){
+            tone := 0
         }
     } else {
-        tone := "'"
+        tone := 0
     }
     return tone
 }
@@ -164,29 +164,27 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; Output always has a tone in last char
 ;
 ; e.g.
-; "wo3ai4ni3" -> [wo3ai4ni3] + [3,6,9] + [,,]
-; "woaini" -> [wo'ai'ni'] + [2,4,6] + [,,]
-; "wo'ai'ni" -> [wo'ai'ni'] + [3,6,8] + [,,]
-; "wo aini" -> [wo'ai'ni'] + [3,5,7] + [,,]
-; "swalb1" -> [s%'wa'l%'b%1] + [1,3,4,6] + [,,,]
-; "zhrmghg" -> [zh%'r%'m%'g%'h%'g%'] + [2,3,4,5,6,7] + [,,,,,]
-; "taNde1B" -> [ta'de1] + [3,7] + [N,B]
-; "z?eyangz?i3" -> [z?e'yang'z?i3] + [3,7,11] + [,,]
+; "wo3ai4ni3" -> [wo3, ai4, ni3]
+; "woaini" -> [wo0, ai0, ni0]
+; "wo'ai'ni" -> [wo0, ai0, ni0]
+; "wo aini" -> [wo0, ai0, ni0]
+; "swalb1" -> [s%0, wa0, l%0, b%1]
+; "zhrmghg" -> [zh%0, r%0, m%0, g%0, h%0, g%0]
+; "taNde1B" -> [ta0{N}, de1{B}]
+; "z?eyangz?i3" -> [z?e0, yang0, z?i3]
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(origin_input, ByRef splitted_indexs, ByRef radical_list)
+PinyinSplitterInputString(input_string)
 {
     local
     Critical
     ImeProfilerBegin(11, true)
 
     index           := 1
-    separate_words  := ""
-    input_str       := origin_input
-    strlen          := StrLen(input_str)
-    splitted_indexs := []
-    radical_list    := []
-    has_skip_char   := false
+    start_index     := 1
+    strlen          := StrLen(input_string)
+    splitter_result := []
+    escape_string   := ""
 
     loop
     {
@@ -194,65 +192,53 @@ PinyinSplitterInputString(origin_input, ByRef splitted_indexs, ByRef radical_lis
             break
         }
 
-        initials := SubStr(input_str, index, 1)
+        initials := SubStr(input_string, index, 1)
         ; 字母，自动分词
         if( IsInitials(initials) )
         {
-            if( has_skip_char ) {
-                has_skip_char := false
-                separate_words .= EscapeCharsGetMark(1)
-                splitted_indexs.Push(index-1)
-                radical_list.Push("")
+            if( escape_string ) {
+                SplitterResultPush(splitter_result, escape_string, 0, "", start_index, index-1, true)
+                escape_string := ""
             }
 
             start_index := index
 
-            initials    := PinyinSplitterGetInitials(input_str, initials, index)
-            vowels      := PinyinSplitterGetVowels(input_str, initials, index)
+            initials    := PinyinSplitterGetInitials(input_string, initials, index)
+            vowels      := PinyinSplitterGetVowels(input_string, initials, index)
             full_vowels := GetFullVowels(initials, vowels)
-            tone        := PinyinSplitterGetTone(input_str, initials, vowels, index)
+            tone        := PinyinSplitterGetTone(input_string, initials, vowels, index)
 
             if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
                 vowels .= "%"
             }
-            ; 转全拼显示
             else
             {
+                ; 转全拼显示
                 vowels := full_vowels ? full_vowels : vowels
             }
 
-            separate_words .= initials . vowels . tone
-
             ; Radical
-            RegExMatch(SubStr(input_str, index), "^([A-Z]+)", radical)
+            RegExMatch(SubStr(input_string, index), "^([A-Z]+)", radical)
             index += StrLen(radical)
-            radical_list.Push(radical)
 
-            ; Store index
-            splitted_indexs.Push(index-1)
+            SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_index, index-1)
         }
         ; 忽略
         else
         {
             index += 1
-            if( initials!="'" ) {
-                if( !has_skip_char ) {
-                    has_skip_char := true
-                    separate_words .= EscapeCharsGetMark(0)
-                }
-                separate_words .= initials
-            }
+            Assert( initials!="'" )
+            escape_string .= initials
         }
     }
 
-    if( has_skip_char ) {
-        separate_words .= EscapeCharsGetMark(1)
-        splitted_indexs.Push(index-1)
-        radical_list.Push("")
+    if( escape_string ) {
+        SplitterResultPush(splitter_result, escape_string, 0, "", start_index, index-1, true)
+        escape_string := ""
     }
 
-    ImeProfilerEnd(11, """" origin_input """->[" separate_words "] " "(" splitted_indexs.Length() ")")
-    return separate_words
+    ImeProfilerEnd(11, """" origin_input """->[" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
+    return splitter_result
 }
 
 ;*******************************************************************************
@@ -264,22 +250,8 @@ PinyinSplitterInputStringTest()
     loop, % test_case.Length()
     {
         input_str := test_case[A_Index]
-        splitted_indexs := []
-        radical_list := []
-        output_str := PinyinSplitterInputString(input_str, splitted_indexs, radical_list)
-        msg_string .= """" input_str """ -> [" output_str "] + ["
-        loop % splitted_indexs.Length()
-        {
-            msg_string .= splitted_indexs[A_Index] ","
-        }
-        msg_string := RegExReplace(msg_string, ",$")
-        msg_string .= "] + ["
-        loop % radical_list.Length()
-        {
-            msg_string .= radical_list[A_Index] ","
-        }
-        msg_string := RegExReplace(msg_string, ",$")
-        msg_string .= "]`n"
+        splitter_result := PinyinSplitterInputString(input_str)
+        msg_string .= "`n""" input_str """ -> [" SplitterResultGetDisplayText(splitter_result) "]"
     }
     MsgBox, % msg_string
 }

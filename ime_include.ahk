@@ -15,6 +15,7 @@
 #Include, ime_inputter.ahk
 
 ; Spliter
+#Include, ime_splitter_result.ahk
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_splitter.ahk
 #Include, ime_pinyin_splitted_Input.ahk
