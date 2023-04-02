@@ -28,7 +28,7 @@ ImeTranslatorUpdateResult(splitter_result)
         loop % splitter_result.Length()
         {
             ime_translator_radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
-            find_split_string := SplitterResultCovertToStringUntilSkip(splitter_result, A_Index)
+            find_split_string := SplitterResultConvertToStringUntilSkip(splitter_result, A_Index)
             debug_text .= find_split_string ", "
             if( SplitterResultIsSkip(splitter_result, A_Index) )
             {
@@ -44,7 +44,7 @@ ImeTranslatorUpdateResult(splitter_result)
                 ; Get translate result
                 translate_result := PinyinTranslateFindResult(find_split_string)
                 if( translate_result.Length() == 0 ){
-                    first_word := SplitterResultCovertToString(splitter_result, A_Index)
+                    first_word := SplitterResultConvertToString(splitter_result, A_Index)
                     translate_result := [[first_word, first_word, 0, "", 1]]
                 }
             }

@@ -157,7 +157,7 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ;   maybe has h sound:  ?
 ; Out:
 ;   spell:              a-z
-;   tone:               12345'
+;   tone:               012345
 ;   auto complete:      %
 ;   maybe has h sound:  ?
 ;
@@ -249,9 +249,9 @@ PinyinSplitterInputStringTest()
     msg_string := ""
     loop, % test_case.Length()
     {
-        input_str := test_case[A_Index]
-        splitter_result := PinyinSplitterInputString(input_str)
-        msg_string .= "`n""" input_str """ -> [" SplitterResultGetDisplayText(splitter_result) "]"
+        input_case := test_case[A_Index]
+        test_result := PinyinSplitterInputString(input_case)
+        msg_string .= "`n""" input_case """ -> [" SplitterResultGetDisplayText(test_result) "]"
     }
     MsgBox, % msg_string
 }

@@ -102,7 +102,7 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
 
 ;*******************************************************************************
 ;
-SplitterResultCovertToStringUntilSkip(splitter_result, start_count := 1)
+SplitterResultConvertToStringUntilSkip(splitter_result, start_count := 1)
 {
     if( SplitterResultIsSkip(splitter_result, start_count) )
     {
@@ -127,7 +127,7 @@ SplitterResultCovertToStringUntilSkip(splitter_result, start_count := 1)
     return find_string
 }
 
-SplitterResultCovertToString(splitter_result, start_count, length_count := 1)
+SplitterResultConvertToString(splitter_result, start_count, length_count := 1)
 {
     find_string := ""
     loop, % splitter_result.Length()

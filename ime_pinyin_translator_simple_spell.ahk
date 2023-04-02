@@ -2,15 +2,6 @@
 ; Simple Spell
 ;
 
-; TODO: Add example input output
-SplittedInputGetSimpleSpell(input_string)
-{
-    input_string := StrReplace(input_string, "?")
-    input_string := RegExReplace(input_string, "([a-z])(?=[^%012345])", "$10")
-    input_string := RegExReplace(input_string, "([^%])([012345])", "$1%$2")
-    return input_string
-}
-
 ; Not include "i" "u" "v"
 SeparateStringHasSound(splitted_string)
 {
@@ -50,7 +41,7 @@ PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitted_input)
     debug_string := ""
     if( SplittedInputGetWordCount(splitted_input) > 1 )
     {
-        splitted_string := SplittedInputGetSimpleSpell(splitted_input)
+        splitted_string := SplittedInputConvertToSimpleSpell(splitted_input)
         if( SeparateStringShouldProcess(splitted_string, splitted_input) )
         {
             TranslatorHistoryUpdateKey(splitted_string, true)
