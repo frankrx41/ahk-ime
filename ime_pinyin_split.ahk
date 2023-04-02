@@ -1,7 +1,8 @@
 ;*******************************************************************************
-IsTone(tone)
+; 
+IsTone(char)
 {
-    return tone && InStr("12345' ", tone)
+    return char && InStr("12345' ", char)
 }
 
 IsRadical(char)
@@ -16,6 +17,7 @@ IsSymbol(char)
 }
 
 ;*******************************************************************************
+; Initialize
 PinyinSplitTableInitialize()
 {
     global split_weight_table := {}
@@ -29,6 +31,8 @@ PinyinSplitTableInitialize()
     Assert(split_weight_table.Count() != 0)
 }
 
+;*******************************************************************************
+; Static
 PinyinSplitGetTone(input_str, initials, vowels, ByRef index)
 {
     local
@@ -36,7 +40,6 @@ PinyinSplitGetTone(input_str, initials, vowels, ByRef index)
     tone := SubStr(input_str, index, 1)
     if( IsTone(tone) ) {
         index += 1
-        ; TODO: make space work to split words
         if( tone == " " ){
             tone := "'"
         }
@@ -164,6 +167,7 @@ PinyinSplitGetInitials(input_str, initials, ByRef index)
     return initials
 }
 
+;*******************************************************************************
 ; In:
 ;   spell:              a-z
 ;   tone:               "12345'" and {space}
@@ -269,6 +273,8 @@ PinyinSplitInputString(origin_input, ByRef split_indexs, ByRef radical_list)
     return separate_words
 }
 
+;*******************************************************************************
+; Unit Test
 PinyinSplitInputStringTest()
 {
     test_case := ["wo3ai4ni3", "woaini", "wo'ai'ni", "wo aini", "swalb1", "zhrmghg", "taNde1B", "z?eyangz?i3"]

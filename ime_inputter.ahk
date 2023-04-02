@@ -21,7 +21,7 @@ ImeInputterClearString()
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
-    ime_input_dirty := true
+    ime_input_dirty     := true
     ime_inputter_split_indexs := []
     ImeSelectorClear()
     ImeTranslatorClear()
