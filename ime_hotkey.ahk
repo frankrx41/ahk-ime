@@ -231,8 +231,8 @@
         WordCreatorUI(GetSelectText())
     return
 
-    ; F5: reload
-    F5::
+    ; Ctrl + F5: reload
+    ^F5::
         ScriptRestart()
     return
 
@@ -255,7 +255,7 @@
     return
 
     ; F12: exit
-    F12::
+    ^F12::
         ExitApp,
     return
 #if ; !ImeModeIsEnglish()
