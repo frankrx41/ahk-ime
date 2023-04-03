@@ -1,9 +1,16 @@
 ;*******************************************************************************
 ;
-ImeOutputterPutSelect(as_legacy)
+ImeOutputterPutSelect(as_legacy, word_by_word:=0)
 {
     local
     input_string := ImeSelectorGetOutputString(as_legacy)
+    if( word_by_word == 1 ){
+        input_string := SubStr(input_string, 1, 1)
+    }
+    if( word_by_word == -1 ){
+        input_string := SubStr(input_string, 0, 1)
+    }
+
     if( input_string )
     {
         PutString(input_string, false)
@@ -12,15 +19,3 @@ ImeOutputterPutSelect(as_legacy)
     ImeInputterClearString()
     ImeSelectMenuClose()
 }
-
-; 以词定字
-; PutCharacterWordByWord(select_index, offset)
-; {
-;     local
-;     split_index := ImeInputterGetCaretSplitIndex()
-;     string := ImeTranslatorResultListGetWord(split_index, select_index)
-;     PutCharacter( SubStr(string, offset, 1) )
-;     ImeInputterClearString()
-;     ImeSelectMenuClose()
-;     ImeSelectorApplyCaretSelectIndex(true)
-; }

@@ -24,18 +24,15 @@
         ImeTooltipUpdate()
     return
 
-    ; TODO:
-    ; ]::
-    ;     PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 0)
-    ;     ImeSelectMenuClose()
-    ;     ImeTooltipUpdate()
-    ; return
+    ]::
+        ImeOutputterPutSelect(false, -1)
+        ImeTooltipUpdate()
+    return
 
-    ; [::
-    ;     PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 1)
-    ;     ImeSelectMenuClose()
-    ;     ImeTooltipUpdate()
-    ; return
+    [::
+        ImeOutputterPutSelect(false, 1)
+        ImeTooltipUpdate()
+    return
 
     ; Tab: Show more select items
     Tab::
