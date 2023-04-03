@@ -105,11 +105,11 @@ PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
     pinyin_db := ImeDBGet()
     if( pinyin_db.GetTable(sql_full_cmd, result_table) )
     {
-        result_table.Rows[0] := splitted_input
         ; result_table.Rows = [
-        ;   [0]: "wu'hui'"
-        ;   [1]: ["wu3hui4", "舞会", "30000", "", 2]
-        ;   [2]: ["wu4hui4", "误会", "26735", "", 2]
+        ;   [1]: ["lao3shi1", "老师", "26995", ""]
+        ;   [2]: ["lao3shi4", "老是", "25921", ""]
+        ;   [3]: ["lao3shi2", "老实", "25877", ""]
+        ;   ...
         ; ]
         result := result_table.Rows
     }

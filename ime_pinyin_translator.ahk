@@ -3,9 +3,10 @@
 PinyinTranslatorInsertResult(ByRef search_result, splitter_result)
 {
     local
-    loop, 8
+    max_len := Min(8, splitter_result.Length())
+    loop, % max_len
     {
-        length_count := 9-A_Index
+        length_count := max_len-A_Index+1
         splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
 
         TranslatorHistoryUpdateKey(splitted_string, length_count)
@@ -36,10 +37,6 @@ PinyinTranslateFindResult(splitter_result)
         PinyinResultCovertTraditional(search_result)
     }
 
-    ; TODO: remove this
-    if( search_result.HasKey(0) ){
-        search_result.Delete(0)
-    }
     ; [
     ;     ; 1   , 2   , 3      , 4 , 5  
     ;     ["wo3", "我", "30233", "", "1"]
