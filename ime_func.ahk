@@ -112,7 +112,7 @@ PutString(input_string, use_clipboard:=false){
     else {
         saveboard := clipboard
         clipboard := input_string
-        SendInput, {RCtrl Down}v{RCtrl Up}
+        Send, {RCtrl Down}v{RCtrl Up}
         clipboard := saveboard
     }
 }
