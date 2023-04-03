@@ -52,7 +52,7 @@ ImeStateRefresh()
     {
         ImeInputterClearString()
         ImeSelectMenuClose()
-        ImeSelectorApplyCaretSelectIndex(true)
+        ImeSelectorClear()
         ImeIconSetMode("")
     }
     else
