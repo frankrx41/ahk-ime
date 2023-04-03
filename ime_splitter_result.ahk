@@ -50,6 +50,7 @@ SplitterResultIsSkip(ByRef splitter_result, index)
 ; Action about splitted indexs
 SplittedIndexsGetPosIndex(splitter_result, caret_pos)
 {
+    local
     if( splitter_result.Length() >= 1)
     {
         if( SplitterResultGetEndPos(splitter_result, splitter_result.Length()) == caret_pos )
@@ -104,6 +105,7 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
 ;
 SplitterResultGetUntilSkip(splitter_result, start_count := 1)
 {
+    local
     return_splitter_result := []
     if( SplitterResultIsSkip(splitter_result, start_count) )
     {
@@ -127,10 +129,14 @@ SplitterResultGetUntilSkip(splitter_result, start_count := 1)
     return return_splitter_result
 }
 
-SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_count := 1)
+SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_count := 0)
 {
+    local
     find_string := ""
     word_length := 0
+    if( inout_length_count == 0 ){
+        inout_length_count := splitter_result.Length()
+    }
     loop, % splitter_result.Length()
     {
         if( A_Index < start_count ) {
