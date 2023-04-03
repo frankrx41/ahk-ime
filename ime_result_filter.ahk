@@ -1,7 +1,7 @@
 TranslatorResultFilterSingleWord(ByRef search_result)
 {
     local
-    ImeProfilerBegin(27)
+    ImeProfilerBegin(37)
 
     index := 1
     loop % search_result.Length()
@@ -16,13 +16,13 @@ TranslatorResultFilterSingleWord(ByRef search_result)
         }
     }
 
-    ImeProfilerEnd(27)
+    ImeProfilerEnd(37)
 }
 
 TranslatorResultFilterZeroWeight(ByRef search_result)
 {
     local
-    ImeProfilerBegin(25)
+    ImeProfilerBegin(35)
 
     index := 1
     loop % search_result.Length()
@@ -41,6 +41,6 @@ TranslatorResultFilterZeroWeight(ByRef search_result)
             index += 1
         }
     }
-    ImeProfilerEnd(25, "remove at: " index)
+    ImeProfilerEnd(35, "remove at: " index)
     return
 }

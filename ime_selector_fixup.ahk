@@ -43,7 +43,7 @@ ImeSelectorFixupSelectIndex()
 {
     local
     debug_info := ""
-    ImeProfilerBegin(32, true)
+    ImeProfilerBegin(40, true)
     skip_word_count := 0
     loop % ImeTranslatorResultListGetLength()
     {
@@ -102,6 +102,6 @@ ImeSelectorFixupSelectIndex()
             debug_info .= "skip: " skip_word_count " "
         }
     }
-    ImeProfilerEnd(32, debug_info)
+    ImeProfilerEnd(40, debug_info)
     Assert(skip_word_count == 0, skip_word_count)
 }

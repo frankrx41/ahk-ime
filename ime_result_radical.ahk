@@ -178,7 +178,7 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
 
     if( radical_list )
     {
-        ImeProfilerBegin(26)
+        ImeProfilerBegin(36)
         index := 1
         loop % search_result.Length()
         {
@@ -209,6 +209,6 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
         }
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
-        ImeProfilerEnd(26)
+        ImeProfilerEnd(36)
     }
 }
