@@ -4,13 +4,12 @@
 ; 
 IsDebugVersion()
 {
-    return !A_IsCompiled
-    ; return false
+    return false
 }
 
 GetVersion()
 {
-    return 0.11
+    return 0.4.4
 }
 
 GetGitHash()
