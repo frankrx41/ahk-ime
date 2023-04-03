@@ -64,8 +64,7 @@ SelectorResultGetLockLength(ByRef selector_result, split_index)
 SelectorResultUnLockFrontWords(ByRef selector_result, split_index)
 {
     local
-    ; Find if prev has a reuslt length include this
-    ; e.g. lock "我爱你", then can not change "爱你"
+    ; Find if any prev result length include this
     test_length := 0
     loop
     {

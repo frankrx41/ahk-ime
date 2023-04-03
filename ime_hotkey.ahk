@@ -250,7 +250,7 @@
         ImeTooltipUpdate()
     return
 
-    ; F12: exit
+    ; Ctrl + F12: exit
     ^F12::
         ExitApp,
     return

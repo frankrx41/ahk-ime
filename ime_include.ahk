@@ -4,6 +4,7 @@
 #Include, ime_profiler.ahk
 #Include, ime_debug.ahk
 
+; Version
 #Include, ime_version.ahk
 
 ; Hotkey
@@ -37,19 +38,21 @@
 
 ; Selector
 #Include, ime_selector.ahk
-#Include, ime_select_menu.ahk
 #Include, ime_selector_result.ahk
 
 #Include, ime_selector_fixup.ahk
 
-#Include, ime_state.ahk
+; Outputter
 #Include, ime_outputter.ahk
 
-
-#Include, ime_db.ahk
+; UI
+#Include, ime_state.ahk
+#Include, ime_select_menu.ahk
 #Include, ime_tooltip.ahk
-
 #Include, ime_word_creator.ahk
+
+; DB
+#Include, ime_db.ahk
 
 ; Third part lib
 #Include, lib\ToolTip.ahk

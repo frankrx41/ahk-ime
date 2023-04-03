@@ -371,5 +371,5 @@ ImeInputterGetRightWordPos(start_index)
 ImeInputterGetLegacyOutputString()
 {
     global ime_input_string
-    return Trim(ime_input_string)
+    return ime_input_string
 }

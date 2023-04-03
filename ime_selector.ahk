@@ -151,7 +151,8 @@ ImeSelectorGetOutputString(as_legacy := false)
     global ime_selector_select
 
     result_string := ""
-    if( as_legacy ){
+    if( as_legacy )
+    {
         result_string := ImeInputterGetLegacyOutputString()
     }
     else
