@@ -43,7 +43,7 @@
 #Include, ime_selector_fixup.ahk
 
 #Include, ime_state.ahk
-#Include, ime_putchar.ahk
+#Include, ime_outputter.ahk
 
 
 #Include, ime_db.ahk

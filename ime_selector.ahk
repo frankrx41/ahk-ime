@@ -146,18 +146,24 @@ ImeSelectorGetLockLength(split_index)
 
 ;*******************************************************************************
 ;
-ImeSelectorGetOutputString()
+ImeSelectorGetOutputString(as_legacy := false)
 {
     global ime_selector_select
 
     result_string := ""
-    loop % ime_selector_select.Length()
+    if( as_legacy ){
+        result_string := ImeInputterGetLegacyOutputString()
+    }
+    else
     {
-        split_index := A_Index
-        select_index := ImeSelectorGetSelectIndex(split_index)
-        if( select_index > 0 )
+        loop % ime_selector_select.Length()
         {
-            result_string .= ImeTranslatorResultListGetWord(split_index, select_index)
+            split_index := A_Index
+            select_index := ImeSelectorGetSelectIndex(split_index)
+            if( select_index > 0 )
+            {
+                result_string .= ImeTranslatorResultListGetWord(split_index, select_index)
+            }
         }
     }
     return result_string

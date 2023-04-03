@@ -18,25 +18,24 @@
             if( ImeInputterIsInputDirty() ) {
                 ImeInputterUpdateString("")
             } else {
-                PutCandidateCharacter()
+                ImeOutputterPutSelect(false)
             }
         }
         ImeTooltipUpdate()
     return
 
-    ]::
-        PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 0)
-        ImeSelectMenuClose()
-        ImeSelectorApplyCaretSelectIndex(true)
-        ImeTooltipUpdate()
-    return
+    ; TODO:
+    ; ]::
+    ;     PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 0)
+    ;     ImeSelectMenuClose()
+    ;     ImeTooltipUpdate()
+    ; return
 
-    [::
-        PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 1)
-        ImeSelectMenuClose()
-        ImeSelectorApplyCaretSelectIndex(true)
-        ImeTooltipUpdate()
-    return
+    ; [::
+    ;     PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 1)
+    ;     ImeSelectMenuClose()
+    ;     ImeTooltipUpdate()
+    ; return
 
     ; Tab: Show more select items
     Tab::

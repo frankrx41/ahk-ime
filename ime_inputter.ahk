@@ -102,7 +102,7 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     ime_input_caret_pos := caret_pos + 1
 
     if( immediate_put && StrLen(ime_input_string) == 1 ) {
-        PutCharacter(input_char)
+        ImeOutputterPutSelect(true)
         ImeInputterClearString()
     } else {
         ImeInputterUpdateString(input_char)
@@ -362,4 +362,12 @@ ImeInputterGetRightWordPos(start_index)
     global ime_inputter_splitter_result
 
     return SplittedIndexsGetRightWordPos(ime_inputter_splitter_result, start_index)
+}
+
+;*******************************************************************************
+;
+ImeInputterGetLegacyOutputString()
+{
+    global ime_input_string
+    return Trim(ime_input_string)
 }

@@ -102,3 +102,17 @@ ScriptRestart()
     ToolTip,
     Reload
 }
+
+PutString(input_string, use_clipboard:=false){
+    local
+    Critical
+    if( !use_clipboard ){
+        SendInput, % "{Text}" input_string
+    }
+    else {
+        saveboard := clipboard
+        clipboard := input_string
+        SendInput, {RCtrl Down}v{RCtrl Up}
+        clipboard := saveboard
+    }
+}

@@ -66,14 +66,8 @@ ImeHotkeyRegisterInitialize()
 
 ImeHotkeyShiftSetMode(orgin_mode)
 {
-    global ime_input_string
     if( orgin_mode == "en" ){
-        if ( ime_input_string ) {
-            PutCharacter(ime_input_string)
-            ImeInputterClearString()
-            ImeSelectMenuClose()
-            ImeSelectorApplyCaretSelectIndex(true)
-        }
+        ImeOutputterPutSelect(true)
     }
     ImeStateUpdateMode(orgin_mode)
 }
