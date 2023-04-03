@@ -135,7 +135,6 @@ ImeTooltipGetDisplayInputString()
         }
     }
     ime_select_str := SubStr(ime_select_str, 2) . "`n" . SubStr(ime_select_index, 2)
-    ime_select_str .= "`n"
     return ime_select_str
 }
 
