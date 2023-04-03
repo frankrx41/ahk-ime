@@ -296,7 +296,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
     ime_input_caret_pos := word_pos
 }
 
-ImeInputterCaretMoveToChar(char, back_to_front)
+ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
 {
     local
     global ime_input_caret_pos
@@ -311,7 +311,9 @@ ImeInputterCaretMoveToChar(char, back_to_front)
             } else {
                 start_index := ime_input_caret_pos + 2
             }
-        } else {
+        }
+        else if( try_rollback )
+        {
             if( back_to_front ) {
                 start_index := 0
             } else {

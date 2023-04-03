@@ -47,9 +47,8 @@ HotkeyOnSymbol(char)
 HotkeyOnCtrlAlphabet(char, shift_down)
 {
     local
-    ; TODO: add rollback
     back_to_front := shift_down ? false : true
-    ImeInputterCaretMoveToChar(char, back_to_front)
+    ImeInputterCaretMoveToChar(char, back_to_front, true)
     ImeTooltipUpdate()
 }
 
