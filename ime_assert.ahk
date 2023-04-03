@@ -3,8 +3,10 @@
 ; Process will auto store failed assert in "".\debug.log"
 ;*******************************************************************************
 ;
-Assert(bool, debug_msg:="", show_msgbox:=false)
+Assert(bool, debug_msg:="", show_msgbox:=true)
 {
+    static assert_ignore_list := {}
+    static disable_tick := 0
     local
     if( IsDebugVersion() && !bool )
     {
@@ -16,8 +18,17 @@ Assert(bool, debug_msg:="", show_msgbox:=false)
         debug_info .= " """ debug_msg """`n"
 
         FileAppend, %debug_info%, .\debug.log
-        if( show_msgbox ){
-            Msgbox, 18, Assert, % debug_info "`n" """" debug_msg """"
+        mark_key := CallStack(1)
+        if( show_msgbox && A_TickCount - disable_tick > 6000 && !assert_ignore_list.HasKey(mark_key)){
+            Msgbox, 18, Assert, % debug_info "`n" """" debug_msg """" "`n`nAbout: Ignore all assert for 1 minute`nRetry: Always ignore this assert`nIgnore: Ignore this assert once"
+            IfMsgBox, Abort
+            {
+                disable_tick := A_TickCount
+            }
+            IfMsgBox, Retry
+            {
+                assert_ignore_list[mark_key] := 1
+            }
         }
         ImeProfilerEnd(4, ImeProfilerBegin(4) "`n  - " CallerName(0) " """ debug_msg """")
     }
