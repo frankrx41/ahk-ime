@@ -83,9 +83,8 @@ TranslatorResultListFindIndex(ByRef translator_result, split_index, find_words, 
     {
         select_index := A_Index
         test_result := TranslatorResultGetWord(translator_result[split_index], select_index)
-        debug_text .= "`n  - """ find_words """ == """ test_result """"
         if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
-            debug_text .= ": " select_index
+            debug_text .= "`n  - [" select_index "] -> """ find_words """ == """ test_result """"
             break
         }
     }
