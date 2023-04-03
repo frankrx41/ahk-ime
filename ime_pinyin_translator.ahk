@@ -21,7 +21,7 @@ PinyinTranslatorInsertResult(ByRef search_result, splitter_result)
 PinyinTranslateFindResult(splitter_result)
 {
     local
-    ImeProfilerBegin(20)
+    profile_text := ImeProfilerBegin(20)
 
     search_result           := []
 
@@ -47,6 +47,6 @@ PinyinTranslateFindResult(splitter_result)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20, "`n  - [" SplitterResultGetDisplayText(splitter_result) "] -> ("  search_result.Length() ")" )
+    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultGetDisplayText(splitter_result) "] -> ("  search_result.Length() ")" )
     return search_result
 }

@@ -156,7 +156,7 @@ ImeInputterCallTranslator(is_delete)
     global ime_input_string
     global ime_input_dirty
 
-    ImeProfilerBegin(12, true)
+    ImeProfilerBegin(12)
     debug_info := ""
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()

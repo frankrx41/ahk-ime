@@ -76,8 +76,8 @@ TranslatorResultListFindIndex(ByRef translator_result, split_index, find_words, 
 {
     local
     find_word_len := StrLen(find_words)
-    ImeProfilerBegin(45)
-    debug_text := split_index "," translator_result[split_index].Length()
+    debug_text := ImeProfilerBegin(45)
+    debug_text .= split_index "," translator_result[split_index].Length()
     select_index := 0
     loop, % translator_result[split_index].Length()
     {
@@ -101,7 +101,7 @@ TranslatorResultListFilterResults(ByRef translator_result_list, input_radical_li
     radical_list    := CopyObj(input_radical_list)
 
     debug_text := ""
-    ImeProfilerBegin(31, true)
+    ImeProfilerBegin(31)
     loop % search_result.Length()
     {
         split_index := A_Index

@@ -63,7 +63,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 {
     local
     global ime_selector_select
-    ImeProfilerBegin(41, true)
+    ImeProfilerBegin(41)
     debug_info := ""
 
     split_index := ImeInputterGetCaretSplitIndex()

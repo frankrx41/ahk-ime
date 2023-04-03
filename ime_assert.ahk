@@ -19,8 +19,7 @@ Assert(bool, debug_msg:="", show_msgbox:=false)
         if( show_msgbox ){
             Msgbox, 18, Assert, % debug_info "`n" """" debug_msg """"
         }
-        ImeProfilerBegin(4)
-        ImeProfilerEnd(4, "`n  - " CallerName(0) " """ debug_msg """")
+        ImeProfilerEnd(4, ImeProfilerBegin(4) "`n  - " CallerName(0) " """ debug_msg """")
     }
 }
 

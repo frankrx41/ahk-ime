@@ -19,7 +19,7 @@ ImeTranslatorUpdateResult(splitter_result)
 
     if( splitter_result.Length() )
     {
-        ImeProfilerBegin(30)
+        debug_text := ImeProfilerBegin(30)
         ime_translator_result_list_origin := []
         radical_list := []
         debug_text := "["

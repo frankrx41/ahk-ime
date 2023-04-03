@@ -46,7 +46,7 @@ ImeSelectorFixupSelectIndex()
 {
     local
     debug_info := ""
-    ImeProfilerBegin(40, true)
+    ImeProfilerBegin(40)
     skip_word_count := 0
     loop % ImeTranslatorResultListGetLength()
     {

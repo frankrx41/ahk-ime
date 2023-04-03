@@ -178,7 +178,7 @@ PinyinSplitterInputString(input_string)
 {
     local
     Critical
-    ImeProfilerBegin(11, true)
+    ImeProfilerBegin(11)
 
     index           := 1
     start_index     := 1

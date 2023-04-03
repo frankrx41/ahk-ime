@@ -41,11 +41,9 @@ ImeProfilerBegin(index, clear_info:=false)
 {
     global ime_profiler
     Assert(ime_profiler[index, 4] == 0,index,true)
-    if( clear_info ) {
-        ime_profiler[index, 2] := ""
-    }
     ime_profiler[index, 3] += 1
     ime_profiler[index, 4] := A_TickCount
+    return ime_profiler[index, 2]
 }
 
 ImeProfilerEnd(index, debug_info:="")
@@ -53,7 +51,7 @@ ImeProfilerEnd(index, debug_info:="")
     global ime_profiler
     Assert(ime_profiler[index, 4] != 0, "Please call ``ImeProfilerBegin(" index ")`` before call ``ImeProfilerEnd(" index ")``" ,true)
     ime_profiler[index, 1] += A_TickCount - ime_profiler[index, 4]
-    ime_profiler[index, 2] .= debug_info
+    ime_profiler[index, 2] := debug_info
     ime_profiler[index, 4] := 0
 }
 
