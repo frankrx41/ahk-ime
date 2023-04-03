@@ -19,6 +19,7 @@ global ime_version  := 0.10
 ; Initialize
 ImeProfilerInitialize()
 ImeInputterInitialize()
+ImeOutputterInitialize()
 
 ; Selector
 ImeSelectMenuInitialize()

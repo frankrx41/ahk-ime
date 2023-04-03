@@ -3,34 +3,48 @@ TranslatorHistoryClear()
     global translator_history_result := []
 }
 
-TranslatorHistoryHasResult(splitted_string)
-{
-    ; TODO: what is different between `TranslatorHistoryHasKey`?
-    global translator_history_result
-    return translator_history_result[splitted_string, 1, 2] != ""
-}
-
+;*******************************************************************************
+; Static
 TranslatorHistoryHasKey(splitted_string)
 {
     global translator_history_result
     return translator_history_result.HasKey(splitted_string)
 }
 
-TranslatorHistoryUpdateKey(splitted_string, auto_comple:=false, limit_num:=100)
+;*******************************************************************************
+;
+; translator_history_result["lao0shi0"] =
+; [
+;   [1]: ["lao3shi1", "老师", "26995", "", 2]
+;   [2]: ["lao3shi4", "老是", "25921", "", 2]
+;   [3]: ["lao3shi2", "老实", "25877", "", 2]
+;   ...
+; ]
+TranslatorHistoryHasResult(splitted_string)
 {
     global translator_history_result
-    if( !TranslatorHistoryHasKey(splitted_string) || translator_history_result[splitted_string].Length()==2 && translator_history_result[splitted_string,2,2]=="" )
+    Assert(TranslatorHistoryHasKey(splitted_string), "Please call ``TranslatorHistoryUpdateKey(""" splitted_string """)`` first!", true)
+    return translator_history_result[splitted_string, 1, 1] != ""
+}
+
+TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, limit_num:=100)
+{
+    global translator_history_result
+    if( !TranslatorHistoryHasKey(splitted_string) )
     {
         translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, auto_comple, limit_num)
+        loop % translator_history_result[splitted_string].Length() {
+            translator_history_result[splitted_string, A_Index, 5] := word_length
+        }
+        if( word_length == 1 )
+        {
+            Assert(translator_history_result[splitted_string].Length() > 0, splitted_string " has no result!", true)
+        }
     }
 }
 
-TranslatorHistoryGetKeyResultLength(splitted_string)
-{
-    global translator_history_result
-    return translator_history_result[splitted_string].Length()
-}
-
+;*******************************************************************************
+; Update `search_result`
 TranslatorHistoryPushResult(ByRef search_result, splitted_string, max_num := 100)
 {
     global translator_history_result

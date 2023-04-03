@@ -102,7 +102,7 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     ime_input_caret_pos := caret_pos + 1
 
     if( immediate_put && StrLen(ime_input_string) == 1 ) {
-        PutCharacter(input_char)
+        ImeOutputterPutSelect(true)
         ImeInputterClearString()
     } else {
         ImeInputterUpdateString(input_char)
@@ -156,15 +156,10 @@ ImeInputterCallTranslator(is_delete)
     global ime_input_string
     global ime_input_dirty
 
-    ImeProfilerBegin(12, true)
-    debug_info := ""
+    ImeProfilerBegin(12)
+    profile_text := ""
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
-    if( is_delete ) {
-        ImeSelectorUnLockFrontLockWords(caret_splitted_index)
-    } else {
-        ImeSelectorUnLockAfterWords(caret_splitted_index)
-    }
 
     splitter_result := []
     loop,% ime_inputter_splitter_result.Length()
@@ -174,10 +169,13 @@ ImeInputterCallTranslator(is_delete)
         }
         splitter_result[A_Index] := ime_inputter_splitter_result[A_Index]
     }
-    debug_info .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
-    ImeProfilerEnd(12, debug_info)
+    profile_text .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
+    ImeProfilerEnd(12, profile_text)
 
     ImeTranslatorUpdateResult(splitter_result)
+    ImeSelectorUnlockWords(caret_splitted_index, is_delete)
+    ImeSelectorFixupSelectIndex()
+
     ime_input_dirty := false
 }
 
@@ -298,23 +296,35 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
     ime_input_caret_pos := word_pos
 }
 
-ImeInputterCaretMoveToChar(char, back_to_front)
+ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
 {
     local
     global ime_input_caret_pos
     global ime_input_string
 
-    input_string := ime_input_string
-    origin_index := ime_input_caret_pos
-    if( back_to_front ) {
-        start_index := origin_index - StrLen(input_string)
-    } else {
-        start_index := origin_index + 2
-    }
-    index := InStr(input_string, char, false, start_index)
-    if( index != 0 )
+    loop, 2
     {
-        ime_input_caret_pos := index - 1
+        if( A_Index == 1 )
+        {
+            if( back_to_front ) {
+                start_index := ime_input_caret_pos - StrLen(ime_input_string)
+            } else {
+                start_index := ime_input_caret_pos + 2
+            }
+        }
+        else if( try_rollback )
+        {
+            if( back_to_front ) {
+                start_index := 0
+            } else {
+                start_index := 1
+            }
+        }
+        index := InStr(ime_input_string, char, false, start_index)
+        if( index != 0 ) {
+            ime_input_caret_pos := index - 1
+            break
+        }
     }
 }
 
@@ -354,4 +364,12 @@ ImeInputterGetRightWordPos(start_index)
     global ime_inputter_splitter_result
 
     return SplittedIndexsGetRightWordPos(ime_inputter_splitter_result, start_index)
+}
+
+;*******************************************************************************
+;
+ImeInputterGetLegacyOutputString()
+{
+    global ime_input_string
+    return ime_input_string
 }

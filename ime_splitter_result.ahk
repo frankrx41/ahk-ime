@@ -50,6 +50,7 @@ SplitterResultIsSkip(ByRef splitter_result, index)
 ; Action about splitted indexs
 SplittedIndexsGetPosIndex(splitter_result, caret_pos)
 {
+    local
     if( splitter_result.Length() >= 1)
     {
         if( SplitterResultGetEndPos(splitter_result, splitter_result.Length()) == caret_pos )
@@ -102,11 +103,13 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
 
 ;*******************************************************************************
 ;
-SplitterResultConvertToStringUntilSkip(splitter_result, start_count := 1)
+SplitterResultGetUntilSkip(splitter_result, start_count := 1)
 {
+    local
+    return_splitter_result := []
     if( SplitterResultIsSkip(splitter_result, start_count) )
     {
-        return SplitterResultGetPinyin(splitter_result, start_count)
+        return_splitter_result[1] := splitter_result[start_count]
     }
     find_string := ""
     loop, % splitter_result.Length()
@@ -116,32 +119,38 @@ SplitterResultConvertToStringUntilSkip(splitter_result, start_count := 1)
         }
         if( !SplitterResultIsSkip(splitter_result, A_Index) )
         {
-            find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
-            find_string .= SplitterResultGetTone(splitter_result, A_Index)
+            return_splitter_result.Push(splitter_result[A_Index])
         }
         else
         {
             break
         }
     }
-    return find_string
+    return return_splitter_result
 }
 
-SplitterResultConvertToString(splitter_result, start_count, length_count := 1)
+SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_count := 0)
 {
+    local
     find_string := ""
+    word_length := 0
+    if( inout_length_count == 0 ){
+        inout_length_count := splitter_result.Length()
+    }
     loop, % splitter_result.Length()
     {
         if( A_Index < start_count ) {
             continue
         }
-        if( length_count <= 0 ){
+        if( inout_length_count <= 0 ){
             break
         }
-        length_count -= 1
+        inout_length_count -= 1
+        word_length += 1
         find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
         find_string .= SplitterResultGetTone(splitter_result, A_Index)
     }
+    inout_length_count := word_length
     return find_string
 }
 
@@ -154,9 +163,18 @@ SplitterResultGetDisplayText(splitter_result)
     loop, % splitter_result.Length()
     {
         index := A_Index
-        dsiplay_text .= SplitterResultGetPinyin(splitter_result, index)
-        dsiplay_text .= SplitterResultGetTone(splitter_result, index)
-        
+        if( !SplitterResultIsSkip(splitter_result, index) )
+        {
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result, index)
+            dsiplay_text .= SplitterResultGetTone(splitter_result, index)
+        }
+        else
+        {
+            dsiplay_text .= "<"
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result, index)
+            dsiplay_text .= ">"
+        }
+
         radical := SplitterResultGetRadical(splitter_result, index)
         if( radical ) {
             dsiplay_text .= "{" radical "}"

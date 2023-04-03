@@ -100,27 +100,21 @@ PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
     sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd
     sql_full_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
 
-    ImeProfilerBegin(15)
+    profile_text := ImeProfilerBegin(15)
     result := []
     pinyin_db := ImeDBGet()
     if( pinyin_db.GetTable(sql_full_cmd, result_table) )
     {
-        length := SplittedInputGetWordCount(splitted_input)
-        loop % result_table.RowCount {
-            result_table.Rows[A_Index, 5] := length
-        }
-        result_table.Rows[0] := splitted_input
         ; result_table.Rows = [
-        ;   [0]: "wu'hui'"
-        ;   [1]: ["wu3hui4", "舞会", "30000", "", 2]
-        ;   [2]: ["wu4hui4", "误会", "26735", "", 2]
+        ;   [1]: ["lao3shi1", "老师", "26995", ""]
+        ;   [2]: ["lao3shi4", "老是", "25921", ""]
+        ;   [3]: ["lao3shi2", "老实", "25877", ""]
+        ;   ...
         ; ]
         result := result_table.Rows
     }
-    ImeProfilerEnd(15, "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
-
-    ImeProfilerBegin(16)
-    ImeProfilerEnd(16, "`n  - [""" splitted_input """] -> (" result.Length() ")")
+    ImeProfilerEnd(15, profile_text . "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
+    ImeProfilerEnd(16, ImeProfilerBegin(16) "`n  - [""" splitted_input """] -> (" result.Length() ")")
     return result
 }
 

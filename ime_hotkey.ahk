@@ -18,23 +18,19 @@
             if( ImeInputterIsInputDirty() ) {
                 ImeInputterUpdateString("")
             } else {
-                PutCandidateCharacter()
+                ImeOutputterPutSelect(false)
             }
         }
         ImeTooltipUpdate()
     return
 
     ]::
-        PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 0)
-        ImeSelectMenuClose()
-        ImeSelectorApplyCaretSelectIndex(true)
+        ImeOutputterPutSelect(false, -1)
         ImeTooltipUpdate()
     return
 
     [::
-        PutCharacterWordByWord(ImeSelectorGetCaretSelectIndex(), 1)
-        ImeSelectMenuClose()
-        ImeSelectorApplyCaretSelectIndex(true)
+        ImeOutputterPutSelect(false, 1)
         ImeTooltipUpdate()
     return
 
@@ -231,8 +227,8 @@
         WordCreatorUI(GetSelectText())
     return
 
-    ; F5: reload
-    F5::
+    ; Ctrl + F5: reload
+    ^F5::
         ScriptRestart()
     return
 
@@ -254,8 +250,8 @@
         ImeTooltipUpdate()
     return
 
-    ; F12: exit
-    F12::
+    ; Ctrl + F12: exit
+    ^F12::
         ExitApp,
     return
 #if ; !ImeModeIsEnglish()
