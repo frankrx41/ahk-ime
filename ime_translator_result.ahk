@@ -26,46 +26,6 @@ TranslatorResultGetWordLength(ByRef translator_result, word_index)
 }
 
 ;*******************************************************************************
-;
-TranslatorResultListFindPossibleMaxLength(ByRef translator_result, split_index)
-{
-    local
-    ; `max_length` = this word until next unlock word
-    ; TODO: Fix
-    if( ImeSelectorIsSelectLock(split_index) )
-    {
-        max_length := TranslatorResultGetWordLength(translator_result, 1)
-    }
-    else
-    {
-        max_length := 1
-        loop % TranslatorResultGetWordLength(translator_result, 1)-1
-        {
-            check_index := split_index + A_Index
-            if( ImeSelectorIsSelectLock(check_index) ) {
-                break
-            }
-            max_length += 1
-        }
-    }
-    return max_length
-}
-
-TranslatorResultListFindMaxLengthResultIndex(ByRef translator_result, split_index, max_length)
-{
-    local
-    loop % translator_result[split_index].Length()
-    {
-        test_len := TranslatorResultGetWordLength(translator_result[A_Index], A_Index)
-        if( test_len <= max_length )
-        {
-            return A_Index
-        }
-    }
-    return 0
-}
-
-;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]
 ; find ["我"]
 ;   - max_length == 1 return 3

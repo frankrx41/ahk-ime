@@ -53,7 +53,6 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
     return true
 }
 
-; TODO: fix with splitter_result
 PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitter_result)
 {
     local
