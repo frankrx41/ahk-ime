@@ -302,17 +302,27 @@ ImeInputterCaretMoveToChar(char, back_to_front)
     global ime_input_caret_pos
     global ime_input_string
 
-    input_string := ime_input_string
-    origin_index := ime_input_caret_pos
-    if( back_to_front ) {
-        start_index := origin_index - StrLen(input_string)
-    } else {
-        start_index := origin_index + 2
-    }
-    index := InStr(input_string, char, false, start_index)
-    if( index != 0 )
+    loop, 2
     {
-        ime_input_caret_pos := index - 1
+        if( A_Index == 1 )
+        {
+            if( back_to_front ) {
+                start_index := ime_input_caret_pos - StrLen(ime_input_string)
+            } else {
+                start_index := ime_input_caret_pos + 2
+            }
+        } else {
+            if( back_to_front ) {
+                start_index := 0
+            } else {
+                start_index := 1
+            }
+        }
+        index := InStr(ime_input_string, char, false, start_index)
+        if( index != 0 ) {
+            ime_input_caret_pos := index - 1
+            break
+        }
     }
 }
 
