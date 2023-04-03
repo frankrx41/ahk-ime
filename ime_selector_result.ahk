@@ -12,8 +12,8 @@ SelectorResultSetSelectIndex(ByRef selector_result, split_index, select_index)
     local
     selector_result[split_index, 1] := select_index
 
-    debug_info := "`n  - [" split_index "]->[" select_index "] " CallerName()
-    ImeProfilerEnd(42, ImeProfilerBegin(42) . debug_info)
+    profile_text := "`n  - [" split_index "]->[" select_index "] " CallerName()
+    ImeProfilerEnd(42, ImeProfilerBegin(42) . profile_text)
 }
 
 SelectorResultUnLockWord(ByRef selector_result, split_index)
@@ -29,8 +29,8 @@ SelectorResultLockWord(ByRef selector_result, split_index, select_word, word_len
     selector_result[split_index, 2] := true
     selector_result[split_index, 3] := select_word
     selector_result[split_index, 4] := word_length
-    debug_info := "`n  - [" split_index "]->[" select_word "," word_length "] "
-    ImeProfilerEnd(43, ImeProfilerBegin(43) . debug_info)
+    profile_text := "`n  - [" split_index "]->[" select_word "," word_length "] "
+    ImeProfilerEnd(43, ImeProfilerBegin(43) . profile_text)
 }
 
 ;*******************************************************************************
@@ -44,8 +44,8 @@ SelectorResultIsSelectLock(ByRef selector_result, split_index)
 {
     local
     ImeProfilerBegin(44)
-    debug_info := "`n  - [" split_index "]->[" selector_result[split_index, 2] "] " CallerName()
-    ImeProfilerEnd(44, debug_info)
+    profile_text := "`n  - [" split_index "]->[" selector_result[split_index, 2] "] " CallerName()
+    ImeProfilerEnd(44, profile_text)
     return selector_result[split_index, 2] ? true : false
 }
 

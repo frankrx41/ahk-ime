@@ -58,7 +58,7 @@ PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitter_result)
 {
     local
     global history_field_array
-    debug_string := ImeProfilerBegin(22)
+    profile_text := ImeProfilerBegin(22)
 
     length_count := 99
     splitted_input := SplitterResultConvertToString(splitter_result, 1, length_count)
@@ -69,10 +69,10 @@ PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitter_result)
         {
             TranslatorHistoryUpdateKey(splitted_string, length_count, true)
             TranslatorHistoryInsertResult(search_result, splitted_string, 1)
-            debug_string := "[""" splitted_string """] -> (" TranslatorHistoryGetKeyResultLength(splitted_string) ")"
+            profile_text := "[""" splitted_string """] -> (" TranslatorHistoryGetKeyResultLength(splitted_string) ")"
         }
     }
-    ImeProfilerEnd(22, debug_string)
+    ImeProfilerEnd(22, profile_text)
     return
 }
 

@@ -157,7 +157,7 @@ ImeInputterCallTranslator(is_delete)
     global ime_input_dirty
 
     ImeProfilerBegin(12)
-    debug_info := ""
+    profile_text := ""
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
 
@@ -169,8 +169,8 @@ ImeInputterCallTranslator(is_delete)
         }
         splitter_result[A_Index] := ime_inputter_splitter_result[A_Index]
     }
-    debug_info .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
-    ImeProfilerEnd(12, debug_info)
+    profile_text .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
+    ImeProfilerEnd(12, profile_text)
 
     ImeTranslatorUpdateResult(splitter_result)
     ImeSelectorUnlockWords(caret_splitted_index, is_delete)

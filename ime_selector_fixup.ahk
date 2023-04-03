@@ -45,7 +45,7 @@ TranslatorFindPossibleMaxLength(split_index)
 ImeSelectorFixupSelectIndex()
 {
     local
-    debug_info := ""
+    profile_text := ""
     ImeProfilerBegin(40)
     skip_word_count := 0
     loop % ImeTranslatorResultListGetLength()
@@ -65,8 +65,8 @@ ImeSelectorFixupSelectIndex()
         ; `max_length` = this word until next unlock word
         max_length := TranslatorFindPossibleMaxLength(split_index)
 
-        debug_info .= "`n  - [" split_index "] "
-        debug_info .= "skip: " skip_word_count ", lock: " select_is_lock ", max_len: " max_length " "
+        profile_text .= "`n  - [" split_index "] "
+        profile_text .= "skip: " skip_word_count ", lock: " select_is_lock ", max_len: " max_length " "
 
         if( skip_word_count )
         {
@@ -97,14 +97,14 @@ ImeSelectorFixupSelectIndex()
             ImeSelectorSetSelectIndex(split_index, select_index)
         }
 
-        debug_info .= "[" origin_select_index "]->[" select_index "] "
+        profile_text .= "[" origin_select_index "]->[" select_index "] "
         if( select_index )
         {
             select_word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
             skip_word_count := select_word_length-1
-            debug_info .= "skip: " skip_word_count " "
+            profile_text .= "skip: " skip_word_count " "
         }
     }
-    ImeProfilerEnd(40, debug_info)
+    ImeProfilerEnd(40, profile_text)
     Assert(skip_word_count == 0, skip_word_count)
 }

@@ -64,7 +64,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
     local
     global ime_selector_select
     ImeProfilerBegin(41)
-    debug_info := ""
+    profile_text := ""
 
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index)
@@ -92,8 +92,8 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         ImeInputterCaretMoveByWord(word_length)
     }
 
-    debug_info .= "[" split_index "]->[" lock_result "]"
-    ImeProfilerEnd(41, debug_info)
+    profile_text .= "[" split_index "]->[" lock_result "]"
+    ImeProfilerEnd(41, profile_text)
 }
 
 ImeSelectorUnlockWords(split_index, unlock_front)
