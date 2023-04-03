@@ -160,7 +160,6 @@ ImeInputterCallTranslator(is_delete)
     debug_info := ""
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
-    ImeSelectorUnlockWords(caret_splitted_index, is_delete ? 1 : 0)
 
     splitter_result := []
     loop,% ime_inputter_splitter_result.Length()
@@ -174,6 +173,7 @@ ImeInputterCallTranslator(is_delete)
     ImeProfilerEnd(12, debug_info)
 
     ImeTranslatorUpdateResult(splitter_result)
+    ImeSelectorUnlockWords(caret_splitted_index, is_delete)
     ImeSelectorFixupSelectIndex()
 
     ime_input_dirty := false

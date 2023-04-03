@@ -78,7 +78,7 @@ ImeSelectorFixupSelectIndex()
             ; TODO: use `lock_length`
             lock_length := ImeSelectorGetLockLength(split_index)
             select_index := ImeTranslatorResultFindIndex(split_index, lock_word, max_length)
-            Assert(select_index, lock_word)
+            Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word)
         }
         else
         {

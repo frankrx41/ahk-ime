@@ -86,6 +86,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         }
     }
 
+    SelectorResultUnLockWord(ime_selector_select, split_index)
     ImeSelectorFixupSelectIndex()
 
     if( !ImeInputterCaretIsAtEnd() )
