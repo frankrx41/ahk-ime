@@ -76,15 +76,21 @@ TranslatorResultListFindIndex(ByRef translator_result, split_index, find_words, 
 {
     local
     find_word_len := StrLen(find_words)
+    ImeProfilerBegin(45)
+    debug_text := split_index "," translator_result[split_index].Length()
+    select_index := 0
     loop, % translator_result[split_index].Length()
     {
         select_index := A_Index
-        test_result := TranslatorResultGetWord(translator_result[A_Index], select_index)
+        test_result := TranslatorResultGetWord(translator_result[split_index], select_index)
+        debug_text .= "`n  - """ find_words """ == """ test_result """"
         if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
-            return select_index
+            debug_text .= ": " select_index
+            break
         }
     }
-    return 0
+    ImeProfilerEnd(45, debug_text)
+    return select_index
 }
 
 ;*******************************************************************************

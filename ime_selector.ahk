@@ -70,6 +70,22 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
     select_index := ImeSelectorGetSelectIndex(split_index)
     word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
 
+    ; if( lock_result )
+    ; {
+    ;     SelectorResultUnLockFrontWords(ime_selector_select, split_index)
+    ;     ; Lock this
+    ;     select_word := ImeTranslatorResultListGetWord(split_index, select_index)
+    ;     word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
+    ;     SelectorResultLockWord(ime_selector_select, split_index, select_word, word_length)
+    ;     loop, % word_length-1
+    ;     {
+    ;         test_index := split_index + A_Index
+    ;         if( ImeSelectorIsSelectLock(test_index) ){
+    ;             SelectorResultUnLockWord(ime_selector_select, test_index)
+    ;         }
+    ;     }
+    ; }
+
     if( lock_result )
     {
         SelectorResultUnLockFrontWords(ime_selector_select, split_index)
@@ -77,17 +93,9 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         select_word := ImeTranslatorResultListGetWord(split_index, select_index)
         word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
         SelectorResultLockWord(ime_selector_select, split_index, select_word, word_length)
-        loop, % word_length-1
-        {
-            test_index := split_index + A_Index
-            if( ImeSelectorIsSelectLock(test_index) ){
-                SelectorResultUnLockWord(ime_selector_select, test_index)
-            }
-        }
+        ; SelectorResultUnLockWord(ime_selector_select, split_index)
+        ImeSelectorFixupSelectIndex()
     }
-
-    SelectorResultUnLockWord(ime_selector_select, split_index)
-    ImeSelectorFixupSelectIndex()
 
     if( !ImeInputterCaretIsAtEnd() )
     {

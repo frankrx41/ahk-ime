@@ -78,7 +78,7 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 43)        ; SelectorResultLockWord
     ImeDebugTipAppend(debug_tip, 44)        ; SelectorResultIsSelectLock
 
-    ImeDebugTipAppend(debug_tip, 45)
+    ImeDebugTipAppend(debug_tip, 45)        ; TranslatorResultListFindIndex
     ImeDebugTipAppend(debug_tip, 46)
     ImeDebugTipAppend(debug_tip, 47)
     ImeDebugTipAppend(debug_tip, 48)
