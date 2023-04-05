@@ -385,5 +385,5 @@ PinyinInitialize()
     }
 
     PinyinSplitterTableInitialize()
-    ; PinyinTraditionalInitialize()
+    PinyinTraditionalInitialize()
 }
