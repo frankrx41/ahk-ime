@@ -26,6 +26,18 @@ TranslatorResultGetWordLength(ByRef translator_result, word_index)
 }
 
 ;*******************************************************************************
+;
+SingleResultSetWeight(ByRef single_result, weight)
+{
+    single_result[3] := weight
+}
+
+SingleResultGetWeight(ByRef single_result)
+{
+    return single_result[3]
+}
+
+;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]
 ; find ["我"]
 ;   - max_length == 1 return 3

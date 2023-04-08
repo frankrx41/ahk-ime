@@ -38,12 +38,16 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, lim
 
 ;*******************************************************************************
 ; Update `search_result`
-TranslatorHistoryPushResult(ByRef search_result, splitted_string, max_num := 100)
+TranslatorHistoryPushResult(ByRef search_result, splitted_string, max_num := 100, modify_weight := 0)
 {
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        search_result.Push(CopyObj(translator_history_result[splitted_string, A_Index]))
+        single_result := CopyObj(translator_history_result[splitted_string, A_Index])
+        if( modify_weight ) {
+            SingleResultSetWeight(single_result, SingleResultGetWeight(single_result) + modify_weight)
+        }
+        search_result.Push(single_result)
     }
 }
 
