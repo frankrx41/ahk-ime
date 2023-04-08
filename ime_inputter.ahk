@@ -204,7 +204,10 @@ ImeInputterGetDisplayString()
     global ime_input_caret_pos
     tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
     tooltip_string := StrReplace(tooltip_string, " ", "_")
-    tooltip_string .= "(" ime_input_caret_pos ")"
+    tooltip_string .= " (" ime_input_caret_pos ")"
+    if( ImeInputterIsInputDirty() ){
+        tooltip_string .= " {Enter}"
+    }
     return tooltip_string
 }
 

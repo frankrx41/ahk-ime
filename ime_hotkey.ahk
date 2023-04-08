@@ -8,7 +8,7 @@
         ImeTooltipUpdate()
     return
 
-    ; Enter 上屏文字
+    ; Enter send string
     Enter::
     NumpadEnter::
         if( ImeSelectMenuIsOpen() ){
