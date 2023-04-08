@@ -176,12 +176,21 @@ TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
 {
     local
 
-    if( radical_list )
+    need_filter := false
+    for index, value in radical_list
     {
-        ImeProfilerBegin(36)
+        if( value != "" ){
+            need_filter := true
+            break
+        }
+    }
+
+    if( need_filter )
+    {
         index := 1
         loop % translate_result.Length()
         {
+            ImeProfilerBegin(36)
             word_value := translate_result[index, 2]
             should_remove := false
             ; loop each character of "我爱你"
@@ -206,9 +215,9 @@ TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
             } else {
                 index += 1
             }
+            ImeProfilerEnd(36)
         }
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
-        ImeProfilerEnd(36)
     }
 }
