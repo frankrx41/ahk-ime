@@ -40,6 +40,9 @@ PinyinTranslateFindResult(splitter_result)
         PinyinResultCovertTraditional(search_result)
     }
 
+    ; Sort
+    TranslatorResultSortByWeight(search_result)
+
     ; [
     ;     ; 1   , 2   , 3      , 4 , 5  
     ;     ["wo3", "我", "30233", "", "1"]

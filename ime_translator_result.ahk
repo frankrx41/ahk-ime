@@ -99,3 +99,10 @@ TranslatorResultListFilterResults(ByRef translator_result_list, input_radical_li
     ImeProfilerEnd(31, "[" search_result.Length() "]: " . debug_text)
     return search_result
 }
+
+;*******************************************************************************
+; Sort
+TranslatorResultSortByWeight(ByRef translator_result)
+{
+    translator_result := ObjectSort(translator_result, 3,, true)
+}
