@@ -11,20 +11,21 @@ PinyinTraditionalInitialize()
     Assert(ime_traditional_table.Count() != 0)
 }
 
-PinyinResultCovertTraditional(ByRef search_result)
+PinyinResultCovertTraditional(ByRef translate_result)
 {
     local
     global ime_traditional_table
     insert_indexs := {}
-    loop, % search_result.Length()
+    loop, % translate_result.Length()
     {
-        result_word := search_result[A_Index, 2]
+        result_word := translate_result[A_Index, 2]
         if( ime_traditional_table[result_word] )
         {
-            pinyin := search_result[A_Index, 1]
-            length := search_result[A_Index, 5]
-            search_result[A_Index, 2] := ime_traditional_table[result_word, 1]
-            search_result[A_Index, 4] := "*" . search_result[A_Index, 4]
+            ; TODO: clear code
+            pinyin := translate_result[A_Index, 1]
+            length := translate_result[A_Index, 5]
+            translate_result[A_Index, 2] := ime_traditional_table[result_word, 1]
+            translate_result[A_Index, 4] := "*" . translate_result[A_Index, 4]
             if( ime_traditional_table[result_word].Length() > 1 )
             {
                 insert_indexs.Push([A_Index, result_word, pinyin, length])
@@ -43,10 +44,10 @@ PinyinResultCovertTraditional(ByRef search_result)
                     traditional_result_word .= A_LoopField
                 }
             }
-            if( traditional_result_word != search_result[A_Index, 2] )
+            if( traditional_result_word != translate_result[A_Index, 2] )
             {
-                search_result[A_Index, 2] := traditional_result_word
-                search_result[A_Index, 4] := "*" . search_result[A_Index, 4]
+                translate_result[A_Index, 2] := traditional_result_word
+                translate_result[A_Index, 4] := "*" . translate_result[A_Index, 4]
             }
         }
     }
@@ -63,7 +64,7 @@ PinyinResultCovertTraditional(ByRef search_result)
             traditional_word := ime_traditional_table[result_word, A_Index+1]
             index += 1
             offset_index += 1
-            search_result.InsertAt(index, [pinyin, traditional_word, 0, "+", length])
+            translate_result.InsertAt(index, [pinyin, traditional_word, 0, "+", length])
         }
     }
 }

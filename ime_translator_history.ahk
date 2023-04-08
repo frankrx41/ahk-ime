@@ -37,8 +37,8 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, lim
 }
 
 ;*******************************************************************************
-; Update `search_result`
-TranslatorHistoryPushResult(ByRef search_result, splitted_string, max_num := 100, modify_weight := 0)
+; Update `translate_result`
+TranslatorHistoryPushResult(ByRef translate_result, splitted_string, max_num := 100, modify_weight := 0)
 {
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
@@ -47,11 +47,11 @@ TranslatorHistoryPushResult(ByRef search_result, splitted_string, max_num := 100
         if( modify_weight ) {
             SingleResultSetWeight(single_result, SingleResultGetWeight(single_result) + modify_weight)
         }
-        search_result.Push(single_result)
+        translate_result.Push(single_result)
     }
 }
 
-TranslatorHistoryInsertResult(ByRef search_result, splitted_string, insert_at := 1, max_num := 100)
+TranslatorHistoryInsertResult(ByRef translate_result, splitted_string, insert_at := 1, max_num := 100)
 {
     local
     global translator_history_result
@@ -59,6 +59,6 @@ TranslatorHistoryInsertResult(ByRef search_result, splitted_string, insert_at :=
     loop_cnt := Min(list_len, max_num)
     loop % loop_cnt
     {
-        search_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
+        translate_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
     }
 }

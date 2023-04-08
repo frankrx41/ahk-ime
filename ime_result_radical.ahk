@@ -172,7 +172,7 @@ RadicalIsFullMatch(test_word, test_radical)
 
 ;*******************************************************************************
 ; radical_list: ["SS", "YZ", "RE"]
-TranslatorResultFilterByRadical(ByRef search_result, radical_list)
+TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
 {
     local
 
@@ -180,12 +180,12 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
     {
         ImeProfilerBegin(36)
         index := 1
-        loop % search_result.Length()
+        loop % translate_result.Length()
         {
-            word_value := search_result[index, 2]
+            word_value := translate_result[index, 2]
             should_remove := false
             ; loop each character of "我爱你"
-            loop % search_result[index, 5]
+            loop % translate_result[index, 5]
             {
                 test_radical := radical_list[A_Index]
                 if( test_radical )
@@ -202,7 +202,7 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
             }
 
             if( should_remove ) {
-                search_result.RemoveAt(index)
+                translate_result.RemoveAt(index)
             } else {
                 index += 1
             }
