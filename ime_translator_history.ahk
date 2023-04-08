@@ -59,8 +59,9 @@ TranslatorHistoryInsertResult(ByRef search_result, splitted_string, insert_at :=
     local
     global translator_history_result
     list_len := translator_history_result[splitted_string].Length()
-    loop % Min(list_len, max_num)
+    loop_cnt := Min(list_len, max_num)
+    loop % loop_cnt
     {
-        search_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, list_len+1-A_Index]))
+        search_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
     }
 }
