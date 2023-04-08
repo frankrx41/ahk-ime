@@ -7,19 +7,10 @@ PinyinTranslatorInsertResult(ByRef search_result, splitter_result)
     loop, % max_len
     {
         length_count := max_len-A_Index+1
-        hope_word_length := SplitterResultGetWordLength(splitter_result, 1)
         splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
 
         TranslatorHistoryUpdateKey(splitted_string, length_count)
-        if( TranslatorHistoryHasResult(splitted_string) )
-        {
-            if( hope_word_length == length_count ) {
-                TranslatorHistoryInsertResult(search_result, splitted_string, 1)
-            }
-            else {
-                TranslatorHistoryPushResult(search_result, splitted_string)
-            }
-        }
+        TranslatorHistoryPushResult(search_result, splitted_string)
     }
 }
 

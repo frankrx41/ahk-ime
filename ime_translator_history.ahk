@@ -20,13 +20,6 @@ TranslatorHistoryHasKey(splitted_string)
 ;   [3]: ["lao3shi2", "老实", "25877", "", 2]
 ;   ...
 ; ]
-TranslatorHistoryHasResult(splitted_string)
-{
-    global translator_history_result
-    Assert(TranslatorHistoryHasKey(splitted_string), "Please call ``TranslatorHistoryUpdateKey(""" splitted_string """)`` first!", true)
-    return translator_history_result[splitted_string, 1, 1] != ""
-}
-
 TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, limit_num:=100)
 {
     global translator_history_result
