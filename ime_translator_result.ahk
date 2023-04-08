@@ -1,4 +1,10 @@
 ;*******************************************************************************
+; translator_result := []
+;   [1]: "wo3"      ; pinyin
+;   [2]: "我"       ; value
+;   [3]: 30233      ; weight
+;   [4]: ""         ; comment
+;   [5]: 1          ; word length
 ;
 TranslatorResultGetPinyin(ByRef translate_result, word_index)
 {
@@ -8,6 +14,11 @@ TranslatorResultGetPinyin(ByRef translate_result, word_index)
 TranslatorResultGetWord(ByRef translate_result, word_index)
 {
     return translate_result[word_index, 2]
+}
+
+TranslatorResultSetWord(ByRef translate_result, word_index, word)
+{
+    translate_result[word_index, 2] := word
 }
 
 TranslatorResultGetWeight(ByRef translate_result, word_index)
@@ -20,6 +31,11 @@ TranslatorResultGetComment(ByRef translate_result, word_index)
     return translate_result[word_index, 4]
 }
 
+TranslatorResultSetComment(ByRef translate_result, word_index, comment)
+{
+    translate_result[word_index, 4] := comment
+}
+
 TranslatorResultGetWordLength(ByRef translate_result, word_index)
 {
     return translate_result[word_index, 5]
@@ -27,14 +43,39 @@ TranslatorResultGetWordLength(ByRef translate_result, word_index)
 
 ;*******************************************************************************
 ;
-SingleResultSetWeight(ByRef single_result, weight)
+TranslatorSingleResultGetPinyin(ByRef single_result)
+{
+    return single_result[1]
+}
+
+TranslatorSingleResultSetWord(ByRef single_result, word)
+{
+    single_result[2] := word
+}
+
+TranslatorSingleResultGetWeight(ByRef single_result)
+{
+    return single_result[3]
+}
+
+TranslatorSingleResultSetWeight(ByRef single_result, weight)
 {
     single_result[3] := weight
 }
 
-SingleResultGetWeight(ByRef single_result)
+TranslatorSingleResultGetComment(ByRef single_result)
 {
-    return single_result[3]
+    return translate_result[4]
+}
+
+TranslatorSingleResultSetComment(ByRef single_result, comment)
+{
+    translate_result[4] := comment
+}
+
+TranslatorSingleResultGetWordLength(ByRef single_result)
+{
+    return single_result[5]
 }
 
 ;*******************************************************************************

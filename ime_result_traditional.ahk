@@ -18,14 +18,14 @@ PinyinResultCovertTraditional(ByRef translate_result)
     insert_indexs := {}
     loop, % translate_result.Length()
     {
-        result_word := translate_result[A_Index, 2]
+        result_word := TranslatorResultGetWord(translate_result, A_Index)
         if( ime_traditional_table[result_word] )
         {
             ; TODO: clear code
-            pinyin := translate_result[A_Index, 1]
-            length := translate_result[A_Index, 5]
-            translate_result[A_Index, 2] := ime_traditional_table[result_word, 1]
-            translate_result[A_Index, 4] := "*" . translate_result[A_Index, 4]
+            pinyin := TranslatorSingleResultGetPinyin(translate_result)
+            length := TranslatorSingleResultGetWordLength(translate_result)
+            TranslatorResultSetWord(translate_result, A_Index, ime_traditional_table[result_word, 1])
+            TranslatorResultSetComment(translate_result, A_Index, "*" . TranslatorResultGetComment(translate_result, A_Index))
             if( ime_traditional_table[result_word].Length() > 1 )
             {
                 insert_indexs.Push([A_Index, result_word, pinyin, length])
@@ -46,8 +46,8 @@ PinyinResultCovertTraditional(ByRef translate_result)
             }
             if( traditional_result_word != translate_result[A_Index, 2] )
             {
-                translate_result[A_Index, 2] := traditional_result_word
-                translate_result[A_Index, 4] := "*" . translate_result[A_Index, 4]
+                TranslatorResultSetWord(translate_result, A_Index, traditional_result_word)
+                TranslatorResultSetComment(translate_result, A_Index, "*" . TranslatorResultGetComment(translate_result, A_Index))
             }
         }
     }

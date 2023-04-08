@@ -45,7 +45,7 @@ TranslatorHistoryPushResult(ByRef translate_result, splitted_string, max_num := 
     {
         single_result := CopyObj(translator_history_result[splitted_string, A_Index])
         if( modify_weight ) {
-            SingleResultSetWeight(single_result, SingleResultGetWeight(single_result) + modify_weight)
+            TranslatorSingleResultSetWeight(single_result, TranslatorSingleResultGetWeight(single_result) + modify_weight)
         }
         translate_result.Push(single_result)
     }
