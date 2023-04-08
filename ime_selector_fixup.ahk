@@ -20,7 +20,7 @@ TranslatorFindPossibleMaxLength(split_index)
     ; `max_length` = this word until next unlock word
     if( ImeSelectorIsSelectLock(split_index) )
     {
-        max_length := ImeTranslatorResultListGetWordLength(split_index, 1)
+        max_length := ImeTranslatorResultListGetWordLength(split_index, ImeSelectorGetSelectIndex(split_index))
     }
     else
     {
