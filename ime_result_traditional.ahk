@@ -21,9 +21,8 @@ PinyinResultCovertTraditional(ByRef translate_result)
         result_word := TranslatorResultGetWord(translate_result, A_Index)
         if( ime_traditional_table[result_word] )
         {
-            ; TODO: clear code
-            pinyin := TranslatorSingleResultGetPinyin(translate_result)
-            length := TranslatorSingleResultGetWordLength(translate_result)
+            pinyin := TranslatorResultGetPinyin(translate_result, A_Index)
+            length := TranslatorResultGetWordLength(translate_result, A_Index)
             TranslatorResultSetWord(translate_result, A_Index, ime_traditional_table[result_word, 1])
             TranslatorResultSetComment(translate_result, A_Index, "*" . TranslatorResultGetComment(translate_result, A_Index))
             if( ime_traditional_table[result_word].Length() > 1 )
