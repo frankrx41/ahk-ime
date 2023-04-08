@@ -180,8 +180,8 @@ PinyinSplitterInputString(input_string)
     Critical
     ImeProfilerBegin(11)
 
-    index           := 1
-    start_index     := 1
+    string_index        := 1
+    start_string_index  := 1
     strlen          := StrLen(input_string)
     splitter_result := []
     escape_string   := ""
@@ -190,26 +190,26 @@ PinyinSplitterInputString(input_string)
 
     loop
     {
-        if( index > strlen ) {
+        if( string_index > strlen ) {
             break
         }
 
-        initials := SubStr(input_string, index, 1)
+        initials := SubStr(input_string, string_index, 1)
         ; 字母，自动分词
         if( IsInitials(initials) )
         {
             if( escape_string ) {
-                SplitterResultPush(splitter_result, escape_string, 0, "", start_index, index-1, true)
+                SplitterResultPush(splitter_result, escape_string, 0, "", start_string_index, string_index-1, true)
                 escape_string := ""
             }
 
-            start_index := index
+            start_string_index := string_index
 
-            initials    := PinyinSplitterGetInitials(input_string, initials, index)
-            vowels      := PinyinSplitterGetVowels(input_string, initials, index)
+            initials    := PinyinSplitterGetInitials(input_string, initials, string_index)
+            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index)
             full_vowels := GetFullVowels(initials, vowels)
-            tone_string := SubStr(input_string, index, 1)
-            tone        := PinyinSplitterGetTone(input_string, initials, vowels, index)
+            tone_string := SubStr(input_string, string_index, 1)
+            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
 
             if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
                 vowels .= "%"
@@ -221,18 +221,19 @@ PinyinSplitterInputString(input_string)
             }
 
             ; Radical
-            RegExMatch(SubStr(input_string, index), "^([A-Z]+)", radical)
-            index += StrLen(radical)
+            RegExMatch(SubStr(input_string, string_index), "^([A-Z]+)", radical)
+            string_index += StrLen(radical)
 
-            if( splitter_index_list.Length() ) {
-                for _, value in splitter_index_list {
-                    length := SplitterResultGetWordLength(splitter_result, value)
-                    SplitterResultSetWordLength(splitter_result, value, length+1)
-                }
-            }
-            SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_index, index-1)
+            SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_string_index, string_index-1)
 
             if( tone_string == " " ){
+                splitter_index_list_len := splitter_index_list.Length()
+                if( splitter_index_list_len ) {
+                    for index, value in splitter_index_list {
+                        length := splitter_index_list_len - index + 2
+                        SplitterResultSetWordLength(splitter_result, value, length)
+                    }
+                }
                 splitter_index_list := []
             } else {
                 splitter_index_list.Push(splitter_result.Length())
@@ -241,14 +242,14 @@ PinyinSplitterInputString(input_string)
         ; 忽略
         else
         {
-            index += 1
+            string_index += 1
             Assert( initials!="'" )
             escape_string .= initials
         }
     }
 
     if( escape_string ) {
-        SplitterResultPush(splitter_result, escape_string, 0, "", start_index, index-1, true)
+        SplitterResultPush(splitter_result, escape_string, 0, "", start_string_index, string_index-1, true)
         escape_string := ""
     }
 
