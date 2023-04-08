@@ -1,16 +1,22 @@
 ;*******************************************************************************
 ; splitter_result
 ;   [1]:
-;       [1,1]: "wo"     ; 拼音
-;       [1,2]: 3        ; 音调 0 任意音，1~5 具体音
-;       [1,3]: "S"      ; 辅助码
-;       [1,4]: 1        ; 原始字符串中开始的位置
-;       [1,5]: 3        ; 原始字符串中结束的位置
-;       [1,6]: true     ; 可以进行翻译
+;       [1]: "wo"       ; 拼音
+;       [2]: 3          ; 音调 0 任意音，1~5 具体音
+;       [3]: "S"        ; 辅助码
+;       [4]: 1          ; 原始字符串中开始的位置
+;       [5]: 3          ; 原始字符串中结束的位置
+;       [6]: true       ; 可以进行翻译
+;       [7]: 1          ; 期待单词长度
 ;
 SplitterResultPush(ByRef splitter_result, pinyin, tone, radical, start_pos, end_pos, skip:=false)
 {
-    splitter_result.Push([pinyin, tone, radical, start_pos, end_pos, skip])
+    splitter_result.Push([pinyin, tone, radical, start_pos, end_pos, skip, 1])
+}
+
+SplitterResultSetWordLength(ByRef splitter_result, index, length)
+{
+    splitter_result[index, 7] := length
 }
 
 ;*******************************************************************************
@@ -43,6 +49,11 @@ SplitterResultGetEndPos(ByRef splitter_result, index)
 SplitterResultIsSkip(ByRef splitter_result, index)
 {
     return splitter_result[index, 6]
+}
+
+SplitterResultGetWordLength(ByRef splitter_result, index)
+{
+    return splitter_result[index, 7]
 }
 
 ;*******************************************************************************
@@ -179,6 +190,9 @@ SplitterResultGetDisplayText(splitter_result)
         if( radical ) {
             dsiplay_text .= "{" radical "}"
         }
+
+        length := SplitterResultGetWordLength(splitter_result, index)
+        dsiplay_text .= " (" length ")"
 
         ; dsiplay_text .= " ("
         ; dsiplay_text .= SplitterResultGetStartPos(splitter_result, index)

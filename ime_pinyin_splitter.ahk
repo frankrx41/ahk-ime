@@ -186,6 +186,8 @@ PinyinSplitterInputString(input_string)
     splitter_result := []
     escape_string   := ""
 
+    splitter_index_list := []
+
     loop
     {
         if( index > strlen ) {
@@ -206,6 +208,7 @@ PinyinSplitterInputString(input_string)
             initials    := PinyinSplitterGetInitials(input_string, initials, index)
             vowels      := PinyinSplitterGetVowels(input_string, initials, index)
             full_vowels := GetFullVowels(initials, vowels)
+            tone_string := SubStr(input_string, index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, index)
 
             if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
@@ -221,7 +224,19 @@ PinyinSplitterInputString(input_string)
             RegExMatch(SubStr(input_string, index), "^([A-Z]+)", radical)
             index += StrLen(radical)
 
+            if( splitter_index_list.Length() ) {
+                for _, value in splitter_index_list {
+                    length := SplitterResultGetWordLength(splitter_result, value)
+                    SplitterResultSetWordLength(splitter_result, value, length+1)
+                }
+            }
             SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_index, index-1)
+
+            if( tone_string == " " ){
+                splitter_index_list := []
+            } else {
+                splitter_index_list.Push(splitter_result.Length())
+            }
         }
         ; 忽略
         else
