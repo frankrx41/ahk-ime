@@ -253,6 +253,14 @@ PinyinSplitterInputString(input_string)
         escape_string := ""
     }
 
+    splitter_index_list_len := splitter_index_list.Length()
+    if( splitter_index_list_len ) {
+        for index, value in splitter_index_list {
+            length := splitter_index_list_len - index + 1
+            SplitterResultSetWordLength(splitter_result, value, length)
+        }
+    }
+
     ImeProfilerEnd(11, """" input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
     return splitter_result
 }
