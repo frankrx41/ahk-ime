@@ -51,7 +51,7 @@ TranslatorHistoryPushResult(ByRef translate_result, splitted_string, max_num := 
     }
 }
 
-TranslatorHistoryInsertResult(ByRef translate_result, splitted_string, insert_at := 1, max_num := 100)
+TranslatorHistoryInsertResultAt(ByRef translate_result, splitted_string, insert_at := 1, max_num := 100)
 {
     local
     global translator_history_result

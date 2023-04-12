@@ -13,7 +13,7 @@ PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
         TranslatorHistoryUpdateKey(splitted_string, length_count)
         TranslatorHistoryPushResult(translate_result, splitted_string, 200)
         if( length_count == hope_word_length ) {
-            TranslatorHistoryInsertResult(translate_result, splitted_string, 1, 3)
+            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1, 3)
         }
     }
 }
