@@ -67,7 +67,8 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result)
         if( SeparateStringShouldProcess(splitted_string, splitted_input) )
         {
             TranslatorHistoryUpdateKey(splitted_string, length_count, true)
-            TranslatorHistoryInsertResult(translate_result, splitted_string, 1)
+            TranslatorHistoryInsertResult(translate_result, splitted_string, 5)
+            TranslatorHistoryInsertResult(translate_result, splitted_string, 1, 1)
             profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
         }
     }
