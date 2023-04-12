@@ -192,7 +192,7 @@ SplitterResultGetDisplayText(splitter_result)
         }
 
         length := SplitterResultGetWordLength(splitter_result, index)
-        dsiplay_text .= "_" length ""
+        dsiplay_text .= "=" length ""
 
         ; dsiplay_text .= " ("
         ; dsiplay_text .= SplitterResultGetStartPos(splitter_result, index)
