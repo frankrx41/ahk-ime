@@ -64,7 +64,7 @@ TranslatorResultListFindIndex(ByRef translate_result_list, split_index, find_wor
 {
     local
     find_word_len := StrLen(find_words)
-    debug_text := ImeProfilerBegin(45)
+    debug_text := ImeProfilerBegin(32)
     debug_text .= split_index "," translate_result_list[split_index].Length()
     select_index := 0
     loop, % translate_result_list[split_index].Length()
@@ -76,7 +76,7 @@ TranslatorResultListFindIndex(ByRef translate_result_list, split_index, find_wor
             break
         }
     }
-    ImeProfilerEnd(45, debug_text)
+    ImeProfilerEnd(32, debug_text)
     return select_index
 }
 
