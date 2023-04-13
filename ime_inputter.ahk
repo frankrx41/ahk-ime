@@ -124,19 +124,10 @@ ImeInputterUpdateString(input_char)
 
     if( ime_input_string )
     {
-        ; If no input_char or input_char is not alphabet, try update
-        if( input_char ) {
-            should_update := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true)
-        } else {
-            should_update := true
-        }
-
         ; Splitter
         ime_inputter_splitter_result := PinyinSplitterInputString(ime_input_string)
         ; Translator
-        if( should_update ) {
-            ImeInputterCallTranslator()
-        }
+        ImeInputterCallTranslator()
     }
     else
     {
