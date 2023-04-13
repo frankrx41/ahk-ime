@@ -305,7 +305,7 @@ ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
         }
         index := InStr(ime_input_string, char, false, start_index)
         if( index != 0 ) {
-            ime_input_caret_pos := index - 1
+            ime_input_caret_pos := index
             break
         }
     }
