@@ -227,9 +227,13 @@
         WordCreatorUI(GetSelectText())
     return
 
-    ; Ctrl + F5: reload
-    ^F5::
+    ; Ctrl + Shift + F5: reload
+    ^+F5::
         ScriptRestart()
+    return
+
+    ^F5::
+        TranslatorHistoryClear()
     return
 
     F6::
