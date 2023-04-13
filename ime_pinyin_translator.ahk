@@ -3,23 +3,30 @@
 PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
 {
     local
-    max_len := Min(8, splitter_result.Length())
+    profile_text := ImeProfilerBegin(21)
+
+    hope_word_length := SplitterResultGetWordLength(splitter_result, 1)
+    next_length := SplitterResultGetWordLength(splitter_result, hope_word_length+1)
+    next_length := next_length ? next_length : 0
+    max_len := hope_word_length + next_length
+    profile_text .= "`n  - (" next_length "," max_len "," hope_word_length "): "
+
     loop, % max_len
     {
         length_count := max_len-A_Index+1
-        hope_word_length := SplitterResultGetWordLength(splitter_result, 1)
         splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
-
+        profile_text .= "[" splitted_string "] "
         TranslatorHistoryUpdateKey(splitted_string, length_count)
         TranslatorHistoryPushResult(translate_result, splitted_string, 200)
         if( length_count == hope_word_length ) {
             TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1, 3)
         }
     }
+    ImeProfilerEnd(21, profile_text)
 }
 
 ;*******************************************************************************
-; 拼音取词
+; Get translate result *ONLY* for splitter_result[1]
 PinyinTranslateFindResult(splitter_result)
 {
     local
