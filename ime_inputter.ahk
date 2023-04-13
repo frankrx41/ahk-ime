@@ -120,6 +120,7 @@ ImeInputterUpdateString(input_char, is_delete:=false)
 
     ime_input_dirty := true
     ImeProfilerClear()
+    ImeProfilerBegin(8)
 
     if( ime_input_string )
     {
@@ -148,6 +149,7 @@ ImeInputterUpdateString(input_char, is_delete:=false)
         ime_input_dirty := true
         Assert(input_char == "")
     }
+    ImeProfilerEnd(8)
 }
 
 ImeInputterCallTranslator(is_delete)
