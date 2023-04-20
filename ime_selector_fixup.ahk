@@ -18,15 +18,18 @@ TranslatorFindPossibleMaxLength(split_index)
 {
     local
     ; `max_length` = this word until next unlock word
+    profile_text := ImeProfilerBegin(45)
+    loop_cnt := 0
     if( ImeSelectorIsSelectLock(split_index) )
     {
-        max_length := ImeTranslatorResultListGetWordLength(split_index, 1)
+        max_length := ImeTranslatorResultListGetWordLength(split_index, ImeSelectorGetSelectIndex(split_index))
     }
     else
     {
         max_length := 1
         loop
         {
+            loop_cnt += 1
             check_index := split_index + A_Index
             if( check_index > ImeTranslatorResultListGetLength() ){
                 break
@@ -37,6 +40,14 @@ TranslatorFindPossibleMaxLength(split_index)
             max_length += 1
         }
     }
+
+    if( max_length == ImeTranslatorResultListGetLength() ){
+        Assert(split_index == 1)
+        max_length := ImeTranslatorResultListGetWordLength(split_index, 1)
+    }
+
+    profile_text .= "`n  - [" split_index "] loop: " loop_cnt " -> " max_length
+    ImeProfilerEnd(45, profile_text)
     return max_length
 }
 

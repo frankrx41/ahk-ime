@@ -135,9 +135,11 @@ WordCreatorDBGetInfo(DB, key, value, ByRef weight, ByRef comment)
 WordCreatorGetPinyin(word)
 {
     if( word ){
-        pypinyin_exe := "C:\SDK\Python\Python310\Scripts\pypinyin.exe"
-        cmdline := pypinyin_exe . " -s TONE3" . " " . word
-        pinyin := CmdRet(cmdline)
+        pypinyin_cmd := "py -c """
+        pypinyin_cmd .= "from pypinyin import pinyin, lazy_pinyin, Style;"
+        pypinyin_cmd .= "print(''.join(lazy_pinyin('" word "', style=Style.TONE3, neutral_tone_with_five=True)))"
+        pypinyin_cmd .= """"
+        pinyin := CmdRet(pypinyin_cmd)
         pinyin := RTrim(pinyin, "`n`r`t ")
         return pinyin
     } else {

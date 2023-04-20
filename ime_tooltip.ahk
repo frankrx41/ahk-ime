@@ -170,17 +170,34 @@ ImeTooltipUpdate(tooltip_pos := "")
         }
 
         split_index := ImeInputterGetCaretSplitIndex()
+        loop
+        {
+            select_index := ImeSelectorGetSelectIndex(split_index)
+            if( select_index != 0 || split_index == 0){
+                break
+            }
+            split_index -= 1
+        }
         extern_info := ""
         extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultListGetListLength(split_index) "] (" ImeTranslatorResultListGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
-        radical_list := RadicalWordSplit(ImeTranslatorResultListGetWord(split_index, ImeSelectorGetSelectIndex(split_index)))
+        current_word := ImeTranslatorResultListGetWord(split_index, select_index)
+        current_word := SubStr(current_word, 0, 1)
+        radical_list := RadicalWordSplit(current_word)
         radical_words := ""
         loop, % radical_list.Length()
         {
-            radical_word := radical_list[A_Index]
-            radical_words .= radical_word ;. RadicalGetPinyin(radical_word)
+            if( radical_words ){
+                radical_words .= ", "
+            }
+            for index, element in radical_list[A_Index]
+            {
+                radical_word := element
+                radical_words .= radical_word ;. RadicalGetPinyin(radical_word)
+            }
         }
         extern_info .= " {" radical_words "}"
         extern_info .= " (" ImeTranslatorResultListGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
 
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()

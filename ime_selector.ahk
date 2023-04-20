@@ -92,7 +92,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         ImeInputterCaretMoveByWord(word_length)
     }
 
-    profile_text .= "[" split_index "]->[" lock_result "]"
+    profile_text .= "[" split_index "]->[" select_index "," word_length "," lock_result "]"
     ImeProfilerEnd(41, profile_text)
 }
 

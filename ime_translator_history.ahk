@@ -20,13 +20,6 @@ TranslatorHistoryHasKey(splitted_string)
 ;   [3]: ["lao3shi2", "老实", "25877", "", 2]
 ;   ...
 ; ]
-TranslatorHistoryHasResult(splitted_string)
-{
-    global translator_history_result
-    Assert(TranslatorHistoryHasKey(splitted_string), "Please call ``TranslatorHistoryUpdateKey(""" splitted_string """)`` first!", true)
-    return translator_history_result[splitted_string, 1, 1] != ""
-}
-
 TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, limit_num:=100)
 {
     global translator_history_result
@@ -44,23 +37,28 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, auto_comple:=false, lim
 }
 
 ;*******************************************************************************
-; Update `search_result`
-TranslatorHistoryPushResult(ByRef search_result, splitted_string, max_num := 100)
+; Update `translate_result`
+TranslatorHistoryPushResult(ByRef translate_result, splitted_string, max_num := 100, modify_weight := 0)
 {
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        search_result.Push(CopyObj(translator_history_result[splitted_string, A_Index]))
+        single_result := CopyObj(translator_history_result[splitted_string, A_Index])
+        if( modify_weight ) {
+            TranslatorSingleResultSetWeight(single_result, TranslatorSingleResultGetWeight(single_result) + modify_weight)
+        }
+        translate_result.Push(single_result)
     }
 }
 
-TranslatorHistoryInsertResult(ByRef search_result, splitted_string, insert_at := 1, max_num := 100)
+TranslatorHistoryInsertResultAt(ByRef translate_result, splitted_string, insert_at := 1, max_num := 100)
 {
     local
     global translator_history_result
     list_len := translator_history_result[splitted_string].Length()
-    loop % Min(list_len, max_num)
+    loop_cnt := Min(list_len, max_num)
+    loop % loop_cnt
     {
-        search_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, list_len+1-A_Index]))
+        translate_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
     }
 }

@@ -29,7 +29,7 @@ SelectorResultLockWord(ByRef selector_result, split_index, select_word, word_len
     selector_result[split_index, 2] := true
     selector_result[split_index, 3] := select_word
     selector_result[split_index, 4] := word_length
-    profile_text := "`n  - [" split_index "]->[" select_word "," word_length "] "
+    profile_text := "`n  - [" split_index "]->[" selector_result[split_index, 1] "," select_word "," word_length "] "
     ImeProfilerEnd(43, ImeProfilerBegin(43) . profile_text)
 }
 

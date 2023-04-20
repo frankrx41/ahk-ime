@@ -14,6 +14,7 @@ gong'an
 han'an
 he'ni
 hen'ai
+huan'e
 jian'ao
 jin'e
 jing'ai
@@ -30,9 +31,13 @@ qing'an
 re'nao
 shan'ao
 shan'e
+tang'a
 ti'gong
 tian'e
+wan'an
 xian'ai
+xie'ren
+xie'ri
 xin'ai
 xing'anlin
 yan'an

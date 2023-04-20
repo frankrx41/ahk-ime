@@ -8,7 +8,7 @@
         ImeTooltipUpdate()
     return
 
-    ; Enter 上屏文字
+    ; Enter send string
     Enter::
     NumpadEnter::
         if( ImeSelectMenuIsOpen() ){
@@ -227,9 +227,13 @@
         WordCreatorUI(GetSelectText())
     return
 
-    ; Ctrl + F5: reload
-    ^F5::
+    ; Ctrl + Shift + F5: reload
+    ^+F5::
         ScriptRestart()
+    return
+
+    ^F5::
+        TranslatorHistoryClear()
     return
 
     F6::

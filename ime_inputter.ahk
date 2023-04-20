@@ -42,7 +42,7 @@ ImeInputterClearPrevSplitted()
     }
 
     ImeSelectorSetCaretSelectIndex(1)
-    ImeInputterUpdateString("", true)
+    ImeInputterUpdateString("")
 }
 
 ImeInputterClearLastSplitted()
@@ -60,7 +60,7 @@ ImeInputterClearLastSplitted()
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos)
         ImeSelectorSetCaretSelectIndex(1)
-        ImeInputterUpdateString("", true)
+        ImeInputterUpdateString("")
     }
 }
 
@@ -73,12 +73,12 @@ ImeInputterDeleteCharAtCaret(delet_before := true)
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos-1) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := ime_input_caret_pos-1
-        ImeInputterUpdateString("", true)
+        ImeInputterUpdateString("")
     }
     if( !delet_before && ime_input_caret_pos != StrLen(ime_input_string) )
     {
         ime_input_string := SubStr(ime_input_string, 1, ime_input_caret_pos) . SubStr(ime_input_string, ime_input_caret_pos+2)
-        ImeInputterUpdateString("", true)
+        ImeInputterUpdateString("")
     }
 }
 
@@ -111,7 +111,7 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 
 ;*******************************************************************************
 ; Update result
-ImeInputterUpdateString(input_char, is_delete:=false)
+ImeInputterUpdateString(input_char)
 {
     local
     global ime_input_string
@@ -120,37 +120,24 @@ ImeInputterUpdateString(input_char, is_delete:=false)
 
     ime_input_dirty := true
     ImeProfilerClear()
+    ImeProfilerBegin(8)
 
     if( ime_input_string )
     {
-        ; If no input_char or input_char is not alphabet, try update
-        ; no input_char and not is_delete means caller what force call translator
-        if( input_char ) {
-            should_update := !InStr("qwertyuiopasdfghjklzxcvbnm?", input_char, true)
-        } else {
-            should_update := true
-        }
-
         ; Splitter
         ime_inputter_splitter_result := PinyinSplitterInputString(ime_input_string)
         ; Translator
-        if( should_update ) {
-            ImeInputterCallTranslator(is_delete)
-        }
+        ImeInputterCallTranslator()
     }
     else
     {
         ImeInputterClearString()
     }
 
-    ; Because `is_delete` only update prev string, it always be dirty
-    if( is_delete ) {
-        ime_input_dirty := true
-        Assert(input_char == "")
-    }
+    ImeProfilerEnd(8)
 }
 
-ImeInputterCallTranslator(is_delete)
+ImeInputterCallTranslator()
 {
     global ime_inputter_splitter_result
     global ime_input_string
@@ -161,19 +148,12 @@ ImeInputterCallTranslator(is_delete)
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
 
-    splitter_result := []
-    loop,% ime_inputter_splitter_result.Length()
-    {
-        if( is_delete && A_Index >= caret_splitted_index ){
-            break
-        }
-        splitter_result[A_Index] := ime_inputter_splitter_result[A_Index]
-    }
+    splitter_result := CopyObj(ime_inputter_splitter_result)
     profile_text .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
     ImeTranslatorUpdateResult(splitter_result)
-    ImeSelectorUnlockWords(caret_splitted_index, is_delete)
+    ImeSelectorUnlockWords(caret_splitted_index, false)
     ImeSelectorFixupSelectIndex()
 
     ime_input_dirty := false
@@ -204,7 +184,10 @@ ImeInputterGetDisplayString()
     global ime_input_caret_pos
     tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
     tooltip_string := StrReplace(tooltip_string, " ", "_")
-    tooltip_string .= "(" ime_input_caret_pos ")"
+    tooltip_string .= " (" ime_input_caret_pos ")"
+    if( ImeInputterIsInputDirty() ){
+        tooltip_string .= " {Enter}"
+    }
     return tooltip_string
 }
 
@@ -322,7 +305,7 @@ ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
         }
         index := InStr(ime_input_string, char, false, start_index)
         if( index != 0 ) {
-            ime_input_caret_pos := index - 1
+            ime_input_caret_pos := index
             break
         }
     }

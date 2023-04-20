@@ -14,9 +14,14 @@ RadicalInitialize()
         if( SubStr(A_LoopField, 1, 1) != ";" )
         {
             ; Split each line by the tab character
-            arr := StrSplit(A_LoopField, A_Tab,, 2)
-            data := StrSplit(arr[2], " ")
-            ime_radical_table[arr[1]] := data
+            line_arr := StrSplit(A_LoopField, A_Tab,, 2)
+            radicals_arr := StrSplit(line_arr[2], A_Tab)
+            data := []
+            for index, element in radicals_arr
+            {
+                data.Push(StrSplit(element, " "))
+            }
+            ime_radical_table[line_arr[1]] := data
         }
     }
     Assert(ime_radical_table.Count() != 0)
@@ -47,7 +52,7 @@ RadicalInitialize()
 }
 
 ;*******************************************************************************
-; "派" -> ["氵", "𠂢"]
+; "里" -> [["田", "土"], ["甲", "二"]]
 RadicalWordSplit(single_word)
 {
     global ime_radical_table
@@ -86,7 +91,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     }
 
     radical_word_list := RadicalWordSplit(test_word)
-    first_word := radical_word_list[1]
+    first_word := radical_word_list[1, 1]
 
     loop, % radical_word_list.Length()-1
     {
@@ -113,7 +118,7 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
     }
 
     radical_word_list := RadicalWordSplit(test_word)
-    last_word := radical_word_list[radical_word_list.Length()]
+    last_word := radical_word_list[1, radical_word_list.Length()]
 
     Assert(last_word != test_word, test_word, true)
     return RadicalMatchLastPart(last_word, test_radical)
@@ -121,9 +126,8 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
 
 ;*******************************************************************************
 ;
-RadicalIsFullMatch(test_word, test_radical)
+RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
 {
-    radical_word_list := CopyObj(RadicalWordSplit(test_word))
     loop
     {
         if( test_radical == "" ){
@@ -170,22 +174,44 @@ RadicalIsFullMatch(test_word, test_radical)
     }
 }
 
+RadicalIsFullMatch(test_word, test_radical)
+{
+    radical_word_list := CopyObj(RadicalWordSplit(test_word))
+    for index, element in radical_word_list
+    {
+        result := RadicalIsFullMatchList(test_word, test_radical, element)
+        if( result ){
+            return true
+        }
+    }
+    return false
+}
+
 ;*******************************************************************************
 ; radical_list: ["SS", "YZ", "RE"]
-TranslatorResultFilterByRadical(ByRef search_result, radical_list)
+TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
 {
     local
 
-    if( radical_list )
+    need_filter := false
+    for index, value in radical_list
     {
-        ImeProfilerBegin(36)
+        if( value != "" ){
+            need_filter := true
+            break
+        }
+    }
+
+    if( need_filter )
+    {
         index := 1
-        loop % search_result.Length()
+        loop % translate_result.Length()
         {
-            word_value := search_result[index, 2]
+            ImeProfilerBegin(36)
+            word_value := translate_result[index, 2]
             should_remove := false
             ; loop each character of "我爱你"
-            loop % search_result[index, 5]
+            loop % translate_result[index, 5]
             {
                 test_radical := radical_list[A_Index]
                 if( test_radical )
@@ -202,13 +228,13 @@ TranslatorResultFilterByRadical(ByRef search_result, radical_list)
             }
 
             if( should_remove ) {
-                search_result.RemoveAt(index)
+                translate_result.RemoveAt(index)
             } else {
                 index += 1
             }
+            ImeProfilerEnd(36)
         }
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
-        ImeProfilerEnd(36)
     }
 }

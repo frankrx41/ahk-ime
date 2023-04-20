@@ -54,7 +54,7 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
     return true
 }
 
-PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitter_result)
+PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result)
 {
     local
     global history_field_array
@@ -67,7 +67,8 @@ PinyinTranslatorInsertSimpleSpell(ByRef search_result, splitter_result)
         if( SeparateStringShouldProcess(splitted_string, splitted_input) )
         {
             TranslatorHistoryUpdateKey(splitted_string, length_count, true)
-            TranslatorHistoryInsertResult(search_result, splitted_string, 1)
+            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 5)
+            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1, 1)
             profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
         }
     }
