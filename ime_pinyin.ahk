@@ -87,15 +87,22 @@ IsCompletePinyin(initials, vowels, tone:="'")
     ; vowels content ?
     if( InStr(vowels, "?") )
     {
-        vowels := StrReplace(vowels, "?", ".")
-        vowels := "^" vowels "$"
-        for index, element in pinyin_table[initials]
-        {
-            if( RegExMatch(element, vowels) ){
-                return true
-            }
+        if( SubStr(vowels, 0, 1) == "?" && SubStr(vowels, -1, 1) == "n" ){
+            vowels_without_g := SubStr(vowels, 1, StrLen(vowels)-1)
+            vowels_with_g := vowels_without_g . "g"
+            return IsCompletePinyin(initials, vowels_without_g, tone) || IsCompletePinyin(initials, vowels_with_g, tone)
         }
-        return false
+        else {
+            vowels := StrReplace(vowels, "?", ".")
+            vowels := "^" vowels "$"
+            for index, element in pinyin_table[initials]
+            {
+                if( RegExMatch(element, vowels) ){
+                    return true
+                }
+            }
+            return false
+        }
     }
     else
     {
