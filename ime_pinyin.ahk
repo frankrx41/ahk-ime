@@ -73,6 +73,7 @@ IsBadTone(initials, vowels, tone)
 IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
+    global pinyin_table_auto_correct
     ; initials like z% c% s%
     initials_has_miss_char := SubStr(initials, 0, 1 ) == "?"
     if( initials_has_miss_char )
@@ -82,7 +83,7 @@ IsCompletePinyin(initials, vowels, tone:="'")
         return IsCompletePinyin(initials_with_h, vowels, tone) || IsCompletePinyin(initials_without_h, vowels, tone)
     }
 
-    is_complete := is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels])
+    is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (pinyin_table_auto_correct[initials, vowels])
     if( is_complete && tone )
     {
         is_complete := !IsBadTone(initials, vowels, tone)
@@ -93,7 +94,14 @@ IsCompletePinyin(initials, vowels, tone:="'")
 GetFullVowels(initials, vowels)
 {
     global pinyin_table
-    return pinyin_table[initials][vowels]
+    global pinyin_table_auto_correct
+
+    if( pinyin_table[initials][vowels] ) {
+        return pinyin_table[initials][vowels]
+    }
+    else {
+        return pinyin_table_auto_correct[initials][vowels]
+    }
 }
 
 GetFullInitials(initials)
@@ -139,6 +147,7 @@ PinyinInitialize()
     local
     global JSON
     global pinyin_table
+    global pinyin_table_auto_correct
     global zero_initials_table := {}
 
     ; 零声母
@@ -352,7 +361,6 @@ PinyinInitialize()
     pinyin_table := JSON.Load(full_spelling_json)
     pinyin_table["l","ue"] := "ue"
     pinyin_table["n","ue"] := "ue"
-
     for key,value In zero_initials
     {
         zero_initials_table[value] := value
@@ -362,6 +370,83 @@ PinyinInitialize()
             pinyin_table[t1][t2:=SubStr(value, 2)]:=t2
         }
     }
+
+    full_spelling_json_auto_correct =
+    (LTrim
+        {
+            "b" :{
+                "ain":"ian","oa":"ao"
+            },
+            "p" :{
+                "aio":"iao","ain":"ian","oa":"ao"
+            },
+            "m" :{
+                "aio":"iao","ain":"ian","oa":"ao"
+            },
+            "f" :{
+                "ie":"ei"
+            },
+            "d" :{
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+            },
+            "t" :{
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+            },
+            "n" :{
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+            },
+            "l" :{
+                "aun":"uan","oa":"ao"
+            },
+            "g" :{
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+            },
+            "k" :{
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+            },
+            "h" :{
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+            },
+            "j" :{
+                "aio":"iao","ain":"ian","aun":"uan"
+            },
+            "q" :{
+                "aio":"iao","ain":"ian","aun":"uan"
+            },
+            "x" :{
+                "aio":"iao","ain":"ian","aun":"uan"
+            },
+            "zh":{
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+            },
+            "ch":{
+                "aui":"uai","aun":"uan","oa":"ao"
+            },
+            "sh":{
+                "aui":"uai","aun":"uan","oa":"ao"
+            },
+            "r" :{
+                "aun":"uan","oa":"ao"
+            },
+            "z" :{
+                "aun":"uan","ie":"ei","oa":"ao"
+            },
+            "c" :{
+                "aun":"uan","oa":"ao"
+            },
+            "s" :{
+                "aun":"uan","oa":"ao"
+            },
+            "y" :{
+                "aun":"uan","oa":"ao"
+            },
+            "w" :{
+                "ie":"ei"
+            }
+        }
+    )
+
+    pinyin_table_auto_correct := JSON.Load(full_spelling_json_auto_correct)
 
     PinyinSplitterTableInitialize()
     PinyinTraditionalInitialize()
