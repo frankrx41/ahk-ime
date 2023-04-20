@@ -170,18 +170,20 @@ ImeTooltipUpdate(tooltip_pos := "")
         }
 
         split_index := ImeInputterGetCaretSplitIndex()
+        word_index := 1
         loop
         {
             select_index := ImeSelectorGetSelectIndex(split_index)
             if( select_index != 0 || split_index == 0){
                 break
             }
+            word_index += 1
             split_index -= 1
         }
         extern_info := ""
         extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultListGetListLength(split_index) "] (" ImeTranslatorResultListGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         current_word := ImeTranslatorResultListGetWord(split_index, select_index)
-        current_word := SubStr(current_word, 0, 1)
+        current_word := SubStr(current_word, word_index, 1)
         radical_list := RadicalWordSplit(current_word)
         radical_words := ""
         loop, % radical_list.Length()
