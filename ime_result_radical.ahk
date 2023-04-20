@@ -93,9 +93,9 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     radical_word_list := RadicalWordSplit(test_word)
     first_word := radical_word_list[1, 1]
 
-    loop, % radical_word_list.Length()-1
+    loop, % radical_word_list[1].Length()-1
     {
-        remain_radicals[remain_radicals.Length()+A_Index] := radical_word_list[A_Index+1]
+        remain_radicals[remain_radicals.Length()+A_Index] := radical_word_list[1, A_Index+1]
     }
 
     Assert(first_word != test_word, test_word, true)
