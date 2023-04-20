@@ -158,8 +158,7 @@ PinyinInitialize()
                 "o":"o",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
-                "u":"u","un":"un",
-                "ain":"ian","oa":"ao"
+                "u":"u","un":"un"
             },
             "p" :{
                 "1":"p",
@@ -167,8 +166,7 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
-                "u":"u",
-                "aio":"iao","ain":"ian","oa":"ao"
+                "u":"u"
             },
             "m" :{
                 "1":"m",
@@ -176,8 +174,7 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
-                "u":"u",
-                "aio":"iao","ain":"ian","oa":"ao"
+                "u":"u"
             },
             "f" :{
                 "1":"f",
@@ -185,8 +182,7 @@ PinyinInitialize()
                 "o":"o","ou":"ou",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "iao":"iao",
-                "u":"u",
-                "ie":"ei"
+                "u":"u"
             },
 
             "d" :{
@@ -195,8 +191,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","ei":"ei","eg":"eng","eng":"eng",
                 "i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing","iu":"iu",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "t" :{
                 "1":"t",
@@ -204,8 +199,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","eg":"eng","eng":"eng","ei":"ei",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "n" :{
                 "1":"n",
@@ -214,8 +208,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","uo":"uo","un":"un",
-                "v":"v","ve":"ue",
-                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+                "v":"v","ve":"ue"
             },
             "l" :{
                 "1":"l",
@@ -224,8 +217,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","eg":"eng","eng":"eng",
                 "i":"i","ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un","uo":"uo",
-                "v":"v","ve":"ue",
-                "aun":"uan","oa":"ao"
+                "v":"v","ve":"ue"
             },
             "g" :{
                 "1":"g",
@@ -233,24 +225,21 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "k" :{
                 "1":"k",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","eg":"eng","eng":"eng","ei":"ei",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "h" :{
                 "1":"h",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
 
             "j" :{
@@ -261,8 +250,7 @@ PinyinInitialize()
                 "iog":"iong","iong":"iong",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "v":"u","van":"uan","ve":"ue","vn":"un",
-                "aio":"iao","ain":"ian","aun":"uan"
+                "v":"u","van":"uan","ve":"ue","vn":"un"
             },
             "q" :{
                 "1":"q",
@@ -273,8 +261,7 @@ PinyinInitialize()
                 "in":"in","ig":"ing","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "van":"uan","ve":"ue","vn":"un","v":"u",
-                "aio":"iao","ain":"ian","aun":"uan"
+                "v":"u","van":"uan","ve":"ue","vn":"un"
             },
             "x" :{
                 "1":"x",
@@ -285,8 +272,7 @@ PinyinInitialize()
                 "in":"in","ig":"ing","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","un":"un","ue":"ue",
-                "van":"uan","ve":"ue","vn":"un","v":"u",
-                "aio":"iao","ain":"ian","aun":"uan"
+                "v":"u","van":"uan","ve":"ue","vn":"un"
             },
             "zh":{
                 "1":"zh",
@@ -294,8 +280,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eng":"eng",
                 "i":"i",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uag":"uang","uang":"uang",
-                "aun":"uan","ie":"ei","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uag":"uang","uang":"uang"
             },
             "ch":{
                 "1":"ch",
@@ -303,8 +288,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","oa":"ao"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "sh":{
                 "1":"sh",
@@ -312,8 +296,7 @@ PinyinInitialize()
                 "ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","oa":"ao"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "r" :{
                 "1":"r",
@@ -321,8 +304,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "z" :{
                 "1":"z",
@@ -330,8 +312,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan","ie":"ei","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "c" :{
                 "1":"c",
@@ -339,8 +320,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "s" :{
                 "1":"s",
@@ -348,8 +328,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan","oa":"ao"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "y" :{
                 "1":"y",
@@ -358,16 +337,14 @@ PinyinInitialize()
                 "e":"e",
                 "i":"i","in":"in","ing":"ing",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
-                "v":"u","van":"uan","ve":"ue","vn":"un",
-                "aun":"uan","oa":"ao"
+                "v":"u","van":"uan","ve":"ue","vn":"un"
             },
             "w" :{
                 "1":"w",
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang",
                 "o":"o",
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "u":"u",
-                "ie":"ei"
+                "u":"u"
             }
         }
     )
