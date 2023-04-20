@@ -15,7 +15,7 @@ RadicalInitialize()
         {
             ; Split each line by the tab character
             line_arr := StrSplit(A_LoopField, A_Tab,, 2)
-            radicals_arr := StrSplit(line_arr[2], A_Tab,, 2)
+            radicals_arr := StrSplit(line_arr[2], A_Tab)
             data := []
             for index, element in radicals_arr
             {
