@@ -257,7 +257,6 @@ PinyinInitialize()
                 "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "i":"i",
                 "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "k" :{
