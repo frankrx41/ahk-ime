@@ -78,6 +78,10 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
     }
 
     right_initials := SubStr(left_vowels, 0, 1)
+    if( right_initials == "?" ){
+        return true
+    }
+
     is_complete := 0
     if( next_char == "o" ){
         is_complete += IsCompletePinyin(right_initials, "on")

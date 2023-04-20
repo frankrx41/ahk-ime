@@ -74,6 +74,7 @@ IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
     global pinyin_table_auto_correct
+
     ; initials like z% c% s%
     initials_has_miss_char := SubStr(initials, 0, 1 ) == "?"
     if( initials_has_miss_char )
@@ -83,12 +84,28 @@ IsCompletePinyin(initials, vowels, tone:="'")
         return IsCompletePinyin(initials_with_h, vowels, tone) || IsCompletePinyin(initials_without_h, vowels, tone)
     }
 
-    is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (pinyin_table_auto_correct[initials, vowels])
-    if( is_complete && tone )
+    ; vowels content ?
+    if( InStr(vowels, "?") )
     {
-        is_complete := !IsBadTone(initials, vowels, tone)
+        vowels := StrReplace(vowels, "?", ".")
+        vowels := "^" vowels "$"
+        for index, element in pinyin_table[initials]
+        {
+            if( RegExMatch(element, vowels) ){
+                return true
+            }
+        }
+        return false
     }
-    return is_complete
+    else
+    {
+        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (pinyin_table_auto_correct[initials, vowels])
+        if( is_complete && tone )
+        {
+            is_complete := !IsBadTone(initials, vowels, tone)
+        }
+        return is_complete
+    }
 }
 
 GetFullVowels(initials, vowels)
