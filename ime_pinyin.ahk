@@ -159,7 +159,7 @@ PinyinInitialize()
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
                 "u":"u","un":"un",
-                "ain":"ian"
+                "ain":"ian","oa":"ao"
             },
             "p" :{
                 "1":"p",
@@ -168,7 +168,7 @@ PinyinInitialize()
                 "ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
                 "u":"u",
-                "aio":"iao","ain":"ian"
+                "aio":"iao","ain":"ian","oa":"ao"
             },
             "m" :{
                 "1":"m",
@@ -177,7 +177,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u",
-                "aio":"iao","ain":"ian"
+                "aio":"iao","ain":"ian","oa":"ao"
             },
             "f" :{
                 "1":"f",
@@ -196,7 +196,7 @@ PinyinInitialize()
                 "e":"e","en":"en","ei":"ei","eg":"eng","eng":"eng",
                 "i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aio":"iao","ain":"ian","aun":"uan"
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
             },
             "t" :{
                 "1":"t",
@@ -205,7 +205,7 @@ PinyinInitialize()
                 "e":"e","eg":"eng","eng":"eng","ei":"ei",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aio":"iao","ain":"ian","aun":"uan"
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
             },
             "n" :{
                 "1":"n",
@@ -215,7 +215,7 @@ PinyinInitialize()
                 "i":"i","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","uo":"uo","un":"un",
                 "v":"v","ve":"ue",
-                "aio":"iao","ain":"ian","aun":"uan"
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
             },
             "l" :{
                 "1":"l",
@@ -225,7 +225,7 @@ PinyinInitialize()
                 "i":"i","ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un","uo":"uo",
                 "v":"v","ve":"ue",
-                "aun":"uan"
+                "aun":"uan","oa":"ao"
             },
             "g" :{
                 "1":"g",
@@ -234,7 +234,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","ie":"ei"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
             },
             "k" :{
                 "1":"k",
@@ -242,7 +242,7 @@ PinyinInitialize()
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "e":"e","en":"en","eg":"eng","eng":"eng","ei":"ei",
                 "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","ie":"ei"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
             },
             "h" :{
                 "1":"h",
@@ -250,7 +250,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "og":"ong","on":"ong","ong":"ong","ou":"ou",
                 "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan","ie":"ei"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
             },
 
             "j" :{
@@ -295,7 +295,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uag":"uang","uang":"uang",
-                "aun":"uan","ie":"ei"
+                "aun":"uan","ie":"ei","oa":"ao"
             },
             "ch":{
                 "1":"ch",
@@ -304,7 +304,7 @@ PinyinInitialize()
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan"
+                "aui":"uai","aun":"uan","oa":"ao"
             },
             "sh":{
                 "1":"sh",
@@ -313,7 +313,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo",
-                "aui":"uai","aun":"uan"
+                "aui":"uai","aun":"uan","oa":"ao"
             },
             "r" :{
                 "1":"r",
@@ -322,7 +322,7 @@ PinyinInitialize()
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan"
+                "aun":"uan","oa":"ao"
             },
             "z" :{
                 "1":"z",
@@ -331,7 +331,7 @@ PinyinInitialize()
                 "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan","ie":"ei"
+                "aun":"uan","ie":"ei","oa":"ao"
             },
             "c" :{
                 "1":"c",
@@ -340,7 +340,7 @@ PinyinInitialize()
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan"
+                "aun":"uan","oa":"ao"
             },
             "s" :{
                 "1":"s",
@@ -349,7 +349,7 @@ PinyinInitialize()
                 "e":"e","en":"en","eg":"eng","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo",
-                "aun":"uan"
+                "aun":"uan","oa":"ao"
             },
             "y" :{
                 "1":"y",
@@ -359,7 +359,7 @@ PinyinInitialize()
                 "i":"i","in":"in","ing":"ing",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
                 "v":"u","van":"uan","ve":"ue","vn":"un",
-                "aun":"uan"
+                "aun":"uan","oa":"ao"
             },
             "w" :{
                 "1":"w",
