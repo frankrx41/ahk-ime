@@ -16,11 +16,6 @@ TranslatorResultGetWord(ByRef translate_result, word_index)
     return translate_result[word_index, 2]
 }
 
-TranslatorResultSetWord(ByRef translate_result, word_index, word)
-{
-    translate_result[word_index, 2] := word
-}
-
 TranslatorResultGetWeight(ByRef translate_result, word_index)
 {
     return translate_result[word_index, 3]
@@ -31,11 +26,6 @@ TranslatorResultGetComment(ByRef translate_result, word_index)
     return translate_result[word_index, 4]
 }
 
-TranslatorResultSetComment(ByRef translate_result, word_index, comment)
-{
-    translate_result[word_index, 4] := comment
-}
-
 TranslatorResultGetWordLength(ByRef translate_result, word_index)
 {
     return translate_result[word_index, 5]
@@ -43,14 +33,9 @@ TranslatorResultGetWordLength(ByRef translate_result, word_index)
 
 ;*******************************************************************************
 ;
-TranslatorSingleResultGetWeight(ByRef single_result)
+TranslatorSingleResultMake(pinyin, word, weight, comment, word_length)
 {
-    return single_result[3]
-}
-
-TranslatorSingleResultSetWeight(ByRef single_result, weight)
-{
-    single_result[3] := weight
+    return [pinyin, word, weight, comment, word_length]
 }
 
 ;*******************************************************************************
