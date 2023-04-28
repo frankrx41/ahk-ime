@@ -58,8 +58,15 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_
 {
     local
 
-    if( splitter_result.Length() == 1 && !auto_complete){
-        return
+    if( !auto_complete )
+    {
+        if( splitter_result.Length() == 1){
+            return
+        }
+
+        if( splitter_result.Length() == 2 && SubStr(splitter_result[2,1], 0, 1) == "%"){
+            return
+        }
     }
 
     splitted_input := SplitterResultConvertToString(splitter_result, 1)
