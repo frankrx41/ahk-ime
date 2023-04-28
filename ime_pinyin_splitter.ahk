@@ -262,7 +262,7 @@ PinyinSplitterInputString(input_string)
             }
 
             ; Radical
-            RegExMatch(SubStr(input_string, string_index), "^([A-Z]+)", radical)
+            radical := GetRadical(SubStr(input_string, string_index))
             string_index += StrLen(radical)
 
             SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_string_index, string_index-1)

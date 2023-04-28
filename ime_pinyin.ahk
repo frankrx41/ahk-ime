@@ -155,7 +155,13 @@ IsTone(char)
 
 IsRadical(char)
 {
-    return InStr("AEOBPMFDTNLGKHJQXZCSRYW", char, true)
+    return InStr("AEOBPMFDTNLGKHJQXZCSRYW!", char, true)
+}
+
+GetRadical(input_string)
+{
+    RegExMatch(input_string, "^([A-Z!]+)", radical)
+    return radical
 }
 
 IsSymbol(char)
