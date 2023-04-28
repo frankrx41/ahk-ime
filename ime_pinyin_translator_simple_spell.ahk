@@ -75,7 +75,7 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_
         return
     }
 
-    profile_text := ImeProfilerBegin(22)
+    profile_text := ImeProfilerBegin(23)
     if( SeparateStringShouldProcess(splitted_string, splitted_input) )
     {
         if( auto_complete ){
@@ -85,7 +85,7 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_
         TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1)
         profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
     }
-    ImeProfilerEnd(22, profile_text)
+    ImeProfilerEnd(23, profile_text)
     return
 }
 

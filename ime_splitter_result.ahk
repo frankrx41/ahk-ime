@@ -148,6 +148,9 @@ SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_c
     if( inout_length_count == 0 ){
         inout_length_count := splitter_result.Length()
     }
+    if( start_count == 0 ){
+        start_count := splitter_result.Length()
+    }
     loop, % splitter_result.Length()
     {
         if( A_Index < start_count ) {
