@@ -1,5 +1,6 @@
 PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
 {
+    splitter_result := SplitterResultGetUntilLength(splitter_result)
     splitted_string := SplitterResultConvertToString(splitter_result, 1, 0)
     if( TranslatorHistoryHasResult(splitted_string) ){
         return

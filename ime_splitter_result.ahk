@@ -140,6 +140,29 @@ SplitterResultGetUntilSkip(splitter_result, start_count := 1)
     return return_splitter_result
 }
 
+SplitterResultGetUntilLength(splitter_result, start_count := 1)
+{
+    local
+    return_splitter_result := []
+    if( SplitterResultGetWordLength(splitter_result, start_count)==1 )
+    {
+        return_splitter_result[1] := splitter_result[start_count]
+    }
+    find_string := ""
+    loop, % splitter_result.Length()
+    {
+        if( A_Index < start_count ) {
+            continue
+        }
+        return_splitter_result.Push(splitter_result[A_Index])
+        if( SplitterResultGetWordLength(splitter_result, A_Index)==1 )
+        {
+            break
+        }
+    }
+    return return_splitter_result
+}
+
 SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_count := 0)
 {
     local
