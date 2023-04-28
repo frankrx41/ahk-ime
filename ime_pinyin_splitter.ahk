@@ -74,6 +74,8 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
     left_vowels_last := SubStr(left_vowels, 0, 1)
     right_initials := SubStr(right_string, 1, 1)
 
+    profile_text := ImeProfilerBegin(13)
+
     max_test_len := Min(5, right_string_len)
     found := false
     complete_left_once := false
@@ -102,6 +104,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
             break
         }
     }
+    ImeProfilerEnd(13, profile_text)
 
     if( !found )
     {
