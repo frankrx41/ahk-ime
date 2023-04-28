@@ -192,6 +192,14 @@ PinyinSplitterInputString(input_string)
 
     splitter_index_list := []
 
+    ; last char * marks simple spell
+    if( SubStr(input_string, 0, 1) == "*" ){
+        input_string := SubStr(input_string, 1, StrLen(input_string)-1)
+        simple_spell := true
+    } else {
+        simple_spell := false
+    }
+
     loop
     {
         if( string_index > strlen ) {
@@ -266,7 +274,7 @@ PinyinSplitterInputString(input_string)
     }
 
     ImeProfilerEnd(11, """" input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
-    return splitter_result
+    return [splitter_result, simple_spell]
 }
 
 ;*******************************************************************************
@@ -278,8 +286,10 @@ PinyinSplitterInputStringTest()
     loop, % test_case.Length()
     {
         input_case := test_case[A_Index]
-        test_result := PinyinSplitterInputString(input_case)
-        msg_string .= "`n""" input_case """ -> [" SplitterResultGetDisplayText(test_result) "]"
+        splitted_return := PinyinSplitterInputString(input_case)
+        test_result := splitted_return[1]
+        simple_spell := splitted_return[2]
+        msg_string .= "`n""" input_case """ -> [" SplitterResultGetDisplayText(test_result) "] (" simple_spell ")"
     }
     MsgBox, % msg_string
 }

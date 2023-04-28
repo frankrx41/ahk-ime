@@ -27,7 +27,7 @@ PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
 
 ;*******************************************************************************
 ; Get translate result *ONLY* for splitter_result[1]
-PinyinTranslateFindResult(splitter_result)
+PinyinTranslateFindResult(splitter_result, auto_comple)
 {
     local
     profile_text := ImeProfilerBegin(20)
@@ -38,7 +38,10 @@ PinyinTranslateFindResult(splitter_result)
     PinyinTranslatorInsertResult(translate_result, splitter_result)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result)
+    if( auto_comple )
+    {
+        PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result)
+    }
 
     if( ImeModeGetLanguage() == "tw" )
     {
