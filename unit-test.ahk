@@ -13,7 +13,7 @@ ImeProfilerInitialize()
 TranslatorHistoryClear()
 RadicalInitialize()
 
-PinyinSplitterInputStringTest2()
+PinyinSplitterInputStringUnitTest()
 ExitApp
 
 
