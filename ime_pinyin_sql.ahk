@@ -96,12 +96,8 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
     Critical
     begin_tick := A_TickCount
 
-    if( SubStr(splitted_input, 0, 1) == "*" ){
-        splitted_input := SubStr(splitted_input, 1, StrLen(splitted_input)-1)
-        auto_complete := true
-    } else {
-        auto_complete := false
-    }
+    auto_complete := (SubStr(splitted_input, 0, 1) == "*")
+    splitted_input := RTrim(splitted_input, "*")
 
     sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_complete)
     sql_full_key    := PinyinSqlFullKey(splitted_input, auto_complete)
