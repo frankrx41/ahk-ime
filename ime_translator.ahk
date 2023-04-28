@@ -11,7 +11,7 @@ ImeTranslatorClear()
     global ime_translator_result_list_filtered  := []
 }
 
-ImeTranslatorUpdateResult(splitter_result, simple_spell)
+ImeTranslatorUpdateResult(splitter_result, auto_complete)
 {
     local
     global ime_translator_result_list_origin
@@ -41,7 +41,7 @@ ImeTranslatorUpdateResult(splitter_result, simple_spell)
             {
                 Assert(test_splitter_result.Length() >= 1)
                 ; Get translate result
-                translate_result := PinyinTranslateFindResult(test_splitter_result, simple_spell)
+                translate_result := PinyinTranslateFindResult(test_splitter_result, auto_complete)
                 if( translate_result.Length() == 0 ){
                     first_word := SplitterResultConvertToString(splitter_result, A_Index)
                     translate_result := [[first_word, first_word, 0, "", 1]]

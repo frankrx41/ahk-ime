@@ -11,20 +11,20 @@
 ; "z?e0yang0z?i3" -> [z_y_z3]
 ; "s?u0" -> [s_]
 ;
-; If `auto_comple`, will add "%%" at the end
-PinyinSqlSimpleKey(splitted_input, auto_comple:=false)
+; If `auto_complete`, will add "%%" at the end
+PinyinSqlSimpleKey(splitted_input, auto_complete:=false)
 {
     key_value := splitted_input
     key_value := StrReplace(key_value, "?")
     key_value := StrReplace(key_value, "0", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
-    if( auto_comple ){
+    if( auto_complete ){
         key_value .= "%%"
     }
     return key_value
 }
 
-PinyinSqlFullKey(splitted_input, auto_comple:=false)
+PinyinSqlFullKey(splitted_input, auto_complete:=false)
 {
     key_value := splitted_input
     key_value := RegExReplace(key_value, "([zcs])\?", "$1h^")
@@ -32,7 +32,7 @@ PinyinSqlFullKey(splitted_input, auto_comple:=false)
     key_value := StrReplace(key_value, "?", ".")
     key_value := StrReplace(key_value, "^", "?")
     key_value := StrReplace(key_value, "0", "_")
-    if( auto_comple ){
+    if( auto_complete ){
         key_value .= "%%"
     }
     return key_value
@@ -90,14 +90,21 @@ PinyinSqlGenerateWhereCommand(sim_key, full_key)
 ;   % = has vowels
 ;   a-z = pinyin
 ;   [012345] = tone
-PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
+PinyinSqlGetResult(splitted_input, limit_num:=100)
 {
     local
     Critical
     begin_tick := A_TickCount
 
-    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_comple)
-    sql_full_key    := PinyinSqlFullKey(splitted_input, auto_comple)
+    if( SubStr(splitted_input, 0, 1) == "*" ){
+        splitted_input := SubStr(splitted_input, 1, StrLen(splitted_input)-1)
+        auto_complete := true
+    } else {
+        auto_complete := false
+    }
+
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_complete)
+    sql_full_key    := PinyinSqlFullKey(splitted_input, auto_complete)
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
     sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd

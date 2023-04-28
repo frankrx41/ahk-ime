@@ -127,9 +127,9 @@ ImeInputterUpdateString(input_char)
         ; Splitter
         splitted_return := PinyinSplitterInputString(ime_input_string)
         ime_inputter_splitter_result := splitted_return[1]
-        simple_spell := splitted_return[2]
+        auto_complete := splitted_return[2]
         ; Translator
-        ImeInputterCallTranslator(simple_spell)
+        ImeInputterCallTranslator(auto_complete)
     }
     else
     {
@@ -139,7 +139,7 @@ ImeInputterUpdateString(input_char)
     ImeProfilerEnd(8)
 }
 
-ImeInputterCallTranslator(simple_spell)
+ImeInputterCallTranslator(auto_complete)
 {
     global ime_inputter_splitter_result
     global ime_input_string
@@ -154,7 +154,7 @@ ImeInputterCallTranslator(simple_spell)
     profile_text .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
-    ImeTranslatorUpdateResult(splitter_result, simple_spell)
+    ImeTranslatorUpdateResult(splitter_result, auto_complete)
     ImeSelectorUnlockWords(caret_splitted_index, false)
     ImeSelectorFixupSelectIndex()
 

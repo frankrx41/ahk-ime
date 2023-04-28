@@ -54,11 +54,11 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
     return true
 }
 
-PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_comple)
+PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_complete)
 {
     local
 
-    if( splitter_result.Length() == 1 && !auto_comple){
+    if( splitter_result.Length() == 1 && !auto_complete){
         return
     }
 
@@ -71,9 +71,11 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_
     profile_text := ImeProfilerBegin(22)
     if( SeparateStringShouldProcess(splitted_string, splitted_input) )
     {
-        TranslatorHistoryUpdateKey(splitted_string, auto_comple, length_count)
-        TranslatorHistoryInsertResultAt(translate_result, splitted_string, auto_comple, 5)
-        TranslatorHistoryInsertResultAt(translate_result, splitted_string, auto_comple, 1, 1)
+        if( auto_complete ){
+            splitted_string .= "*"
+        }
+        TranslatorHistoryUpdateKey(splitted_string, length_count)
+        TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1)
         profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
     }
     ImeProfilerEnd(22, profile_text)
