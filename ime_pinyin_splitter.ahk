@@ -64,34 +64,52 @@ PinyinSplitterGetWeight(pinyin)
 }
 
 ;*******************************************************************************
-; banan -> [ba'nan, ban'an]
-; xieru -> [xi'eru, xie'ru]
+; ban'an -> [ba'nan]
+; xie'ru -> [xi'eru]
+; tig'ong -> [ti'gong + tig'ong] + [ti'gon + tig'on] + [ti'go + tig'o]
 PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
 {
     right_string_len := StrLen(right_string)
-    right_initials := SubStr(right_string, 1, 1)
     left_vowels_cut_last := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
     left_vowels_last := SubStr(left_vowels, 0, 1)
+    right_initials := SubStr(right_string, 1, 1)
 
     max_test_len := Min(5, right_string_len)
     found := false
-    loop, % max_test_len-1
+    complete_left_once := false
+    loop, % max_test_len - 1
     {
-        index := max_test_len - A_Index
-        test_right_string := SubStr(right_string, 2, index)
-        if( IsCompletePinyin(right_initials, test_right_string) && IsCompletePinyin(left_vowels_last, right_initials . test_right_string) )
+        index := max_test_len - A_Index + 1
+        test_right_string := SubStr(right_string, 1, index)
+
+        complete_left := false
+        complete_right := false
+        if( IsCompletePinyin(left_vowels_last, test_right_string) )
+        {
+            complete_left := true
+            complete_left_once := true
+
+            test_right_string_cut := SubStr(test_right_string, 2, index-1)
+            if( IsCompletePinyin(right_initials, test_right_string_cut) )
+            {
+                complete_right := true
+            }
+        }
+
+        if( complete_left && complete_right )
         {
             found := true
             break
         }
     }
 
-    if( !found ){
-        return true
+    if( !found )
+    {
+        return !complete_left_once
     }
 
-    word_left := left_initials . left_vowels "0" right_initials . test_right_string "0"
-    word_right := left_initials . left_vowels_cut_last "0" left_vowels_last . right_initials . test_right_string "0"
+    word_left := left_initials . left_vowels "0" test_right_string "0"
+    word_right := left_initials . left_vowels_cut_last "0" left_vowels_last . test_right_string "0"
 
     word_left_weight := PinyinSplitterGetWeight(word_left)
     word_right_weight := PinyinSplitterGetWeight(word_right)
@@ -114,12 +132,7 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
         return true
     }
 
-    is_complete := 0
-    if( next_char == "o" ){
-        is_complete += IsCompletePinyin(right_initials, "on")
-    }
-
-    if( is_complete || IsCompletePinyin(right_initials, next_char) )
+    if( IsCompletePinyin(left_initials, SubStr(left_vowels, 1, StrLen(left_vowels)-1)) )
     {
         return PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
     }
