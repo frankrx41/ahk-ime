@@ -34,10 +34,13 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
 
     translate_result           := []
 
-    ; 插入拼音所能组成的候选词
+    ; Insert db result
     PinyinTranslatorInsertResult(translate_result, splitter_result)
 
-    ; 超级简拼 显示 4 字及以上简拼候选
+    ; Insert auto combine word
+    PinyinTranslatorInsertCombineWord(translate_result, splitter_result)
+
+    ; Insert simple spell, need end with "*"
     PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result, auto_complete)
 
     if( ImeModeGetLanguage() == "tw" )

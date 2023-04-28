@@ -37,16 +37,20 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
     }
 }
 
-TranslatorHistoryGetResult(splitted_string, index)
+TranslatorHistoryGetResultWord(splitted_string, part_of_speech:="")
 {
     global translator_history_result
-    return translator_history_result[splitted_string, index]
-}
-
-TranslatorHistorySetResult(splitted_string, index)
-{
-    global translator_history_result
-    return translator_history_result[splitted_string, index]
+    loop
+    {
+        word := TranslatorResultGetWord(translator_history_result[splitted_string], A_Index)
+        if( part_of_speech == "" ){
+            return word
+        }
+        if( part_of_speech == "verb" && IsVerb(word) ){
+            return word
+        }
+    }
+    return ""
 }
 
 ;*******************************************************************************

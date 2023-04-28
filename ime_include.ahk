@@ -27,6 +27,7 @@
 
 #Include, ime_pinyin_translator.ahk
 #Include, ime_pinyin_translator_simple_spell.ahk
+#Include, ime_pinyin_translator_combine_word.ahk
 
 #Include, ime_pinyin_sql.ahk
 
