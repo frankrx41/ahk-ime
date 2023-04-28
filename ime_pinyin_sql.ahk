@@ -125,6 +125,28 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
 }
 
 ;*******************************************************************************
+; 
+PinyinSqlGetWeight(splitted_input)
+{
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, false)
+    sql_full_key    := PinyinSqlFullKey(splitted_input, false)
+
+    sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
+    sql_full_cmd := "SELECT weight FROM 'pinyin' WHERE " . sql_where_cmd
+    sql_full_cmd .= " ORDER BY weight DESC LIMIT 1"
+
+    result := 0
+    pinyin_db := ImeDBGet()
+    if( pinyin_db.GetTable(sql_full_cmd, result_table) )
+    {
+        if( result_table.RowCount > 0 ){
+            result := result_table.Rows[1, 1]
+        }
+    }
+    return result
+}
+
+;*******************************************************************************
 ;
 PinyinSqlSimpleKeyTest()
 {

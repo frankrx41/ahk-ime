@@ -2,15 +2,15 @@
 ; Initialize
 PinyinSplitterTableInitialize()
 {
-    global splitted_string_weight_table := {}
-    FileRead, file_content, data\pinyin-split.txt
-    Loop, Parse, file_content, `n, `r
-    {
-        if( A_LoopField ){
-            splitted_string_weight_table[A_LoopField] := 1
-        }
-    }
-    Assert(splitted_string_weight_table.Count() != 0)
+    ; global splitted_string_weight_table := {}
+    ; FileRead, file_content, data\pinyin-split.txt
+    ; Loop, Parse, file_content, `n, `r
+    ; {
+    ;     if( A_LoopField ){
+    ;         splitted_string_weight_table[A_LoopField] := 1
+    ;     }
+    ; }
+    ; Assert(splitted_string_weight_table.Count() != 0)
 }
 
 ;*******************************************************************************
@@ -53,20 +53,108 @@ PinyinSplitterMaxVowelsLength(input_str, index)
     return vowels_max_len
 }
 
-PinyinSplitterIsInTable(left_initials, left_vowels, right_string)
+PinyinSplitterGetWeight(pinyin)
 {
-    global splitted_string_weight_table
-    right_string_len := StrLen(right_string)
-    loop, 5
+    static splitted_string_weight_table := {}
+    if( !splitted_string_weight_table.HasKey(pinyin) )
     {
-        key := left_initials . left_vowels . "'" . SubStr(right_string, 1, A_Index)
-        if( splitted_string_weight_table.HasKey(Key) ){
-            return true
-        }
-        if( A_Index >= right_string_len ){
+        splitted_string_weight_table[pinyin] := PinyinSqlGetWeight(pinyin)
+    }
+    return splitted_string_weight_table[pinyin]
+}
+
+;*******************************************************************************
+; banan -> [ba'nan, ban'an]
+PinyinSplitterCheckDB(left_initials, left_vowels, right_string)
+{
+    ; right_string_len := StrLen(right_string)
+    ; left_vowels_len := StrLen(left_vowels)
+    ; loop, % left_vowels_len
+    ; {
+    ;     test_left_vowels_len := A_Index
+    ;     pinyin_left := left_initials . SubStr(left_vowels, 1, test_left_vowels_len)
+    ;     remain_len := left_vowels_len-test_left_vowels_len
+    ;     loop, % Min(5, right_string_len+remain_len)
+    ;     {
+    ;         ; if( IsInitials()
+    ;         if( A_Index <= remain_len ) {
+    ;             pinyin_right := SubStr(left_vowels, test_left_vowels_len+1, A_Index)
+    ;         } else {
+    ;             pinyin_right := SubStr(left_vowels, test_left_vowels_len+1) . SubStr(right_string, 1, A_Index-remain_len)
+    ;         }
+    ;         ; if( IsCompletePinyin()
+    ;         key_pinyin := pinyin_left "0" pinyin_right "0"
+    ;         weight := PinyinSplitterGetWeight(key_pinyin)
+    ;     }
+    ; }
+
+    ; right_string_len := StrLen(right_string)
+    ; left_vowels_len := StrLen(left_vowels)
+    ; loop, % left_vowels_len
+    ; {
+    ;     test_left_vowels_len := A_Index
+    ;     pinyin_left := left_initials . SubStr(left_vowels, 1, test_left_vowels_len)
+    ;     remain_len := left_vowels_len-test_left_vowels_len
+    ;     loop, % Min(5, right_string_len+remain_len)
+    ;     {
+    ;         ; if( IsInitials()
+    ;         if( A_Index <= remain_len ) {
+    ;             pinyin_right := SubStr(left_vowels, test_left_vowels_len+1, A_Index)
+    ;         } else {
+    ;             pinyin_right := SubStr(left_vowels, test_left_vowels_len+1) . SubStr(right_string, 1, A_Index-remain_len)
+    ;         }
+    ;         ; if( IsCompletePinyin()
+    ;         key_pinyin := pinyin_left "0" pinyin_right "0"
+    ;         weight := PinyinSplitterGetWeight(key_pinyin)
+    ;     }
+    ; }
+
+    right_string_len := StrLen(right_string)
+    right_initials := SubStr(right_string, 1, 1)
+    left_vowels_cut_last := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
+    left_vowels_last := SubStr(left_vowels, 0, 1)
+
+    max_test_len := Min(5, right_string_len)
+    found := false
+    loop, % max_test_len
+    {
+        index := max_test_len - A_Index
+        test_right_string := SubStr(right_string, 2, A_Index)
+        if( IsCompletePinyin(right_initials, test_right_string) && IsCompletePinyin(left_vowels_last, right_initials . test_right_string) )
+        {
+            found := true
             break
         }
     }
+
+    Assert( found )
+
+    word_left := left_initials . left_vowels "0" right_initials . test_right_string "0"
+    word_right := left_initials . left_vowels_cut_last "0" left_vowels_last . right_initials . test_right_string "0"
+
+    word_left_weight := PinyinSplitterGetWeight(word_left)
+    word_right_weight := PinyinSplitterGetWeight(word_right)
+    ; if( word_left_weight > 0 && word_right_weight > 0 && word_left_weight > word_right_weight ){
+    if( word_left_weight > word_right_weight && word_left_weight >= 0 ){
+        return true
+    }
+
+
+
+    ; loop, 5
+    ; {
+    ;     key_left := left_initials . left_vowels "'" SubStr(right_string, 1, A_Index)
+    ;     key_right := ""
+    ;     weight_left := PinyinSplitterGetWeight(key_left)
+    ;     weight_right := PinyinSplitterGetWeight(key_right)
+    ;     if( weight_left > weight_right && weight_left > 0 ){
+    ;         return true
+    ;     }
+
+    ;     if( A_Index >= right_string_len ){
+    ;         break
+    ;     }
+    ; }
     return false
 }
 
@@ -89,7 +177,8 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
 
     if( is_complete || IsCompletePinyin(right_initials, next_char) )
     {
-        return PinyinSplitterIsInTable(left_initials, left_vowels, right_string)
+        return PinyinSplitterCheckDB(left_initials, left_vowels, right_string)
+        ; return false
     }
     else
     {
