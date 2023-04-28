@@ -324,7 +324,7 @@ PinyinSplitterInputStringTest()
 
 PinyinSplitterInputStringTest2()
 {
-    test_case := [ "banan","bingan","canan","changan","change","dingan","dinge","dongan","enai","enen","gangaotai","geren","gongan","hanan","heni","henai","huane","jianao","jine","jingai","jinge","keneg","keneng","keren","kune","nanan","pingan","qiane","qinai","qingan","renao","shanao","shane","tanga","tigong","tiane","wanan","xianai","xieren","xieri","xinai","xinganlin","yanan","yiner","zhenai","zonge","wanou","lianai","bieren" ]
+    test_case := [ "banan","bingan","canan","changan","change","dingan","dinge","dongan","enai","enen","gangaotai","geren","gongan","hanan","heni","henai","jianao","jine","jingai","jinge","keneg","keneng","keren","kune","nanan","pingan","qiane","qinai","qingan","renao","shanao","shane","tigong","tiane","wanan","xianai","xieren","xieri","xinai","daxinganling","yanan","yiner","zhenai","zonge","wanou","lianai","bieren","buhuanersan","changanaotuo","wanganshi","zenmeneng","zenmerang","yixieren","naxieren" ]
     msg_string := ""
     loop, % test_case.Length()
     {
