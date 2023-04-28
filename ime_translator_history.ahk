@@ -3,6 +3,12 @@ TranslatorHistoryClear()
     global translator_history_result := []
 }
 
+TranslatorHistoryHasResult(splitted_string)
+{
+    global translator_history_result
+    return translator_history_result[splitted_string].Length() > 0
+}
+
 ;*******************************************************************************
 ; Static
 TranslatorHistoryHasKey(splitted_string)

@@ -1,5 +1,9 @@
 PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
 {
+    splitted_string := SplitterResultConvertToString(splitter_result, 1, 0)
+    if( TranslatorHistoryHasResult(splitted_string) ){
+        return
+    }
     ; A-le-X-B
     profile_text := ImeProfilerBegin(22)
     if( splitter_result.Length() >= 4 && RegexMatch(SplitterResultConvertToString(splitter_result, 2, 1), "^(le0|le1)$" ) ){
