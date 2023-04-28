@@ -1,19 +1,4 @@
 ;*******************************************************************************
-; Initialize
-PinyinSplitterTableInitialize()
-{
-    ; global splitted_string_weight_table := {}
-    ; FileRead, file_content, data\pinyin-split.txt
-    ; Loop, Parse, file_content, `n, `r
-    ; {
-    ;     if( A_LoopField ){
-    ;         splitted_string_weight_table[A_LoopField] := 1
-    ;     }
-    ; }
-    ; Assert(splitted_string_weight_table.Count() != 0)
-}
-
-;*******************************************************************************
 ; Static
 PinyinSplitterGetTone(input_str, initials, vowels, ByRef index)
 {
