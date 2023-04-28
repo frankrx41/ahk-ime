@@ -16,10 +16,10 @@ PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
         length_count := max_len-A_Index+1
         splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
         profile_text .= "[" splitted_string "] "
-        TranslatorHistoryUpdateKey(splitted_string, length_count)
-        TranslatorHistoryPushResult(translate_result, splitted_string, 200)
+        TranslatorHistoryUpdateKey(splitted_string, false, length_count)
+        TranslatorHistoryPushResult(translate_result, splitted_string, false, 200)
         if( length_count == hope_word_length ) {
-            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1, 3)
+            TranslatorHistoryInsertResultAt(translate_result, splitted_string, false, 1, 3)
         }
     }
     ImeProfilerEnd(21, profile_text)
@@ -38,10 +38,7 @@ PinyinTranslateFindResult(splitter_result, auto_comple)
     PinyinTranslatorInsertResult(translate_result, splitter_result)
 
     ; 超级简拼 显示 4 字及以上简拼候选
-    if( auto_comple )
-    {
-        PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result)
-    }
+    PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result, auto_comple)
 
     if( ImeModeGetLanguage() == "tw" )
     {

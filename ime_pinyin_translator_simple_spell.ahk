@@ -54,23 +54,27 @@ SeparateStringShouldProcess(splitted_string, splitted_input)
     return true
 }
 
-PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result)
+PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_comple)
 {
     local
-    global history_field_array
-    profile_text := ImeProfilerBegin(22)
+
+    if( splitter_result.Length() == 1 && !auto_comple){
+        return
+    }
 
     splitted_input := SplitterResultConvertToString(splitter_result, 1)
     splitted_string := SplittedInputConvertToSimpleSpell(splitted_input, length_count)
-    if(splitted_string)
+    if(!splitted_string){
+        return
+    }
+
+    profile_text := ImeProfilerBegin(22)
+    if( SeparateStringShouldProcess(splitted_string, splitted_input) )
     {
-        if( SeparateStringShouldProcess(splitted_string, splitted_input) )
-        {
-            TranslatorHistoryUpdateKey(splitted_string, length_count, true)
-            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 5)
-            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1, 1)
-            profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
-        }
+        TranslatorHistoryUpdateKey(splitted_string, auto_comple, length_count)
+        TranslatorHistoryInsertResultAt(translate_result, splitted_string, auto_comple, 5)
+        TranslatorHistoryInsertResultAt(translate_result, splitted_string, auto_comple, 1, 1)
+        profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
     }
     ImeProfilerEnd(22, profile_text)
     return
