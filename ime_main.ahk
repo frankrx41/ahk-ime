@@ -3,6 +3,8 @@
 #SingleInstance, force
 
 CoordMode, ToolTip, Screen
+CoordMode, Caret, Screen
+CoordMode, Mouse, Screen
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 if not A_IsAdmin
 {
