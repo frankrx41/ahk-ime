@@ -8,6 +8,12 @@
         ImeTooltipUpdate()
     return
 
+    NumpadMult::
+    *::
+        ImeInputterProcessChar("*")
+        ImeTooltipUpdate()
+    return
+
     ; Enter send string
     Enter::
     NumpadEnter::
