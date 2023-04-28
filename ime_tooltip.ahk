@@ -200,6 +200,7 @@ ImeTooltipUpdate(tooltip_pos := "")
         extern_info .= " {" radical_words "}"
         extern_info .= " (" ImeTranslatorResultListGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
+        extern_info .= " (" ime_tooltip_pos.x "," ime_tooltip_pos.y "," ime_tooltip_pos.t ")"
 
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
