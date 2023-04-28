@@ -115,6 +115,12 @@ IsCompletePinyin(initials, vowels, tone:="'")
     }
 }
 
+IsAutoCorrectPinyin(initials, vowels, tone:="'")
+{
+    global pinyin_table_auto_correct
+    return pinyin_table_auto_correct[initials, vowels]
+}
+
 GetFullVowels(initials, vowels)
 {
     global pinyin_table
