@@ -52,6 +52,7 @@ PinyinSplitterGetWeight(pinyin)
 ; ban'an -> [ba'nan]
 ; xie'ru -> [xi'eru]
 ; tig'ong -> [ti'gong + tig'ong] + [ti'gon + tig'on] + [ti'go + tig'o]
+; le'ge -> [leg'e]
 PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
 {
     right_string_len := StrLen(right_string)
@@ -62,50 +63,51 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
     profile_text := ImeProfilerBegin(13)
 
     max_test_len := Min(5, right_string_len)
-    found := false
-    complete_left_once := false
-    loop, % max_test_len - 1
+
+    max_word_weight := 0
+    result_word := ""
+    loop,
     {
-        index := max_test_len - A_Index + 1
-        test_right_string := SubStr(right_string, 1, index)
-
-        complete_left := false
-        complete_right := false
-        if( IsCompletePinyin(left_vowels_last, test_right_string) )
+        test_len := max_test_len - A_Index + 1
+        if( test_len <= 0 ) {
+            break
+        }
+        next_char := SubStr(right_string, test_len+1, 1)
+        if( IsMustSplit(next_char) || IsInitials(next_char) )
         {
-            complete_left := true
-            complete_left_once := true
+            test_right_string := SubStr(right_string, 1, test_len)
+            if( IsCompletePinyin(left_vowels_last, test_right_string) )
+            {
+                full_vowels := GetFullVowels(left_vowels_last, test_right_string)
+                test_word := left_initials . left_vowels_cut_last "0" left_vowels_last . full_vowels "0"
+                word_weight := PinyinSplitterGetWeight(test_word)
+                if( word_weight > max_word_weight ){
+                    max_word_weight := word_weight
+                    result_word := left_initials . left_vowels_cut_last
+                }
+            }
 
-            test_right_string_cut := SubStr(test_right_string, 2, index-1)
+            test_right_string_cut := SubStr(right_string, 2, test_len-1)
             if( IsCompletePinyin(right_initials, test_right_string_cut) )
             {
-                complete_right := true
+                full_vowels := GetFullVowels(right_initials, test_right_string_cut)
+                test_word := left_initials . left_vowels "0" right_initials . full_vowels "0"
+                word_weight := PinyinSplitterGetWeight(test_word)
+                if( word_weight > max_word_weight ){
+                    max_word_weight := word_weight
+                    result_word := left_initials . left_vowels
+                }
             }
-        }
-
-        if( complete_left && complete_right )
-        {
-            found := true
-            break
         }
     }
     ImeProfilerEnd(13, profile_text)
 
-    if( !found )
+    if( max_word_weight > 0 )
     {
-        return !complete_left_once
+        return (left_initials . left_vowels) == result_word
     }
 
-    word_left := left_initials . left_vowels "0" test_right_string "0"
-    word_right := left_initials . left_vowels_cut_last "0" left_vowels_last . test_right_string "0"
-
-    word_left_weight := PinyinSplitterGetWeight(word_left)
-    word_right_weight := PinyinSplitterGetWeight(word_right)
-    if( word_left_weight > word_right_weight && word_left_weight >= 0 ){
-        return true
-    }
-
-    return false
+    return true
 }
 
 PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
@@ -120,7 +122,8 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
         return true
     }
 
-    if( IsCompletePinyin(left_initials, SubStr(left_vowels, 1, StrLen(left_vowels)-1)) )
+    left_vowels_cut := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
+    if( IsCompletePinyin(left_initials, left_vowels_cut) )
     {
         return PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string)
     }
@@ -128,6 +131,11 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string)
     {
         return true
     }
+}
+
+IsMustSplit(next_char)
+{
+    return next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char)
 }
 
 PinyinSplitterGetVowels(input_str, initials, ByRef index)
@@ -146,7 +154,7 @@ PinyinSplitterGetVowels(input_str, initials, ByRef index)
             if( IsCompletePinyin(initials, vowels) )
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
-                if( next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) ) {
+                if( IsMustSplit(next_char) ){
                     break
                 }
                 if( !IsZeroInitials(initials) && vowels_len == 1 ){
@@ -325,8 +333,8 @@ PinyinSplitterInputStringTest()
 
 PinyinSplitterInputStringUnitTest()
 {
-    test_case := [ "banan","bingan","canan","changan","change","dingan","dinge","dongan","enai","enen","gangaotai","geren","gongan","hanan","heni","henai","jianao","jine","jingai","jinge","keneg","keneng","keren","kune","nanan","pingan","qiane","qinai","qingan","renao","shanao","shane","tigong","tiane","wanan","xianai","xieren","xieri","xinai","daxinganling","yanan","yiner","zhenai","zonge","wanou","lianai","bieren","buhuanersan","changanaotuo","wanganshi","zenmeneng","zenmerang","yixieren","naxieren","xigezao","xilegezao","xieriji" ]
-    case_result := [ "ban'an","bing'an","can'an","chang'an","chang'e","ding'an","ding'e","dong'an","en'ai","en'en","gang'ao'tai","ge'ren","gong'an","ha'nan","he'ni","hen'ai","jian'ao","jin'e","jing'ai","jing'e","ke'neng","ke'neng","ke'ren","kun'e","nan'an","ping'an","qian'e","qin'ai","qing'an","re'nao","shan'ao","shan'e","ti'gong","tian'e","wan'an","xian'ai","xie'ren","xie'ri","xin'ai","da'xing'an'ling","yan'an","yin'er","zhen'ai","zong'e","wan'ou","lian'ai","bie'ren","bu'huan'er'san","chang'an'ao'tuo","wang'an'shi","zen'me'neng","zen'me'rang","yi'xie'ren","na'xie'ren","xi'ge'zao","xi'le'ge'zao","xie'ri'ji" ]
+    test_case := [ "banan","bingan","canan","changan","change","dingan","dinge","dongan","enai","enen","gangaotai","geren","gongan","heni","henai","jianao","jine","jingai","jinge","keneg","keneng","keren","kune","nanan","pingan","qiane","qinai","qingan","renao","shanao","shane","tigong","tiane","wanan","xianai","xieren","xieri","xinai","daxinganling","yanan","yiner","zhenai","zonge","wanou","lianai","bieren","buhuanersan","changanaotuo","wanganshi","zenmeneng","zenmerang","yixieren","naxieren","xigezao","xilegezao","xieriji" ]
+    case_result := [ "ban'an","bing'an","can'an","chang'an","chang'e","ding'an","ding'e","dong'an","en'ai","en'en","gang'ao'tai","ge'ren","gong'an","he'ni","hen'ai","jian'ao","jin'e","jing'ai","jing'e","ke'neng","ke'neng","ke'ren","kun'e","nan'an","ping'an","qian'e","qin'ai","qing'an","re'nao","shan'ao","shan'e","ti'gong","tian'e","wan'an","xian'ai","xie'ren","xie'ri","xin'ai","da'xing'an'ling","yan'an","yin'er","zhen'ai","zong'e","wan'ou","lian'ai","bie'ren","bu'huan'er'san","chang'an'ao'tuo","wang'an'shi","zen'me'neng","zen'me'rang","yi'xie'ren","na'xie'ren","xi'ge'zao","xi'le'ge'zao","xie'ri'ji" ]
     msg_string := ""
     loop, % test_case.Length()
     {
