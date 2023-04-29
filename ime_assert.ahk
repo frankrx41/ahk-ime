@@ -7,6 +7,7 @@ Assert(bool, debug_msg:="", show_msgbox:=true)
 {
     static assert_ignore_list := {}
     static disable_tick := 0
+    static in_msgbox := false
     local
     if( IsDebugVersion() && !bool )
     {
@@ -19,7 +20,8 @@ Assert(bool, debug_msg:="", show_msgbox:=true)
 
         FileAppend, %debug_info%, .\debug.log
         mark_key := CallStack(1)
-        if( show_msgbox && A_TickCount - disable_tick > 6000 && !assert_ignore_list.HasKey(mark_key)){
+        if( show_msgbox && A_TickCount - disable_tick > 6000 && !assert_ignore_list.HasKey(mark_key) && !in_msgbox ){
+            in_msgbox := true
             Msgbox, 18, Assert, % debug_info "`n" """" debug_msg """" "`n`nAbout: Ignore all assert for 1 minute`nRetry: Always ignore this assert`nIgnore: Ignore this assert once"
             IfMsgBox, Abort
             {
@@ -29,6 +31,7 @@ Assert(bool, debug_msg:="", show_msgbox:=true)
             {
                 assert_ignore_list[mark_key] := 1
             }
+            in_msgbox := false
         }
         ImeProfilerEnd(4, ImeProfilerBegin(4) "`n  - " CallerName(0) " """ debug_msg """")
     }
