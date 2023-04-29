@@ -13,12 +13,12 @@
 ; "z?e0yang0z?i3" -> [z%0e%0y%0a%0n%0g%0z%0i%3,8]
 ;
 ; See `SplittedInputConvertToSimpleSpellTest`
-SplittedInputConvertToSimpleSpell(input_string, ByRef word_count)
+SplittedInputConvertToSimpleSpell(input_string)
 {
     input_string := StrReplace(input_string, "?")
     input_string := RegExReplace(input_string, "([a-z])(?=[^%012345])", "$10")
     input_string := RegExReplace(input_string, "([^%])([012345])", "$1%$2")
-    StrReplace(input_string, "%", "", word_count)
+    ; StrReplace(input_string, "%", "", word_count)
     return input_string
 }
 
@@ -70,7 +70,8 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_
     }
 
     splitted_input := SplitterResultConvertToString(splitter_result, 1)
-    splitted_string := SplittedInputConvertToSimpleSpell(splitted_input, length_count)
+    splitted_string := SplittedInputConvertToSimpleSpell(splitted_input)
+    take_up_length := splitter_result.Length()
     if(!splitted_string){
         return
     }
@@ -81,9 +82,9 @@ PinyinTranslatorInsertSimpleSpell(ByRef translate_result, splitter_result, auto_
         if( auto_complete ){
             splitted_string .= "*"
         }
-        TranslatorHistoryUpdateKey(splitted_string, length_count)
+        TranslatorHistoryUpdateKey(splitted_string, take_up_length)
         TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1)
-        profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," length_count "]"
+        profile_text := "[""" SplitterResultConvertToString(splitter_result, 1) """] -> [""" splitted_string """," take_up_length "]"
     }
     ImeProfilerEnd(23, profile_text)
     return
@@ -98,8 +99,8 @@ SplittedInputConvertToSimpleSpellTest()
     loop, % test_case.Length()
     {
         input_case := test_case[A_Index]
-        test_result := SplittedInputConvertToSimpleSpell(input_case, word_count)
-        msg_string .= "`n""" input_case """ -> [" test_result "," word_count "]"
+        test_result := SplittedInputConvertToSimpleSpell(input_case)
+        msg_string .= "`n""" input_case """ -> [" test_result "]"
     }
     MsgBox, % msg_string
 }
