@@ -63,6 +63,8 @@ RadicalGetPinyin(single_radical)
 {
     local
     global ime_radicals_pinyin
+    Assert(single_radical != "")
+    Assert(ime_radicals_pinyin.HasKey(single_radical), "Miss pinyin for """ single_radical "," Asc(single_radical) """" )
     return ime_radicals_pinyin[single_radical]
 }
 
@@ -84,6 +86,10 @@ IsVerb(word)
 ;
 RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 {
+    if( !test_word ){
+        return true
+    }
+
     test_pinyin := RadicalGetPinyin(test_word)
     if( test_pinyin == SubStr(test_radical, 1, 1) ) {
         test_radical := SubStr(test_radical, 2)
@@ -111,6 +117,10 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 
 RadicalMatchLastPart(test_word, ByRef test_radical)
 {
+    if( !test_word ){
+        return true
+    }
+
     test_pinyin := RadicalGetPinyin(test_word)
     if( test_pinyin == SubStr(test_radical, 0, 1) ) {
         test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
