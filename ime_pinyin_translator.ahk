@@ -37,11 +37,17 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     ; Insert db result
     PinyinTranslatorInsertResult(translate_result, splitter_result)
 
-    ; Insert auto combine word
-    PinyinTranslatorInsertCombineWord(translate_result, splitter_result)
 
-    ; Insert simple spell, need end with "*"
-    ; PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result, auto_complete)
+    if( auto_complete )
+    {
+        ; Insert simple spell, need end with "**"
+        PinyinTranslatorInsertAutpComplete(translate_result, splitter_result)
+    }
+    else
+    {
+        ; Insert auto combine word
+        PinyinTranslatorInsertCombineWord(translate_result, splitter_result)
+    }
 
     if( ImeModeGetLanguage() == "tw" )
     {
