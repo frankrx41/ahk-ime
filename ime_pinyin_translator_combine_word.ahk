@@ -1,3 +1,44 @@
+IsSoundLike(speech, sounds_to)
+{
+    sounds_pinyin   := SubStr(sounds_to, 1, StrLen(sounds_to)-1)
+    sounds_tone     := SubStr(sounds_to, 0, 1)
+
+    speech_pinyin   := SubStr(speech, 1, StrLen(speech)-1)
+    speech_tone     := SubStr(speech, 0, 1)
+
+    ; TODO: check this
+    speech_pinyin   := RegexReplace(speech_pinyin, "([zcs])\?", "$1", replace_count)
+    if( replace_count )
+    {
+        sounds_pinyin := RegexReplace(speech_pinyin, "([zcs])h", "$1")
+    }
+
+
+    speech_pinyin   := StrReplace(speech_pinyin, "?", ".")
+    speech_pinyin   := StrReplace(speech_pinyin, "%", ".*")
+
+    if( !RegExMatch(sounds_pinyin, speech_pinyin) )
+    {
+        return false
+    }
+
+    if( speech_tone != sounds_tone )
+    {
+        if( speech_tone != "0" )
+        {
+            if( sounds_tone == "5" )
+            {
+                if( speech_tone != "1" )
+                {
+                    return false
+                }
+            }
+        }
+    }
+
+    return true
+}
+
 PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
 {
     splitter_result := SplitterResultGetUntilLength(splitter_result)
@@ -7,7 +48,7 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
     }
     ; A-le-X-B
     profile_text := ImeProfilerBegin(22)
-    if( splitter_result.Length() >= 4 && RegexMatch(SplitterResultConvertToString(splitter_result, 2, 1), "^(le0|le1)$" ) ){
+    if( splitter_result.Length() >= 4 && IsSoundLike(SplitterResultConvertToString(splitter_result, 2, 1), "le5") ){
         splitted_string := ""
         word_length := 0
         splitted_string .= SplitterResultConvertToString(splitter_result, 1, 1)
