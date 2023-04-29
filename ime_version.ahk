@@ -4,12 +4,12 @@
 ; 
 IsDebugVersion()
 {
-    return false
+    return true
 }
 
 GetVersion()
 {
-    return "0.5.0"
+    return "0.6.1"
 }
 
 GetGitHash()
