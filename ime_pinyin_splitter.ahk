@@ -246,7 +246,7 @@ PinyinSplitterInputString(input_string)
         try_simple_spliter := true
         loop, % splitter_result.Length()
         {
-            if( SplitterResultIsCompleted(splitter_result, A_Index) )
+            if( SplitterResultIsCompleted(splitter_result[A_Index]) )
             {
                 try_simple_spliter := false
                 break
@@ -287,7 +287,8 @@ PinyinSplitterInputStringSimple(input_string)
             radical := GetRadical(SubStr(input_string, string_index))
             string_index += StrLen(radical)
 
-            SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_string_index, string_index-1)
+            make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
+            splitter_result.Push(make_result)
 
             splitter_index_list.Push(splitter_result.Length())
         }
@@ -297,7 +298,7 @@ PinyinSplitterInputStringSimple(input_string)
     if( splitter_index_list_len ) {
         for index, value in splitter_index_list {
             length := splitter_index_list_len - index + 1
-            SplitterResultSetWordLength(splitter_result, value, length)
+            SplitterResultSetHopeLength(splitter_result[value], length)
         }
     }
 
@@ -331,7 +332,9 @@ PinyinSplitterInputStringNormal(input_string)
         if( IsInitials(initials) )
         {
             if( escape_string ) {
-                SplitterResultPush(splitter_result, escape_string, 0, "", start_string_index, string_index-1, true)
+                make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, true)
+                splitter_result.Push(make_result)
+
                 escape_string := ""
             }
             start_string_index := string_index
@@ -355,7 +358,9 @@ PinyinSplitterInputStringNormal(input_string)
             radical := GetRadical(SubStr(input_string, string_index))
             string_index += StrLen(radical)
 
-            SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_string_index, string_index-1)
+            make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
+            splitter_result.Push(make_result)
+
             prev_splitted_input := initials . vowels . tone
 
             if( tone_string == " " ){
@@ -363,7 +368,7 @@ PinyinSplitterInputStringNormal(input_string)
                 if( splitter_index_list_len ) {
                     for index, value in splitter_index_list {
                         length := splitter_index_list_len - index + 2
-                        SplitterResultSetWordLength(splitter_result, value, length)
+                        SplitterResultSetHopeLength(splitter_result[value], length)
                     }
                 }
                 splitter_index_list := []
@@ -381,7 +386,8 @@ PinyinSplitterInputStringNormal(input_string)
     }
 
     if( escape_string ) {
-        SplitterResultPush(splitter_result, escape_string, 0, "", start_string_index, string_index-1, true)
+        make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, true)
+        splitter_result.Push(make_result)
         escape_string := ""
     }
 
@@ -389,7 +395,7 @@ PinyinSplitterInputStringNormal(input_string)
     if( splitter_index_list_len ) {
         for index, value in splitter_index_list {
             length := splitter_index_list_len - index + 1
-            SplitterResultSetWordLength(splitter_result, value, length)
+            SplitterResultSetHopeLength(splitter_result[value], length)
         }
     }
 

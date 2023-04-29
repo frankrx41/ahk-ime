@@ -6,61 +6,46 @@
 ;       [3]: "S"        ; 辅助码
 ;       [4]: 1          ; 原始字符串中开始的位置
 ;       [5]: 3          ; 原始字符串中结束的位置
-;       [6]: false      ; 应该跳过翻译该词条
+;       [6]: true       ; 需要翻译该词条
 ;       [7]: 1          ; 期待单词长度
 ;       [8]: false      ; 不是完整的单词 (拼音末尾是 %)
 ;
-SplitterResultPush(ByRef splitter_result, pinyin, tone, radical, start_pos, end_pos, skip:=false)
+SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, skip:=false)
 {
     is_completed := SubStr(pinyin, 0, 1) != "%"
-    splitter_result.Push([pinyin, tone, radical, start_pos, end_pos, skip, 1, is_completed])
+    return [pinyin, tone, radical, start_pos, end_pos, !skip, 1, is_completed]
 }
 
-SplitterResultSetWordLength(ByRef splitter_result, index, length)
+SplitterResultSetHopeLength(ByRef splitter_result, length)
 {
-    splitter_result[index, 7] := length
+    splitter_result[7] := length
 }
 
 ;*******************************************************************************
 ;
-SplitterResultGetPinyin(ByRef splitter_result, index)
-{
-    return splitter_result[index, 1]
+SplitterResultGetPinyin(splitter_result) {
+    return splitter_result[1]
 }
-
-SplitterResultGetTone(ByRef splitter_result, index)
-{
-    return splitter_result[index, 2]
+SplitterResultGetTone(splitter_result) {
+    return splitter_result[2]
 }
-
-SplitterResultGetRadical(ByRef splitter_result, index)
-{
-    return splitter_result[index, 3]
+SplitterResultGetRadical(splitter_result) {
+    return splitter_result[3]
 }
-
-SplitterResultGetStartPos(ByRef splitter_result, index)
-{
-    return splitter_result[index, 4]
+SplitterResultGetStartPos(splitter_result) {
+    return splitter_result[4]
 }
-
-SplitterResultGetEndPos(ByRef splitter_result, index)
-{
-    return splitter_result[index, 5]
+SplitterResultGetEndPos(splitter_result) {
+    return splitter_result[5]
 }
-
-SplitterResultIsSkip(ByRef splitter_result, index)
-{
-    return splitter_result[index, 6]
+SplitterResultNeedTranslate(splitter_result) {
+    return splitter_result[6]
 }
-
-SplitterResultGetWordLength(ByRef splitter_result, index)
-{
-    return splitter_result[index, 7]
+SplitterResultGetHopeLength(splitter_result) {
+    return splitter_result[7]
 }
-
-SplitterResultIsCompleted(ByRef splitter_result, index)
-{
-    return splitter_result[index, 8]
+SplitterResultIsCompleted(splitter_result) {
+    return splitter_result[8]
 }
 
 ;*******************************************************************************
@@ -71,13 +56,13 @@ SplittedIndexsGetPosIndex(splitter_result, caret_pos)
     local
     if( splitter_result.Length() >= 1)
     {
-        if( SplitterResultGetEndPos(splitter_result, splitter_result.Length()) == caret_pos )
+        if( SplitterResultGetEndPos(splitter_result[splitter_result.Length()]) == caret_pos )
         {
             return splitter_result.Length()
         }
         loop % splitter_result.Length()
         {
-            if( SplitterResultGetEndPos(splitter_result, A_Index) > caret_pos ){
+            if( SplitterResultGetEndPos(splitter_result[A_Index]) > caret_pos ){
                 return A_Index
             }
         }
@@ -95,7 +80,7 @@ SplittedIndexsGetLeftWordPos(splitter_result, start_pos)
     last_index := 0
     loop, % splitter_result.Length()
     {
-        split_index := SplitterResultGetEndPos(splitter_result, A_Index)
+        split_index := SplitterResultGetEndPos(splitter_result[A_Index])
         if( split_index >= start_pos ){
             break
         }
@@ -110,7 +95,7 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
     last_index := start_pos
     loop, % splitter_result.Length()
     {
-        split_index := SplitterResultGetEndPos(splitter_result, A_Index)
+        split_index := SplitterResultGetEndPos(splitter_result[A_Index])
         if( split_index > start_pos ){
             last_index := split_index
             break
@@ -125,7 +110,7 @@ SplitterResultGetUntilSkip(splitter_result, start_count := 1)
 {
     local
     return_splitter_result := []
-    if( SplitterResultIsSkip(splitter_result, start_count) )
+    if( !SplitterResultNeedTranslate(splitter_result[start_count]) )
     {
         return_splitter_result[1] := splitter_result[start_count]
     }
@@ -135,7 +120,7 @@ SplitterResultGetUntilSkip(splitter_result, start_count := 1)
         if( A_Index < start_count ) {
             continue
         }
-        if( !SplitterResultIsSkip(splitter_result, A_Index) )
+        if( SplitterResultNeedTranslate(splitter_result[A_Index]) )
         {
             return_splitter_result.Push(splitter_result[A_Index])
         }
@@ -151,7 +136,7 @@ SplitterResultGetUntilLength(splitter_result, start_count := 1)
 {
     local
     return_splitter_result := []
-    if( SplitterResultGetWordLength(splitter_result, start_count)==1 )
+    if( SplitterResultGetHopeLength(splitter_result[start_count])==1 )
     {
         return_splitter_result[1] := splitter_result[start_count]
     }
@@ -162,7 +147,7 @@ SplitterResultGetUntilLength(splitter_result, start_count := 1)
             continue
         }
         return_splitter_result.Push(splitter_result[A_Index])
-        if( SplitterResultGetWordLength(splitter_result, A_Index)==1 )
+        if( SplitterResultGetHopeLength(splitter_result[A_Index])==1 )
         {
             break
         }
@@ -191,8 +176,8 @@ SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_c
         }
         inout_length_count -= 1
         word_length += 1
-        find_string .= SplitterResultGetPinyin(splitter_result, A_Index)
-        find_string .= SplitterResultGetTone(splitter_result, A_Index)
+        find_string .= SplitterResultGetPinyin(splitter_result[A_Index])
+        find_string .= SplitterResultGetTone(splitter_result[A_Index])
     }
     inout_length_count := word_length
     return find_string
@@ -207,30 +192,30 @@ SplitterResultGetDisplayText(splitter_result)
     loop, % splitter_result.Length()
     {
         index := A_Index
-        if( !SplitterResultIsSkip(splitter_result, index) )
+        if( SplitterResultNeedTranslate(splitter_result[index]) )
         {
-            dsiplay_text .= SplitterResultGetPinyin(splitter_result, index)
-            dsiplay_text .= SplitterResultGetTone(splitter_result, index)
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result[index])
+            dsiplay_text .= SplitterResultGetTone(splitter_result[index])
         }
         else
         {
             dsiplay_text .= "<"
-            dsiplay_text .= SplitterResultGetPinyin(splitter_result, index)
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result[index])
             dsiplay_text .= ">"
         }
 
-        radical := SplitterResultGetRadical(splitter_result, index)
+        radical := SplitterResultGetRadical(splitter_result[index])
         if( radical ) {
             dsiplay_text .= "{" radical "}"
         }
 
-        length := SplitterResultGetWordLength(splitter_result, index)
+        length := SplitterResultGetHopeLength(splitter_result[index])
         dsiplay_text .= "=" length ""
 
         ; dsiplay_text .= " ("
-        ; dsiplay_text .= SplitterResultGetStartPos(splitter_result, index)
+        ; dsiplay_text .= SplitterResultGetStartPos(splitter_result[index])
         ; dsiplay_text .= ","
-        ; dsiplay_text .= SplitterResultGetEndPos(splitter_result, index)
+        ; dsiplay_text .= SplitterResultGetEndPos(splitter_result[index])
         ; dsiplay_text .= ")"
 
         dsiplay_text .= ","

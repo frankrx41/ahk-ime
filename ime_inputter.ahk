@@ -333,7 +333,7 @@ ImeInputterGetLastWordPos()
     if( ime_inputter_splitter_result.Length() <= 1 ){
         return 0
     }
-    return SplitterResultGetEndPos(ime_inputter_splitter_result, ime_inputter_splitter_result.Length()-1)
+    return SplitterResultGetEndPos(ime_inputter_splitter_result[ime_inputter_splitter_result.Length()-1])
 }
 
 ImeInputterGetLeftWordPos(start_index)

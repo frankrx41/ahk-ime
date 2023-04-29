@@ -5,8 +5,8 @@ PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
     local
     profile_text := ImeProfilerBegin(21)
 
-    hope_word_length := SplitterResultGetWordLength(splitter_result, 1)
-    next_length := SplitterResultGetWordLength(splitter_result, hope_word_length+1)
+    hope_word_length := SplitterResultGetHopeLength(splitter_result[1])
+    next_length := SplitterResultGetHopeLength(splitter_result[hope_word_length+1])
     next_length := next_length ? next_length : 0
     max_len := hope_word_length + next_length
     profile_text .= "`n  - (" next_length "," max_len "," hope_word_length "): "

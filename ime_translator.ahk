@@ -25,13 +25,13 @@ ImeTranslatorUpdateResult(splitter_result, auto_complete)
         debug_text := "["
         loop % splitter_result.Length()
         {
-            radical_list.Push(SplitterResultGetRadical(splitter_result, A_Index))
+            radical_list.Push(SplitterResultGetRadical(splitter_result[A_Index]))
             test_splitter_result := SplitterResultGetUntilSkip(splitter_result, A_Index)
             debug_text .= """" SplitterResultGetDisplayText(test_splitter_result) ""","
-            if( SplitterResultIsSkip(splitter_result, A_Index) )
+            if( !SplitterResultNeedTranslate(splitter_result[A_Index]) )
             {
                 ; Add legacy text
-                test_string := SplitterResultGetPinyin(test_splitter_result, 1)
+                test_string := SplitterResultGetPinyin(test_splitter_result[1])
                 translate_result := [[test_string, test_string, 0, "", 1]]
                 if( RegexMatch(test_string, "^\s+$") ) {
                     translate_result[1,2] := ""
