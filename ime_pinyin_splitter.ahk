@@ -232,9 +232,9 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 PinyinSplitterInputString(input_string, ByRef auto_complete)
 {
     ; last char * marks simple spell
-    auto_complete := (SubStr(input_string, -1, 2) == "**")
+    auto_complete := (SubStr(input_string, -1, 2) == "**") || (SubStr(input_string, 0, 1) == "+")
     simple_spell := (SubStr(input_string, 0, 1) == "*")
-    input_string := RTrim(input_string, "*")
+    input_string := RTrim(input_string, "*+")
 
     if( simple_spell )
     {

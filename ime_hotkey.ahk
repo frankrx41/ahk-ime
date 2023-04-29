@@ -14,6 +14,12 @@
         ImeTooltipUpdate()
     return
 
+    NumpadAdd::
+    +::
+        ImeInputterProcessChar("+")
+        ImeTooltipUpdate()
+    return
+
     !::
         ImeInputterProcessChar("!")
         ImeTooltipUpdate()
