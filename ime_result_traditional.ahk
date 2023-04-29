@@ -37,6 +37,8 @@ PinyinResultCovertTraditional(ByRef translate_result)
         simplified_word := TranslatorResultGetWord(translate_result, A_Index)
         if( ime_traditional_table[simplified_word] )
         {
+            pinyin := TranslatorResultGetPinyin(translate_result, A_Index)
+            word_length := TranslatorResultGetWordLength(translate_result, A_Index)
             PinyinResultTraditionalUpdate(translate_result, A_Index, ime_traditional_table[simplified_word, 1])
 
             if( ime_traditional_table[simplified_word].Length() > 1 )
