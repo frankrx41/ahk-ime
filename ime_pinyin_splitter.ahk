@@ -234,19 +234,19 @@ PinyinSplitterInputString(input_string)
 
     if( auto_complete )
     {
-        splitter_result := PinyinSplitterInputStringSimple(input_string)
+        splitter_list := PinyinSplitterInputStringSimple(input_string)
     }
     else
     {
-        splitter_result := PinyinSplitterInputStringNormal(input_string)
+        splitter_list := PinyinSplitterInputStringNormal(input_string)
     }
 
-    if( !auto_complete && StrLen(input_string) <= 3 && splitter_result.Length() < StrLen(input_string) )
+    if( !auto_complete && StrLen(input_string) <= 3 && splitter_list.Length() < StrLen(input_string) )
     {
         try_simple_spliter := true
-        loop, % splitter_result.Length()
+        loop, % splitter_list.Length()
         {
-            if( SplitterResultIsCompleted(splitter_result[A_Index]) )
+            if( SplitterResultIsCompleted(splitter_list[A_Index]) )
             {
                 try_simple_spliter := false
                 break
@@ -254,11 +254,11 @@ PinyinSplitterInputString(input_string)
         }
         if( try_simple_spliter )
         {
-            splitter_result := PinyinSplitterInputStringSimple(input_string)
+            splitter_list := PinyinSplitterInputStringSimple(input_string)
         }
     }
 
-    return [splitter_result, auto_complete]
+    return [splitter_list, auto_complete]
 }
 
 PinyinSplitterInputStringSimple(input_string)
@@ -269,8 +269,8 @@ PinyinSplitterInputStringSimple(input_string)
 
     string_index        := 1
     strlen              := StrLen(input_string)
-    splitter_result     := []
-    splitter_index_list := []
+    splitter_list       := []
+    hope_length_list    := [0]
     loop
     {
         if( string_index > strlen ) {
@@ -288,22 +288,39 @@ PinyinSplitterInputStringSimple(input_string)
             string_index += StrLen(radical)
 
             make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
-            splitter_result.Push(make_result)
+            splitter_list.Push(make_result)
 
-            splitter_index_list.Push(splitter_result.Length())
+            hope_length_list[hope_length_list.Length()] += 1
         }
     }
 
-    splitter_index_list_len := splitter_index_list.Length()
-    if( splitter_index_list_len ) {
-        for index, value in splitter_index_list {
-            length := splitter_index_list_len - index + 1
-            SplitterResultSetHopeLength(splitter_result[value], length)
+    splitter_return_list := []
+    loop, % splitter_list.Length()
+    {
+        splitter_result := splitter_list[A_Index]
+        pinyin          := SplitterResultGetPinyin(splitter_result)
+        tone            := SplitterResultGetTone(splitter_result)
+        radical         := SplitterResultGetRadical(splitter_result)
+        start_pos       := SplitterResultGetStartPos(splitter_result)
+        end_pos         := SplitterResultGetEndPos(splitter_result)
+        need_translate  := SplitterResultNeedTranslate(splitter_result)
+
+        if( need_translate ){
+            if( hope_length_list[1] == 0 ){
+                hope_length_list.RemoveAt(1)
+            }
+            hope_length := hope_length_list[1]
+            hope_length_list[1] -= 1
+        } else {
+            hope_length := 1
         }
+
+        make_result := SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate, hope_length)
+        splitter_return_list.Push(make_result)
     }
 
-    ImeProfilerEnd(11, "SIM: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
-    return splitter_result
+    ImeProfilerEnd(11, "SIM: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    return splitter_return_list
 }
 
 PinyinSplitterInputStringNormal(input_string)
@@ -316,10 +333,9 @@ PinyinSplitterInputStringNormal(input_string)
     string_index        := 1
     start_string_index  := 1
     strlen              := StrLen(input_string)
-    splitter_result     := []
+    splitter_list       := []
     escape_string       := ""
-
-    splitter_index_list := []
+    hope_length_list    := [0]
 
     loop
     {
@@ -332,9 +348,8 @@ PinyinSplitterInputStringNormal(input_string)
         if( IsInitials(initials) )
         {
             if( escape_string ) {
-                make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, true)
-                splitter_result.Push(make_result)
-
+                make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
+                splitter_list.Push(make_result)
                 escape_string := ""
             }
             start_string_index := string_index
@@ -359,21 +374,13 @@ PinyinSplitterInputStringNormal(input_string)
             string_index += StrLen(radical)
 
             make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
-            splitter_result.Push(make_result)
+            splitter_list.Push(make_result)
 
             prev_splitted_input := initials . vowels . tone
 
+            hope_length_list[hope_length_list.Length()] += 1
             if( tone_string == " " ){
-                splitter_index_list_len := splitter_index_list.Length()
-                if( splitter_index_list_len ) {
-                    for index, value in splitter_index_list {
-                        length := splitter_index_list_len - index + 2
-                        SplitterResultSetHopeLength(splitter_result[value], length)
-                    }
-                }
-                splitter_index_list := []
-            } else {
-                splitter_index_list.Push(splitter_result.Length())
+                hope_length_list.Push(0)
             }
         }
         ; 忽略
@@ -386,21 +393,39 @@ PinyinSplitterInputStringNormal(input_string)
     }
 
     if( escape_string ) {
-        make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, true)
-        splitter_result.Push(make_result)
+        make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
+        splitter_list.Push(make_result)
         escape_string := ""
     }
 
-    splitter_index_list_len := splitter_index_list.Length()
-    if( splitter_index_list_len ) {
-        for index, value in splitter_index_list {
-            length := splitter_index_list_len - index + 1
-            SplitterResultSetHopeLength(splitter_result[value], length)
+    splitter_return_list := []
+    loop, % splitter_list.Length()
+    {
+        splitter_result := splitter_list[A_Index]
+        pinyin          := SplitterResultGetPinyin(splitter_result)
+        tone            := SplitterResultGetTone(splitter_result)
+        radical         := SplitterResultGetRadical(splitter_result)
+        start_pos       := SplitterResultGetStartPos(splitter_result)
+        end_pos         := SplitterResultGetEndPos(splitter_result)
+        need_translate  := SplitterResultNeedTranslate(splitter_result)
+
+        if( need_translate ){
+            if( hope_length_list[1] == 0 ){
+                hope_length_list.RemoveAt(1)
+            }
+            hope_length := hope_length_list[1]
+            hope_length_list[1] -= 1
+        } else {
+            hope_length := 1
         }
+
+        make_result := SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate, hope_length)
+        splitter_return_list.Push(make_result)
     }
 
-    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
-    return splitter_result
+
+    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    return splitter_return_list
 }
 
 ;*******************************************************************************

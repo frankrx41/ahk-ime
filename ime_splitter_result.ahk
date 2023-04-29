@@ -10,15 +10,10 @@
 ;       [7]: 1          ; 期待单词长度
 ;       [8]: false      ; 不是完整的单词 (拼音末尾是 %)
 ;
-SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, skip:=false)
+SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate:=true, hope_len:=1)
 {
     is_completed := SubStr(pinyin, 0, 1) != "%"
-    return [pinyin, tone, radical, start_pos, end_pos, !skip, 1, is_completed]
-}
-
-SplitterResultSetHopeLength(ByRef splitter_result, length)
-{
-    splitter_result[7] := length
+    return [pinyin, tone, radical, start_pos, end_pos, need_translate, hope_len, is_completed]
 }
 
 ;*******************************************************************************
