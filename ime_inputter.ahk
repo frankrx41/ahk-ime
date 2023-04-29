@@ -125,9 +125,7 @@ ImeInputterUpdateString(input_char)
     if( ime_input_string )
     {
         ; Splitter
-        splitted_return := PinyinSplitterInputString(ime_input_string)
-        ime_inputter_splitter_result := splitted_return[1]
-        auto_complete := splitted_return[2]
+        ime_splitted_list := PinyinSplitterInputString(ime_input_string, auto_complete)
         ; Translator
         ImeInputterCallTranslator(auto_complete)
     }

@@ -229,13 +229,14 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(input_string)
+PinyinSplitterInputString(input_string, ByRef auto_complete)
 {
     ; last char * marks simple spell
-    auto_complete := (SubStr(input_string, 0, 1) == "*")
+    auto_complete := (SubStr(input_string, -1, 2) == "**")
+    simple_spell := (SubStr(input_string, 0, 1) == "*")
     input_string := RTrim(input_string, "*")
 
-    if( auto_complete )
+    if( simple_spell )
     {
         splitter_list := PinyinSplitterInputStringSimple(input_string)
     }
@@ -244,7 +245,7 @@ PinyinSplitterInputString(input_string)
         splitter_list := PinyinSplitterInputStringNormal(input_string)
     }
 
-    if( !auto_complete && StrLen(input_string) <= 4 && splitter_list.Length() < StrLen(input_string) )
+    if( !simple_spell && StrLen(input_string) <= 4 )
     {
         try_simple_spliter := true
         loop, % splitter_list.Length()
@@ -261,7 +262,7 @@ PinyinSplitterInputString(input_string)
         }
     }
 
-    return [splitter_list, auto_complete]
+    return splitter_list
 }
 
 PinyinSplitterInputStringSimple(input_string)
@@ -440,9 +441,7 @@ PinyinSplitterInputStringTest()
     loop, % test_case.Length()
     {
         input_case := test_case[A_Index]
-        splitted_return := PinyinSplitterInputString(input_case)
-        test_result := splitted_return[1]
-        auto_complete := splitted_return[2]
+        test_result := PinyinSplitterInputString(input_case, auto_complete)
         msg_string .= "`n""" input_case """ -> [" SplitterResultGetDisplayText(test_result) "] (" auto_complete ")"
     }
     MsgBox, % msg_string
@@ -456,9 +455,7 @@ PinyinSplitterInputStringUnitTest()
     loop, % test_case.Length()
     {
         input_case := test_case[A_Index]
-        splitted_return := PinyinSplitterInputString(input_case)
-        test_result := splitted_return[1]
-        auto_complete := splitted_return[2]
+        test_result := PinyinSplitterInputString(input_case, auto_complete)
         result_str := ""
         loop, % test_result.Length()
         {
