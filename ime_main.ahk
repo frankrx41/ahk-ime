@@ -20,6 +20,7 @@ global ime_version  := 0.10
 ;*******************************************************************************
 ; Initialize
 ImeProfilerInitialize()
+ImeProfilerBegin(1)
 ImeInputterInitialize()
 ImeOutputterInitialize()
 
@@ -47,6 +48,8 @@ ImeDBInitialize()
 
 ; We should register hotkey after other modules are initialized
 ImeHotkeyRegisterInitialize()
+ImeProfilerEnd(1)
+; Tooltip, % ImeProfilerGetTotalTick(1)
 return
 
 ;*******************************************************************************
