@@ -228,6 +228,85 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; See: `PinyinSplitterInputStringTest`
 PinyinSplitterInputString(input_string)
 {
+    ; last char * marks simple spell
+    auto_complete := (SubStr(input_string, 0, 1) == "*")
+    input_string := RTrim(input_string, "*")
+
+    if( auto_complete )
+    {
+        splitter_result := PinyinSplitterInputStringSimple(input_string)
+    }
+    else
+    {
+        splitter_result := PinyinSplitterInputStringNormal(input_string)
+    }
+
+    if( !auto_complete && StrLen(input_string) <= 3 && splitter_result.Length() < StrLen(input_string) )
+    {
+        try_simple_spliter := true
+        loop, % splitter_result.Length()
+        {
+            if( SplitterResultIsCompleted(splitter_result, A_Index) )
+            {
+                try_simple_spliter := false
+                break
+            }
+        }
+        if( try_simple_spliter )
+        {
+            splitter_result := PinyinSplitterInputStringSimple(input_string)
+        }
+    }
+
+    return [splitter_result, auto_complete]
+}
+
+PinyinSplitterInputStringSimple(input_string)
+{
+    local
+    Critical
+    ImeProfilerBegin(11)
+
+    string_index        := 1
+    strlen              := StrLen(input_string)
+    splitter_result     := []
+    splitter_index_list := []
+    loop
+    {
+        if( string_index > strlen ) {
+            break
+        }
+
+        initials := SubStr(input_string, string_index, 1)
+        string_index += 1
+        if( IsInitials(initials) )
+        {
+            start_string_index := string_index
+            vowels      := "%"
+            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
+            radical := GetRadical(SubStr(input_string, string_index))
+            string_index += StrLen(radical)
+
+            SplitterResultPush(splitter_result, initials . vowels, tone, radical, start_string_index, string_index-1)
+
+            splitter_index_list.Push(splitter_result.Length())
+        }
+    }
+
+    splitter_index_list_len := splitter_index_list.Length()
+    if( splitter_index_list_len ) {
+        for index, value in splitter_index_list {
+            length := splitter_index_list_len - index + 1
+            SplitterResultSetWordLength(splitter_result, value, length)
+        }
+    }
+
+    ImeProfilerEnd(11, "SIM: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
+    return splitter_result
+}
+
+PinyinSplitterInputStringNormal(input_string)
+{
     local
     Critical
     ImeProfilerBegin(11)
@@ -235,15 +314,11 @@ PinyinSplitterInputString(input_string)
     prev_splitted_input := ""
     string_index        := 1
     start_string_index  := 1
-    strlen          := StrLen(input_string)
-    splitter_result := []
-    escape_string   := ""
+    strlen              := StrLen(input_string)
+    splitter_result     := []
+    escape_string       := ""
 
     splitter_index_list := []
-
-    ; last char * marks simple spell
-    auto_complete := (SubStr(input_string, 0, 1) == "*")
-    input_string := RTrim(input_string, "*")
 
     loop
     {
@@ -318,8 +393,8 @@ PinyinSplitterInputString(input_string)
         }
     }
 
-    ImeProfilerEnd(11, """" input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
-    return [splitter_result, auto_complete]
+    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_result) "] " "(" splitter_result.Length() ")")
+    return splitter_result
 }
 
 ;*******************************************************************************

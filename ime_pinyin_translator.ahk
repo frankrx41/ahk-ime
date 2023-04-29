@@ -41,7 +41,7 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     PinyinTranslatorInsertCombineWord(translate_result, splitter_result)
 
     ; Insert simple spell, need end with "*"
-    PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result, auto_complete)
+    ; PinyinTranslatorInsertSimpleSpell(translate_result, splitter_result, auto_complete)
 
     if( ImeModeGetLanguage() == "tw" )
     {

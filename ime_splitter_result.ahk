@@ -6,12 +6,14 @@
 ;       [3]: "S"        ; 辅助码
 ;       [4]: 1          ; 原始字符串中开始的位置
 ;       [5]: 3          ; 原始字符串中结束的位置
-;       [6]: true       ; 可以进行翻译
+;       [6]: false      ; 应该跳过翻译该词条
 ;       [7]: 1          ; 期待单词长度
+;       [8]: false      ; 不是完整的单词 (拼音末尾是 %)
 ;
 SplitterResultPush(ByRef splitter_result, pinyin, tone, radical, start_pos, end_pos, skip:=false)
 {
-    splitter_result.Push([pinyin, tone, radical, start_pos, end_pos, skip, 1])
+    is_completed := SubStr(pinyin, 0, 1) != "%"
+    splitter_result.Push([pinyin, tone, radical, start_pos, end_pos, skip, 1, is_completed])
 }
 
 SplitterResultSetWordLength(ByRef splitter_result, index, length)
@@ -56,6 +58,11 @@ SplitterResultGetWordLength(ByRef splitter_result, index)
     return splitter_result[index, 7]
 }
 
+SplitterResultIsCompleted(ByRef splitter_result, index)
+{
+    return splitter_result[index, 8]
+}
+
 ;*******************************************************************************
 ;
 ; Action about splitted indexs
@@ -74,7 +81,7 @@ SplittedIndexsGetPosIndex(splitter_result, caret_pos)
                 return A_Index
             }
         }
-        Assert(false, SplitterResultGetDisplayText(splitter_result) "," caret_pos)
+        ; Assert(false, SplitterResultGetDisplayText(splitter_result) "," caret_pos)
     }
     return 1
 }
