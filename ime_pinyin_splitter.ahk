@@ -216,14 +216,17 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; Output always has a tone in last char
 ;
 ; e.g.
-; "wo3ai4ni3" -> [wo3, ai4, ni3]
-; "woaini" -> [wo0, ai0, ni0]
-; "wo'ai'ni" -> [wo0, ai0, ni0]
-; "wo aini" -> [wo0, ai0, ni0]
-; "swalb1" -> [s%0, wa0, l%0, b%1]
-; "zhrmghg" -> [zh%0, r%0, m%0, g%0, h%0, g%0]
-; "taNde1B" -> [ta0{N}, de1{B}]
-; "z?eyangz?i3" -> [z?e0, yang0, z?i3]
+; "wo3ai4ni3" -> [wo3=3,ai4=2,ni3=1] (0)
+; "woaini" -> [wo0=3,ai0=2,ni0=1] (0)
+; "wo'ai'ni" -> [wo0=3,ai0=2,ni0=1] (0)
+; "wo aini" -> [wo0=1,ai0=2,ni0=1] (0)
+; "swalb1" -> [s%0=4,wa0=3,l%0=2,b%1=1] (0)
+; "zhrmghg" -> [zh%0=6,r%0=5,m%0=4,g%0=3,h%0=2,g%0=1] (0)
+; "taNde1B" -> [ta0{N}=2,de1{B}=1] (0)
+; "z?eyangz?i3" -> [z?e0=3,yang0=2,z?i3=1] (0)
+; "tzh" -> [t%0=3,z%0=2,h%0=1] (0)
+; "zhe" -> [zhe0=1] (0)
+; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
 PinyinSplitterInputString(input_string)
@@ -241,7 +244,7 @@ PinyinSplitterInputString(input_string)
         splitter_list := PinyinSplitterInputStringNormal(input_string)
     }
 
-    if( !auto_complete && StrLen(input_string) <= 3 && splitter_list.Length() < StrLen(input_string) )
+    if( !auto_complete && StrLen(input_string) <= 4 && splitter_list.Length() < StrLen(input_string) )
     {
         try_simple_spliter := true
         loop, % splitter_list.Length()
@@ -432,7 +435,7 @@ PinyinSplitterInputStringNormal(input_string)
 ; Unit Test
 PinyinSplitterInputStringTest()
 {
-    test_case := ["wo3ai4ni3", "woaini", "wo'ai'ni", "wo aini", "swalb1", "zhrmghg", "taNde1B", "z?eyangz?i3"]
+    test_case := ["wo3ai4ni3", "woaini", "wo'ai'ni", "wo aini", "swalb1", "zhrmghg", "taNde1B", "z?eyangz?i3", "tzh", "zhe", "haoN"]
     msg_string := ""
     loop, % test_case.Length()
     {
