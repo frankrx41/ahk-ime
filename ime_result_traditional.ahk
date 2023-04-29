@@ -34,20 +34,20 @@ PinyinResultCovertTraditional(ByRef translate_result)
 
     loop, % translate_result.Length()
     {
-        result_word := TranslatorResultGetWord(translate_result, A_Index)
-        if( ime_traditional_table[result_word] )
+        simplified_word := TranslatorResultGetWord(translate_result, A_Index)
+        if( ime_traditional_table[simplified_word] )
         {
             PinyinResultTraditionalUpdate(translate_result, A_Index, ime_traditional_table[simplified_word, 1])
 
-            if( ime_traditional_table[result_word].Length() > 1 )
+            if( ime_traditional_table[simplified_word].Length() > 1 )
             {
-                additional_result_info.Push([A_Index, result_word, pinyin, word_length])
+                additional_result_info.Push([A_Index, simplified_word, pinyin, word_length])
             }
         }
-        else if( StrLen(result_word) > 1 )
+        else if( StrLen(simplified_word) > 1 )
         {
             traditional_result_word := ""
-            loop, Parse, result_word
+            loop, Parse, simplified_word
             {
                 traditional_word := ime_traditional_table[A_LoopField, 1]
                 if( traditional_word ) {
@@ -68,12 +68,12 @@ PinyinResultCovertTraditional(ByRef translate_result)
     loop, % additional_result_info.Length()
     {
         index := additional_result_info[A_Index, 1] + offset_index
-        result_word := additional_result_info[A_Index, 2]
+        simplified_word := additional_result_info[A_Index, 2]
         pinyin := additional_result_info[A_Index, 3]
         length := additional_result_info[A_Index, 4]
-        loop, % ime_traditional_table[result_word].Length() - 1
+        loop, % ime_traditional_table[simplified_word].Length() - 1
         {
-            traditional_word := ime_traditional_table[result_word, A_Index+1]
+            traditional_word := ime_traditional_table[simplified_word, A_Index+1]
             index += 1
             offset_index += 1
             single_result := TranslatorSingleResultMake(pinyin, traditional_word, 0, "+", length)
