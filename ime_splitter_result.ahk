@@ -61,6 +61,7 @@ SplittedIndexsGetPosIndex(splitter_result, caret_pos)
                 return A_Index
             }
         }
+        ; TODO: fix this
         ; Assert(false, SplitterResultGetDisplayText(splitter_result) "," caret_pos)
     }
     return 1
