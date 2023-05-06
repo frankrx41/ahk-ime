@@ -206,6 +206,12 @@ ImeInputterCaretIsAtEnd()
     return ime_input_caret_pos == StrLen(ime_input_string)
 }
 
+ImeInputterCaretIsAtBegin()
+{
+    global ime_input_caret_pos
+    return ime_input_caret_pos == 0
+}
+
 ;*******************************************************************************
 ; Move caret
 ; -1 <- | -> +1
