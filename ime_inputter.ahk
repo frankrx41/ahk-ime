@@ -228,6 +228,50 @@ ImeInputterCaretMove(dir)
     }
 }
 
+
+; move to initials
+ImeInputterCaretMoveSmartRight()
+{
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_splitted_list
+
+    input_string_len := StrLen(ime_input_string)
+
+    loop_count := 1
+    current_pos := ime_input_caret_pos
+    loop, % loop_count
+    {
+        last_pos := current_pos
+        ; loop
+        if( current_pos == input_string_len )
+        {
+            current_pos := 0
+        }
+
+        ; update word index
+        if( last_pos == current_pos )
+        {
+            current_start_pos := SplittedIndexsGetCurrentWordPos(ime_splitted_list, current_pos)
+            if( current_start_pos == current_pos && InStr("zcs", SubStr(ime_input_string, current_start_pos+1, 1)) )
+            {
+                if( SubStr(ime_input_string, current_start_pos+2, 1) == "h" )
+                {
+                    current_pos += 2
+                } else {
+                    current_pos += 1
+                }
+            }
+            else
+            {
+                right_pos := SplittedIndexsGetRightWordPos(ime_splitted_list, current_pos)
+                current_pos := right_pos
+            }
+        }
+    }
+    ime_input_caret_pos := current_pos
+}
+
 ; graceful: take a white space move as a step
 ImeInputterCaretMoveByWord(dir, graceful:=true)
 {

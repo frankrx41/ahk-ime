@@ -154,7 +154,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(+1, true)
+            ImeInputterCaretMoveSmartRight()
         }
         ImeTooltipUpdate()
     return
