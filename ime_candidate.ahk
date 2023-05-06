@@ -1,26 +1,26 @@
 ImeTranslatorInitialize()
 {
-    global ime_translator_result_list_origin
-    global ime_translator_result_list_filtered
+    global ime_candidate_result_list_origin
+    global ime_candidata_result_list_filtered
     ImeTranslatorClear()
 }
 
 ImeTranslatorClear()
 {
-    global ime_translator_result_list_origin    := []
-    global ime_translator_result_list_filtered  := []
+    global ime_candidate_result_list_origin     := []
+    global ime_candidata_result_list_filtered   := []
 }
 
 ImeTranslatorUpdateResult(splitter_result, auto_complete)
 {
     local
-    global ime_translator_result_list_origin
-    global ime_translator_result_list_filtered
+    global ime_candidate_result_list_origin
+    global ime_candidata_result_list_filtered
 
     if( splitter_result.Length() )
     {
         debug_text := ImeProfilerBegin(30)
-        ime_translator_result_list_origin := []
+        ime_candidate_result_list_origin := []
         radical_list := []
         debug_text := "["
         loop % splitter_result.Length()
@@ -50,11 +50,11 @@ ImeTranslatorUpdateResult(splitter_result, auto_complete)
                 }
             }
             ; Insert result
-            ime_translator_result_list_origin.Push(translate_result_list)
+            ime_candidate_result_list_origin.Push(translate_result_list)
         }
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
-        ime_translator_result_list_filtered := TranslatorResultListFilterResults(ime_translator_result_list_origin, radical_list)
+        ime_candidata_result_list_filtered := CandidateResultListFilterResults(ime_candidate_result_list_origin, radical_list)
     } else {
         ImeTranslatorClear()
     }
@@ -62,54 +62,54 @@ ImeTranslatorUpdateResult(splitter_result, auto_complete)
 
 ImeTranslatorResultFindIndex(split_index, start_words, max_length)
 {
-    global ime_translator_result_list_filtered
-    return TranslatorResultListFindIndex(ime_translator_result_list_filtered, split_index, start_words, max_length)
+    global ime_candidata_result_list_filtered
+    return CandidateResultListFindIndex(ime_candidata_result_list_filtered, split_index, start_words, max_length)
 }
 
 ;*******************************************************************************
 ;
 ImeTranslatorResultListGetLength()
 {
-    global ime_translator_result_list_filtered
-    return ime_translator_result_list_filtered.Length()
+    global ime_candidata_result_list_filtered
+    return ime_candidata_result_list_filtered.Length()
 }
 
 ;*******************************************************************************
 ;
 ImeTranslatorResultListGetListLength(split_index)
 {
-    global ime_translator_result_list_filtered
-    return ime_translator_result_list_filtered[split_index].Length()
+    global ime_candidata_result_list_filtered
+    return ime_candidata_result_list_filtered[split_index].Length()
 }
 
 ImeTranslatorResultListGetPinyin(split_index, word_index)
 {
-    global ime_translator_result_list_filtered
-    return TranslatorResultGetPinyin(ime_translator_result_list_filtered[split_index, word_index])
+    global ime_candidata_result_list_filtered
+    return TranslatorResultGetPinyin(ime_candidata_result_list_filtered[split_index, word_index])
 }
 
 ImeTranslatorResultListGetWord(split_index, word_index)
 {
-    global ime_translator_result_list_filtered
-    return TranslatorResultGetWord(ime_translator_result_list_filtered[split_index, word_index])
+    global ime_candidata_result_list_filtered
+    return TranslatorResultGetWord(ime_candidata_result_list_filtered[split_index, word_index])
 }
 
 ImeTranslatorResultListGetWeight(split_index, word_index)
 {
-    global ime_translator_result_list_filtered
-    return TranslatorResultGetWeight(ime_translator_result_list_filtered[split_index, word_index])
+    global ime_candidata_result_list_filtered
+    return TranslatorResultGetWeight(ime_candidata_result_list_filtered[split_index, word_index])
 }
 
 ImeTranslatorResultListGetComment(split_index, word_index)
 {
-    global ime_translator_result_list_filtered
-    return TranslatorResultGetComment(ime_translator_result_list_filtered[split_index, word_index])
+    global ime_candidata_result_list_filtered
+    return TranslatorResultGetComment(ime_candidata_result_list_filtered[split_index, word_index])
 }
 
 ImeTranslatorResultListGetWordLength(split_index, word_index)
 {
-    global ime_translator_result_list_filtered
-    return TranslatorResultGetWordLength(ime_translator_result_list_filtered[split_index, word_index])
+    global ime_candidata_result_list_filtered
+    return TranslatorResultGetWordLength(ime_candidata_result_list_filtered[split_index, word_index])
 }
 
 ;*******************************************************************************

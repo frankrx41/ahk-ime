@@ -20,8 +20,11 @@
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_splitter.ahk
 
+; Candidate
+#Include, ime_candidate.ahk
+#Include, ime_candidate_result.ahk
+
 ; Translator
-#Include, ime_translator.ahk
 #Include, ime_translator_history.ahk
 #Include, ime_translator_result.ahk
 
