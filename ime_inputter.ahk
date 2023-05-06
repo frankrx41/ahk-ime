@@ -373,6 +373,20 @@ ImeInputterCaretMoveToHome(move_home)
     }
 }
 
+ImeInputterCaretMoveToIndex(index)
+{
+    global ime_splitted_list
+    global ime_input_caret_pos
+    if( ime_splitted_list.Length() >= index )
+    {
+        ime_input_caret_pos := SplitterResultGetStartPos(ime_splitted_list[index])
+    }
+    else
+    {
+        ime_input_caret_pos := SplitterResultGetEndPos(ime_splitted_list[index-1])
+    }
+}
+
 ;*******************************************************************************
 ; Static
 ImeInputterGetLastWordPos()
