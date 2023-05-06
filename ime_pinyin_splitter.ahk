@@ -188,12 +188,12 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 {
     local
     index += 1
-    if( InStr("csz", initials) && (SubStr(input_str, index, 1)=="h") ){
+    if( InStr("zcs", initials) && (SubStr(input_str, index, 1)=="h") ){
         ; zcs + h
         index += 1
         initials .= "h"
     }
-    if( InStr("csz", initials) && (SubStr(input_str, index, 1)=="?") ){
+    if( InStr("zcs", initials) && (SubStr(input_str, index, 1)=="?") ){
         index += 1
         initials .= "?"
     }
