@@ -72,6 +72,12 @@ ImeProfilerEnd(index, profile_text:="")
 ;     ime_profiler[index, 4] := 0
 ; }
 
+ImeProfilerTemp(profile_text)
+{
+    ImeProfilerBegin(1)
+    ImeProfilerEnd(1, profile_text)
+}
+
 ;*******************************************************************************
 ; Use for print
 ImeProfilerGetTotalTick(index)
