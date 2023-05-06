@@ -42,6 +42,15 @@ HotkeyOnSymbol(char)
     ImeTooltipUpdate()
 }
 
+HotkeyOnShiftAlphabet(char)
+{
+    if( ImeInputterCaretIsAtBegin() ) {
+        ImeInputterCaretMoveToIndex(2)
+    }
+    ImeInputterProcessChar(char)
+    ImeTooltipUpdate()
+}
+
 ;*******************************************************************************
 ; Function key
 HotkeyOnCtrlAlphabet(char, shift_down)
