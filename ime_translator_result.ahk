@@ -38,6 +38,11 @@ TranslatorSingleResultMake(pinyin, word, weight, comment, word_length)
     return [pinyin, word, weight, comment, word_length]
 }
 
+TranslatorSingleResultMakeError()
+{
+    return TranslatorSingleResultMake("", "", 0, "Error", 1)
+}
+
 ;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]
 ; find ["我"]

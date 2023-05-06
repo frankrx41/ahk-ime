@@ -260,5 +260,10 @@ TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
         }
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+
+        if( translate_result.Length() == 0 )
+        {
+            translate_result.Push(TranslatorSingleResultMakeError())
+        }
     }
 }
