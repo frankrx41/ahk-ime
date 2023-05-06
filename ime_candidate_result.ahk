@@ -6,17 +6,17 @@
 ;   - max_length == 2 return 2
 ; find ["你"]
 ;   return 0
-CandidateResultListFindIndex(ByRef translate_result_list, split_index, find_words, max_length)
+CandidateResultListFindIndex(ByRef candidate_result_list, split_index, find_words, max_length)
 {
     local
     find_word_len := StrLen(find_words)
     debug_text := ImeProfilerBegin(32)
-    debug_text .= split_index "," translate_result_list[split_index].Length()
+    debug_text .= split_index "," candidate_result_list[split_index].Length()
     select_index := 0
-    loop, % translate_result_list[split_index].Length()
+    loop, % candidate_result_list[split_index].Length()
     {
         select_index := A_Index
-        test_result := TranslatorResultGetWord(translate_result_list[split_index, select_index])
+        test_result := TranslatorResultGetWord(candidate_result_list[split_index, select_index])
         if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
             debug_text .= "`n  - [" select_index "] -> """ find_words """ == """ test_result """"
             break
