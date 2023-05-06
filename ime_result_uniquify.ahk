@@ -1,4 +1,4 @@
-TranslatorResultUniquify(ByRef translate_result)
+TranslatorResultUniquify(ByRef translate_result_list)
 {
     local
     ImeProfilerBegin(39)
@@ -6,12 +6,12 @@ TranslatorResultUniquify(ByRef translate_result)
 
     begin_tick := A_TickCount
     index := 1
-    loop % translate_result.Length()
+    loop % translate_result_list.Length()
     {
-        word_value := translate_result[index, 2]
+        word_value := translate_result_list[index, 2]
         if( store_result.HasKey(word_value) )
         {
-            translate_result.RemoveAt(index)
+            translate_result_list.RemoveAt(index)
         }
         else
         {

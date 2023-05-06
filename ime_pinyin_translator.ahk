@@ -1,6 +1,6 @@
 ;*******************************************************************************
 ;
-PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
+PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result)
 {
     local
     profile_text := ImeProfilerBegin(21)
@@ -17,9 +17,9 @@ PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
         splitted_string := SplitterResultListConvertToString(splitter_result, 1, length_count)
         profile_text .= "[" splitted_string "] "
         TranslatorHistoryUpdateKey(splitted_string, length_count)
-        TranslatorHistoryPushResult(translate_result, splitted_string, 200)
+        TranslatorHistoryPushResult(translate_result_list, splitted_string, 200)
         if( length_count == hope_word_length ) {
-            TranslatorHistoryInsertResultAt(translate_result, splitted_string, 1, 3)
+            TranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 1, 3)
         }
     }
     ImeProfilerEnd(21, profile_text)
@@ -32,30 +32,30 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     local
     profile_text := ImeProfilerBegin(20)
 
-    translate_result           := []
+    translate_result_list := []
 
     ; Insert db result
-    PinyinTranslatorInsertResult(translate_result, splitter_result)
+    PinyinTranslatorInsertResult(translate_result_list, splitter_result)
 
 
     if( auto_complete )
     {
         ; Insert simple spell, need end with "**"
-        PinyinTranslatorInsertAutpComplete(translate_result, splitter_result)
+        PinyinTranslatorInsertAutpComplete(translate_result_list, splitter_result)
     }
     else
     {
         ; Insert auto combine word
-        PinyinTranslatorInsertCombineWord(translate_result, splitter_result)
+        PinyinTranslatorInsertCombineWord(translate_result_list, splitter_result)
     }
 
     if( ImeModeGetLanguage() == "tw" )
     {
-        PinyinResultCovertTraditional(translate_result)
+        PinyinResultCovertTraditional(translate_result_list)
     }
 
     ; Sort
-    ; TranslatorResultSortByWeight(translate_result)
+    ; TranslatorResultListSortByWeight(translate_result_list)
 
     ; [
     ;     ; 1   , 2   , 3      , 4 , 5  
@@ -64,6 +64,6 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultListGetDisplayText(splitter_result) "] -> ("  translate_result.Length() ")" )
-    return translate_result
+    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultListGetDisplayText(splitter_result) "] -> ("  translate_result_list.Length() ")" )
+    return translate_result_list
 }

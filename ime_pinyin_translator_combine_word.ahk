@@ -39,7 +39,7 @@ IsSoundLike(speech, sounds_to)
 }
 
 ; A-XY-B
-PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result, splitter_result, match_pinyin, match_word_length, xy_start_index, word_xy_length)
+PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_result, match_pinyin, match_word_length, xy_start_index, word_xy_length)
 {
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
     try_match_pinyin := SplitterResultListConvertToString(splitter_result, xy_start_index, match_word_length)
@@ -59,13 +59,13 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result, splitter_result
 
             total_word_length := splitter_result.Length()
             pinyin := SplitterResultListConvertToString(splitter_result, 1, total_word_length)
-            single_result := TranslatorSingleResultMake(pinyin, full_word, 0, "auto", total_word_length)
-            translate_result.InsertAt(1, single_result)
+            single_result := TranslatorResultMake(pinyin, full_word, 0, "auto", total_word_length)
+            translate_result_list.InsertAt(1, single_result)
         }
     }
 }
 
-PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
+PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result)
 {
     splitter_result := SplitterResultListGetUntilLength(splitter_result)
     splitted_string := SplitterResultListConvertToString(splitter_result, 1, 0)
@@ -77,18 +77,18 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
     if( splitter_result.Length() >= 4 )
     {
         ; 了个 了会 了朵 了顿
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "le5", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "le5", 1, 2, 2)
 
         ; 生我的气
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "wo3de5", 2, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "wo3de5", 2, 2, 2)
 
         ; 他/她
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "ta1de5", 2, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "ta1de5", 2, 2, 2)
     }
     if( splitter_result.Length() == 3 )
     {
         ; 陪了他
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "le5", 1, 2, 1)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "le5", 1, 2, 1)
     }
 
     ImeProfilerEnd(22, profile_text)

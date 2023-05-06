@@ -213,7 +213,7 @@ RadicalIsFullMatch(test_word, test_radical)
 
 ;*******************************************************************************
 ; radical_list: ["SS", "YZ", "RE"]
-TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
+TranslatorResultFilterByRadical(ByRef translate_result_list, radical_list)
 {
     local
 
@@ -229,13 +229,13 @@ TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
     if( need_filter )
     {
         index := 1
-        loop % translate_result.Length()
+        loop % translate_result_list.Length()
         {
             ImeProfilerBegin(36)
-            word_value := translate_result[index, 2]
+            word_value := translate_result_list[index, 2]
             should_remove := false
             ; loop each character of "我爱你"
-            loop % translate_result[index, 5]
+            loop % translate_result_list[index, 5]
             {
                 test_radical := radical_list[A_Index]
                 if( test_radical )
@@ -252,7 +252,7 @@ TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
             }
 
             if( should_remove ) {
-                translate_result.RemoveAt(index)
+                translate_result_list.RemoveAt(index)
             } else {
                 index += 1
             }
@@ -261,9 +261,9 @@ TranslatorResultFilterByRadical(ByRef translate_result, radical_list)
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
 
-        if( translate_result.Length() == 0 )
+        if( translate_result_list.Length() == 0 )
         {
-            translate_result.Push(TranslatorSingleResultMakeError())
+            translate_result_list.Push(TranslatorResultMakeError())
         }
     }
 }

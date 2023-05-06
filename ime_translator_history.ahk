@@ -48,7 +48,7 @@ TranslatorHistoryGetResultWord(splitted_string, part_of_speech:="")
     global translator_history_result
     loop
     {
-        word := TranslatorResultGetWord(translator_history_result[splitted_string], A_Index)
+        word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
         if( part_of_speech == "" ){
             return word
         }
@@ -61,23 +61,23 @@ TranslatorHistoryGetResultWord(splitted_string, part_of_speech:="")
 
 ;*******************************************************************************
 ; Update `translate_result`
-TranslatorHistoryPushResult(ByRef translate_result, splitted_string, max_num := 100, modify_weight := 0)
+TranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_num := 100, modify_weight := 0)
 {
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        pinyin := TranslatorResultGetPinyin(translator_history_result[splitted_string], A_Index)
-        word := TranslatorResultGetWord(translator_history_result[splitted_string], A_Index)
-        weight := TranslatorResultGetWeight(translator_history_result[splitted_string], A_Index)
-        comment := TranslatorResultGetComment(translator_history_result[splitted_string], A_Index)
-        word_length := TranslatorResultGetWordLength(translator_history_result[splitted_string], A_Index)
+        pinyin := TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
+        word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
+        weight := TranslatorResultGetWeight(translator_history_result[splitted_string, A_Index])
+        comment := TranslatorResultGetComment(translator_history_result[splitted_string, A_Index])
+        word_length := TranslatorResultGetWordLength(translator_history_result[splitted_string, A_Index])
 
-        single_result := TranslatorSingleResultMake(pinyin, word, weight, comment, word_length + modify_weight)
-        translate_result.Push(single_result)
+        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length + modify_weight)
+        translate_result_list.Push(single_result)
     }
 }
 
-TranslatorHistoryInsertResultAt(ByRef translate_result, splitted_string, insert_at := 1, max_num := 100)
+TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, insert_at := 1, max_num := 100)
 {
     local
     global translator_history_result
@@ -85,6 +85,6 @@ TranslatorHistoryInsertResultAt(ByRef translate_result, splitted_string, insert_
     loop_cnt := Min(list_len, max_num)
     loop % loop_cnt
     {
-        translate_result.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
+        translate_result_list.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
     }
 }

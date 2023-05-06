@@ -6,41 +6,32 @@
 ;   [4]: ""         ; comment
 ;   [5]: 1          ; word length
 ;
-TranslatorResultGetPinyin(ByRef translate_result, word_index)
-{
-    return translate_result[word_index, 1]
+TranslatorResultGetPinyin(ByRef translate_result) {
+    return translate_result[1]
 }
-
-TranslatorResultGetWord(ByRef translate_result, word_index)
-{
-    return translate_result[word_index, 2]
+TranslatorResultGetWord(ByRef translate_result) {
+    return translate_result[2]
 }
-
-TranslatorResultGetWeight(ByRef translate_result, word_index)
-{
-    return translate_result[word_index, 3]
+TranslatorResultGetWeight(ByRef translate_result) {
+    return translate_result[3]
 }
-
-TranslatorResultGetComment(ByRef translate_result, word_index)
-{
-    return translate_result[word_index, 4]
+TranslatorResultGetComment(ByRef translate_result) {
+    return translate_result[4]
 }
-
-TranslatorResultGetWordLength(ByRef translate_result, word_index)
-{
-    return translate_result[word_index, 5]
+TranslatorResultGetWordLength(ByRef translate_result) {
+    return translate_result[5]
 }
 
 ;*******************************************************************************
 ;
-TranslatorSingleResultMake(pinyin, word, weight, comment, word_length)
+TranslatorResultMake(pinyin, word, weight, comment, word_length)
 {
     return [pinyin, word, weight, comment, word_length]
 }
 
-TranslatorSingleResultMakeError()
+TranslatorResultMakeError()
 {
-    return TranslatorSingleResultMake("", "", 0, "Error", 1)
+    return TranslatorResultMake("", "", 0, "Error", 1)
 }
 
 ;*******************************************************************************
@@ -60,7 +51,7 @@ TranslatorResultListFindIndex(ByRef translate_result_list, split_index, find_wor
     loop, % translate_result_list[split_index].Length()
     {
         select_index := A_Index
-        test_result := TranslatorResultGetWord(translate_result_list[split_index], select_index)
+        test_result := TranslatorResultGetWord(translate_result_list[split_index, select_index])
         if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
             debug_text .= "`n  - [" select_index "] -> """ find_words """ == """ test_result """"
             break
@@ -108,7 +99,7 @@ TranslatorResultListFilterResults(ByRef translate_result_list, input_radical_lis
 
 ;*******************************************************************************
 ; Sort
-TranslatorResultSortByWeight(ByRef translate_result)
+TranslatorResultListSortByWeight(ByRef translate_result_list)
 {
-    translate_result := ObjectSort(translate_result, 3,, true)
+    translate_result_list := ObjectSort(translate_result_list, 3,, true)
 }
