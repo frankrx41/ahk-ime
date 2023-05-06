@@ -67,6 +67,27 @@ SplittedIndexsGetPosIndex(splitter_result, caret_pos)
     return 1
 }
 
+;*******************************************************************************
+;
+SplittedIndexsGetCurrentWordPos(splitter_result, start_pos)
+{
+    local
+    if( start_pos == 0 ){
+        return 0
+    }
+    last_index := 0
+    loop, % splitter_result.Length()
+    {
+        split_index := SplitterResultGetEndPos(splitter_result[A_Index])
+        if( split_index >= start_pos ){
+            last_index := split_index
+            break
+        }
+    }
+    return last_index
+}
+
+
 SplittedIndexsGetLeftWordPos(splitter_result, start_pos)
 {
     local
