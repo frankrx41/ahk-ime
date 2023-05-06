@@ -39,9 +39,9 @@ IsSoundLike(speech, sounds_to)
 }
 
 ; A-XY-B
-PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result, splitter_result, match_pinyin, xy_start_index, word_xy_length)
+PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result, splitter_result, match_pinyin, match_word_length, xy_start_index, word_xy_length)
 {
-    RegExReplace(match_pinyin, "[012345]",, match_word_length)
+    ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
     try_match_pinyin := SplitterResultConvertToString(splitter_result, xy_start_index, match_word_length)
     if( IsSoundLike(try_match_pinyin, match_pinyin) )
     {
@@ -77,13 +77,19 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
     if( splitter_result.Length() >= 4 )
     {
         ; 了个 了会 了朵 了顿
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "le5", 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "le5", 1, 2, 2)
 
         ; 生我的气
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "wo3", 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "wo3de5", 2, 2, 2)
 
         ; 他/她
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "ta1", 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "ta1de5", 2, 2, 2)
     }
+    if( splitter_result.Length() == 3 )
+    {
+        ; 陪了他
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result, splitter_result, "le5", 1, 2, 1)
+    }
+
     ImeProfilerEnd(22, profile_text)
 }
