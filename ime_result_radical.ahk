@@ -28,13 +28,10 @@ RadicalInitialize()
 
     FileRead, file_content, data\radicals-pinyin.txt
     index := 0
-    radical_atomic_start := false
+    radical_atomic_start := true
     Loop, Parse, file_content, `n, `r
     {
         line := A_LoopField
-        if( line == "#radical_atomic_start" ) {
-            radical_atomic_start := true
-        }
         if( line == "#radical_atomic_end" ) {
             radical_atomic_start := false
         }
