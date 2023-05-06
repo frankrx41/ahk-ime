@@ -52,12 +52,6 @@ ImeHotkeyRegisterInitialize()
             ; A-Z
             func := Func("HotkeyOnShiftAlphabet").Bind(Format("{:U}", Chr(96+A_Index)))
             Hotkey, % "+" Chr(96+A_Index), %func%
-
-            ; Ctrl + Shift + A-Z
-            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), false)
-            Hotkey, % "^" Chr(96+A_Index), %func%
-            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), true)
-            Hotkey, % "^+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,

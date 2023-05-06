@@ -53,14 +53,6 @@ HotkeyOnShiftAlphabet(char)
 
 ;*******************************************************************************
 ; Function key
-HotkeyOnCtrlAlphabet(char, shift_down)
-{
-    local
-    back_to_front := shift_down ? false : true
-    ImeInputterCaretMoveToChar(char, back_to_front, true)
-    ImeTooltipUpdate()
-}
-
 HotkeyOnEsc()
 {
     static last_esc_tick := 0
