@@ -42,23 +42,23 @@ IsSoundLike(speech, sounds_to)
 PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result, splitter_result, match_pinyin, match_word_length, xy_start_index, word_xy_length)
 {
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
-    try_match_pinyin := SplitterResultArrayConvertToString(splitter_result, xy_start_index, match_word_length)
+    try_match_pinyin := SplitterResultListConvertToString(splitter_result, xy_start_index, match_word_length)
     if( IsSoundLike(try_match_pinyin, match_pinyin) )
     {
         splitted_string_ab := ""
-        splitted_string_ab .= SplitterResultArrayConvertToString(splitter_result, 1, xy_start_index-1)
-        splitted_string_ab .= SplitterResultArrayConvertToString(splitter_result, xy_start_index+word_xy_length)
+        splitted_string_ab .= SplitterResultListConvertToString(splitter_result, 1, xy_start_index-1)
+        splitted_string_ab .= SplitterResultListConvertToString(splitter_result, xy_start_index+word_xy_length)
         TranslatorHistoryUpdateKey(splitted_string_ab, splitter_result.Length()-word_xy_length)
 
         word_ab := TranslatorHistoryGetResultWord(splitted_string_ab)
         if( word_ab ){
-            splitted_string_xy := SplitterResultArrayConvertToString(splitter_result, xy_start_index, word_xy_length)
+            splitted_string_xy := SplitterResultListConvertToString(splitter_result, xy_start_index, word_xy_length)
             TranslatorHistoryUpdateKey(splitted_string_xy, word_xy_length)
             word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
             full_word := SubStr(word_ab, 1, 1) . word_xy . SubStr(word_ab, 2)
 
             total_word_length := splitter_result.Length()
-            pinyin := SplitterResultArrayConvertToString(splitter_result, 1, total_word_length)
+            pinyin := SplitterResultListConvertToString(splitter_result, 1, total_word_length)
             single_result := TranslatorSingleResultMake(pinyin, full_word, 0, "auto", total_word_length)
             translate_result.InsertAt(1, single_result)
         }
@@ -67,8 +67,8 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result, splitter_result
 
 PinyinTranslatorInsertCombineWord(ByRef translate_result, splitter_result)
 {
-    splitter_result := SplitterResultArrayGetUntilLength(splitter_result)
-    splitted_string := SplitterResultArrayConvertToString(splitter_result, 1, 0)
+    splitter_result := SplitterResultListGetUntilLength(splitter_result)
+    splitted_string := SplitterResultListConvertToString(splitter_result, 1, 0)
     if( TranslatorHistoryHasResult(splitted_string) ){
         return
     }
