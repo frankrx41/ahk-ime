@@ -229,7 +229,7 @@ ImeInputterCaretMove(dir)
 }
 
 ; graceful: take a white space move as a step
-ImeInputterCaretMoveByWord(dir, graceful:=false)
+ImeInputterCaretMoveByWord(dir, graceful:=true)
 {
     global ime_input_caret_pos
     global ime_input_string

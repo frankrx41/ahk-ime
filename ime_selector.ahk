@@ -89,7 +89,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 
     if( !ImeInputterCaretIsAtEnd() )
     {
-        ImeInputterCaretMoveByWord(word_length)
+        ImeInputterCaretMoveByWord(word_length, false)
     }
 
     profile_text .= "[" split_index "]->[" select_index "," word_length "," lock_result "]"
