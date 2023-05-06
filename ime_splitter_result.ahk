@@ -46,40 +46,40 @@ SplitterResultIsCompleted(splitter_result) {
 ;*******************************************************************************
 ;
 ; Action about splitted indexs
-SplittedIndexsGetPosIndex(splitter_result, caret_pos)
+SplitterResultArrayGetIndex(splitter_result_arr, caret_pos)
 {
     local
-    if( splitter_result.Length() >= 1)
+    if( splitter_result_arr.Length() >= 1)
     {
-        if( SplitterResultGetEndPos(splitter_result[splitter_result.Length()]) == caret_pos )
+        if( SplitterResultGetEndPos(splitter_result_arr[splitter_result_arr.Length()]) == caret_pos )
         {
-            return splitter_result.Length()
+            return splitter_result_arr.Length()
         }
-        loop % splitter_result.Length()
+        loop % splitter_result_arr.Length()
         {
-            if( SplitterResultGetEndPos(splitter_result[A_Index]) > caret_pos ){
+            if( SplitterResultGetEndPos(splitter_result_arr[A_Index]) > caret_pos ){
                 return A_Index
             }
         }
         ; TODO: fix this
-        ; Assert(false, SplitterResultGetDisplayText(splitter_result) "," caret_pos)
+        ; Assert(false, SplitterResultArrayGetDisplayText(splitter_result_arr) "," caret_pos)
     }
     return 1
 }
 
 ;*******************************************************************************
 ;
-SplittedIndexsGetCurrentWordPos(splitter_result, start_pos)
+SplitterResultArrayGetCurrentWordPos(splitter_result_arr, caret_pos)
 {
     local
-    if( start_pos == 0 ){
+    if( caret_pos == 0 ){
         return 0
     }
     last_index := 0
-    loop, % splitter_result.Length()
+    loop, % splitter_result_arr.Length()
     {
-        split_index := SplitterResultGetEndPos(splitter_result[A_Index])
-        if( split_index >= start_pos ){
+        split_index := SplitterResultGetEndPos(splitter_result_arr[A_Index])
+        if( split_index >= caret_pos ){
             last_index := split_index
             break
         }
@@ -88,17 +88,17 @@ SplittedIndexsGetCurrentWordPos(splitter_result, start_pos)
 }
 
 
-SplittedIndexsGetLeftWordPos(splitter_result, start_pos)
+SplitterResultArrayGetLeftWordPos(splitter_result_arr, caret_pos)
 {
     local
-    if( start_pos == 0 ){
+    if( caret_pos == 0 ){
         return 0
     }
     last_index := 0
-    loop, % splitter_result.Length()
+    loop, % splitter_result_arr.Length()
     {
-        split_index := SplitterResultGetEndPos(splitter_result[A_Index])
-        if( split_index >= start_pos ){
+        split_index := SplitterResultGetEndPos(splitter_result_arr[A_Index])
+        if( split_index >= caret_pos ){
             break
         }
         last_index := split_index
@@ -106,14 +106,14 @@ SplittedIndexsGetLeftWordPos(splitter_result, start_pos)
     return last_index
 }
 
-SplittedIndexsGetRightWordPos(splitter_result, start_pos)
+SplitterResultArrayGetRightWordPos(splitter_result_arr, caret_pos)
 {
     local
-    last_index := start_pos
-    loop, % splitter_result.Length()
+    last_index := caret_pos
+    loop, % splitter_result_arr.Length()
     {
-        split_index := SplitterResultGetEndPos(splitter_result[A_Index])
-        if( split_index > start_pos ){
+        split_index := SplitterResultGetEndPos(splitter_result_arr[A_Index])
+        if( split_index > caret_pos ){
             last_index := split_index
             break
         }
@@ -123,23 +123,23 @@ SplittedIndexsGetRightWordPos(splitter_result, start_pos)
 
 ;*******************************************************************************
 ;
-SplitterResultGetUntilSkip(splitter_result, start_count := 1)
+SplitterResultArrayGetUntilSkip(splitter_result_arr, start_count := 1)
 {
     local
     return_splitter_result := []
-    if( !SplitterResultNeedTranslate(splitter_result[start_count]) )
+    if( !SplitterResultNeedTranslate(splitter_result_arr[start_count]) )
     {
-        return_splitter_result[1] := splitter_result[start_count]
+        return_splitter_result[1] := splitter_result_arr[start_count]
     }
     find_string := ""
-    loop, % splitter_result.Length()
+    loop, % splitter_result_arr.Length()
     {
         if( A_Index < start_count ) {
             continue
         }
-        if( SplitterResultNeedTranslate(splitter_result[A_Index]) )
+        if( SplitterResultNeedTranslate(splitter_result_arr[A_Index]) )
         {
-            return_splitter_result.Push(splitter_result[A_Index])
+            return_splitter_result.Push(splitter_result_arr[A_Index])
         }
         else
         {
@@ -149,22 +149,22 @@ SplitterResultGetUntilSkip(splitter_result, start_count := 1)
     return return_splitter_result
 }
 
-SplitterResultGetUntilLength(splitter_result, start_count := 1)
+SplitterResultArrayGetUntilLength(splitter_result_arr, start_count := 1)
 {
     local
     return_splitter_result := []
-    if( SplitterResultGetHopeLength(splitter_result[start_count])==1 )
+    if( SplitterResultGetHopeLength(splitter_result_arr[start_count])==1 )
     {
-        return_splitter_result[1] := splitter_result[start_count]
+        return_splitter_result[1] := splitter_result_arr[start_count]
     }
     find_string := ""
-    loop, % splitter_result.Length()
+    loop, % splitter_result_arr.Length()
     {
         if( A_Index < start_count ) {
             continue
         }
-        return_splitter_result.Push(splitter_result[A_Index])
-        if( SplitterResultGetHopeLength(splitter_result[A_Index])==1 )
+        return_splitter_result.Push(splitter_result_arr[A_Index])
+        if( SplitterResultGetHopeLength(splitter_result_arr[A_Index])==1 )
         {
             break
         }
@@ -172,18 +172,18 @@ SplitterResultGetUntilLength(splitter_result, start_count := 1)
     return return_splitter_result
 }
 
-SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_count := 0)
+SplitterResultArrayConvertToString(splitter_result_arr, start_count, ByRef inout_length_count := 0)
 {
     local
     find_string := ""
     word_length := 0
     if( inout_length_count == 0 ){
-        inout_length_count := splitter_result.Length()
+        inout_length_count := splitter_result_arr.Length()
     }
     if( start_count == 0 ){
-        start_count := splitter_result.Length()
+        start_count := splitter_result_arr.Length()
     }
-    loop, % splitter_result.Length()
+    loop, % splitter_result_arr.Length()
     {
         if( A_Index < start_count ) {
             continue
@@ -193,8 +193,8 @@ SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_c
         }
         inout_length_count -= 1
         word_length += 1
-        find_string .= SplitterResultGetPinyin(splitter_result[A_Index])
-        find_string .= SplitterResultGetTone(splitter_result[A_Index])
+        find_string .= SplitterResultGetPinyin(splitter_result_arr[A_Index])
+        find_string .= SplitterResultGetTone(splitter_result_arr[A_Index])
     }
     inout_length_count := word_length
     return find_string
@@ -202,37 +202,37 @@ SplitterResultConvertToString(splitter_result, start_count, ByRef inout_length_c
 
 ;*******************************************************************************
 ;
-SplitterResultGetDisplayText(splitter_result)
+SplitterResultArrayGetDisplayText(splitter_result_arr)
 {
     local
     dsiplay_text := ""
-    loop, % splitter_result.Length()
+    loop, % splitter_result_arr.Length()
     {
         index := A_Index
-        if( SplitterResultNeedTranslate(splitter_result[index]) )
+        if( SplitterResultNeedTranslate(splitter_result_arr[index]) )
         {
-            dsiplay_text .= SplitterResultGetPinyin(splitter_result[index])
-            dsiplay_text .= SplitterResultGetTone(splitter_result[index])
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result_arr[index])
+            dsiplay_text .= SplitterResultGetTone(splitter_result_arr[index])
         }
         else
         {
             dsiplay_text .= "<"
-            dsiplay_text .= SplitterResultGetPinyin(splitter_result[index])
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result_arr[index])
             dsiplay_text .= ">"
         }
 
-        radical := SplitterResultGetRadical(splitter_result[index])
+        radical := SplitterResultGetRadical(splitter_result_arr[index])
         if( radical ) {
             dsiplay_text .= "{" radical "}"
         }
 
-        length := SplitterResultGetHopeLength(splitter_result[index])
+        length := SplitterResultGetHopeLength(splitter_result_arr[index])
         dsiplay_text .= "=" length ""
 
         ; dsiplay_text .= " ("
-        ; dsiplay_text .= SplitterResultGetStartPos(splitter_result[index])
+        ; dsiplay_text .= SplitterResultGetStartPos(splitter_result_arr[index])
         ; dsiplay_text .= ","
-        ; dsiplay_text .= SplitterResultGetEndPos(splitter_result[index])
+        ; dsiplay_text .= SplitterResultGetEndPos(splitter_result_arr[index])
         ; dsiplay_text .= ")"
 
         dsiplay_text .= ","

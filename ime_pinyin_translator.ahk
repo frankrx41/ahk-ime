@@ -14,7 +14,7 @@ PinyinTranslatorInsertResult(ByRef translate_result, splitter_result)
     loop, % max_len
     {
         length_count := max_len-A_Index+1
-        splitted_string := SplitterResultConvertToString(splitter_result, 1, length_count)
+        splitted_string := SplitterResultArrayConvertToString(splitter_result, 1, length_count)
         profile_text .= "[" splitted_string "] "
         TranslatorHistoryUpdateKey(splitted_string, length_count)
         TranslatorHistoryPushResult(translate_result, splitted_string, 200)
@@ -64,6 +64,6 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultGetDisplayText(splitter_result) "] -> ("  translate_result.Length() ")" )
+    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultArrayGetDisplayText(splitter_result) "] -> ("  translate_result.Length() ")" )
     return translate_result
 }

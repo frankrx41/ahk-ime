@@ -323,7 +323,7 @@ PinyinSplitterInputStringSimple(input_string)
         splitter_return_list.Push(make_result)
     }
 
-    ImeProfilerEnd(11, "SIM: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    ImeProfilerEnd(11, "SIM: """ input_string """ -> [" SplitterResultArrayGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
     return splitter_return_list
 }
 
@@ -428,7 +428,7 @@ PinyinSplitterInputStringNormal(input_string)
     }
 
 
-    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultArrayGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
     return splitter_return_list
 }
 
@@ -442,7 +442,7 @@ PinyinSplitterInputStringTest()
     {
         input_case := test_case[A_Index]
         test_result := PinyinSplitterInputString(input_case, auto_complete)
-        msg_string .= "`n""" input_case """ -> [" SplitterResultGetDisplayText(test_result) "] (" auto_complete ")"
+        msg_string .= "`n""" input_case """ -> [" SplitterResultArrayGetDisplayText(test_result) "] (" auto_complete ")"
     }
     MsgBox, % msg_string
 }

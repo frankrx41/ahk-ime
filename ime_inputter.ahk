@@ -36,7 +36,7 @@ ImeInputterClearPrevSplitted()
 
     if( ime_input_caret_pos != 0 )
     {
-        left_pos := SplittedIndexsGetLeftWordPos(ime_splitted_list, ime_input_caret_pos)
+        left_pos := SplitterResultArrayGetLeftWordPos(ime_splitted_list, ime_input_caret_pos)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := left_pos
     }
@@ -149,7 +149,7 @@ ImeInputterCallTranslator(auto_complete)
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
 
     splitter_result := CopyObj(ime_splitted_list)
-    profile_text .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_splitted_list.Length() ")" 
+    profile_text .= "[" SplitterResultArrayGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_splitted_list.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
     ImeTranslatorUpdateResult(splitter_result, auto_complete)
@@ -172,7 +172,7 @@ ImeInputterGetCaretSplitIndex()
     global ime_input_caret_pos
     global ime_splitted_list
 
-    return SplittedIndexsGetPosIndex(ime_splitted_list, ime_input_caret_pos)
+    return SplitterResultArrayGetIndex(ime_splitted_list, ime_input_caret_pos)
 }
 
 ;*******************************************************************************
@@ -258,7 +258,7 @@ ImeInputterCaretMoveSmartRight()
         ; update word index
         if( last_pos == current_pos )
         {
-            current_start_pos := SplittedIndexsGetCurrentWordPos(ime_splitted_list, current_pos)
+            current_start_pos := SplitterResultArrayGetCurrentWordPos(ime_splitted_list, current_pos)
             if( current_start_pos == current_pos && InStr("zcs", SubStr(ime_input_string, current_start_pos+1, 1)) )
             {
                 if( SubStr(ime_input_string, current_start_pos+2, 1) == "h" )
@@ -270,7 +270,7 @@ ImeInputterCaretMoveSmartRight()
             }
             else
             {
-                right_pos := SplittedIndexsGetRightWordPos(ime_splitted_list, current_pos)
+                right_pos := SplitterResultArrayGetRightWordPos(ime_splitted_list, current_pos)
                 current_pos := right_pos
             }
         }
@@ -402,7 +402,7 @@ ImeInputterGetLeftWordPos(start_index)
 {
     local
     global ime_splitted_list
-    return SplittedIndexsGetLeftWordPos(ime_splitted_list, start_index)
+    return SplitterResultArrayGetLeftWordPos(ime_splitted_list, start_index)
 }
 
 ImeInputterGetRightWordPos(start_index)
@@ -410,7 +410,7 @@ ImeInputterGetRightWordPos(start_index)
     local
     global ime_splitted_list
 
-    return SplittedIndexsGetRightWordPos(ime_splitted_list, start_index)
+    return SplitterResultArrayGetRightWordPos(ime_splitted_list, start_index)
 }
 
 ;*******************************************************************************
