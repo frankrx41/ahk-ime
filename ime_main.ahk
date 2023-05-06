@@ -29,7 +29,7 @@ ImeSelectMenuInitialize()
 ImeSelectorInitialize()
 
 ; Translator
-ImeTranslatorInitialize()
+ImeCandidateInitialize()
 TranslatorHistoryClear()
 
 ; Radical

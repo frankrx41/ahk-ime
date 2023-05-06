@@ -3,9 +3,9 @@
 TranslatorFindMaxLengthResultIndex(split_index, max_length)
 {
     local
-    loop % ImeTranslatorResultListGetListLength(split_index)
+    loop % ImeCandidateGetListLength(split_index)
     {
-        test_len := ImeTranslatorResultListGetWordLength(split_index, A_Index)
+        test_len := ImeCandidateGetWordLength(split_index, A_Index)
         if( test_len <= max_length )
         {
             return A_Index
@@ -22,7 +22,7 @@ TranslatorFindPossibleMaxLength(split_index)
     loop_cnt := 0
     if( ImeSelectorIsSelectLock(split_index) )
     {
-        max_length := ImeTranslatorResultListGetWordLength(split_index, ImeSelectorGetSelectIndex(split_index))
+        max_length := ImeCandidateGetWordLength(split_index, ImeSelectorGetSelectIndex(split_index))
     }
     else
     {
@@ -31,7 +31,7 @@ TranslatorFindPossibleMaxLength(split_index)
         {
             loop_cnt += 1
             check_index := split_index + A_Index
-            if( check_index > ImeTranslatorResultListGetLength() ){
+            if( check_index > ImeCandidateGetLength() ){
                 break
             }
             if( ImeSelectorIsSelectLock(check_index) ) {
@@ -41,9 +41,9 @@ TranslatorFindPossibleMaxLength(split_index)
         }
     }
 
-    if( max_length == ImeTranslatorResultListGetLength() ){
+    if( max_length == ImeCandidateGetLength() ){
         Assert(split_index == 1)
-        max_length := ImeTranslatorResultListGetWordLength(split_index, 1)
+        max_length := ImeCandidateGetWordLength(split_index, 1)
     }
 
     profile_text .= "`n  - [" split_index "] loop: " loop_cnt " -> " max_length
@@ -59,7 +59,7 @@ ImeSelectorFixupSelectIndex()
     profile_text := ""
     ImeProfilerBegin(40)
     skip_word_count := 0
-    loop % ImeTranslatorResultListGetLength()
+    loop % ImeCandidateGetLength()
     {
         split_index := A_Index
 
@@ -67,7 +67,7 @@ ImeSelectorFixupSelectIndex()
         select_index := !origin_select_index ? 0 : origin_select_index
 
         if( select_index ) {
-            select_word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
+            select_word_length := ImeCandidateGetWordLength(split_index, select_index)
         } else {
             select_word_length := 0
         }
@@ -92,7 +92,7 @@ ImeSelectorFixupSelectIndex()
             ; TODO: use `lock_length`
             lock_length := ImeSelectorGetLockLength(split_index)
             Assert( max_length <= lock_length )
-            select_index := ImeTranslatorResultFindIndex(split_index, lock_word, max_length)
+            select_index := ImeCandidateFindIndex(split_index, lock_word, max_length)
             Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word "," max_length)
         }
         else
@@ -112,7 +112,7 @@ ImeSelectorFixupSelectIndex()
         profile_text .= "[" origin_select_index "]->[" select_index "] "
         if( select_index )
         {
-            select_word_length := ImeTranslatorResultListGetWordLength(split_index, select_index)
+            select_word_length := ImeCandidateGetWordLength(split_index, select_index)
             skip_word_count := select_word_length-1
             profile_text .= "skip: " skip_word_count " "
         }

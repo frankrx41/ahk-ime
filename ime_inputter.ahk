@@ -24,7 +24,7 @@ ImeInputterClearString()
     ime_input_dirty     := true
     ime_splitted_list := []
     ImeSelectorClear()
-    ImeTranslatorClear()
+    ImeCandidateClear()
     return
 }
 
@@ -152,7 +152,7 @@ ImeInputterCallTranslator(auto_complete)
     profile_text .= "[" SplitterResultListGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_splitted_list.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
-    ImeTranslatorUpdateResult(splitter_result, auto_complete)
+    ImeCandidateUpdateResult(splitter_result, auto_complete)
     ImeSelectorUnlockWords(caret_splitted_index, false)
     ImeSelectorFixupSelectIndex()
 

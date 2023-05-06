@@ -26,7 +26,7 @@ ImeTooltipGetDisplaySelectItems()
     ime_select_str  := "----------------"
     max_column_loop := 6
 
-    loop % ImeTranslatorResultListGetLength()
+    loop % ImeCandidateGetLength()
     {
         split_index     := A_Index
         select_index    := ImeSelectorGetSelectIndex(split_index)
@@ -38,17 +38,17 @@ ImeTooltipGetDisplaySelectItems()
             continue
         }
         start_index     := ImeSelectMenuIsMultiple() ? 0 : Floor((select_index-1) / column) * column
-        column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeTranslatorResultListGetListLength(split_index) / column) +1 : 1
+        column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeCandidateGetListLength(split_index) / column) +1 : 1
 
         max_item_len    := []
 
         if( column_loop > max_column_loop ) {
             column_loop := max_column_loop
             start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
-            start_index := Min(start_index, (Floor((ImeTranslatorResultListGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
+            start_index := Min(start_index, (Floor((ImeCandidateGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
         }
 
-        loop % Min(ImeTranslatorResultListGetListLength(split_index)+1, column) {
+        loop % Min(ImeCandidateGetListLength(split_index)+1, column) {
             word_index      := start_index + A_Index
             ime_select_str  .= "`n"
             row_index       := A_Index
@@ -58,7 +58,7 @@ ImeTooltipGetDisplaySelectItems()
                 item_str := ""
                 ; in_column := word_index / column >= start_index && word_index / column <= start_index + column
                 in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
-                if( word_index <= ImeTranslatorResultListGetListLength(split_index) )
+                if( word_index <= ImeCandidateGetListLength(split_index) )
                 {
                     begin_str := "  "
                     radical_code := ""
@@ -75,14 +75,14 @@ ImeTooltipGetDisplaySelectItems()
                     }
 
                     end_str_mark := " "
-                    comment := ImeTranslatorResultGetFormattedComment(split_index, word_index)
+                    comment := ImeCandidateGetFormattedComment(split_index, word_index)
                     if( IsTraditionalComment(comment) )
                     {
                         end_str_mark := SubStr(comment, 1, 1)
                         comment := SubStr(comment, 2)
                     }
                     end_str := select_index == word_index ? "]" : end_str_mark
-                    item_str := begin_str . ImeTranslatorResultListGetWord(split_index, word_index) . radical_code . end_str . comment
+                    item_str := begin_str . ImeCandidateGetWord(split_index, word_index) . radical_code . end_str . comment
                     ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
                 } else {
                     item_str := ""
@@ -108,12 +108,12 @@ ImeTooltipGetDisplayInputString()
 {
     ime_select_index := ""
     ime_select_str := ""
-    loop % ImeTranslatorResultListGetLength()
+    loop % ImeCandidateGetLength()
     {
         split_index     := A_Index
         select_index    := ImeSelectorGetSelectIndex(split_index)
         select_lock     := ImeSelectorIsSelectLock(split_index)
-        selected_word   := ImeTranslatorResultListGetWord(split_index, select_index)
+        selected_word   := ImeCandidateGetWord(split_index, select_index)
         if( select_index != 0 )
         {
             if( SubStr(ime_select_str, 0, 1) != "/" ){
@@ -123,7 +123,7 @@ ImeTooltipGetDisplayInputString()
             ime_select_str .= selected_word
         }
         select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
-        if( select_index != 0 && selected_word == ImeTranslatorResultListGetPinyin(split_index, select_index) ) {
+        if( select_index != 0 && selected_word == ImeCandidateGetPinyin(split_index, select_index) ) {
             ime_select_index .= select_index_char
             loop % StrPut(selected_word, "CP936") - 2 {
                 ime_select_index .= "-"
@@ -181,8 +181,8 @@ ImeTooltipUpdate(tooltip_pos := "")
             split_index -= 1
         }
         extern_info := ""
-        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeTranslatorResultListGetListLength(split_index) "] (" ImeTranslatorResultListGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
-        current_word := ImeTranslatorResultListGetWord(split_index, select_index)
+        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeCandidateGetListLength(split_index) "] (" ImeCandidateGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        current_word := ImeCandidateGetWord(split_index, select_index)
         current_word := SubStr(current_word, word_index, 1)
         radical_list := RadicalWordSplit(current_word)
         radical_words := ""
@@ -198,7 +198,7 @@ ImeTooltipUpdate(tooltip_pos := "")
             }
         }
         extern_info .= " {" radical_words "}"
-        extern_info .= " (" ImeTranslatorResultListGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        extern_info .= " (" ImeCandidateGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
         extern_info .= " (" ime_tooltip_pos.x "," ime_tooltip_pos.y "," ime_tooltip_pos.t ")"
 
