@@ -234,7 +234,6 @@ ImeInputterCaretMove(dir)
     }
 }
 
-
 ; move to initials
 ImeInputterCaretMoveSmartRight()
 {
@@ -283,6 +282,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=true)
 {
     global ime_input_caret_pos
     global ime_input_string
+    global ime_splitted_list
 
     move_count := dir > 0 ? dir : (-1 * dir)
     if( dir > 0 ){
@@ -299,7 +299,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=true)
                 }
                 index += 1
                 begin_pos := word_pos
-                word_pos := ImeInputterGetRightWordPos(word_pos)
+                word_pos := SplitterResultListGetRightWordPos(ime_splitted_list, word_pos)
                 if( graceful && SubStr(ime_input_string, word_pos, 1) == " " && begin_pos+1 != word_pos ) {
                     word_pos := word_pos-1
                 }
@@ -321,7 +321,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=true)
                     word_pos := word_pos-1
                 } else {
                     index += 1
-                    word_pos := ImeInputterGetLeftWordPos(word_pos)
+                    word_pos := SplitterResultListGetLeftWordPos(ime_splitted_list, word_pos)
                 }
             }
         }
@@ -329,6 +329,8 @@ ImeInputterCaretMoveByWord(dir, graceful:=true)
     ime_input_caret_pos := word_pos
 }
 
+;*******************************************************************************
+; Move to
 ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
 {
     local
@@ -396,21 +398,6 @@ ImeInputterGetLastWordPos()
         return 0
     }
     return SplitterResultGetEndPos(ime_splitted_list[ime_splitted_list.Length()-1])
-}
-
-ImeInputterGetLeftWordPos(start_index)
-{
-    local
-    global ime_splitted_list
-    return SplitterResultListGetLeftWordPos(ime_splitted_list, start_index)
-}
-
-ImeInputterGetRightWordPos(start_index)
-{
-    local
-    global ime_splitted_list
-
-    return SplitterResultListGetRightWordPos(ime_splitted_list, start_index)
 }
 
 ;*******************************************************************************

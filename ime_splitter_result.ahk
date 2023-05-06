@@ -87,7 +87,6 @@ SplitterResultListGetCurrentWordPos(splitter_result_list, caret_pos)
     return last_index
 }
 
-
 SplitterResultListGetLeftWordPos(splitter_result_list, caret_pos)
 {
     local
