@@ -1,7 +1,7 @@
 ;*******************************************************************************
 ; Simple Spell
 ;
-PinyinTranslatorInsertAutpComplete(ByRef translate_result_list, splitter_result)
+PinyinTranslatorInsertAutoComplete(ByRef translate_result_list, splitter_result)
 {
     local
 

@@ -41,7 +41,7 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     if( auto_complete )
     {
         ; Insert simple spell, need end with "**"
-        PinyinTranslatorInsertAutpComplete(translate_result_list, splitter_result)
+        PinyinTranslatorInsertAutoComplete(translate_result_list, splitter_result)
     }
     else
     {
