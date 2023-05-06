@@ -213,7 +213,7 @@ RadicalIsFullMatch(test_word, test_radical)
 
 ;*******************************************************************************
 ; radical_list: ["SS", "YZ", "RE"]
-TranslatorResultFilterByRadical(ByRef translate_result_list, radical_list)
+TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
 {
     local
 

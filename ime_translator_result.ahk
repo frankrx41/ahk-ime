@@ -77,17 +77,17 @@ TranslatorResultListFilterResults(ByRef translate_result_list, input_radical_lis
         test_result := result_list[split_index]
         debug_text .= "`n  - [" split_index "] (" test_result.Length() ")"
         if( true ){
-            ; TranslatorResultFilterZeroWeight(test_result)
+            ; TranslatorResultListFilterZeroWeight(test_result)
         }
         if( radical_list ){
-            TranslatorResultFilterByRadical(test_result, radical_list)
+            TranslatorResultListFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
         }
         if( single_mode ){
-            TranslatorResultFilterSingleWord(test_result)
+            TranslatorResultListFilterSingleWord(test_result)
         }
         if( true ){
-            TranslatorResultUniquify(test_result)
+            TranslatorResultListUniquify(test_result)
         }
         debug_text .= " -> (" test_result.Length() ")"
     }

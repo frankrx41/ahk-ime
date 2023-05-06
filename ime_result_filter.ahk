@@ -1,4 +1,4 @@
-TranslatorResultFilterSingleWord(ByRef translate_result_list)
+TranslatorResultListFilterSingleWord(ByRef translate_result_list)
 {
     local
     ImeProfilerBegin(37)
@@ -19,7 +19,7 @@ TranslatorResultFilterSingleWord(ByRef translate_result_list)
     ImeProfilerEnd(37)
 }
 
-TranslatorResultFilterZeroWeight(ByRef translate_result_list)
+TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
 {
     local
     profile_text := ImeProfilerBegin(35)

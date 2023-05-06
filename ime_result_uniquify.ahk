@@ -1,4 +1,4 @@
-TranslatorResultUniquify(ByRef translate_result_list)
+TranslatorResultListUniquify(ByRef translate_result_list)
 {
     local
     ImeProfilerBegin(39)
