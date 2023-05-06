@@ -114,6 +114,10 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
         return (left_initials . left_vowels) == result_word
     }
 
+    if( IsZeroInitials(SubStr(right_string, 1, 1)) ){
+        return false
+    }
+
     return true
 }
 
