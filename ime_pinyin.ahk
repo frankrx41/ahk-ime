@@ -427,31 +427,31 @@ PinyinInitialize()
             },
             "d" :{
                 "aio":"iao","ain":"ian","aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","ig":"ing"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","ig":"ing"
             },
             "t" :{
                 "aio":"iao","ain":"ian","aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","ig":"ing"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","ig":"ing"
             },
             "n" :{
                 "aio":"iao","ain":"ian","aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","iag":"iang","ig":"ing"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","iag":"iang","ig":"ing"
             },
             "l" :{
                 "aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","iag":"iang","ig":"ing"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","iag":"iang","ig":"ing"
             },
             "g" :{
                 "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","uag":"uang"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "k" :{
                 "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","uag":"uang"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "h" :{
                 "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","uag":"uang"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "j" :{
                 "aio":"iao","ain":"ian","aun":"uan",
@@ -467,11 +467,11 @@ PinyinInitialize()
             },
             "zh":{
                 "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
-                "ag":"ang","og":"ong","on":"ong","uag":"uang"
+                "ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "ch":{
                 "aui":"uai","aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong","uag":"uang"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "sh":{
                 "aui":"uai","aun":"uan","oa":"ao",
@@ -479,19 +479,19 @@ PinyinInitialize()
             },
             "r" :{
                 "aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "z" :{
                 "aun":"uan","ie":"ei","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "c" :{
                 "aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "s" :{
                 "aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","og":"ong","on":"ong"
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "y" :{
                 "aun":"uan","oa":"ao",
