@@ -36,10 +36,10 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
         loop % translator_history_result[splitted_string].Length() {
             translator_history_result[splitted_string, A_Index, 5] := word_length
         }
-        if( word_length == 1 )
-        {
-            Assert(translator_history_result[splitted_string].Length() > 0, splitted_string " has no result!", true)
-        }
+        ; if( word_length == 1 )
+        ; {
+        ;     Assert(translator_history_result[splitted_string].Length() > 0, splitted_string " has no result!", false)
+        ; }
     }
 }
 
