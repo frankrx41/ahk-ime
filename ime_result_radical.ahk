@@ -53,6 +53,7 @@ RadicalInitialize()
 RadicalWordSplit(single_word)
 {
     global ime_radical_table
+    ; Assert(ime_radical_table.HasKey(single_word), single_word)
     return ime_radical_table[single_word]
 }
 
@@ -151,6 +152,7 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
     radical_word_list := RadicalWordSplit(test_word)
     last_word := radical_word_list[1, radical_word_list[1].Length()]
 
+    ; "qianDR" "qianDT" -> 潜
     Assert(last_word != test_word, test_word, true)
     return RadicalMatchLastPart(last_word, test_radical)
 }
@@ -159,6 +161,8 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
 ;
 RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
 {
+    local
+    match_last_part := false
     loop
     {
         if( test_radical == "" ){
@@ -168,11 +172,11 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
             return false
         }
 
-        has_part_same := false
+        match_any_part := false
 
         ; Check if is part of first char
         ; e.g. 干 -> 二 丨, "一" H and "二" E both think match
-        if( !has_part_same )
+        if( !match_any_part )
         {
             first_word := radical_word_list[1]
             remain_radicals := []
@@ -183,22 +187,23 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
                 {
                     radical_word_list.InsertAt(1, remain_radicals[A_Index])
                 }
-                has_part_same := true
+                match_any_part := true
             }
         }
 
         ; e.g. 肉 -> 冂 仌, "人" R will also be match
-        if( !has_part_same )
+        if( !match_any_part && !match_last_part )
         {
             last_word := radical_word_list[radical_word_list.Length()]
             if( RadicalMatchLastPart(last_word, test_radical) )
             {
                 radical_word_list.RemoveAt(radical_word_list.Length())
-                has_part_same := true
+                match_any_part := true
+                ; match_last_part := true
             }
         }
 
-        if( !has_part_same )
+        if( !match_any_part )
         {
             return false
         }
