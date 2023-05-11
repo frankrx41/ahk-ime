@@ -83,6 +83,7 @@ IsVerb(word)
 ;
 RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 {
+    local
     if( !test_word ){
         return true
     }
@@ -100,16 +101,32 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         return false
     }
 
-    radical_word_list := RadicalWordSplit(test_word)
-    first_word := radical_word_list[1, 1]
+    ; Backup
+    test_radical_backup := test_radical
+    remain_radicals_backup := CopyObj(remain_radicals)
 
-    loop, % radical_word_list[1].Length()-1
+    radical_word_list := RadicalWordSplit(test_word)
+    loop, % radical_word_list.Length()
     {
-        remain_radicals[remain_radicals.Length()+A_Index] := radical_word_list[1, A_Index+1]
+        loop_radical_index := A_Index
+        first_word := radical_word_list[loop_radical_index, 1]
+        Assert(first_word != test_word, test_word, true)
+
+        test_radical := test_radical_backup
+        remain_radicals := CopyObj(remain_radicals_backup)
+
+        loop, % radical_word_list[loop_radical_index].Length()-1
+        {
+            remain_radicals[remain_radicals.Length()+A_Index] := radical_word_list[loop_radical_index, A_Index+1]
+        }
+
+        if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
+        {
+            return true
+        }
     }
 
-    Assert(first_word != test_word, test_word, true)
-    return RadicalMatchFirstPart(first_word, test_radical, remain_radicals)
+    return false
 }
 
 RadicalMatchLastPart(test_word, ByRef test_radical)
