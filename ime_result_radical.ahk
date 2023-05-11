@@ -231,11 +231,12 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         index := 1
         loop % translate_result_list.Length()
         {
+            translate_result := translate_result_list[index]
             ImeProfilerBegin(36)
-            word_value := translate_result_list[index, 2]
+            word_value := TranslatorResultGetWord(translate_result)
             should_remove := false
             ; loop each character of "我爱你"
-            loop % translate_result_list[index, 5]
+            loop % TranslatorResultGetWordLength(translate_result)
             {
                 test_radical := radical_list[A_Index]
                 if( test_radical )
