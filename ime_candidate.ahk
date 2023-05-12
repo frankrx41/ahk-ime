@@ -59,42 +59,22 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
     return ime_candidata_result_list_filtered
 }
 
-; X
-ImeCandidateFindIndex(split_index, start_words, max_length)
-{
-    global ime_candidata_result_list_filtered
-    return CandidateFindIndex(ime_candidata_result_list_filtered, split_index, start_words, max_length)
-}
-
-CandidateFindIndex(candidata, split_index, start_words, max_length)
-{
-    return CandidateResultListFindIndex(candidata, split_index, start_words, max_length)
-}
-
 ImeCandidateGet()
 {
     global ime_candidata_result_list_filtered
     return ime_candidata_result_list_filtered
 }
 
-; X
-ImeCandidateListGetTranslatorResult(split_index, word_index)
+;*******************************************************************************
+;
+CandidateFindIndex(candidata, split_index, start_words, max_length)
 {
-    return CandidateGetTranslatorResult(ImeCandidateGet(), split_index, word_index)
+    return CandidateResultListFindIndex(candidata, split_index, start_words, max_length)
 }
 
 CandidateGetTranslatorResult(candidata, split_index, word_index)
 {
     return candidata[split_index, word_index]
-}
-
-;*******************************************************************************
-;
-
-; X
-ImeCandidateGetLength()
-{
-    return ImeCandidateGet().Length()
 }
 
 ;*******************************************************************************

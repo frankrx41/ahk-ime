@@ -28,7 +28,7 @@ ImeTooltipGetDisplaySelectItems()
     ime_select_str  := "----------------"
     max_column_loop := 6
 
-    loop % ImeCandidateGetLength()
+    loop % ImeCandidateGet().Length()
     {
         split_index     := A_Index
         select_index    := ImeSelectorGetSelectIndex(split_index)
@@ -110,7 +110,7 @@ ImeTooltipGetDisplayInputString()
 {
     ime_select_index := ""
     ime_select_str := ""
-    loop % ImeCandidateGetLength()
+    loop % ImeCandidateGet().Length()
     {
         split_index     := A_Index
         select_index    := ImeSelectorGetSelectIndex(split_index)
