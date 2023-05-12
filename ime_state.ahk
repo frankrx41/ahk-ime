@@ -33,15 +33,15 @@ ImeStateEventProcHook(phook, msg, hwnd)
         WinGetClass, win_class, ahk_id %hwnd%
         ime_active_window_class := win_class
         ImeStateRefresh()
-        ImeTooltipUpdate("")
+        ImeTooltipUpdate()
     case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
         ImeStateRefresh()
-        ImeTooltipUpdate("")
+        ImeTooltipUpdate()
     case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
         ImeStateRefresh()
-        ImeTooltipUpdate("")
+        ImeTooltipUpdate()
     }
     return
 }

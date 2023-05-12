@@ -1,6 +1,8 @@
 ImeTooltipInitialize()
 {
     local
+    global ime_tooltip_pos := ""
+
     font_size           := 13
     font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
     font_bold           := false
@@ -140,18 +142,16 @@ ImeTooltipGetDisplayInputString()
 
 ImeTooltipUpdatePos()
 {
-    ImeTooltipUpdate(GetCaretPos())
+    global ime_tooltip_pos := ""
 }
 
-ImeTooltipUpdate(tooltip_pos := "")
+ImeTooltipUpdate()
 {
     local
-    static ime_tooltip_pos := ""
 
     if( !ImeInputterHasAnyInput() )
     {
-        ToolTip(1, "")
-        ime_tooltip_pos := ""
+        tooltip_string := ""
     }
     else
     {
@@ -159,14 +159,6 @@ ImeTooltipUpdate(tooltip_pos := "")
             ime_select_str := ImeTooltipGetDisplaySelectItems()
         } else {
             ime_select_str := ImeTooltipGetDisplayInputString()
-        }
-
-        ; Update pos
-        if( tooltip_pos != "" ){
-            ime_tooltip_pos := tooltip_pos
-        }
-        if( !ime_tooltip_pos ){
-            ime_tooltip_pos := GetCaretPos()
         }
 
         split_index := ImeInputterGetCaretSplitIndex()
@@ -200,7 +192,6 @@ ImeTooltipUpdate(tooltip_pos := "")
         extern_info .= " {" radical_words "}"
         extern_info .= " (" ImeCandidateGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
-        extern_info .= " (" ime_tooltip_pos.x "," ime_tooltip_pos.y "," ime_tooltip_pos.t ")"
 
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
@@ -208,31 +199,63 @@ ImeTooltipUpdate(tooltip_pos := "")
         inputter_string := ImeInputterGetDisplayString()
         tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info debug_tip
         ; tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info
-
-        ImeTooltipShow(tooltip_string, ime_tooltip_pos.X, ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
+
+    ImeTooltipShow(tooltip_string)
     return
 }
 
-ImeTooltipShow(tooltip_string, x, y)
+ImeTooltipShow(tooltip_string)
 {
     local
-    hwnd := ToolTip(1, tooltip_string, "", "x" x " y" y)
+    static last_x := "", last_y := ""
+    global ime_tooltip_pos
 
-    new_x := x
-    new_y := y
-    WinGetPos, , , w, h, ahk_id %hwnd%
-    if( x + w > A_ScreenWidth ){
-        new_x := A_ScreenWidth - w
+    if( !tooltip_string )
+    {
+        ToolTip(1, "")
+        ime_tooltip_pos := ""
+        last_x := ""
+        last_y := ""
     }
-    if( y + h > A_ScreenHeight ){
-        new_y := A_ScreenHeight - h
-    }
-    ; tooltip, % x "," y "," w "," h "`n" A_ScreenWidth "," A_ScreenHeight "`n" new_x "," new_y
-    ; tooltip, % x "," y "," w "," h "`n" A_ScreenWidth "," A_ScreenHeight
+    else
+    {
+        ; Update pos
+        if( !ime_tooltip_pos ){
+            ime_tooltip_pos := GetCaretPos()
+            last_x := ""
+            last_y := ""
+        }
+        x := ime_tooltip_pos.X
+        y := ime_tooltip_pos.Y+ime_tooltip_pos.H
+        extern_info := "`n(" ime_tooltip_pos.x "," ime_tooltip_pos.y "," ime_tooltip_pos.t ")"
+        tooltip_string .= extern_info
 
-    ; Update tooltip pos
-    if( x != new_x || y != new_y ) {
-        ToolTip(1, tooltip_string, "", "x" new_x " y" new_y)
+        if( last_x && x > last_x ){
+            x := last_x
+        }
+        if( last_y && y > last_y ){
+            y := last_y
+        }
+
+        hwnd := ToolTip(1, tooltip_string, "", "x" x " y" y)
+        new_x := x
+        new_y := y
+        WinGetPos, , , w, h, ahk_id %hwnd%
+        if( x + w > A_ScreenWidth ){
+            new_x := A_ScreenWidth - w
+        }
+        if( y + h > A_ScreenHeight ){
+            new_y := A_ScreenHeight - h
+        }
+        ; tooltip, % x "," y "," w "," h "`n" A_ScreenWidth "," A_ScreenHeight "`n" new_x "," new_y
+        ; tooltip, % x "," y "," w "," h "`n" A_ScreenWidth "," A_ScreenHeight
+
+        ; Update tooltip pos
+        if( x != new_x || y != new_y ) {
+            ToolTip(1, tooltip_string, "", "x" new_x " y" new_y)
+            last_x := new_x
+            last_y := new_y
+        }
     }
 }

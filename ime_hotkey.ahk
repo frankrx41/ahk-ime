@@ -268,6 +268,7 @@
     ~LButton up::
         Sleep, 10
         ImeTooltipUpdatePos()
+        ImeTooltipUpdate()
     return
 #if ; ImeInputterHasAnyInput()
 
@@ -330,5 +331,5 @@ ImeToggleSuspend:
     }
     ImeInputterClearString()
     ImeStateRefresh()
-    ImeTooltipUpdate("")
+    ImeTooltipUpdate()
 return
