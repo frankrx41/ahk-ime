@@ -335,7 +335,7 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                         match_level := match_result
                         break
                     }
-                    if( match_level < match_result ) {
+                    if( match_result < match_level ) {
                         match_level := match_result
                     }
                 }
@@ -365,14 +365,17 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         ; Show full match word first
         loop, % translate_full_match_result_list.Length()
         {
+            ; translate_full_match_result_list[A_Index, 4] := 1
             translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
         }
         loop, % translate_last_match_result_list.Length()
         {
+            ; translate_last_match_result_list[A_Index, 4] := 2
             translate_result_list.Push(translate_last_match_result_list[A_Index])
         }
         loop, % translate_no_radical_result_list.Length()
         {
+            ; translate_no_radical_result_list[A_Index, 4] := 3
             translate_result_list.Push(translate_no_radical_result_list[A_Index])
         }
 
