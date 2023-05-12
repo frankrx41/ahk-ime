@@ -142,6 +142,7 @@ ImeInputterCallTranslator(auto_complete)
     global ime_splitted_list
     global ime_input_string
     global ime_input_dirty
+    global ime_selector_select_list
 
     ImeProfilerBegin(12)
     profile_text := ""
@@ -154,7 +155,7 @@ ImeInputterCallTranslator(auto_complete)
 
     candidate := ImeCandidateUpdateResult(splitter_result, auto_complete)
     ImeSelectorUnlockWords(caret_splitted_index, false)
-    ImeSelectorFixupSelectIndex(candidate)
+    ime_selector_select_list := ImeSelectorFixupSelectIndex(candidate, ime_selector_select_list)
 
     ime_input_dirty := false
 }

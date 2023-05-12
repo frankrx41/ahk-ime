@@ -1,18 +1,18 @@
 ImeCandidateInitialize()
 {
-    global ime_candidata_result_list_filtered
+    global ime_candidata_result
     ImeCandidateClear()
 }
 
 ImeCandidateClear()
 {
-    global ime_candidata_result_list_filtered   := []
+    global ime_candidata_result   := []
 }
 
 ImeCandidateUpdateResult(splitter_result, auto_complete)
 {
     local
-    global ime_candidata_result_list_filtered
+    global ime_candidata_result
 
     if( splitter_result.Length() )
     {
@@ -51,18 +51,18 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
         }
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
-        ime_candidata_result_list_filtered := CandidateResultListFilterResults(ime_candidate_result_list_origin, radical_list)
+        ime_candidata_result := CandidateResultListFilterResults(ime_candidate_result_list_origin, radical_list)
     } else {
         ImeCandidateClear()
     }
 
-    return ime_candidata_result_list_filtered
+    return ime_candidata_result
 }
 
 ImeCandidateGet()
 {
-    global ime_candidata_result_list_filtered
-    return ime_candidata_result_list_filtered
+    global ime_candidata_result
+    return ime_candidata_result
 }
 
 ;*******************************************************************************

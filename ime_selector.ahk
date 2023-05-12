@@ -97,7 +97,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
                 SelectorResultUnLockWord(ime_selector_select_list[test_index])
             }
         }
-        ImeSelectorFixupSelectIndex(ImeCandidateGet())
+        ime_selector_select_list := ImeSelectorFixupSelectIndex(ImeCandidateGet(), ime_selector_select_list)
     }
 
     if( !ImeInputterCaretIsAtEnd() )
