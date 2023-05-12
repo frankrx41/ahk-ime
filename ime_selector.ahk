@@ -99,7 +99,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         }
     }
 
-    ime_selector_select_list := ImeSelectorFixupSelectIndex(ImeCandidateGet(), ime_selector_select_list)
+    ime_selector_select_list := SelectorFixupSelectIndex(ImeCandidateGet(), ime_selector_select_list)
 
     if( !ImeInputterCaretIsAtEnd() )
     {

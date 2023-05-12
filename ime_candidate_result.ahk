@@ -57,7 +57,7 @@ CandidateResultListFilterResults(ByRef candidate_result_list, input_radical_list
         debug_text .= " -> (" test_result.Length() ")"
     }
 
-    ; ImeSelectorFixupSelectIndex()
+    ; SelectorFixupSelectIndex()
     ImeProfilerEnd(31, "[" result_list.Length() "]: " . debug_text)
     return result_list
 }

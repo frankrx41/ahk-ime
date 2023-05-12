@@ -53,7 +53,7 @@ TranslatorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, spl
 
 ;*******************************************************************************
 ;
-ImeSelectorFixupSelectIndex(candidate, const_selector_result_list)
+SelectorFixupSelectIndex(candidate, const_selector_result_list)
 {
     local
     profile_text := ""
