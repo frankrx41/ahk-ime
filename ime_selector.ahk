@@ -85,6 +85,7 @@ ImeSelectorFixupSelectIndex(candidate)
 ImeSelectorApplyCaretSelectIndex(lock_result)
 {
     local
+    global ime_selector_select_list
     ImeProfilerBegin(41)
     profile_text := ""
 
