@@ -322,7 +322,7 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
             ImeProfilerBegin(36)
             word_value := TranslatorResultGetWord(translate_result)
             should_remove   := false
-            match_level     := radical_match_level_no_match
+            match_level     := radical_match_level_no_radical
             ; loop each character of "我爱你"
             loop % TranslatorResultGetWordLength(translate_result)
             {
@@ -341,17 +341,17 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 }
             }
 
-            if( match_result == radical_match_level_full_match ) {
+            if( match_level == radical_match_level_full_match ) {
                 translate_full_match_result_list.Push(translate_result)
             }
-            if( match_result == radical_match_level_last_match ) {
+            if( match_level == radical_match_level_last_match ) {
                 translate_last_match_result_list.Push(translate_result)
             }
-            if( match_result == radical_match_level_no_radical ) {
+            if( match_level == radical_match_level_no_radical ) {
                 translate_no_radical_result_list.Push(translate_result)
             }
 
-            if( match_result != radical_match_level_part_match ) {
+            if( match_level != radical_match_level_part_match ) {
                 translate_result_list.RemoveAt(index)
             } else {
                 index += 1
