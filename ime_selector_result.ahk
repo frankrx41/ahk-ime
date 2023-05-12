@@ -1,67 +1,65 @@
 ;*******************************************************************************
-; [split_index, 0] = select info
-;   - 1: select index, work for selector menu, 0 mark not select, should skip this
-;   - 2: is lock
-;   - lock use:
-;       - 3: word value
-;       - 4: length
+; select result
+;   - 1: current select index, work for selector menu, 0 mark no select, should skip this
+;   - 2: lock word (empty means no lock)
+;   - 3: lock length (0 when no lock)
 ;*******************************************************************************
 ; Set
-SelectorResultSetSelectIndex(ByRef selector_result, split_index, select_index)
+SelectorResultSetSelectIndex(ByRef selector_result, select_index)
 {
     local
-    selector_result[split_index, 1] := select_index
-
-    profile_text := "`n  - [" split_index "]->[" select_index "] " CallerName()
+    Assert(selector_result)
+    selector_result[1] := select_index
+    profile_text := "`n  - " CallerName()
     ImeProfilerEnd(42, ImeProfilerBegin(42) . profile_text)
 }
 
-SelectorResultUnLockWord(ByRef selector_result, split_index)
+SelectorResultUnLockWord(ByRef selector_result)
 {
-    selector_result[split_index, 2] := false
-    selector_result[split_index, 3] := ""
-    selector_result[split_index, 4] := 0
+    Assert(selector_result)
+    selector_result[2] := ""
+    selector_result[3] := 0
 }
 
-SelectorResultLockWord(ByRef selector_result, split_index, select_word, word_length)
+SelectorResultLockWord(ByRef selector_result, select_word, word_length)
 {
     local
-    selector_result[split_index, 2] := true
-    selector_result[split_index, 3] := select_word
-    selector_result[split_index, 4] := word_length
-    profile_text := "`n  - [" split_index "]->[" selector_result[split_index, 1] "," select_word "," word_length "] "
+    Assert(selector_result)
+    selector_result[2] := select_word
+    selector_result[3] := word_length
+    profile_text := "`n  ->[" selector_result[1] "," select_word "," word_length "] "
     ImeProfilerEnd(43, ImeProfilerBegin(43) . profile_text)
 }
 
 ;*******************************************************************************
 ; Get
-SelectorResultGetSelectIndex(ByRef selector_result, split_index)
+SelectorResultGetSelectIndex(ByRef selector_result)
 {
-    return selector_result[split_index, 1] ? selector_result[split_index, 1] : 0
+    return selector_result[1] ? selector_result[1] : 0
 }
 
-SelectorResultIsSelectLock(ByRef selector_result, split_index)
+SelectorResultIsSelectLock(ByRef selector_result)
 {
     local
     ImeProfilerBegin(44)
-    profile_text := "`n  - [" split_index "]->[" selector_result[split_index, 2] "] " CallerName()
+    profile_text := "`n  - " selector_result[2] " " CallerName()
     ImeProfilerEnd(44, profile_text)
-    return selector_result[split_index, 2] ? true : false
+    return selector_result[2] ? true : false
 }
 
-SelectorResultGetLockWord(ByRef selector_result, split_index)
+SelectorResultGetLockWord(ByRef selector_result)
 {
-    return selector_result[split_index, 3]
+    return selector_result[2]
 }
 
-SelectorResultGetLockLength(ByRef selector_result, split_index)
+SelectorResultGetLockLength(ByRef selector_result)
 {
-    return selector_result[split_index, 4]
+    return selector_result[3]
 }
 
 ;*******************************************************************************
 ;
-SelectorResultUnLockFrontWords(ByRef selector_result, split_index)
+SelectorResultUnLockFrontWords(ByRef selector_result_list, split_index)
 {
     local
     ; Find if any prev result length include this
@@ -72,10 +70,10 @@ SelectorResultUnLockFrontWords(ByRef selector_result, split_index)
         if( test_index >= split_index ){
             break
         }
-        if( SelectorResultIsSelectLock(selector_result, test_index) )
+        if( SelectorResultIsSelectLock(selector_result_list[test_index]) )
         {
-            if( test_length + SelectorResultGetLockLength(selector_result, test_index) >= split_index ){
-                SelectorResultUnLockWord(selector_result, test_index)
+            if( test_length + SelectorResultGetLockLength(selector_result_list[test_index]) >= split_index ){
+                SelectorResultUnLockWord(selector_result_list[test_index])
                 break
             }
         }
@@ -85,15 +83,15 @@ SelectorResultUnLockFrontWords(ByRef selector_result, split_index)
     }
 }
 
-SelectorResultUnLockAfterWords(ByRef selector_result, split_index)
+SelectorResultUnLockAfterWords(ByRef selector_result_list, split_index)
 {
     local
-    loop % selector_result.Length()
+    loop % selector_result_list.Length()
     {
         test_index := A_Index
         if( test_index > split_index )
         {
-            SelectorResultUnLockWord(selector_result, test_index)
+            SelectorResultUnLockWord(selector_result_list[test_index])
         }
     }
 }
