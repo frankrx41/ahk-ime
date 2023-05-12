@@ -84,7 +84,7 @@ ImeTooltipGetDisplaySelectItems()
                         comment := SubStr(comment, 2)
                     }
                     end_str := select_index == word_index ? "]" : end_str_mark
-                    item_str := begin_str . ImeCandidateGetWord(split_index, word_index) . radical_code . end_str . comment
+                    item_str := begin_str . CandidateGetWord(ImeCandidateGet(), split_index, word_index) . radical_code . end_str . comment
                     ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
                 } else {
                     item_str := ""
@@ -115,7 +115,7 @@ ImeTooltipGetDisplayInputString()
         split_index     := A_Index
         select_index    := ImeSelectorGetSelectIndex(split_index)
         select_lock     := ImeSelectorIsSelectLock(split_index)
-        selected_word   := ImeCandidateGetWord(split_index, select_index)
+        selected_word   := CandidateGetWord(ImeCandidateGet(), split_index, select_index)
         if( select_index != 0 )
         {
             if( SubStr(ime_select_str, 0, 1) != "/" ){
@@ -125,7 +125,7 @@ ImeTooltipGetDisplayInputString()
             ime_select_str .= selected_word
         }
         select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
-        if( select_index != 0 && selected_word == ImeCandidateGetPinyin(split_index, select_index) ) {
+        if( select_index != 0 && selected_word == CandidateGetPinyin(ImeCandidateGet(), split_index, select_index) ) {
             ime_select_index .= select_index_char
             loop % StrPut(selected_word, "CP936") - 2 {
                 ime_select_index .= "-"
@@ -173,8 +173,9 @@ ImeTooltipUpdate()
             split_index -= 1
         }
         extern_info := ""
-        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" CandidateGetListLength(ImeCandidateGet(), split_index) "] (" ImeCandidateGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
-        current_word := ImeCandidateGetWord(split_index, select_index)
+        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" CandidateGetListLength(ImeCandidateGet(), split_index) "]"
+        extern_info .= " (" CandidateGetWeight(ImeCandidateGet(), split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        current_word := CandidateGetWord(ImeCandidateGet(), split_index, select_index)
         current_word := SubStr(current_word, word_index, 1)
         radical_list := RadicalWordSplit(current_word)
         radical_words := ""
@@ -190,7 +191,7 @@ ImeTooltipUpdate()
             }
         }
         extern_info .= " {" radical_words "}"
-        extern_info .= " (" ImeCandidateGetPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        extern_info .= " (" CandidateGetPinyin(ImeCandidateGet(), split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
 
         ; Debug info

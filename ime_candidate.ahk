@@ -84,22 +84,9 @@ CandidateGetListLength(candidata, split_index)
     return candidata[split_index].Length()
 }
 
-; X
-ImeCandidateGetPinyin(split_index, word_index)
-{
-    return CandidateGetPinyin(ImeCandidateGet(), split_index, word_index)
-}
-
 CandidateGetPinyin(candidata, split_index, word_index)
 {
     return TranslatorResultGetPinyin(candidata[split_index, word_index])
-}
-
-
-; X
-ImeCandidateGetWord(split_index, word_index)
-{
-    return CandidateGetWord(ImeCandidateGet(), split_index, word_index)
 }
 
 CandidateGetWord(candidata, split_index, word_index)
