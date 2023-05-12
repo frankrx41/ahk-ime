@@ -32,6 +32,9 @@ ImeSelectorSetCaretSelectIndex(select_index)
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := Max(1, Min(ImeCandidateGetListLength(split_index), select_index))
+    if( !ime_selector_select_list[split_index] ){
+        ime_selector_select_list[split_index] := []
+    }
     SelectorResultSetSelectIndex(ime_selector_select_list[split_index], select_index)
 }
 
