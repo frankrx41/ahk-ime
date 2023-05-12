@@ -6,7 +6,7 @@ ImeTooltipInitialize()
     font_bold           := false
     background_color    := "373832"
     text_color          := "d4d4d4"
-    ToolTip(1, "", "Q0 B" background_color " T"  text_color " S" font_size, font_family, font_bold)
+    ToolTip(1, "", "", "Q0 B" background_color " T"  text_color " S" font_size, font_family, font_bold)
 }
 
 ;*******************************************************************************

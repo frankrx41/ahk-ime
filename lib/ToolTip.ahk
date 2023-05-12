@@ -30,7 +30,7 @@ Return Value: ToolTip returns hWnd of the ToolTip
 \          To hide a ToolTip use ToolTip(Number), to destroy all ToolTip()
 */
 
-ToolTip(ID="",TEXT="",OPTIONS="",F:="",Style:=""){
+ToolTip(ID="",TEXT="", title="",OPTIONS="",F:="",Style:=""){
 	static
 	static Init := 0
 	static TT_HWND_0 := 0
@@ -80,6 +80,7 @@ ToolTip(ID="",TEXT="",OPTIONS="",F:="",Style:=""){
 	local k := 0
 	local t := 0
 	local b := 0
+	local g := 0
 	local #_DetectHiddenWindows := 0
 
 	If !Init
@@ -222,8 +223,9 @@ ToolTip(ID="",TEXT="",OPTIONS="",F:="",Style:=""){
 		}
 		If (!x and !y)
 			Gosub, TTM_UPDATE
-		else if !WinActive("ahk_id " . TT_HWND)
+		else if !WinActive("ahk_id " . TT_HWND) {
 			DllCall("SendMessage", "Uint", TT_HWND, "Uint", %A_ThisLabel%, "Uint", 0, "Uint", (x<9999999 ? x : xc & 0xFFFF)|(y<9999999 ? y : yc & 0xFFFF)<<16)
+		}
 	Return
 	TTM_SETTIPBKCOLOR:
 		If (B!="")
