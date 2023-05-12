@@ -38,8 +38,6 @@ ImeHotkeyRegisterInitialize()
         func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, ', %func%
         func := Func("HotkeyOnSplitMark").Bind("'")
-        Hotkey, \, %func%
-        func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, `;, %func%
         ; 0-9
         loop 10 {
