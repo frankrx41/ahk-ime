@@ -205,9 +205,34 @@ ImeTooltipUpdate(tooltip_pos := "")
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
 
-        tooltip_string := ImeInputterGetDisplayString()
-        ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info debug_tip, "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
-        ; ToolTip(1, tooltip_string "`n" ime_select_str "`n" extern_info , "x" ime_tooltip_pos.x " y" ime_tooltip_pos.Y+ime_tooltip_pos.H)
+        inputter_string := ImeInputterGetDisplayString()
+        tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info debug_tip
+        ; tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info
+
+        ImeTooltipShow(tooltip_string, ime_tooltip_pos.X, ime_tooltip_pos.Y+ime_tooltip_pos.H)
     }
     return
+}
+
+ImeTooltipShow(tooltip_string, x, y)
+{
+    local
+    hwnd := ToolTip(1, tooltip_string, "", "x" x " y" y)
+
+    new_x := x
+    new_y := y
+    WinGetPos, , , w, h, ahk_id %hwnd%
+    if( x + w > A_ScreenWidth ){
+        new_x := A_ScreenWidth - w
+    }
+    if( y + h > A_ScreenHeight ){
+        new_y := A_ScreenHeight - h
+    }
+    ; tooltip, % x "," y "," w "," h "`n" A_ScreenWidth "," A_ScreenHeight "`n" new_x "," new_y
+    ; tooltip, % x "," y "," w "," h "`n" A_ScreenWidth "," A_ScreenHeight
+
+    ; Update tooltip pos
+    if( x != new_x || y != new_y ) {
+        ToolTip(1, tooltip_string, "", "x" new_x " y" new_y)
+    }
 }

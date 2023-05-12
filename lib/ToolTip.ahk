@@ -81,6 +81,7 @@ ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
 	local t := 0
 	local b := 0
 	local g := 0
+	local s := 0
 	local #_DetectHiddenWindows := 0
 
 	If !Init
