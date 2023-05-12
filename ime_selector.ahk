@@ -2,14 +2,17 @@ ImeSelectorInitialize()
 {
     global ime_selector_select_list
     global ime_selector_store_select_index
+    global ime_selector_single_mode
 }
 
 ImeSelectorClear()
 {
     global ime_selector_select_list
     global ime_selector_store_select_index
+    global ime_selector_single_mode
     ime_selector_select_list := []
     ime_selector_store_select_index := 0
+    ime_selector_single_mode := 0
 }
 
 ;*******************************************************************************
@@ -62,11 +65,11 @@ ImeSelectorOffsetCaretSelectIndex(offset)
 ;
 ImeSelectorToggleSingleMode()
 {
-    ; TODO:
-    ; Assert(false, "not implement!", true)
-    ; global ime_selector_single_mode
-    ; ime_selector_single_mode := !ime_selector_single_mode
-    ; CandidateResultListFilterResults(ime_selector_single_mode)
+    global ime_selector_single_mode
+    global ime_selector_select_list
+    ime_selector_single_mode := !ime_selector_single_mode
+    ImeCandidateSetSingleMode(ime_selector_single_mode)
+    ime_selector_select_list := SelectorFixupSelectIndex(ImeCandidateGet(), ime_selector_select_list)
 }
 
 ;*******************************************************************************

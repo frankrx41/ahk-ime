@@ -1,23 +1,26 @@
 ImeCandidateInitialize()
 {
-    global ime_candidata_result
+    global ime_candidata_result_filter
+    global ime_candidata_result_origin
     ImeCandidateClear()
 }
 
 ImeCandidateClear()
 {
-    global ime_candidata_result   := []
+    global ime_candidata_result_filter  := []
+    global ime_candidata_result_origin  := []
 }
 
 ImeCandidateUpdateResult(splitter_result, auto_complete)
 {
     local
-    global ime_candidata_result
+    global ime_candidata_result_filter
+    global ime_candidata_result_origin
 
     if( splitter_result.Length() )
     {
         debug_text := ImeProfilerBegin(30)
-        ime_candidate_result_list_origin := []
+        ime_candidata_result_origin := []
         radical_list := []
         debug_text := "["
         loop % splitter_result.Length()
@@ -47,22 +50,35 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
                 }
             }
             ; Insert result
-            ime_candidate_result_list_origin.Push(translate_result_list)
+            ime_candidata_result_origin.Push(translate_result_list)
         }
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
-        ime_candidata_result := CandidateResultListFilterResults(ime_candidate_result_list_origin, radical_list)
+        ime_candidata_result_origin := CandidateResultListFilterResults(ime_candidata_result_origin, radical_list)
+        ime_candidata_result_filter := CopyObj(ime_candidata_result_origin)
     } else {
         ImeCandidateClear()
     }
 
-    return ime_candidata_result
+    return ime_candidata_result_filter
+}
+
+ImeCandidateSetSingleMode(single_mode)
+{
+    global ime_candidata_result_filter
+    global ime_candidata_result_origin
+
+    if( single_mode ){
+        ime_candidata_result_filter := CandidateResultListFilterResultsSingleMode(ime_candidata_result_origin)
+    } else {
+        ime_candidata_result_filter := ime_candidata_result_origin
+    }
 }
 
 ImeCandidateGet()
 {
-    global ime_candidata_result
-    return ime_candidata_result
+    global ime_candidata_result_filter
+    return ime_candidata_result_filter
 }
 
 ;*******************************************************************************

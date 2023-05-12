@@ -6,7 +6,7 @@ TranslatorResultListFilterSingleWord(ByRef translate_result_list)
     index := 1
     loop % translate_result_list.Length()
     {
-        if( translate_result_list[index, 5] > 1 )
+        if( TranslatorResultGetWordLength(translate_result_list[index]) > 1 )
         {
             translate_result_list.RemoveAt(index)
         }

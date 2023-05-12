@@ -28,7 +28,7 @@ CandidateResultListFindIndex(ByRef candidate_result_list, split_index, find_word
 
 ;*******************************************************************************
 ;
-CandidateResultListFilterResults(ByRef candidate_result_list, input_radical_list, single_mode:=false)
+CandidateResultListFilterResults(ByRef candidate_result_list, input_radical_list)
 {
     local
     result_list     := CopyObj(candidate_result_list)
@@ -48,9 +48,6 @@ CandidateResultListFilterResults(ByRef candidate_result_list, input_radical_list
             TranslatorResultListFilterByRadical(test_result, radical_list)
             radical_list.RemoveAt(1)
         }
-        if( single_mode ){
-            TranslatorResultListFilterSingleWord(test_result)
-        }
         if( true ){
             TranslatorResultListUniquify(test_result)
         }
@@ -59,5 +56,15 @@ CandidateResultListFilterResults(ByRef candidate_result_list, input_radical_list
 
     ; SelectorFixupSelectIndex()
     ImeProfilerEnd(31, "[" result_list.Length() "]: " . debug_text)
+    return result_list
+}
+
+CandidateResultListFilterResultsSingleMode(ByRef candidate_result_list)
+{
+    result_list := CopyObj(candidate_result_list)
+    loop % result_list.Length()
+    {
+        TranslatorResultListFilterSingleWord(result_list[A_Index])
+    }
     return result_list
 }
