@@ -78,18 +78,11 @@ CandidateGetTranslatorResult(candidata, split_index, word_index)
 }
 
 ;*******************************************************************************
-
-; X
-ImeCandidateGetListLength(split_index)
-{
-    return CandidateGetListLength(ImeCandidateGet(), split_index)
-}
-
+;
 CandidateGetListLength(candidata, split_index)
 {
     return candidata[split_index].Length()
 }
-
 
 ; X
 ImeCandidateGetPinyin(split_index, word_index)
