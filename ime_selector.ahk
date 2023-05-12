@@ -69,7 +69,13 @@ ImeSelectorToggleSingleMode()
     global ime_selector_select_list
     ime_selector_single_mode := !ime_selector_single_mode
     ImeCandidateSetSingleMode(ime_selector_single_mode)
-    ime_selector_select_list := SelectorFixupSelectIndex(ImeCandidateGet(), ime_selector_select_list)
+    ImeSelectorFixupSelectIndex(ImeCandidateGet())
+}
+
+ImeSelectorFixupSelectIndex(candidate)
+{
+    global ime_selector_select_list
+    ime_selector_select_list := SelectorFixupSelectIndex(candidate, ime_selector_select_list)
 }
 
 ;*******************************************************************************
@@ -79,7 +85,6 @@ ImeSelectorToggleSingleMode()
 ImeSelectorApplyCaretSelectIndex(lock_result)
 {
     local
-    global ime_selector_select_list
     ImeProfilerBegin(41)
     profile_text := ""
 
@@ -101,9 +106,8 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
                 SelectorResultUnLockWord(ime_selector_select_list[test_index])
             }
         }
+        ImeSelectorFixupSelectIndex(ImeCandidateGet())
     }
-
-    ime_selector_select_list := SelectorFixupSelectIndex(ImeCandidateGet(), ime_selector_select_list)
 
     if( !ImeInputterCaretIsAtEnd() )
     {
