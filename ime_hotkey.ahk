@@ -2,29 +2,35 @@
 ; In typing
 #if ImeInputterHasAnyInput()
     ; Input char
+
+    ; Fuzzy pinyin
     %::
     ?::
         ImeInputterProcessChar("?")
         ImeTooltipUpdate()
     return
 
+    ; Auto complete
     NumpadMult::
     *::
         ImeInputterProcessChar("*")
         ImeTooltipUpdate()
     return
 
+    ; Simple spell
     NumpadAdd::
     +::
         ImeInputterProcessChar("+")
         ImeTooltipUpdate()
     return
 
+    ; Verb
     !::
         ImeInputterProcessChar("!")
         ImeTooltipUpdate()
     return
 
+    ; Measure
     #::
         ImeInputterProcessChar("#")
         ImeTooltipUpdate()
