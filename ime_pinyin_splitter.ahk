@@ -350,19 +350,28 @@ PinyinSplitterInputStringNormal(input_string)
 
     loop
     {
-        if( string_index > strlen ) {
-            break
-        }
-
         initials := SubStr(input_string, string_index, 1)
-        ; 字母，自动分词
-        if( IsInitials(initials) )
+
+        if( string_index > strlen || IsInitials(initials) )
         {
             if( escape_string ) {
+                if( RegexMatch(escape_string, "^\s+$") ) {
+                    escape_string := ""
+                }
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
                 splitter_list.Push(make_result)
                 escape_string := ""
             }
+        }
+
+        if( string_index > strlen )
+        {
+            break
+        }
+
+        ; 字母，自动分词
+        if( IsInitials(initials) )
+        {
             start_string_index := string_index
 
             initials    := PinyinSplitterGetInitials(input_string, initials, string_index)
@@ -403,12 +412,6 @@ PinyinSplitterInputStringNormal(input_string)
             }
             escape_string .= initials
         }
-    }
-
-    if( escape_string ) {
-        make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
-        splitter_list.Push(make_result)
-        escape_string := ""
     }
 
     splitter_return_list := []

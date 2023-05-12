@@ -8,7 +8,7 @@
 ;       [5]: 3          ; 原始字符串中结束的位置
 ;       [6]: true       ; 需要翻译该词条
 ;       [7]: 1          ; 期待单词长度
-;       [8]: false      ; 不是完整的单词 (拼音末尾是 %)
+;       [8]: true       ; 是完整的单词 (拼音末尾不是 %)
 ;
 SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate:=true, hope_len:=1)
 {

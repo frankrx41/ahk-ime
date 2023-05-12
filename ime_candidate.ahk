@@ -32,12 +32,7 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
             {
                 ; Add legacy text
                 test_string := SplitterResultGetPinyin(test_splitter_result[1])
-                translate_result_list := [[test_string, test_string, 0, "", 1]]
-                if( RegexMatch(test_string, "^\s+$") ) {
-                    translate_result_list := [TranslatorResultMake(test_string, "", 0, "", 1)]
-                } else {
-                    translate_result_list := [TranslatorResultMake(test_string, test_string, 0, "", 1)]
-                }
+                translate_result_list := [TranslatorResultMake(test_string, test_string, 0, "", 1)]
             }
             else
             {
