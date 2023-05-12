@@ -62,7 +62,8 @@ ImeSelectorOffsetCaretSelectIndex(offset)
 ;
 ImeSelectorToggleSingleMode()
 {
-    Assert(false, "not implement!", true)
+    ; TODO:
+    ; Assert(false, "not implement!", true)
     ; global ime_selector_single_mode
     ; ime_selector_single_mode := !ime_selector_single_mode
     ; CandidateResultListFilterResults(ime_selector_single_mode)
@@ -121,13 +122,7 @@ ImeSelectorUnlockWords(split_index, unlock_front)
 }
 
 ;*******************************************************************************
-; [split_index, 0] = select info
-;   - 1: select index, work for selector menu, 0 mark not select, should skip this
-;   - 2: is lock
-;   - lock use:
-;       - 3: word value
-;       - 4: length
-
+;
 ImeSelectorSetSelectIndex(split_index, select_index)
 {
     global ime_selector_select_list
