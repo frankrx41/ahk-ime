@@ -17,10 +17,14 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result)
         splitted_string := SplitterResultListConvertToString(splitter_result, 1, length_count)
         profile_text .= "[" splitted_string "] "
         TranslatorHistoryUpdateKey(splitted_string, length_count)
+        if( length_count == hope_word_length ) {
+            first_weight := TranslatorResultGetWeight(translate_result_list[1])
+            last_index := translate_result_list.Length() + 1
+        }
         TranslatorHistoryPushResult(translate_result_list, splitted_string, 200)
-        ; if( length_count == hope_word_length ) {
-        ;     TranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 1, 3)
-        ; }
+        if( length_count == hope_word_length && TranslatorResultGetWeight(translate_result_list[last_index]) > first_weight) {
+            TranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 1, 1)
+        }
     }
     ImeProfilerEnd(21, profile_text)
 }
