@@ -166,7 +166,7 @@ IsRadical(char)
 
 GetRadical(input_string)
 {
-    RegExMatch(input_string, "^([A-Z!]+)", radical)
+    RegExMatch(input_string, "^([A-Z!#]+)", radical)
     return radical
 }
 

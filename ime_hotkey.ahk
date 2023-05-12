@@ -25,6 +25,11 @@
         ImeTooltipUpdate()
     return
 
+    #::
+        ImeInputterProcessChar("#")
+        ImeTooltipUpdate()
+    return
+
     ; Enter send string
     Enter::
     NumpadEnter::
