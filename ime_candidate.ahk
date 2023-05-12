@@ -55,6 +55,8 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
     } else {
         ImeCandidateClear()
     }
+
+    return ime_candidata_result_list_filtered
 }
 
 ; X
