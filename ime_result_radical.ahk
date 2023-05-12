@@ -177,6 +177,9 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
         if( test_radical == "" ){
             return 2
         }
+        if( radical_word_list.Length() == 0 ){
+            return false
+        }
 
         match_any_part := false
 
