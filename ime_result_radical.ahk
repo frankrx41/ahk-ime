@@ -150,11 +150,14 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
     }
 
     radical_word_list := RadicalWordSplit(test_word)
-    last_word := radical_word_list[1, radical_word_list[1].Length()]
-
-    ; "qianDR" "qianDT" -> 潜
-    Assert(last_word != test_word, test_word, true)
-    return RadicalMatchLastPart(last_word, test_radical)
+    if( radical_word_list.Length() > 0 ) {
+        last_word := radical_word_list[1, radical_word_list[1].Length()]
+        ; "qianDR" "qianDT" -> 潜
+        Assert(last_word != test_word, test_word, true)
+        return RadicalMatchLastPart(last_word, test_radical)
+    } else {
+        return false
+    }
 }
 
 ;*******************************************************************************
