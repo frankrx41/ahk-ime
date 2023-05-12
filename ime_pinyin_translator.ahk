@@ -11,6 +11,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result)
     max_len := hope_word_length + next_length
     profile_text .= "`n  - (" next_length "," max_len "," hope_word_length "): "
 
+    max_len := Min(max_len, 8)
     loop, % max_len
     {
         length_count := max_len-A_Index+1
