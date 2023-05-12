@@ -18,9 +18,9 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result)
         profile_text .= "[" splitted_string "] "
         TranslatorHistoryUpdateKey(splitted_string, length_count)
         TranslatorHistoryPushResult(translate_result_list, splitted_string, 200)
-        if( length_count == hope_word_length ) {
-            TranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 1, 3)
-        }
+        ; if( length_count == hope_word_length ) {
+        ;     TranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 1, 3)
+        ; }
     }
     ImeProfilerEnd(21, profile_text)
 }
