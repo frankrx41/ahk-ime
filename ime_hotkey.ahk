@@ -146,6 +146,7 @@
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
         } else {
             ImeSelectorOffsetCaretSelectIndex(-1)
+            ImeSelectorApplyCaretSelectIndex(true)
         }
         ImeTooltipUpdate()
     return
@@ -155,6 +156,7 @@
             ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
         } else {
             ImeSelectorOffsetCaretSelectIndex(+1)
+            ImeSelectorApplyCaretSelectIndex(true)
         }
         ImeTooltipUpdate()
     return
