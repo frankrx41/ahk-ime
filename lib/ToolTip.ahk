@@ -30,7 +30,7 @@ Return Value: ToolTip returns hWnd of the ToolTip
 \          To hide a ToolTip use ToolTip(Number), to destroy all ToolTip()
 */
 
-ToolTip(ID="",TEXT="", title="",OPTIONS="",F:="",Style:=""){
+ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
 	static
 	static Init := 0
 	static TT_HWND_0 := 0
@@ -85,7 +85,7 @@ ToolTip(ID="",TEXT="", title="",OPTIONS="",F:="",Style:=""){
 
 	If !Init
 		Gosub, TTM_INIT
-	DetectHiddenWindows:=A_DetectHiddenWindows
+	#_DetectHiddenWindows:=A_DetectHiddenWindows
 	DetectHiddenWindows, On
 	If !ID
 	{
