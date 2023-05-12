@@ -81,14 +81,14 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
 
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index)
-    word_length := ImeCandidateGetWordLength(split_index, select_index)
+    word_length := CandidateGetWordLength(ImeCandidateGet(), split_index, select_index)
 
     if( lock_result )
     {
         SelectorResultUnLockFrontWords(ime_selector_select_list, split_index)
         ; Lock this
         select_word := CandidateGetWord(ImeCandidateGet(), split_index, select_index)
-        word_length := ImeCandidateGetWordLength(split_index, select_index)
+        word_length := CandidateGetWordLength(ImeCandidateGet(), split_index, select_index)
         SelectorResultLockWord(ime_selector_select_list[split_index], select_word, word_length)
         loop, % word_length-1
         {

@@ -77,7 +77,7 @@ ImeTooltipGetDisplaySelectItems()
                     }
 
                     end_str_mark := " "
-                    comment := ImeCandidateGetFormattedComment(split_index, word_index)
+                    comment := CandidateGetFormattedComment(ImeCandidateGet(), split_index, word_index)
                     if( IsTraditionalComment(comment) )
                     {
                         end_str_mark := SubStr(comment, 1, 1)

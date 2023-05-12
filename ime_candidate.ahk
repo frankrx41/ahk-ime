@@ -94,32 +94,14 @@ CandidateGetWord(candidata, split_index, word_index)
     return TranslatorResultGetWord(candidata[split_index, word_index])
 }
 
-; X
-ImeCandidateGetWeight(split_index, word_index)
-{
-    return CandidateGetWeight(ImeCandidateGet(), split_index, word_index)
-}
-
 CandidateGetWeight(candidata, split_index, word_index)
 {
     return TranslatorResultGetWeight(candidata[split_index, word_index])
 }
 
-; X
-ImeCandidateGetComment(split_index, word_index)
-{
-    return CandidateGetComment(ImeCandidateGet(), split_index, word_index)
-}
-
 CandidateGetComment(candidata, split_index, word_index)
 {
     return TranslatorResultGetComment(candidata[split_index, word_index])
-}
-
-; X
-ImeCandidateGetWordLength(split_index, word_index)
-{
-    return CandidateGetWordLength(ImeCandidateGet(), split_index, word_index)
 }
 
 CandidateGetWordLength(candidata, split_index, word_index)
@@ -129,9 +111,9 @@ CandidateGetWordLength(candidata, split_index, word_index)
 
 ;*******************************************************************************
 ;
-ImeCandidateGetFormattedComment(split_index, word_index)
+CandidateGetFormattedComment(candidata, split_index, word_index)
 {
-    comment := ImeCandidateGetComment(split_index, word_index)
+    comment := CandidateGetComment(candidata, split_index, word_index)
     if( comment ){
         if( comment == "name" ){
             return "名"
