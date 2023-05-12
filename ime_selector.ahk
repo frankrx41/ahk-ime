@@ -183,7 +183,10 @@ ImeSelectorGetOutputString(as_legacy := false)
             select_index := ImeSelectorGetSelectIndex(split_index)
             if( select_index > 0 )
             {
-                result_string .= CandidateGetWord(ImeCandidateGet(), split_index, select_index)
+                select_word := CandidateGetWord(ImeCandidateGet(), split_index, select_index)
+                word_pinyin := CandidateGetPinyin(ImeCandidateGet(), split_index, select_index)
+                result_string .= select_word
+                TranslatorHistoryDynamicUpdate(word_pinyin, select_word)
             }
         }
     }

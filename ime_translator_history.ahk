@@ -66,7 +66,7 @@ TranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_nu
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        pinyin := TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
+        pinyin := splitted_string ;TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
         word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
         weight := TranslatorResultGetWeight(translator_history_result[splitted_string, A_Index])
         comment := TranslatorResultGetComment(translator_history_result[splitted_string, A_Index])
@@ -87,4 +87,27 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
     {
         translate_result_list.InsertAt(insert_at, CopyObj(translator_history_result[splitted_string, loop_cnt+1-A_Index]))
     }
+}
+
+;*******************************************************************************
+TranslatorHistoryDynamicUpdate(splitted_string, word)
+{
+    local
+    global translator_history_result
+    update_successful := false
+    loop, % translator_history_result[splitted_string].Length()
+    {
+        if( TranslatorResultGetWord(translator_history_result[splitted_string, A_Index]) == word )
+        {
+            if( A_Index != 1 )
+            {
+                translator_result := translator_history_result[splitted_string, A_Index]
+                translator_history_result[splitted_string].RemoveAt(A_Index)
+                translator_history_result[splitted_string].InsertAt(1, translator_result)
+            }
+            update_successful := true
+            break
+        }
+    }
+    Assert(update_successful, splitted_string ", " word)
 }
