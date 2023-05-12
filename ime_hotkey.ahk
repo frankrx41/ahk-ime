@@ -4,7 +4,6 @@
     ; Input char
 
     ; Fuzzy pinyin
-    %::
     ?::
         ImeInputterProcessChar("?")
         ImeTooltipUpdate()
@@ -30,9 +29,34 @@
         ImeTooltipUpdate()
     return
 
+    @::
+        ImeInputterProcessChar("@")
+        ImeTooltipUpdate()
+    return
+
     ; Measure
     #::
         ImeInputterProcessChar("#")
+        ImeTooltipUpdate()
+    return
+
+    $::
+        ImeInputterProcessChar("$")
+        ImeTooltipUpdate()
+    return
+
+    %::
+        ImeInputterProcessChar("%")
+        ImeTooltipUpdate()
+    return
+
+    ^::
+        ImeInputterProcessChar("^")
+        ImeTooltipUpdate()
+    return
+
+    &::
+        ImeInputterProcessChar("&")
         ImeTooltipUpdate()
     return
 

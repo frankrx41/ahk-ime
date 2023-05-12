@@ -242,7 +242,7 @@ RadicalIsFullMatch(test_word, test_radical)
         return 0
     }
     ; You also need to update `GetRadical`
-    test_radical := RegExReplace(test_radical, "[!#]")
+    test_radical := RegExReplace(test_radical, "[!@#$%^&]")
 
     radical_word_list := CopyObj(RadicalWordSplit(test_word))
     if( !radical_word_list ){
