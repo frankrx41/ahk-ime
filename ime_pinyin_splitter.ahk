@@ -398,7 +398,9 @@ PinyinSplitterInputStringNormal(input_string)
         else
         {
             string_index += 1
-            Assert( initials!="'" )
+            if( initials == "'" ){
+                initials := " "
+            }
             escape_string .= initials
         }
     }
