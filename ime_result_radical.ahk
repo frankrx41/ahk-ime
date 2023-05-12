@@ -161,18 +161,21 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
 }
 
 ;*******************************************************************************
-;
+; return
+;   0 == no match
+;   1 == full match
+;   2 == part match
 RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
 {
     local
     match_last_part := false
     loop
     {
-        if( test_radical == "" ){
-            return true
+        if( radical_word_list.Length() == 0 && test_radical == "" ){
+            return 1
         }
-        if( radical_word_list.Length() == 0 || ){
-            return false
+        if( test_radical == "" ){
+            return 2
         }
 
         match_any_part := false
@@ -208,7 +211,7 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
 
         if( !match_any_part )
         {
-            return false
+            return 0
         }
     }
 }
@@ -226,14 +229,22 @@ RadicalIsFullMatch(test_word, test_radical)
     }
 
     radical_word_list := CopyObj(RadicalWordSplit(test_word))
+    part_match := false
     for index, element in radical_word_list
     {
         result := RadicalIsFullMatchList(test_word, test_radical, element)
-        if( result ){
-            return true
+        if( result == 1 ){
+            return 1
+        }
+        if( result == 2 ){
+            part_match := true
         }
     }
-    return false
+    if( part_match ) {
+        return 2
+    } else {
+        return 0
+    }
 }
 
 ;*******************************************************************************
@@ -253,6 +264,8 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
 
     if( need_filter )
     {
+        translate_full_match_result_list := []
+
         index := 1
         loop % translate_result_list.Length()
         {
@@ -260,6 +273,7 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
             ImeProfilerBegin(36)
             word_value := TranslatorResultGetWord(translate_result)
             should_remove := false
+            is_full_match := true
             ; loop each character of "我爱你"
             loop % TranslatorResultGetWordLength(translate_result)
             {
@@ -267,9 +281,12 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 if( test_radical )
                 {
                     test_word := SubStr(word_value, A_Index, 1)
-                    if( !RadicalIsFullMatch(test_word, test_radical) )
-                    {
+                    result := RadicalIsFullMatch(test_word, test_radical)
+                    if( result == 0 ) {
                         should_remove := true
+                    }
+                    if( result != 1 ) {
+                        is_full_match := false
                     }
                 }
                 if( should_remove ){
@@ -277,15 +294,28 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 }
             }
 
-            if( should_remove ) {
+            ; Turn off full match feature
+            ; is_full_match := false
+            if( is_full_match ) {
+                translate_full_match_result_list.Push(translate_result)
+            }
+
+            if( should_remove || is_full_match ) {
                 translate_result_list.RemoveAt(index)
             } else {
                 index += 1
             }
+
             ImeProfilerEnd(36)
         }
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+
+        ; Show full match word first
+        loop, % translate_full_match_result_list.Length()
+        {
+            translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
+        }
 
         if( translate_result_list.Length() == 0 )
         {
