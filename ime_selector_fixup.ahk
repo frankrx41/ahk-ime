@@ -22,7 +22,7 @@ TranslatorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, spl
     loop_cnt := 0
     if( SelectorResultIsSelectLock(selector_result_list[split_index]) )
     {
-        max_length := CandidateGetWordLength(candidate, split_index, ImeSelectorGetSelectIndex(split_index))
+        max_length := CandidateGetWordLength(candidate, split_index, SelectorResultGetSelectIndex(selector_result_list[split_index]))
     }
     else
     {
