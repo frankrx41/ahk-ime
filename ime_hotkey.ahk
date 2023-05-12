@@ -241,6 +241,7 @@
         if( ImeSelectMenuIsOpen() ) {
             ImeSelectorOffsetCaretSelectIndex(+1)
         } else {
+            ImeSelectorStoreSelectIndexBeforeMenuOpen()
             ImeSelectMenuOpen()
             if( ImeSelectorGetCaretSelectIndex() == 0 )
             {
