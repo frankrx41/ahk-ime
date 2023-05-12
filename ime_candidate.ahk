@@ -1,20 +1,17 @@
 ImeCandidateInitialize()
 {
-    global ime_candidate_result_list_origin
     global ime_candidata_result_list_filtered
     ImeCandidateClear()
 }
 
 ImeCandidateClear()
 {
-    global ime_candidate_result_list_origin     := []
     global ime_candidata_result_list_filtered   := []
 }
 
 ImeCandidateUpdateResult(splitter_result, auto_complete)
 {
     local
-    global ime_candidate_result_list_origin
     global ime_candidata_result_list_filtered
 
     if( splitter_result.Length() )
@@ -60,56 +57,112 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
     }
 }
 
+; X
 ImeCandidateFindIndex(split_index, start_words, max_length)
 {
     global ime_candidata_result_list_filtered
-    return CandidateResultListFindIndex(ime_candidata_result_list_filtered, split_index, start_words, max_length)
+    return CandidateFindIndex(ime_candidata_result_list_filtered, split_index, start_words, max_length)
+}
+
+CandidateFindIndex(candidata, split_index, start_words, max_length)
+{
+    return CandidateResultListFindIndex(candidata, split_index, start_words, max_length)
+}
+
+ImeCandidateGet()
+{
+    global ime_candidata_result_list_filtered
+    return ime_candidata_result_list_filtered
+}
+
+; X
+ImeCandidateListGetTranslatorResult(split_index, word_index)
+{
+    return CandidateGetTranslatorResult(ImeCandidateGet(), split_index, word_index)
+}
+
+CandidateGetTranslatorResult(candidata, split_index, word_index)
+{
+    return candidata[split_index, word_index]
 }
 
 ;*******************************************************************************
 ;
+
+; X
 ImeCandidateGetLength()
 {
-    global ime_candidata_result_list_filtered
-    return ime_candidata_result_list_filtered.Length()
+    return ImeCandidateGet().Length()
 }
 
 ;*******************************************************************************
-;
+
+; X
 ImeCandidateGetListLength(split_index)
 {
-    global ime_candidata_result_list_filtered
-    return ime_candidata_result_list_filtered[split_index].Length()
+    return CandidateGetListLength(ImeCandidateGet(), split_index)
 }
 
+CandidateGetListLength(candidata, split_index)
+{
+    return candidata[split_index].Length()
+}
+
+
+; X
 ImeCandidateGetPinyin(split_index, word_index)
 {
-    global ime_candidata_result_list_filtered
-    return TranslatorResultGetPinyin(ime_candidata_result_list_filtered[split_index, word_index])
+    return CandidateGetPinyin(ImeCandidateGet(), split_index, word_index)
 }
 
+CandidateGetPinyin(candidata, split_index, word_index)
+{
+    return TranslatorResultGetPinyin(candidata[split_index, word_index])
+}
+
+
+; X
 ImeCandidateGetWord(split_index, word_index)
 {
-    global ime_candidata_result_list_filtered
-    return TranslatorResultGetWord(ime_candidata_result_list_filtered[split_index, word_index])
+    return CandidateGetWord(ImeCandidateGet(), split_index, word_index)
 }
 
+CandidateGetWord(candidata, split_index, word_index)
+{
+    return TranslatorResultGetWord(candidata[split_index, word_index])
+}
+
+; X
 ImeCandidateGetWeight(split_index, word_index)
 {
-    global ime_candidata_result_list_filtered
-    return TranslatorResultGetWeight(ime_candidata_result_list_filtered[split_index, word_index])
+    return CandidateGetWeight(ImeCandidateGet(), split_index, word_index)
 }
 
+CandidateGetWeight(candidata, split_index, word_index)
+{
+    return TranslatorResultGetWeight(candidata[split_index, word_index])
+}
+
+; X
 ImeCandidateGetComment(split_index, word_index)
 {
-    global ime_candidata_result_list_filtered
-    return TranslatorResultGetComment(ime_candidata_result_list_filtered[split_index, word_index])
+    return CandidateGetComment(ImeCandidateGet(), split_index, word_index)
 }
 
+CandidateGetComment(candidata, split_index, word_index)
+{
+    return TranslatorResultGetComment(candidata[split_index, word_index])
+}
+
+; X
 ImeCandidateGetWordLength(split_index, word_index)
 {
-    global ime_candidata_result_list_filtered
-    return TranslatorResultGetWordLength(ime_candidata_result_list_filtered[split_index, word_index])
+    return CandidateGetWordLength(ImeCandidateGet(), split_index, word_index)
+}
+
+CandidateGetWordLength(candidata, split_index, word_index)
+{
+    return TranslatorResultGetWordLength(candidata[split_index, word_index])
 }
 
 ;*******************************************************************************
