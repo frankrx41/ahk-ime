@@ -38,14 +38,18 @@ PinyinSplitterMaxVowelsLength(input_str, index)
     return vowels_max_len
 }
 
-PinyinSplitterGetWeight(pinyin, prev_splitted_input:="")
+PinyinSplitterGetWeight(pinyin, prev_splitted_input:="", update:=false)
 {
     static splitted_string_weight_table := {}
+    Assert(pinyin)
     if( prev_splitted_input == "" )
     {
         if( !splitted_string_weight_table.HasKey(pinyin) )
         {
             splitted_string_weight_table[pinyin] := PinyinSqlGetWeight(pinyin)
+        }
+        if( update ) {
+            splitted_string_weight_table[pinyin] += 1
         }
         return splitted_string_weight_table[pinyin]
     }

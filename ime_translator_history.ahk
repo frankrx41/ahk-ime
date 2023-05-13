@@ -36,6 +36,7 @@ TranslatorHistoryHasKey(splitted_string)
 ; ]
 TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
 {
+    local
     global translator_history_result
     global translator_history_weight
 
@@ -45,12 +46,19 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
         loop % translator_history_result[splitted_string].Length() {
             ; word length
             translator_history_result[splitted_string, A_Index, 5] := word_length
-            ; weight
-            word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
-            if( translator_history_weight.HasKey(word) ){
-                translator_history_result[splitted_string, A_Index, 3] += translator_history_weight[word]
-            }
         }
+    }
+
+    ; update weight
+    need_sort := false
+    loop % translator_history_result[splitted_string].Length() {
+        word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
+        if( translator_history_weight.HasKey(word) ){
+            translator_history_result[splitted_string, A_Index, 3] := translator_history_weight[word]
+            need_sort := true
+        }
+    }
+    if( need_sort ) {
         translator_history_result[splitted_string] := TranslatorResultListSortByWeight(translator_history_result[splitted_string])
     }
 }
@@ -110,19 +118,18 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
 ;
 TranslatorHistoryDynamicUpdate(splitted_string, word)
 {
+    local
     global translator_history_result
     global translator_history_weight
-    if( !translator_history_weight.HasKey(word) ){
-        translator_history_weight[word] := 20000
-    }
 
-    loop, % translator_history_result[splitted_string].Length()
-    {
-        if( TranslatorResultGetWord(translator_history_result[splitted_string, A_Index]) == word )
-        {
-            translator_history_result[splitted_string, A_Index, 3] += translator_history_weight[word]
-            break
-        }
+    Assert(splitted_string)
+
+    zero_tone_pinyin := RegExReplace(splitted_string, "[0-5]", "0")
+    auto_pinyin := RegExReplace(zero_tone_pinyin, "0([a-z])[a-z]*0$", "0$1%0")
+    if( auto_pinyin ) {
+        test_pinyin := auto_pinyin
+    } else {
+        test_pinyin := zero_tone_pinyin
     }
-    translator_history_result[splitted_string] := TranslatorResultListSortByWeight(translator_history_result[splitted_string])
+    translator_history_weight[word] := PinyinSplitterGetWeight(test_pinyin, "", true)
 }

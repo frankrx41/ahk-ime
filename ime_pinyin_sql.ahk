@@ -75,7 +75,7 @@ PinyinSqlGenerateWhereCondition(key_name, key_value, is_full_key:=false)
 
 PinyinSqlGenerateWhereCommand(sim_key, full_key)
 {
-    Assert(sim_key != "", sim_key "," sim_key, true)
+    Assert(sim_key != "", sim_key "," full_key)
     sql_where_cmd := PinyinSqlGenerateWhereCondition("sim", sim_key)
 
     if( full_key ) {
@@ -98,6 +98,8 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
 
     auto_complete := (SubStr(splitted_input, 0, 1) == "*")
     splitted_input := RTrim(splitted_input, "*")
+
+    Assert(splitted_input)
 
     sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_complete)
     sql_full_key    := PinyinSqlFullKey(splitted_input, auto_complete)
@@ -128,6 +130,8 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
 ; 
 PinyinSqlGetWeight(splitted_input)
 {
+    Assert(splitted_input)
+
     sql_sim_key     := PinyinSqlSimpleKey(splitted_input, false)
     sql_full_key    := PinyinSqlFullKey(splitted_input, false)
 
