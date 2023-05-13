@@ -38,5 +38,6 @@ TranslatorResultMakeError()
 ; Sort
 TranslatorResultListSortByWeight(ByRef translate_result_list)
 {
+    ; TODO: 换成更高效且稳定的函数
     return ObjectSort(translate_result_list, 3,, true)
 }

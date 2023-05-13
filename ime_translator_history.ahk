@@ -55,13 +55,13 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
     }
 }
 
-TranslatorHistoryGetResultWord(splitted_string)
+TranslatorHistoryGetResultWord(splitted_string, word_class:="")
 {
     global translator_history_result
     loop
     {
         word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
-        if( part_of_speech == "" ){
+        if( word_class == "" ){
             return word
         }
     }
