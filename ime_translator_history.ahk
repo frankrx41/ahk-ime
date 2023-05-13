@@ -1,6 +1,14 @@
+TranslatorHistoryInitialize()
+{
+    global translator_history_result    ; See ime_translator_result.ahk
+    global translator_history_weight    ; {"单词": 1000, "字": 1000}
+    TranslatorHistoryClear()
+}
+
 TranslatorHistoryClear()
 {
     global translator_history_result := []
+    global translator_history_weight := {}
 }
 
 TranslatorHistoryHasResult(splitted_string)

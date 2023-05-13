@@ -31,7 +31,7 @@ ImeSelectorInitialize()
 
 ; Translator
 ImeCandidateInitialize()
-TranslatorHistoryClear()
+TranslatorHistoryInitialize()
 
 ; Radical
 RadicalInitialize()
