@@ -20,6 +20,8 @@
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_splitter.ahk
 
+#Include, ime_gojuon_splitter.ahk
+
 ; Candidate
 #Include, ime_candidate.ahk
 #Include, ime_candidate_result.ahk
