@@ -56,14 +56,6 @@ ImeHotkeyRegisterInitialize()
     return
 }
 
-ImeHotkeyShiftSetMode(orgin_mode)
-{
-    if( orgin_mode == "en" ){
-        ImeOutputterPutSelect(true)
-    }
-    ImeStateUpdateMode(orgin_mode)
-}
-
 ImeHotkeyRegisterShift(origin_state)
 {
     global ime_hotkey_on_shift_set_mode
