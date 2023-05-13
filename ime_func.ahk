@@ -117,11 +117,18 @@ ScriptRestart()
     Reload
 }
 
+PutStringTimer:
+    Critical
+    SendInput, % "{Text}" global_input_string
+return
+
 PutString(input_string, use_clipboard:=false){
     local
+    global global_input_string
     Critical
     if( !use_clipboard ){
-        SendInput, % "{Text}" input_string
+        global_input_string := input_string
+        SetTimer, PutStringTimer, -1
     }
     else {
         saveboard := clipboard
