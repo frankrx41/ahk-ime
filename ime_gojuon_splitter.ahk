@@ -6,10 +6,10 @@
 
 IsGojuonInitials(character)
 {
-    return InStr("aiueo", character) || InStr("kstcnhmyrw", character) || character == "n" || InStr("gzjdbp", character)
+    return InStr("aiueo", character) || InStr("kstcnhfmyrw", character) || character == "n" || InStr("gzjdbp", character)
 }
 
-GojuonSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
+GojuonSplitterGetVowels(input_str, initials, ByRef index)
 {
     have_check := false
     ; aiueo
@@ -43,7 +43,7 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
         have_check := true
     }
 
-    if( !have_check && InStr("kstcnhmyrwgzjdbp", initials) && InStr("aiueo", SubStr(input_str, index, 1)) ){
+    if( !have_check && InStr("kstcnhfmyrwgzjdbp", initials) && InStr("aiueo", SubStr(input_str, index, 1)) ){
         vowels := SubStr(input_str, index, 1)
         index += 1
         have_check := true
@@ -55,9 +55,11 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
         have_check := true
     }
 
+    ; TODO: fa ふぁ la
+    ; xtsu xtu ltsu ltu っ
+
     return vowels
 }
-
 
 GojuonSplitterInputString(input_string)
 {
@@ -76,9 +78,10 @@ GojuonSplitterInputString(input_string)
         if( IsGojuonInitials(initials) )
         {
             start_string_index := string_index
-            vowels      := GojuonSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
+            vowels      := GojuonSplitterGetVowels(input_string, initials, string_index)
 
-            make_result := SplitterResultMake(initials . vowels, "", "", start_string_index, string_index-1)
+            need_translate := (string_index <= strlen+1)
+            make_result := SplitterResultMake(initials . vowels, "", "", start_string_index, string_index-1, need_translate)
             splitter_list.Push(make_result)
 
             hope_length_list[hope_length_list.Length()] += 1

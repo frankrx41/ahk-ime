@@ -42,7 +42,11 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
             {
                 Assert(test_splitter_result.Length() >= 1)
                 ; Get translate result
-                translate_result_list := PinyinTranslateFindResult(test_splitter_result, auto_complete)
+                if( ImeModeGetLanguage() == "tw" || ImeModeGetLanguage() == "cn" ){
+                    translate_result_list := PinyinTranslateFindResult(test_splitter_result, auto_complete)
+                } else if( ImeModeGetLanguage() == "jp" ) {
+                    translate_result_list := GojuonTranslateFindResult(test_splitter_result, auto_complete)
+                }
                 if( translate_result_list.Length() == 0 ){
                     first_word := SplitterResultListConvertToString(splitter_result, A_Index)
                     translate_result_list := [TranslatorResultMake(first_word, first_word, 0, "", 1, first_word)]

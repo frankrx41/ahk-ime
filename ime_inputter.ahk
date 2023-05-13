@@ -125,7 +125,12 @@ ImeInputterUpdateString(input_char)
     if( ime_input_string )
     {
         ; Splitter
-        ime_splitted_list := PinyinSplitterInputString(ime_input_string, auto_complete)
+        if( ImeModeGetLanguage() == "tw" || ImeModeGetLanguage() == "cn" ){
+            ime_splitted_list := PinyinSplitterInputString(ime_input_string, auto_complete)
+        } else if( ImeModeGetLanguage() == "jp" ) {
+            ime_splitted_list := GojuonSplitterInputString(ime_input_string)
+            auto_complete := false
+        }
         ; Translator
         ImeInputterCallTranslator(auto_complete)
     }

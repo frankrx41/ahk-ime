@@ -37,6 +37,7 @@ TranslatorHistoryInitialize()
 RadicalInitialize()
 
 PinyinInitialize()
+GojuonTranslateInitialize()
 
 ImeTooltipInitialize()
 
