@@ -355,9 +355,6 @@ PinyinSplitterInputStringNormal(input_string)
         if( string_index > strlen || IsInitials(initials) )
         {
             if( escape_string ) {
-                if( RegexMatch(escape_string, "^\s+$") ) {
-                    escape_string := ""
-                }
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
                 splitter_list.Push(make_result)
                 escape_string := ""
