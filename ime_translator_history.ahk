@@ -116,13 +116,22 @@ TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
 
 TranslatorHistoryDynamicUpdate(splitted_string, word)
 {
+    local
     ; origin pinyin "shang1hai4"
     TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
 
     ; 0 tone pinyin "shang0hai0"
-    splitted_string := RegExReplace(splitted_string, "[0-5]", "0", word_len)
-    if( word_len ){
-        TranslatorHistoryUpdateKey(splitted_string, word_len)
-        TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
+    zero_tone_pinyin := RegExReplace(splitted_string, "[0-5]", "0", word_len)
+    if( word_len && zero_tone_pinyin != splitted_string ){
+        TranslatorHistoryUpdateKey(zero_tone_pinyin, word_len)
+        TranslatorHistoryDynamicUpdateSingleSort(zero_tone_pinyin, word)
+    }
+
+    ; auto complete "shang0h%0"
+    auto_pinyin := RegExReplace(zero_tone_pinyin, "0([a-z])[a-z]*0$", "0$1%0")
+    ; ToolTip, % splitted_string ", " zero_tone_pinyin ", " word_len ", " auto_pinyin
+    if( word_len && auto_pinyin != splitted_string ) {
+        TranslatorHistoryUpdateKey(auto_pinyin, word_len)
+        TranslatorHistoryDynamicUpdateSingleSort(auto_pinyin, word)
     }
 }
