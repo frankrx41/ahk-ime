@@ -75,7 +75,7 @@ PinyinSqlGenerateWhereCondition(key_name, key_value, is_full_key:=false)
 
 PinyinSqlGenerateWhereCommand(sim_key, full_key)
 {
-    Assert(sim_key,sim_key,true)
+    Assert(sim_key != "", sim_key "," sim_key, true)
     sql_where_cmd := PinyinSqlGenerateWhereCondition("sim", sim_key)
 
     if( full_key ) {

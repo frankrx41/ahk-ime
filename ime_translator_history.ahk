@@ -59,7 +59,7 @@ TranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_nu
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        pinyin  := TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
+        pinyin  := splitted_string  ; TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
         word    := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
         weight  := TranslatorResultGetWeight(translator_history_result[splitted_string, A_Index])
         comment := TranslatorResultGetComment(translator_history_result[splitted_string, A_Index])
@@ -79,7 +79,7 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
     loop % loop_cnt
     {
         index   := loop_cnt+1-A_Index
-        pinyin  := TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
+        pinyin  := splitted_string  ; TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
         word    := TranslatorResultGetWord(translator_history_result[splitted_string, index])
         weight  := TranslatorResultGetWeight(translator_history_result[splitted_string, index])
         comment := TranslatorResultGetComment(translator_history_result[splitted_string, index])
@@ -91,14 +91,11 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
 }
 
 ;*******************************************************************************
-TranslatorHistoryDynamicUpdate(splitted_string, word)
+TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
 {
     local
     global translator_history_result
     update_successful := false
-
-    splitted_string := RegExReplace(splitted_string, "[0-5]", "0", word_len)
-    TranslatorHistoryUpdateKey(splitted_string, word_len)
 
     loop, % translator_history_result[splitted_string].Length()
     {
@@ -114,5 +111,18 @@ TranslatorHistoryDynamicUpdate(splitted_string, word)
             break
         }
     }
-    Assert(update_successful, splitted_string ", " word)
+    ; Assert(update_successful, splitted_string ", " word)
+}
+
+TranslatorHistoryDynamicUpdate(splitted_string, word)
+{
+    ; origin pinyin "shang1hai4"
+    TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
+
+    ; 0 tone pinyin "shang0hai0"
+    splitted_string := RegExReplace(splitted_string, "[0-5]", "0", word_len)
+    if( word_len ){
+        TranslatorHistoryUpdateKey(splitted_string, word_len)
+        TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
+    }
 }
