@@ -1,12 +1,13 @@
 ;*******************************************************************************
 ; translator_result := []
-;   [1]: "wo3"      ; pinyin
-;   [2]: "我"       ; value
+;   [1]: "wo3"      ; legacy pinyin
+;   [2]: "我"       ; word value
 ;   [3]: 30233      ; weight
 ;   [4]: ""         ; comment
 ;   [5]: 1          ; word length
+;   [6]: 1          ; input pinyin
 ;
-TranslatorResultGetPinyin(ByRef translate_result) {
+TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
 }
 TranslatorResultGetWord(ByRef translate_result) {
@@ -21,17 +22,20 @@ TranslatorResultGetComment(ByRef translate_result) {
 TranslatorResultGetWordLength(ByRef translate_result) {
     return translate_result[5]
 }
+TranslatorResultGetInputPinyin(ByRef translate_result) {
+    return translate_result[6]
+}
 
 ;*******************************************************************************
 ;
-TranslatorResultMake(pinyin, word, weight, comment, word_length)
+TranslatorResultMake(pinyin, word, weight, comment, word_length, input_pinyin)
 {
-    return [pinyin, word, weight, comment, word_length]
+    return [pinyin, word, weight, comment, word_length, input_pinyin]
 }
 
 TranslatorResultMakeError()
 {
-    return TranslatorResultMake("", "", 0, "Error", 1)
+    return TranslatorResultMake("", "", 0, "Error", 1, "")
 }
 
 ;*******************************************************************************

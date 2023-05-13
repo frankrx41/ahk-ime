@@ -125,7 +125,7 @@ ImeTooltipGetDisplayInputString()
             ime_select_str .= selected_word
         }
         select_index_char := (select_index == 0) ? "-" : Mod(select_index,10)
-        if( select_index != 0 && selected_word == CandidateGetPinyin(ImeCandidateGet(), split_index, select_index) ) {
+        if( select_index != 0 && selected_word == CandidateGetLegacyPinyin(ImeCandidateGet(), split_index, select_index) ) {
             ime_select_index .= select_index_char
             loop % StrPut(selected_word, "CP936") - 2 {
                 ime_select_index .= "-"
@@ -191,7 +191,7 @@ ImeTooltipUpdate()
             }
         }
         extern_info .= " {" radical_words "}"
-        extern_info .= " (" CandidateGetPinyin(ImeCandidateGet(), split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        extern_info .= " (" CandidateGetLegacyPinyin(ImeCandidateGet(), split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
 
         ; Debug info

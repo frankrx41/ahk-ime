@@ -184,7 +184,7 @@ ImeSelectorGetOutputString(as_legacy := false)
             if( select_index > 0 )
             {
                 select_word := CandidateGetWord(ImeCandidateGet(), split_index, select_index)
-                word_pinyin := CandidateGetPinyin(ImeCandidateGet(), split_index, select_index)
+                word_pinyin := CandidateGetLegacyPinyin(ImeCandidateGet(), split_index, select_index)
                 result_string .= select_word
                 TranslatorHistoryDynamicUpdate(word_pinyin, select_word)
             }

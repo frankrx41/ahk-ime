@@ -83,13 +83,13 @@ TranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_nu
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        pinyin  := splitted_string  ; TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
+        pinyin  := TranslatorResultGetLegacyPinyin(translator_history_result[splitted_string, A_Index])
         word    := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
         weight  := TranslatorResultGetWeight(translator_history_result[splitted_string, A_Index])
         comment := TranslatorResultGetComment(translator_history_result[splitted_string, A_Index])
         word_length := TranslatorResultGetWordLength(translator_history_result[splitted_string, A_Index])
 
-        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length + modify_weight)
+        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length + modify_weight, splitted_string)
         translate_result_list.Push(single_result)
     }
 }
@@ -103,28 +103,28 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
     loop % loop_cnt
     {
         index   := loop_cnt+1-A_Index
-        pinyin  := splitted_string  ; TranslatorResultGetPinyin(translator_history_result[splitted_string, A_Index])
+        pinyin  := TranslatorResultGetLegacyPinyin(translator_history_result[splitted_string, A_Index])
         word    := TranslatorResultGetWord(translator_history_result[splitted_string, index])
         weight  := TranslatorResultGetWeight(translator_history_result[splitted_string, index])
         comment := TranslatorResultGetComment(translator_history_result[splitted_string, index])
         word_length := TranslatorResultGetWordLength(translator_history_result[splitted_string, index])
 
-        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length)
+        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length, splitted_string)
         translate_result_list.InsertAt(insert_at, single_result)
     }
 }
 
 ;*******************************************************************************
 ;
-TranslatorHistoryDynamicUpdate(splitted_string, word)
+TranslatorHistoryDynamicUpdate(input_pinyin, word)
 {
     local
     global translator_history_result
     global translator_history_weight
 
-    Assert(splitted_string)
+    Assert(input_pinyin)
 
-    zero_tone_pinyin := RegExReplace(splitted_string, "[0-5]", "0")
+    zero_tone_pinyin := RegExReplace(input_pinyin, "[0-5]", "0")
     auto_pinyin := RegExReplace(zero_tone_pinyin, "0([a-z])[a-z]*0$", "0$1%0")
     if( auto_pinyin ) {
         test_pinyin := auto_pinyin

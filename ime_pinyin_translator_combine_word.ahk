@@ -59,7 +59,7 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
 
             total_word_length := splitter_result.Length()
             pinyin := SplitterResultListConvertToString(splitter_result, 1, total_word_length)
-            single_result := TranslatorResultMake(pinyin, full_word, 0, "auto", total_word_length)
+            single_result := TranslatorResultMake(pinyin, full_word, 0, "auto", total_word_length, pinyin)
             translate_result_list.InsertAt(1, single_result)
         }
     }

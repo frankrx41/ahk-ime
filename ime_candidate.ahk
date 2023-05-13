@@ -33,9 +33,9 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
                 ; Add legacy text
                 test_string := SplitterResultGetPinyin(test_splitter_result[1])
                 if( RegexMatch(test_string, "^\s*$") ) {
-                    translate_result_list := [TranslatorResultMake(test_string, "", 0, "", 1)]
+                    translate_result_list := [TranslatorResultMake(test_string, "", 0, "", 1, test_string)]
                 } else {
-                    translate_result_list := [TranslatorResultMake(test_string, test_string, 0, "", 1)]
+                    translate_result_list := [TranslatorResultMake(test_string, test_string, 0, "", 1, test_string)]
                 }
             }
             else
@@ -45,7 +45,7 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
                 translate_result_list := PinyinTranslateFindResult(test_splitter_result, auto_complete)
                 if( translate_result_list.Length() == 0 ){
                     first_word := SplitterResultListConvertToString(splitter_result, A_Index)
-                    translate_result_list := [TranslatorResultMake(first_word, first_word, 0, "", 1)]
+                    translate_result_list := [TranslatorResultMake(first_word, first_word, 0, "", 1, first_word)]
                 }
             }
             ; Insert result
@@ -99,9 +99,14 @@ CandidateGetListLength(candidata, split_index)
     return candidata[split_index].Length()
 }
 
-CandidateGetPinyin(candidata, split_index, word_index)
+CandidateGetLegacyPinyin(candidata, split_index, word_index)
 {
-    return TranslatorResultGetPinyin(candidata[split_index, word_index])
+    return TranslatorResultGetLegacyPinyin(candidata[split_index, word_index])
+}
+
+CandidateGetInputPinyin(candidata, split_index, word_index)
+{
+    return TranslatorResultGetInputPinyin(candidata[split_index, word_index])
 }
 
 CandidateGetWord(candidata, split_index, word_index)
