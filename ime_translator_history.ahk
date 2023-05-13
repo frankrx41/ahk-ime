@@ -37,13 +37,21 @@ TranslatorHistoryHasKey(splitted_string)
 TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
 {
     global translator_history_result
+    global translator_history_weight
 
     if( !TranslatorHistoryHasKey(splitted_string) )
     {
         translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, limit_num)
         loop % translator_history_result[splitted_string].Length() {
+            ; word length
             translator_history_result[splitted_string, A_Index, 5] := word_length
+            ; weight
+            word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
+            if( translator_history_weight.HasKey(word) ){
+                translator_history_result[splitted_string, A_Index, 3] += translator_history_weight[word]
+            }
         }
+        translator_history_result[splitted_string] := TranslatorResultListSortByWeight(translator_history_result[splitted_string])
     }
 }
 
@@ -99,47 +107,22 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
 }
 
 ;*******************************************************************************
-TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
+;
+TranslatorHistoryDynamicUpdate(splitted_string, word)
 {
-    local
     global translator_history_result
-    update_successful := false
+    global translator_history_weight
+    if( !translator_history_weight.HasKey(word) ){
+        translator_history_weight[word] := 20000
+    }
 
     loop, % translator_history_result[splitted_string].Length()
     {
         if( TranslatorResultGetWord(translator_history_result[splitted_string, A_Index]) == word )
         {
-            if( A_Index != 1 )
-            {
-                translator_result := translator_history_result[splitted_string, A_Index]
-                translator_history_result[splitted_string].RemoveAt(A_Index)
-                translator_history_result[splitted_string].InsertAt(1, translator_result)
-            }
-            update_successful := true
+            translator_history_result[splitted_string, A_Index, 3] += translator_history_weight[word]
             break
         }
     }
-    ; Assert(update_successful, splitted_string ", " word)
-}
-
-TranslatorHistoryDynamicUpdate(splitted_string, word)
-{
-    local
-    ; origin pinyin "shang1hai4"
-    TranslatorHistoryDynamicUpdateSingleSort(splitted_string, word)
-
-    ; 0 tone pinyin "shang0hai0"
-    zero_tone_pinyin := RegExReplace(splitted_string, "[0-5]", "0", word_len)
-    if( word_len && zero_tone_pinyin != splitted_string ){
-        TranslatorHistoryUpdateKey(zero_tone_pinyin, word_len)
-        TranslatorHistoryDynamicUpdateSingleSort(zero_tone_pinyin, word)
-    }
-
-    ; auto complete "shang0h%0"
-    auto_pinyin := RegExReplace(zero_tone_pinyin, "0([a-z])[a-z]*0$", "0$1%0")
-    ; ToolTip, % splitted_string ", " zero_tone_pinyin ", " word_len ", " auto_pinyin
-    if( word_len && auto_pinyin != splitted_string ) {
-        TranslatorHistoryUpdateKey(auto_pinyin, word_len)
-        TranslatorHistoryDynamicUpdateSingleSort(auto_pinyin, word)
-    }
+    translator_history_result[splitted_string] := TranslatorResultListSortByWeight(translator_history_result[splitted_string])
 }

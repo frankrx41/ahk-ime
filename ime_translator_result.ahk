@@ -38,5 +38,5 @@ TranslatorResultMakeError()
 ; Sort
 TranslatorResultListSortByWeight(ByRef translate_result_list)
 {
-    translate_result_list := ObjectSort(translate_result_list, 3,, true)
+    return ObjectSort(translate_result_list, 3,, true)
 }

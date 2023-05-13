@@ -60,7 +60,7 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
     }
 
     ; Sort
-    ; TranslatorResultListSortByWeight(translate_result_list)
+    ; translate_result_list := TranslatorResultListSortByWeight(translate_result_list)
 
     ; [
     ;     ; 1   , 2   , 3      , 4 , 5  
