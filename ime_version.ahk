@@ -9,7 +9,7 @@ IsDebugVersion()
 
 GetVersion()
 {
-    return "0.6.1"
+    return "0.7.0"
 }
 
 GetGitHash()
