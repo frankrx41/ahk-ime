@@ -42,6 +42,25 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index)
         index += 2
         have_check := true
     }
+    ; kya sha
+    if( !have_check && InStr("kscnhmrgzjdbp", initials) && RegExMatch(SubStr(input_str, index, 2), "y[auo]") ){
+        vowels := SubStr(input_str, index, 2)
+        index += 2
+        have_check := true
+    }
+    ; cha
+    if( !have_check && InStr("sc", initials) && RegExMatch(SubStr(input_str, index, 2), "h[auo]") ){
+        vowels := SubStr(input_str, index, 2)
+        index += 2
+        have_check := true
+    }
+    ; ja
+    if( !have_check && initials == "j" && InStr("auo", SubStr(input_str, index, 1)) ){
+        vowels := SubStr(input_str, index, 1)
+        index += 1
+        have_check := true
+    }
+
 
     if( !have_check && InStr("kstcnhfmyrwgzjdbp", initials) && InStr("aiueo", SubStr(input_str, index, 1)) ){
         vowels := SubStr(input_str, index, 1)

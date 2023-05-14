@@ -29,7 +29,23 @@ GojuonTranslateInitialize()
             "pi": ["ぴ", "ピ"],
             "pu": ["ぷ", "プ"],
             "pe": ["ぺ", "ペ"],
-            "po": ["ぽ", "ポ"]
+            "po": ["ぽ", "ポ"],
+            "t": ["っ", "ッ"],
+            
+            "kya": ["きゃ", "キャ"], "kyu": ["きゅ", "キュ"], "kyo": ["きょ", "キョ"],
+            "sha": ["しゃ", "シャ"], "shu": ["しゅ", "シュ"], "sho": ["しょ", "ショ"],
+            "cha": ["ちゃ", "チャ"], "chu": ["ちゅ", "チュ"], "cho": ["ちょ", "チョ"],
+            "nya": ["にゃ", "ニャ"], "nyu": ["にゅ", "ニュ"], "nyo": ["にょ", "ニョ"],
+            "hya": ["ひゃ", "ヒャ"], "hyu": ["ひゅ", "ヒュ"], "hyo": ["ひょ", "ヒョ"],
+            "mya": ["みゃ", "ミャ"], "myu": ["みゅ", "ミュ"], "myo": ["みょ", "ミョ"],
+            "rya": ["りゃ", "リャ"], "ryu": ["りゅ", "リュ"], "ryo": ["りょ", "リョ"],
+            "gya": ["ぎゃ", "ギャ"], "gyu": ["ぎゅ", "ギュ"], "gyo": ["ぎょ", "ギョ"],
+            "zya": ["じゃ", "ジャ"], "zyu": ["じゅ", "ジュ"], "zyo": ["じょ", "ジョ"],
+            "dya": ["ぢゃ", "ヂャ"], "dyu": ["ぢゅ", "ヂュ"], "dyo": ["ぢょ", "ヂョ"],
+            "bya": ["びゃ", "ビャ"], "byu": ["びゅ", "ビュ"], "byo": ["びょ", "ビョ"],
+            "pya": ["ぴゃ", "ピャ"], "pyu": ["ぴゅ", "ピュ"], "pyo": ["ぴょ", "ピョ"],
+            "ja": ["じゃ", "ジャ"], "ju": ["じゅ", "ジュ"], "jo": ["じょ", "ジョ"],
+            "jya": ["じゃ", "ジャ"], "jyu": ["じゅ", "ジュ"], "jyo": ["じょ", "ジョ"]
         }
     )
     global ime_gojuon_list := JSON.Load(gojuon_list_json)
@@ -40,10 +56,16 @@ GojuonTranslateFindResult(splitter_result, auto_complete)
     global ime_gojuon_list
 
     splitted_string := SplitterResultGetPinyin(splitter_result[1])
-    Assert(ime_gojuon_list.HasKey(splitted_string), splitted_string)
-    gojuon := ime_gojuon_list[splitted_string]
-    translate_result_list := [TranslatorResultMake(splitted_string, gojuon[1], 0, "", 1, splitted_string) 
-        ,TranslatorResultMake(splitted_string, gojuon[2], 1, "", 1, splitted_string)]
+    if( ime_gojuon_list.HasKey(splitted_string) )
+    {
+        gojuon := ime_gojuon_list[splitted_string]
+        translate_result_list := [TranslatorResultMake(splitted_string, gojuon[1], 0, "", 1, splitted_string) 
+            ,TranslatorResultMake(splitted_string, gojuon[2], 1, "", 1, splitted_string)]
+    }
+    else
+    {
+        translate_result_list := [TranslatorResultMake(splitted_string, splitted_string, 1, "", 1, splitted_string)]
+    }
 
     return translate_result_list
 }
