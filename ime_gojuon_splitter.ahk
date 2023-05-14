@@ -19,7 +19,7 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index)
         have_check := true
     }
     ; tta ppa
-    if( !have_check && InStr("kstcplx", initials) && SubStr(input_str, index, 1) == initials){
+    if( !have_check && InStr("ksthfmyrgzdbpclx", initials) && SubStr(input_str, index, 1) == initials){
         vowels := ""
         index += 0
         have_check := true
