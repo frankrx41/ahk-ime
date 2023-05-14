@@ -1,12 +1,6 @@
-; ワ	ラ	ヤ	マ	ハ	ナ	タ	サ	カ	ア	ア段
-; (ヰ)	リ		ミ	ヒ	ニ	チ	シ	キ	イ	イ段
-; ル	ユ	ム	フ	ヌ	ツ	ス	ク	ウ	ウ段
-; (ヱ)	レ		メ	ヘ	ネ	テ	セ	ケ	エ	エ段
-; ヲ	ロ	ヨ	モ	ホ	ノ	ト	ソ	コ	オ
-
 IsGojuonInitials(character)
 {
-    return InStr("aiueo", character) || InStr("kstcnhfmyrw", character) || character == "n" || InStr("gzjdbp", character) || character == "-"
+    return InStr("aiueo", character) || InStr("kstcnhfmyrw", character) || character == "n" || InStr("gzjdbp", character) || character == "-" || InStr("lx", character)
 }
 
 GojuonSplitterGetVowels(input_str, initials, ByRef index)
@@ -25,7 +19,7 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index)
         have_check := true
     }
     ; tta ppa
-    if( !have_check && InStr("kstcp", initials) && SubStr(input_str, index, 1) == initials){
+    if( !have_check && InStr("kstcplx", initials) && SubStr(input_str, index, 1) == initials){
         vowels := ""
         index += 0
         have_check := true
@@ -60,7 +54,12 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index)
         index += 1
         have_check := true
     }
-
+    ; lx
+    if( !have_check && InStr("lx", initials) && InStr("aiueo", SubStr(input_str, index, 1))){
+        vowels := SubStr(input_str, index, 1)
+        index += 1
+        have_check := true
+    }
 
     if( !have_check && InStr("kstcnhfmyrwgzjdbp", initials) && InStr("aiueo", SubStr(input_str, index, 1)) ){
         vowels := SubStr(input_str, index, 1)
