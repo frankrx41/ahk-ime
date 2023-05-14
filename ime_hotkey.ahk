@@ -165,6 +165,8 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectMenuOpen(true)
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
+        } else {
+            ImeInputterProcessChar("-")
         }
         ImeTooltipUpdate()
     return

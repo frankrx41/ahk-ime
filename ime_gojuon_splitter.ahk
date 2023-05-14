@@ -6,7 +6,7 @@
 
 IsGojuonInitials(character)
 {
-    return InStr("aiueo", character) || InStr("kstcnhfmyrw", character) || character == "n" || InStr("gzjdbp", character)
+    return InStr("aiueo", character) || InStr("kstcnhfmyrw", character) || character == "n" || InStr("gzjdbp", character) || character == "-"
 }
 
 GojuonSplitterGetVowels(input_str, initials, ByRef index)
