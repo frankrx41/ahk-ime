@@ -55,7 +55,32 @@ GojuonSplitterGetVowels(input_str, initials, ByRef index)
         have_check := true
     }
     ; lx
-    if( !have_check && InStr("lx", initials) && InStr("aiueo", SubStr(input_str, index, 1))){
+    if( !have_check && InStr("lx", initials) ){
+        ; la xa
+        if( !have_check && InStr("aiueo", SubStr(input_str, index, 1)) ){
+            vowels := SubStr(input_str, index, 1)
+            index += 1
+            have_check := true
+        }
+        ; lka
+        if( !have_check && RegExMatch(SubStr(input_str, index, 2), "(k[aue]|s[iu]|tu|nu|h[aiueo]|mu|y[auo]|r[aiueo]|wa|pu)") ){
+            vowels := SubStr(input_str, index, 2)
+            index += 2
+            have_check := true
+        }
+        if( !have_check && RegExMatch(SubStr(input_str, index, 3), "(shi|tsu)") ){
+            vowels := SubStr(input_str, index, 3)
+            index += 3
+            have_check := true
+        }
+    }
+    ; ki
+    if( !have_check && InStr("lx", initials) && SubStr(input_str, index, 2) == "ku"){
+        vowels := SubStr(input_str, index, 1)
+        index += 1
+        have_check := true
+    }
+        if( !have_check && InStr("lx", initials) && SubStr(input_str, index, 2) == "ka"){
         vowels := SubStr(input_str, index, 1)
         index += 1
         have_check := true
