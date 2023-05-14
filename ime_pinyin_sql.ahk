@@ -11,20 +11,20 @@
 ; "z?e0yang0z?i3" -> [z_y_z3]
 ; "s?u0" -> [s_]
 ;
-; If `auto_comple`, will add "%%" at the end
-PinyinSqlSimpleKey(splitted_input, auto_comple:=false)
+; If `auto_complete`, will add "%%" at the end
+PinyinSqlSimpleKey(splitted_input, auto_complete:=false)
 {
     key_value := splitted_input
     key_value := StrReplace(key_value, "?")
     key_value := StrReplace(key_value, "0", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
-    if( auto_comple ){
+    if( auto_complete ){
         key_value .= "%%"
     }
     return key_value
 }
 
-PinyinSqlFullKey(splitted_input, auto_comple:=false)
+PinyinSqlFullKey(splitted_input, auto_complete:=false)
 {
     key_value := splitted_input
     key_value := RegExReplace(key_value, "([zcs])\?", "$1h^")
@@ -32,7 +32,7 @@ PinyinSqlFullKey(splitted_input, auto_comple:=false)
     key_value := StrReplace(key_value, "?", ".")
     key_value := StrReplace(key_value, "^", "?")
     key_value := StrReplace(key_value, "0", "_")
-    if( auto_comple ){
+    if( auto_complete ){
         key_value .= "%%"
     }
     return key_value
@@ -75,7 +75,7 @@ PinyinSqlGenerateWhereCondition(key_name, key_value, is_full_key:=false)
 
 PinyinSqlGenerateWhereCommand(sim_key, full_key)
 {
-    Assert(sim_key,sim_key,true)
+    Assert(sim_key != "", sim_key "," full_key)
     sql_where_cmd := PinyinSqlGenerateWhereCondition("sim", sim_key)
 
     if( full_key ) {
@@ -90,14 +90,19 @@ PinyinSqlGenerateWhereCommand(sim_key, full_key)
 ;   % = has vowels
 ;   a-z = pinyin
 ;   [012345] = tone
-PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
+PinyinSqlGetResult(splitted_input, limit_num:=100)
 {
     local
     Critical
     begin_tick := A_TickCount
 
-    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_comple)
-    sql_full_key    := PinyinSqlFullKey(splitted_input, auto_comple)
+    auto_complete := (SubStr(splitted_input, 0, 1) == "*")
+    splitted_input := RTrim(splitted_input, "*")
+
+    Assert(splitted_input)
+
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_complete)
+    sql_full_key    := PinyinSqlFullKey(splitted_input, auto_complete)
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
     sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd
@@ -118,6 +123,30 @@ PinyinSqlGetResult(splitted_input, auto_comple:=false, limit_num:=100)
     }
     ImeProfilerEnd(15, profile_text . "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
     ImeProfilerEnd(16, ImeProfilerBegin(16) "`n  - [""" splitted_input """] -> (" result.Length() ")")
+    return result
+}
+
+;*******************************************************************************
+; 
+PinyinSqlGetWeight(splitted_input)
+{
+    Assert(splitted_input)
+
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, false)
+    sql_full_key    := PinyinSqlFullKey(splitted_input, false)
+
+    sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
+    sql_full_cmd := "SELECT weight FROM 'pinyin' WHERE " . sql_where_cmd
+    sql_full_cmd .= " ORDER BY weight DESC LIMIT 1"
+
+    result := 0
+    pinyin_db := ImeDBGet()
+    if( pinyin_db.GetTable(sql_full_cmd, result_table) )
+    {
+        if( result_table.RowCount > 0 ){
+            result := result_table.Rows[1, 1]
+        }
+    }
     return result
 }
 

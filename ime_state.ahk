@@ -33,15 +33,15 @@ ImeStateEventProcHook(phook, msg, hwnd)
         WinGetClass, win_class, ahk_id %hwnd%
         ime_active_window_class := win_class
         ImeStateRefresh()
-        ImeTooltipUpdate("")
+        ImeTooltipUpdate()
     case 0x06:                  ; EVENT_SYSTEM_MENUPOPUPSTART
         ime_is_active_system_menu := 1
         ImeStateRefresh()
-        ImeTooltipUpdate("")
+        ImeTooltipUpdate()
     case 0x07:                  ; EVENT_SYSTEM_MENUPOPUPEND
         ime_is_active_system_menu := 0
         ImeStateRefresh()
-        ImeTooltipUpdate("")
+        ImeTooltipUpdate()
     }
     return
 }
@@ -130,7 +130,7 @@ ImeIconSetMode(mode)
     static ime_opt_icon_path := "ime.icl"
     tooltip_option := "X2300 Y1200"
     if( !mode ){
-        ToolTip(4, "", tooltip_option)
+        ToolTip(4, "", "", tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 2, 1
     } else {
         switch (mode) {
@@ -139,7 +139,7 @@ ImeIconSetMode(mode)
         case "tw": info_text := "漢", tooltip_option := tooltip_option . " Q1 B0033cc Tfefefe"
         case "jp": info_text := "日", tooltip_option := tooltip_option . " Q1 B339933 Tfefefe"
         }
-        ToolTip(4, info_text, tooltip_option)
+        ToolTip(4, info_text, "", tooltip_option)
         Menu, Tray, Icon, %ime_opt_icon_path%, 1, 1
     }
     return

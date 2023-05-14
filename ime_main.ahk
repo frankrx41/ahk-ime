@@ -3,12 +3,15 @@
 #SingleInstance, force
 
 CoordMode, ToolTip, Screen
+CoordMode, Caret, Screen
+CoordMode, Mouse, Screen
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 if not A_IsAdmin
 {
     Run *RunAs "%A_ScriptFullPath%"
 }
 SetTitleMatchMode, 2 ; For WinActive(A_ScriptName)
+DetectHiddenWindows, On
 
 ;*******************************************************************************
 ; Global variable
@@ -18,6 +21,7 @@ global ime_version  := 0.10
 ;*******************************************************************************
 ; Initialize
 ImeProfilerInitialize()
+ImeProfilerBegin(1)
 ImeInputterInitialize()
 ImeOutputterInitialize()
 
@@ -26,13 +30,14 @@ ImeSelectMenuInitialize()
 ImeSelectorInitialize()
 
 ; Translator
-ImeTranslatorInitialize()
-TranslatorHistoryClear()
+ImeCandidateInitialize()
+TranslatorHistoryInitialize()
 
 ; Radical
 RadicalInitialize()
 
 PinyinInitialize()
+GojuonTranslateInitialize()
 
 ImeTooltipInitialize()
 
@@ -45,6 +50,8 @@ ImeDBInitialize()
 
 ; We should register hotkey after other modules are initialized
 ImeHotkeyRegisterInitialize()
+ImeProfilerEnd(1)
+; Tooltip, % ImeProfilerGetTotalTick(1)
 return
 
 ;*******************************************************************************

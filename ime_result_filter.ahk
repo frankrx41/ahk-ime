@@ -1,14 +1,14 @@
-TranslatorResultFilterSingleWord(ByRef translate_result)
+TranslatorResultListFilterSingleWord(ByRef translate_result_list)
 {
     local
     ImeProfilerBegin(37)
 
     index := 1
-    loop % translate_result.Length()
+    loop % translate_result_list.Length()
     {
-        if( translate_result[index, 5] > 1 )
+        if( TranslatorResultGetWordLength(translate_result_list[index]) > 1 )
         {
-            translate_result.RemoveAt(index)
+            translate_result_list.RemoveAt(index)
         }
         else
         {
@@ -19,21 +19,21 @@ TranslatorResultFilterSingleWord(ByRef translate_result)
     ImeProfilerEnd(37)
 }
 
-TranslatorResultFilterZeroWeight(ByRef translate_result)
+TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
 {
     local
     profile_text := ImeProfilerBegin(35)
 
     index := 1
-    loop % translate_result.Length()
+    loop % translate_result_list.Length()
     {
-        weight := translate_result[index, 3]
+        weight := translate_result_list[index, 3]
         if( weight<=0 )
         {
             if( index == 1 ){
                 break
             }
-            translate_result.RemoveAt(index, translate_result.Length() - index + 1)
+            translate_result_list.RemoveAt(index, translate_result_list.Length() - index + 1)
             break
         }
         else

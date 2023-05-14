@@ -2,9 +2,61 @@
 ; In typing
 #if ImeInputterHasAnyInput()
     ; Input char
-    %::
+
+    ; Fuzzy pinyin
     ?::
         ImeInputterProcessChar("?")
+        ImeTooltipUpdate()
+    return
+
+    ; Auto complete
+    NumpadMult::
+    *::
+        ImeInputterProcessChar("*")
+        ImeTooltipUpdate()
+    return
+
+    ; Simple spell
+    NumpadAdd::
+    +::
+        ImeInputterProcessChar("+")
+        ImeTooltipUpdate()
+    return
+
+    ; Verb
+    !::
+        ImeInputterProcessChar("!")
+        ImeTooltipUpdate()
+    return
+
+    @::
+        ImeInputterProcessChar("@")
+        ImeTooltipUpdate()
+    return
+
+    ; Measure
+    #::
+        ImeInputterProcessChar("#")
+        ImeTooltipUpdate()
+    return
+
+    $::
+        ImeInputterProcessChar("$")
+        ImeTooltipUpdate()
+    return
+
+    %::
+        ImeInputterProcessChar("%")
+        ImeTooltipUpdate()
+    return
+
+    ^::
+        ImeInputterProcessChar("^")
+        ImeTooltipUpdate()
+    return
+
+    &::
+        ImeInputterProcessChar("&")
         ImeTooltipUpdate()
     return
 
@@ -94,6 +146,7 @@
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
         } else {
             ImeSelectorOffsetCaretSelectIndex(-1)
+            ImeSelectorApplyCaretSelectIndex(true)
         }
         ImeTooltipUpdate()
     return
@@ -103,6 +156,7 @@
             ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
         } else {
             ImeSelectorOffsetCaretSelectIndex(+1)
+            ImeSelectorApplyCaretSelectIndex(true)
         }
         ImeTooltipUpdate()
     return
@@ -111,6 +165,8 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectMenuOpen(true)
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
+        } else {
+            ImeInputterProcessChar("-")
         }
         ImeTooltipUpdate()
     return
@@ -128,7 +184,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(-ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(-1, true)
+            ImeInputterCaretMoveByWord(-1)
         }
         ImeTooltipUpdate()
     return
@@ -137,7 +193,7 @@
         if( ImeSelectMenuIsOpen() ){
             ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
         } else {
-            ImeInputterCaretMoveByWord(+1, true)
+            ImeInputterCaretMoveSmartRight()
         }
         ImeTooltipUpdate()
     return
@@ -145,12 +201,12 @@
     ; Ctrl + Left/Right
     ; Move caret by a word
     ^Left::
-        ImeInputterCaretMoveByWord(-1, true)
+        ImeInputterCaretMoveByWord(-1)
         ImeTooltipUpdate()
     return
 
     ^Right::
-        ImeInputterCaretMoveByWord(+1, true)
+        ImeInputterCaretMoveByWord(+1)
         ImeTooltipUpdate()
     return
 
@@ -189,6 +245,7 @@
         if( ImeSelectMenuIsOpen() ) {
             ImeSelectorOffsetCaretSelectIndex(+1)
         } else {
+            ImeSelectorStoreSelectIndexBeforeMenuOpen()
             ImeSelectMenuOpen()
             if( ImeSelectorGetCaretSelectIndex() == 0 )
             {
@@ -216,6 +273,7 @@
     ~LButton up::
         Sleep, 10
         ImeTooltipUpdatePos()
+        ImeTooltipUpdate()
     return
 #if ; ImeInputterHasAnyInput()
 
@@ -278,5 +336,5 @@ ImeToggleSuspend:
     }
     ImeInputterClearString()
     ImeStateRefresh()
-    ImeTooltipUpdate("")
+    ImeTooltipUpdate()
 return

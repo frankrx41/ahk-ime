@@ -7,7 +7,7 @@ ImeHotkeyRegisterInitialize()
     symbol_ctrl_start_hotkey := {"^``":"``", "^+``":"～", "^+1":"！", "^+2":"＠", "^+3":"#", "^+4":"$", "^+5":"％"
     , "^+6":"……", "^+7":"＆", "^+8":"＊", "^+9":"「", "^+0":"」", "^-":"－", "^+-":"——", "^=":"＝", "^+=":"＋"
     , "^[":"【", "^]":"】", "^+[":"（", "^+]":"）", "^\":"、", "^;":"；", "^+;": "：", "^'":"＇", "^+'":"＂"
-    , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" }
+    , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" , "^Space":"　" }
     global symbol_list_string := ""
 
     ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
@@ -38,8 +38,6 @@ ImeHotkeyRegisterInitialize()
         func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, ', %func%
         func := Func("HotkeyOnSplitMark").Bind("'")
-        Hotkey, \, %func%
-        func := Func("HotkeyOnSplitMark").Bind("'")
         Hotkey, `;, %func%
         ; 0-9
         loop 10 {
@@ -50,26 +48,12 @@ ImeHotkeyRegisterInitialize()
         loop 26
         {
             ; A-Z
-            func := Func("HotkeyOnAlphabet").Bind(Format("{:U}", Chr(96+A_Index)))
+            func := Func("HotkeyOnShiftAlphabet").Bind(Format("{:U}", Chr(96+A_Index)))
             Hotkey, % "+" Chr(96+A_Index), %func%
-
-            ; Ctrl + Shift + A-Z
-            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), false)
-            Hotkey, % "^" Chr(96+A_Index), %func%
-            func := Func("HotkeyOnCtrlAlphabet").Bind(Chr(96+A_Index), true)
-            Hotkey, % "^+" Chr(96+A_Index), %func%
         }
     }
     Hotkey, if,
     return
-}
-
-ImeHotkeyShiftSetMode(orgin_mode)
-{
-    if( orgin_mode == "en" ){
-        ImeOutputterPutSelect(true)
-    }
-    ImeStateUpdateMode(orgin_mode)
 }
 
 ImeHotkeyRegisterShift(origin_state)

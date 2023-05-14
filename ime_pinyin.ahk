@@ -115,6 +115,12 @@ IsCompletePinyin(initials, vowels, tone:="'")
     }
 }
 
+IsAutoCorrectPinyin(initials, vowels, tone:="'")
+{
+    global pinyin_table_auto_correct
+    return pinyin_table_auto_correct[initials, vowels]
+}
+
 GetFullVowels(initials, vowels)
 {
     global pinyin_table
@@ -155,7 +161,13 @@ IsTone(char)
 
 IsRadical(char)
 {
-    return InStr("AEOBPMFDTNLGKHJQXZCSRYW", char, true)
+    return InStr("AEOBPMFDTNLGKHJQXZCSRYW!", char, true)
+}
+
+GetRadical(input_string)
+{
+    RegExMatch(input_string, "^([A-Z!@#$%^&]+)", radical)
+    return radical
 }
 
 IsSymbol(char)
@@ -181,105 +193,105 @@ PinyinInitialize()
     full_spelling_json =
     (LTrim
         {
-            "a" :{"1":"a","ai":"i","an":"n","ag":"ng","ang":"ng","ao":"o"},
-            "e" :{"1":"e","ei":"i","en":"n","eg":"ng","eng":"ng","er":"r"},
+            "a" :{"1":"a","ai":"i","an":"n","ang":"ng","ao":"o"},
+            "e" :{"1":"e","ei":"i","en":"n","eng":"ng","er":"r"},
             "o" :{"1":"o","ou":"u"},
 
             "b" :{
                 "1":"b",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
                 "o":"o",
-                "ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
+                "ei":"ei","en":"en","eng":"eng",
+                "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing",
                 "u":"u","un":"un"
             },
             "p" :{
                 "1":"p",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
                 "o":"o","ou":"ou",
-                "ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing",
+                "ei":"ei","en":"en","eng":"eng",
+                "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing",
                 "u":"u"
             },
             "m" :{
                 "1":"m",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
                 "o":"o","ou":"ou",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
+                "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu",
                 "u":"u"
             },
             "f" :{
                 "1":"f",
-                "a":"a","an":"an","ag":"ang","ang":"ang",
+                "a":"a","an":"an","ang":"ang",
                 "o":"o","ou":"ou",
-                "ei":"ei","en":"en","eg":"eng","eng":"eng",
+                "ei":"ei","en":"en","eng":"eng",
                 "iao":"iao",
                 "u":"u"
             },
 
             "d" :{
                 "1":"d",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","en":"en","ei":"ei","eg":"eng","eng":"eng",
-                "i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing","iu":"iu",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","en":"en","ei":"ei","eng":"eng",
+                "i":"i","ia":"ia","ian":"ian","iao":"iao","ie":"ie","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "t" :{
                 "1":"t",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","eg":"eng","eng":"eng","ei":"ei",
-                "i":"i","ian":"ian","iao":"iao","ie":"ie","ig":"ing","ing":"ing",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","eng":"eng","ei":"ei",
+                "i":"i","ian":"ian","iao":"iao","ie":"ie","ing":"ing",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "n" :{
                 "1":"n",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "i":"i","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
+                "i":"i","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","uo":"uo","un":"un",
                 "v":"v","ve":"ue"
             },
             "l" :{
                 "1":"l",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","ei":"ei","eg":"eng","eng":"eng",
-                "i":"i","ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao","ie":"ie","in":"in","ig":"ing","ing":"ing","iu":"iu",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","ei":"ei","eng":"eng",
+                "i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un","uo":"uo",
                 "v":"v","ve":"ue"
             },
             "g" :{
                 "1":"g",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "k" :{
                 "1":"k",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","en":"en","eg":"eng","eng":"eng","ei":"ei",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","en":"en","eng":"eng","ei":"ei",
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "h" :{
                 "1":"h",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
+                "ong":"ong","ou":"ou",
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
 
             "j" :{
                 "1":"j",
-                "i":"i","ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao",
+                "i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao",
                 "ie":"ie",
-                "in":"in","ig":"ing","ing":"ing",
-                "iog":"iong","iong":"iong",
+                "in":"in","ing":"ing",
+                "iong":"iong",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
                 "v":"u","van":"uan","ve":"ue","vn":"un"
@@ -287,10 +299,10 @@ PinyinInitialize()
             "q" :{
                 "1":"q",
                 "i":"i",
-                "ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao",
-                "iog":"iong","iong":"iong",
+                "ia":"ia","ian":"ian","iang":"iang","iao":"iao",
+                "iong":"iong",
                 "ie":"ie",
-                "in":"in","ig":"ing","ing":"ing",
+                "in":"in","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
                 "v":"u","van":"uan","ve":"ue","vn":"un"
@@ -298,74 +310,74 @@ PinyinInitialize()
             "x" :{
                 "1":"x",
                 "i":"i",
-                "ia":"ia","ian":"ian","iag":"iang","iang":"iang","iao":"iao",
-                "iog":"iong","iong":"iong",
+                "ia":"ia","ian":"ian","iang":"iang","iao":"iao",
+                "iong":"iong",
                 "ie":"ie",
-                "in":"in","ig":"ing","ing":"ing",
+                "in":"in","ing":"ing",
                 "iu":"iu",
                 "u":"u","uan":"uan","un":"un","ue":"ue",
                 "v":"u","van":"uan","ve":"ue","vn":"un"
             },
             "zh":{
                 "1":"zh",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
                 "e":"e","ei":"ei","en":"en","eng":"eng",
                 "i":"i",
-                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uag":"uang","uang":"uang"
+                "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo","ua":"ua","uai":"uai","uang":"uang"
             },
             "ch":{
                 "1":"ch",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","en":"en","eg":"eng","eng":"eng",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","en":"en","eng":"eng",
                 "i":"i",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "sh":{
                 "1":"sh",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
                 "ou":"ou",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
                 "i":"i",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uag":"uang","uang":"uang","ui":"ui","un":"un","uo":"uo"
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo"
             },
             "r" :{
                 "1":"r",
-                "an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","en":"en","eg":"eng","eng":"eng",
+                "an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","en":"en","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "z" :{
                 "1":"z",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","ei":"ei","en":"en","eg":"eng","eng":"eng",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "c" :{
                 "1":"c",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","en":"en","eg":"eng","eng":"eng",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","en":"en","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "s" :{
                 "1":"s",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "og":"ong","on":"ong","ong":"ong","ou":"ou",
-                "e":"e","en":"en","eg":"eng","eng":"eng",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "ong":"ong","ou":"ou",
+                "e":"e","en":"en","eng":"eng",
                 "i":"i",
                 "u":"u","uan":"uan","ui":"ui","un":"un","uo":"uo"
             },
             "y" :{
                 "1":"y",
-                "a":"a","an":"an","ag":"ang","ang":"ang","ao":"ao",
-                "o":"o","og":"ong","on":"ong","ong":"ong","ou":"ou",
+                "a":"a","an":"an","ang":"ang","ao":"ao",
+                "o":"o","ong":"ong","ou":"ou",
                 "e":"e",
                 "i":"i","in":"in","ing":"ing",
                 "u":"u","uan":"uan","ue":"ue","un":"un",
@@ -373,9 +385,9 @@ PinyinInitialize()
             },
             "w" :{
                 "1":"w",
-                "a":"a","ai":"ai","an":"an","ag":"ang","ang":"ang",
+                "a":"a","ai":"ai","an":"an","ang":"ang",
                 "o":"o",
-                "ei":"ei","en":"en","eg":"eng","eng":"eng",
+                "ei":"ei","en":"en","eng":"eng",
                 "u":"u"
             }
         }
@@ -398,79 +410,101 @@ PinyinInitialize()
     (LTrim
         {
             "b" :{
-                "ain":"ian","oa":"ao"
+                "ain":"ian","oa":"ao",
+                "eg":"eng","ag":"ang","ig":"ing"
             },
             "p" :{
-                "aio":"iao","ain":"ian","oa":"ao"
+                "aio":"iao","ain":"ian","oa":"ao",
+                "eg":"eng","ag":"ang","ig":"ing"
             },
             "m" :{
-                "aio":"iao","ain":"ian","oa":"ao"
+                "aio":"iao","ain":"ian","oa":"ao",
+                "eg":"eng","ag":"ang","ig":"ing"
             },
             "f" :{
-                "ie":"ei"
+                "ie":"ei",
+                "eg":"eng","ag":"ang"
             },
             "d" :{
-                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","ig":"ing"
             },
             "t" :{
-                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","ig":"ing"
             },
             "n" :{
-                "aio":"iao","ain":"ian","aun":"uan","oa":"ao"
+                "aio":"iao","ain":"ian","aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","iag":"iang","ig":"ing"
             },
             "l" :{
-                "aun":"uan","oa":"ao"
+                "aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","iag":"iang","ig":"ing"
             },
             "g" :{
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "k" :{
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "h" :{
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "j" :{
-                "aio":"iao","ain":"ian","aun":"uan"
+                "aio":"iao","ain":"ian","aun":"uan",
+                "iag":"iang","ig":"ing","iog":"iong"
             },
             "q" :{
-                "aio":"iao","ain":"ian","aun":"uan"
+                "aio":"iao","ain":"ian","aun":"uan",
+                "iag":"iang","iog":"iong","ig":"ing"
             },
             "x" :{
-                "aio":"iao","ain":"ian","aun":"uan"
+                "aio":"iao","ain":"ian","aun":"uan",
+                "iag":"iang","iog":"iong","ig":"ing"
             },
             "zh":{
-                "aui":"uai","aun":"uan","ie":"ei","oa":"ao"
+                "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
+                "ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "ch":{
-                "aui":"uai","aun":"uan","oa":"ao"
+                "aui":"uai","aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","uag":"uang"
             },
             "sh":{
-                "aui":"uai","aun":"uan","oa":"ao"
+                "aui":"uai","aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","uag":"uang"
             },
             "r" :{
-                "aun":"uan","oa":"ao"
+                "aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "z" :{
-                "aun":"uan","ie":"ei","oa":"ao"
+                "aun":"uan","ie":"ei","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "c" :{
-                "aun":"uan","oa":"ao"
+                "aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "s" :{
-                "aun":"uan","oa":"ao"
+                "aun":"uan","oa":"ao",
+                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong"
             },
             "y" :{
-                "aun":"uan","oa":"ao"
+                "aun":"uan","oa":"ao",
+                "ag":"ang","og":"ong","on":"ong"
             },
             "w" :{
-                "ie":"ei"
+                "ie":"ei",
+                "eg":"eng","ag":"ang"
             }
         }
     )
 
     pinyin_table_auto_correct := JSON.Load(full_spelling_json_auto_correct)
 
-    PinyinSplitterTableInitialize()
     PinyinTraditionalInitialize()
 }

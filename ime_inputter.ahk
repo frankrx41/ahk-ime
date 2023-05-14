@@ -5,7 +5,7 @@ ImeInputterInitialize()
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_dirty
-    global ime_inputter_splitter_result := []
+    global ime_splitted_list := []
 
     ImeInputterClearString()
 }
@@ -17,14 +17,14 @@ ImeInputterClearString()
     global ime_input_string
     global ime_input_caret_pos
     global ime_input_dirty
-    global ime_inputter_splitter_result
+    global ime_splitted_list
 
     ime_input_string    := ""
     ime_input_caret_pos := 0
     ime_input_dirty     := true
-    ime_inputter_splitter_result := []
+    ime_splitted_list := []
     ImeSelectorClear()
-    ImeTranslatorClear()
+    ImeCandidateClear()
     return
 }
 
@@ -32,11 +32,11 @@ ImeInputterClearPrevSplitted()
 {
     global ime_input_string
     global ime_input_caret_pos
-    global ime_inputter_splitter_result
+    global ime_splitted_list
 
     if( ime_input_caret_pos != 0 )
     {
-        left_pos := SplittedIndexsGetLeftWordPos(ime_inputter_splitter_result, ime_input_caret_pos)
+        left_pos := SplitterResultListGetLeftWordPos(ime_splitted_list, ime_input_caret_pos)
         ime_input_string := SubStr(ime_input_string, 1, left_pos) . SubStr(ime_input_string, ime_input_caret_pos+1)
         ime_input_caret_pos := left_pos
     }
@@ -115,7 +115,7 @@ ImeInputterUpdateString(input_char)
 {
     local
     global ime_input_string
-    global ime_inputter_splitter_result
+    global ime_splitted_list
     global ime_input_dirty
 
     ime_input_dirty := true
@@ -125,9 +125,14 @@ ImeInputterUpdateString(input_char)
     if( ime_input_string )
     {
         ; Splitter
-        ime_inputter_splitter_result := PinyinSplitterInputString(ime_input_string)
+        if( ImeModeGetLanguage() == "tw" || ImeModeGetLanguage() == "cn" ){
+            ime_splitted_list := PinyinSplitterInputString(ime_input_string, auto_complete)
+        } else if( ImeModeGetLanguage() == "jp" ) {
+            ime_splitted_list := GojuonSplitterInputString(ime_input_string)
+            auto_complete := false
+        }
         ; Translator
-        ImeInputterCallTranslator()
+        ImeInputterCallTranslator(auto_complete)
     }
     else
     {
@@ -137,9 +142,9 @@ ImeInputterUpdateString(input_char)
     ImeProfilerEnd(8)
 }
 
-ImeInputterCallTranslator()
+ImeInputterCallTranslator(auto_complete)
 {
-    global ime_inputter_splitter_result
+    global ime_splitted_list
     global ime_input_string
     global ime_input_dirty
 
@@ -148,13 +153,13 @@ ImeInputterCallTranslator()
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
 
-    splitter_result := CopyObj(ime_inputter_splitter_result)
-    profile_text .= "[" SplitterResultGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_inputter_splitter_result.Length() ")" 
+    splitter_result := CopyObj(ime_splitted_list)
+    profile_text .= "[" SplitterResultListGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_splitted_list.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
-    ImeTranslatorUpdateResult(splitter_result)
+    candidate := ImeCandidateUpdateResult(splitter_result, auto_complete)
     ImeSelectorUnlockWords(caret_splitted_index, false)
-    ImeSelectorFixupSelectIndex()
+    ImeSelectorFixupSelectIndex(candidate)
 
     ime_input_dirty := false
 }
@@ -170,9 +175,9 @@ ImeInputterIsInputDirty()
 ImeInputterGetCaretSplitIndex()
 {
     global ime_input_caret_pos
-    global ime_inputter_splitter_result
+    global ime_splitted_list
 
-    return SplittedIndexsGetPosIndex(ime_inputter_splitter_result, ime_input_caret_pos)
+    return SplitterResultListGetIndex(ime_splitted_list, ime_input_caret_pos)
 }
 
 ;*******************************************************************************
@@ -206,6 +211,12 @@ ImeInputterCaretIsAtEnd()
     return ime_input_caret_pos == StrLen(ime_input_string)
 }
 
+ImeInputterCaretIsAtBegin()
+{
+    global ime_input_caret_pos
+    return ime_input_caret_pos == 0
+}
+
 ;*******************************************************************************
 ; Move caret
 ; -1 <- | -> +1
@@ -228,11 +239,55 @@ ImeInputterCaretMove(dir)
     }
 }
 
-; graceful: take a white space move as a step
-ImeInputterCaretMoveByWord(dir, graceful:=false)
+; move to initials
+ImeInputterCaretMoveSmartRight()
 {
     global ime_input_caret_pos
     global ime_input_string
+    global ime_splitted_list
+
+    input_string_len := StrLen(ime_input_string)
+
+    loop_count := 1
+    current_pos := ime_input_caret_pos
+    loop, % loop_count
+    {
+        last_pos := current_pos
+        ; loop
+        if( current_pos == input_string_len )
+        {
+            current_pos := 0
+        }
+
+        ; update word index
+        if( last_pos == current_pos )
+        {
+            current_start_pos := SplitterResultListGetCurrentWordPos(ime_splitted_list, current_pos)
+            if( current_start_pos == current_pos && InStr("zcs", SubStr(ime_input_string, current_start_pos+1, 1)) )
+            {
+                if( SubStr(ime_input_string, current_start_pos+2, 1) == "h" )
+                {
+                    current_pos += 2
+                } else {
+                    current_pos += 1
+                }
+            }
+            else
+            {
+                right_pos := SplitterResultListGetRightWordPos(ime_splitted_list, current_pos)
+                current_pos := right_pos
+            }
+        }
+    }
+    ime_input_caret_pos := current_pos
+}
+
+; graceful: take a white space move as a step
+ImeInputterCaretMoveByWord(dir, graceful:=true)
+{
+    global ime_input_caret_pos
+    global ime_input_string
+    global ime_splitted_list
 
     move_count := dir > 0 ? dir : (-1 * dir)
     if( dir > 0 ){
@@ -249,7 +304,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
                 }
                 index += 1
                 begin_pos := word_pos
-                word_pos := ImeInputterGetRightWordPos(word_pos)
+                word_pos := SplitterResultListGetRightWordPos(ime_splitted_list, word_pos)
                 if( graceful && SubStr(ime_input_string, word_pos, 1) == " " && begin_pos+1 != word_pos ) {
                     word_pos := word_pos-1
                 }
@@ -271,7 +326,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
                     word_pos := word_pos-1
                 } else {
                     index += 1
-                    word_pos := ImeInputterGetLeftWordPos(word_pos)
+                    word_pos := SplitterResultListGetLeftWordPos(ime_splitted_list, word_pos)
                 }
             }
         }
@@ -279,6 +334,8 @@ ImeInputterCaretMoveByWord(dir, graceful:=false)
     ime_input_caret_pos := word_pos
 }
 
+;*******************************************************************************
+; Move to
 ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
 {
     local
@@ -323,30 +380,29 @@ ImeInputterCaretMoveToHome(move_home)
     }
 }
 
+ImeInputterCaretMoveToIndex(index)
+{
+    global ime_splitted_list
+    global ime_input_caret_pos
+    if( ime_splitted_list.Length() >= index )
+    {
+        ime_input_caret_pos := SplitterResultGetStartPos(ime_splitted_list[index])
+    }
+    else
+    {
+        ime_input_caret_pos := SplitterResultGetEndPos(ime_splitted_list[index-1])
+    }
+}
+
 ;*******************************************************************************
 ; Static
 ImeInputterGetLastWordPos()
 {
-    global ime_inputter_splitter_result
-    if( ime_inputter_splitter_result.Length() <= 1 ){
+    global ime_splitted_list
+    if( ime_splitted_list.Length() <= 1 ){
         return 0
     }
-    return SplitterResultGetEndPos(ime_inputter_splitter_result, ime_inputter_splitter_result.Length()-1)
-}
-
-ImeInputterGetLeftWordPos(start_index)
-{
-    local
-    global ime_inputter_splitter_result
-    return SplittedIndexsGetLeftWordPos(ime_inputter_splitter_result, start_index)
-}
-
-ImeInputterGetRightWordPos(start_index)
-{
-    local
-    global ime_inputter_splitter_result
-
-    return SplittedIndexsGetRightWordPos(ime_inputter_splitter_result, start_index)
+    return SplitterResultGetEndPos(ime_splitted_list[ime_splitted_list.Length()-1])
 }
 
 ;*******************************************************************************

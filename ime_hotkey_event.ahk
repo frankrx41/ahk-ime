@@ -42,16 +42,17 @@ HotkeyOnSymbol(char)
     ImeTooltipUpdate()
 }
 
-;*******************************************************************************
-; Function key
-HotkeyOnCtrlAlphabet(char, shift_down)
+HotkeyOnShiftAlphabet(char)
 {
-    local
-    back_to_front := shift_down ? false : true
-    ImeInputterCaretMoveToChar(char, back_to_front, true)
+    if( ImeInputterCaretIsAtBegin() ) {
+        ImeInputterCaretMoveToIndex(2)
+    }
+    ImeInputterProcessChar(char)
     ImeTooltipUpdate()
 }
 
+;*******************************************************************************
+; Function key
 HotkeyOnEsc()
 {
     static last_esc_tick := 0
@@ -81,6 +82,7 @@ HotkeyOnShift(orgin_mode)
     ; Fix when use {Shift} + {Numpad1} send {NumpadEnd}
     ; system will set {Shift up} event
     static shift_down_tick := A_TickCount
+    static double_shift := A_TickCount
     if( GetKeyState("RShift", "P") ) {
         shift_down_tick := A_TickCount
         return
@@ -92,9 +94,21 @@ HotkeyOnShift(orgin_mode)
     if( ImeSelectMenuIsOpen() ) {
         ImeSelectorToggleSingleMode()
     }
-    else {
-        ImeHotkeyShiftSetMode(orgin_mode)
+    else
+    if( ImeInputterHasAnyInput() )
+    {
+        if( A_TickCount - double_shift < 500 ) {
+            ImeOutputterPutSelect(true)
+            ImeStateUpdateMode(orgin_mode)
+        } else {
+            double_shift := A_TickCount
+        }
     }
+    else
+    {
+        ImeStateUpdateMode(orgin_mode)
+    }
+
     ImeTooltipUpdate()
 }
 
