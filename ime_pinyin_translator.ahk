@@ -54,7 +54,7 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
         PinyinTranslatorInsertCombineWord(translate_result_list, splitter_result)
     }
 
-    if( ImeModeGetLanguage() == "tw" )
+    if( ImeModeIsTraChinese() )
     {
         PinyinResultCovertTraditional(translate_result_list)
     }

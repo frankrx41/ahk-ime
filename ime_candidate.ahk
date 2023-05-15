@@ -42,9 +42,10 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
             {
                 Assert(test_splitter_result.Length() >= 1)
                 ; Get translate result
-                if( ImeModeGetLanguage() == "tw" || ImeModeGetLanguage() == "cn" ){
+                if( ImeModeIsChinese() ){
                     translate_result_list := PinyinTranslateFindResult(test_splitter_result, auto_complete)
-                } else if( ImeModeGetLanguage() == "jp" ) {
+                } else
+                if( ImeModeIsJapanese() ) {
                     translate_result_list := GojuonTranslateFindResult(test_splitter_result, auto_complete)
                 }
                 if( translate_result_list.Length() == 0 ){

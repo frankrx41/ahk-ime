@@ -125,9 +125,10 @@ ImeInputterUpdateString(input_char)
     if( ime_input_string )
     {
         ; Splitter
-        if( ImeModeGetLanguage() == "tw" || ImeModeGetLanguage() == "cn" ){
+        if( ImeModeIsChinese() ){
             ime_splitted_list := PinyinSplitterInputString(ime_input_string, auto_complete)
-        } else if( ImeModeGetLanguage() == "jp" ) {
+        } else
+        if( ImeModeIsJapanese() ) {
             ime_splitted_list := GojuonSplitterInputString(ime_input_string)
             auto_complete := false
         }
