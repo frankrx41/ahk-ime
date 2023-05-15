@@ -83,7 +83,7 @@ ImeDebugGetDisplayText()
     ; ImeDebugTipAppend(debug_tip, 43)        ; SelectorResultLockWord
     ; ImeDebugTipAppend(debug_tip, 44)        ; SelectorResultIsSelectLock
 
-    ; ImeDebugTipAppend(debug_tip, 45)        ; TranslatorFindPossibleMaxLength
+    ; ImeDebugTipAppend(debug_tip, 45)        ; SelectorFindPossibleMaxLength
     ImeDebugTipAppend(debug_tip, 46, 2000)        ; SelectorFindGraceResultIndex
     ImeDebugTipAppend(debug_tip, 47)
     ImeDebugTipAppend(debug_tip, 48)
