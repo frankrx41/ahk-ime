@@ -5,6 +5,7 @@ ImeTooltipInitialize()
 
     font_size           := 13
     font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
+    ; font_family         := "DengXian"
     font_bold           := false
     background_color    := "373832"
     text_color          := "d4d4d4"
@@ -194,8 +195,8 @@ ImeTooltipUpdate()
         extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
         extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
 
-        global ime_selector_select_list
-        extern_info .= " (" ime_selector_select_list.Length() ")"
+        ; global ime_selector_select_list
+        ; extern_info .= " (" ime_selector_select_list.Length() ")"
 
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
