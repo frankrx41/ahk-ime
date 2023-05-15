@@ -53,6 +53,11 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
     need_sort := false
     loop % translator_history_result[splitted_string].Length() {
         word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
+        if( TranslatorResultGetWordLength(translator_history_result[splitted_string, A_Index]) == 1 ){
+            pinyin := TranslatorResultGetLegacyPinyin(translator_history_result[splitted_string, A_Index])
+            word .= RegExReplace(pinyin, "[0-5]", "0", word_count)
+            Assert( word_count == 1 )
+        }
         if( translator_history_weight.HasKey(word) ){
             translator_history_result[splitted_string, A_Index, 3] := translator_history_weight[word]
             need_sort := true
@@ -124,12 +129,16 @@ TranslatorHistoryDynamicWeight(input_pinyin, word)
 
     Assert(input_pinyin)
 
-    zero_tone_pinyin := RegExReplace(input_pinyin, "[0-5]", "0")
-    simple_pinyin := PinyinSqlSimpleKey(zero_tone_pinyin)
-    ; no need this because `PinyinSqlSimpleKey` not check '_', but I leave it here just in case
-    ; simple_pinyin := StrReplace(simple_pinyin, "_", "0")
-    if( simple_pinyin ) {
-        test_pinyin := simple_pinyin
+    zero_tone_pinyin := RegExReplace(input_pinyin, "[0-5]", "0", word_count)
+    if( word_count > 1 ) {
+        check_pinyin := PinyinSqlSimpleKey(zero_tone_pinyin)
+        check_pinyin := StrReplace(check_pinyin, "_", "%0")
+    } else {
+        check_pinyin := zero_tone_pinyin
+        word := word . check_pinyin
+    }
+    if( check_pinyin ) {
+        test_pinyin := check_pinyin
     } else {
         test_pinyin := zero_tone_pinyin
     }
