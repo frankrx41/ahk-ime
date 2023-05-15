@@ -177,7 +177,6 @@ ImeSelectorGetOutputString(as_legacy := false)
     }
     else
     {
-        need_update_weight := ImeModeIsSimChinese()
         loop % ime_selector_select_list.Length()
         {
             split_index := A_Index
@@ -186,7 +185,8 @@ ImeSelectorGetOutputString(as_legacy := false)
             {
                 select_word := CandidateGetWord(ImeCandidateGet(), split_index, select_index)
                 result_string .= select_word
-                if( need_update_weight )
+                comment := CandidateGetComment(ImeCandidateGet(), split_index, select_index)
+                if( SubStr(comment, 1, 1) == "*" )
                 {
                     input_pinyin := CandidateGetInputPinyin(ImeCandidateGet(), split_index, select_index)
                     TranslatorHistoryDynamicWeight(input_pinyin, select_word)

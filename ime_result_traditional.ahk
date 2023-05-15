@@ -44,7 +44,9 @@ PinyinResultCovertTraditional(ByRef translate_result_list)
             input_pinyin    := TranslatorResultGetInputPinyin(translate_result)
 
             word_length := TranslatorResultGetWordLength(translate_result)
-            PinyinResultTraditionalUpdate(translate_result_list, A_Index, ime_traditional_table[simplified_word, 1])
+            tranditional_word := ime_traditional_table[simplified_word, 1]
+            comment := tranditional_word == simplified_word ? "" : "*"
+            PinyinResultTraditionalUpdate(translate_result_list, A_Index, tranditional_word, comment)
 
             if( ime_traditional_table[simplified_word].Length() > 1 )
             {
@@ -84,7 +86,7 @@ PinyinResultCovertTraditional(ByRef translate_result_list)
             traditional_word := ime_traditional_table[simplified_word, A_Index+1]
             index += 1
             offset_index += 1
-            single_result := TranslatorResultMake(legacy_pinyin, traditional_word, 0, "+", length, input_pinyin)
+            single_result := TranslatorResultMake(legacy_pinyin, traditional_word, 0, "*", length, input_pinyin)
             translate_result_list.InsertAt(index, single_result)
         }
     }
