@@ -59,11 +59,10 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
     profile_text := ""
     ImeProfilerBegin(40)
     skip_word_count := 0
-    selector_result_list := []
+    selector_result_list := CopyObj(const_selector_result_list)
     loop % candidate.Length()
     {
         split_index := A_Index
-        selector_result_list[split_index] := const_selector_result_list[split_index]
         if( !selector_result_list[split_index] ){
             selector_result_list[split_index] := []
         }
