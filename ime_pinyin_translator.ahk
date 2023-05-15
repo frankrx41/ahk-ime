@@ -56,7 +56,7 @@ PinyinTranslateFindResult(splitter_result, auto_complete)
 
     if( ImeModeIsTraChinese() )
     {
-        PinyinResultCovertTraditional(translate_result_list)
+        PinyinTranslatorCovertTraditional(translate_result_list)
     }
 
     ; Sort

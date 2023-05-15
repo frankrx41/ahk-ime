@@ -17,9 +17,6 @@
 
 ; Spliter
 #Include, ime_splitter_result.ahk
-#Include, ime_pinyin.ahk
-#Include, ime_pinyin_splitter.ahk
-#Include, ime_gojuon_splitter.ahk
 
 ; Candidate
 #Include, ime_candidate.ahk
@@ -29,17 +26,22 @@
 #Include, ime_translator_history.ahk
 #Include, ime_translator_result.ahk
 
+; pinyin
+#Include, ime_pinyin.ahk
+#Include, ime_pinyin_sql.ahk
+#Include, ime_pinyin_splitter.ahk
 #Include, ime_pinyin_translator.ahk
 #Include, ime_pinyin_translator_auto_complete.ahk
 #Include, ime_pinyin_translator_combine_word.ahk
-#Include, ime_gojuon_translator.ahk
+#Include, ime_pinyin_translator_traditional.ahk
 
-#Include, ime_pinyin_sql.ahk
+; gojuon
+#Include, ime_gojuon_splitter.ahk
+#Include, ime_gojuon_translator.ahk
 
 ; Filter
 #Include, ime_result_filter.ahk
 #Include, ime_result_radical.ahk
-#Include, ime_result_traditional.ahk
 #Include, ime_result_uniquify.ahk
 
 ; Selector
