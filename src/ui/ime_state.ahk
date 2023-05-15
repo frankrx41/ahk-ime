@@ -151,7 +151,7 @@ ImeModeIsJapanese()
 ImeIconSetMode(mode)
 {
     local
-    static ime_opt_icon_path := "ime.icl"
+    static ime_opt_icon_path := "data\ime.icl"
     tooltip_option := "X2300 Y1200"
     if( !mode ){
         ToolTip(4, "", "", tooltip_option)
