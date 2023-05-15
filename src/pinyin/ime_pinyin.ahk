@@ -161,7 +161,7 @@ IsTone(char)
 
 IsRadical(char)
 {
-    return InStr("AEOBPMFDTNLGKHJQXZCSRYW!", char, true)
+    return InStr("AEOBPMFDTNLGKHJQXZCSRYW!@#$%^&", char, true)
 }
 
 GetRadical(input_string)
