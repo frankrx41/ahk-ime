@@ -26,6 +26,11 @@
 #Include, ime_translator_history.ahk
 #Include, ime_translator_result.ahk
 
+; Filter
+#Include, ime_translator_list_filter.ahk
+#Include, ime_translator_list_radical.ahk
+#Include, ime_translator_list_uniquify.ahk
+
 ; pinyin
 #Include, ime_pinyin.ahk
 #Include, ime_pinyin_sql.ahk
@@ -38,11 +43,6 @@
 ; gojuon
 #Include, ime_gojuon_splitter.ahk
 #Include, ime_gojuon_translator.ahk
-
-; Filter
-#Include, ime_result_filter.ahk
-#Include, ime_result_radical.ahk
-#Include, ime_result_uniquify.ahk
 
 ; Selector
 #Include, ime_selector.ahk

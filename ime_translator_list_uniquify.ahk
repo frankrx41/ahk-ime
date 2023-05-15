@@ -8,7 +8,7 @@ TranslatorResultListUniquify(ByRef translate_result_list)
     index := 1
     loop % translate_result_list.Length()
     {
-        word_value := translate_result_list[index, 2]
+        word_value := TranslatorResultGetWord(translate_result_list[index])
         if( store_result.HasKey(word_value) )
         {
             translate_result_list.RemoveAt(index)

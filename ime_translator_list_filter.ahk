@@ -27,13 +27,13 @@ TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
     index := 1
     loop % translate_result_list.Length()
     {
-        weight := translate_result_list[index, 3]
-        if( weight<=0 )
+        weight := TranslatorResultGetWeight(translate_result_list[index])
+        if( weight <= 0 )
         {
-            if( index == 1 ){
-                break
+            ; If only has 0 weight result, skip
+            if( index != 1 ){
+                translate_result_list.RemoveAt(index, translate_result_list.Length() - index + 1)
             }
-            translate_result_list.RemoveAt(index, translate_result_list.Length() - index + 1)
             break
         }
         else
