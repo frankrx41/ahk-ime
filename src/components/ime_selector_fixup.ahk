@@ -14,16 +14,17 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
     if( right_split_index > candidate.Length() || right_length == 0 ){
         right_weight := 0
         right_word := ""
+        right_word_length := 0
     } else {
         right_select_index := SelectorFindMaxLengthResultIndex(candidate, right_split_index, right_length)
-        right_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
+        right_word_length := CandidateGetWordLength(candidate, right_split_index, left_select_index)
         ; right_word_length := 1
         right_weight := CandidateGetWeight(candidate, right_split_index, right_select_index) * right_word_length
         right_word  := CandidateGetWord(candidate, right_split_index, right_select_index)
     }
     ; profile_text .= "`n  - [" left_word "(" left_split_index ") ," right_word "(" right_split_index ") ] " left_weight " + " right_weight " = " left_weight + right_weight
     total_weight := left_weight + right_weight
-    profile_text .= "`n  - [" left_word "," right_word "] " left_weight " + " right_weight " = " total_weight
+    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight
     ImeProfilerEnd(46, profile_text)
 
     return total_weight
@@ -147,11 +148,12 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         }
         else
         {
-            ; Find a result the no longer than `max_length`
-            select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
-            ; if( select_index == 0 || select_word_length > max_length )
-            ; {
-            ; }
+            if( max_length == candidate.Length() ) {
+                select_index := 1
+            } else {
+                ; Find a result the no longer than `max_length`
+                select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
+            }
         }
 
         if( origin_select_index != select_index )

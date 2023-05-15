@@ -31,7 +31,7 @@ ImeDebugGetDisplayText()
     local debug_tip := ""
     if( true )
     {
-        ; return debug_tip
+        return debug_tip
     }
 
     ; Comment out the debug info you don't want
@@ -42,12 +42,12 @@ ImeDebugGetDisplayText()
     ; ```
     ; See ime_profiler.ahk for detail.
     ; ImeDebugTipAppend(debug_tip, 10)
-    ImeDebugTipAppend(debug_tip, 11)        ; PinyinSplitterInputString
-    ImeDebugTipAppend(debug_tip, 12)        ; ImeInputterCallTranslator
-    ImeDebugTipAppend(debug_tip, 13)        ; PinyinSplitterCheckDBWeight
+    ; ImeDebugTipAppend(debug_tip, 11)        ; PinyinSplitterInputString
+    ; ImeDebugTipAppend(debug_tip, 12)        ; ImeInputterCallTranslator
+    ; ImeDebugTipAppend(debug_tip, 13)        ; PinyinSplitterCheckDBWeight
     ; ImeDebugTipAppend(debug_tip, 14)
 
-    ImeDebugTipAppend(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
+    ; ImeDebugTipAppend(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
     ; ImeDebugTipAppend(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result
     ; ImeDebugTipAppend(debug_tip, 17)
     ; ImeDebugTipAppend(debug_tip, 18)
@@ -65,7 +65,7 @@ ImeDebugGetDisplayText()
     ; ImeDebugTipAppend(debug_tip, 28)
     ; ImeDebugTipAppend(debug_tip, 29)
 
-    ImeDebugTipAppend(debug_tip, 30)        ; ImeCandidateUpdateResult
+    ; ImeDebugTipAppend(debug_tip, 30)        ; ImeCandidateUpdateResult
     ; ImeDebugTipAppend(debug_tip, 31, 2000)  ; CandidateResultListFilterResults
     ; ImeDebugTipAppend(debug_tip, 32)        ; CandidateResultListFindIndex
     ; ImeDebugTipAppend(debug_tip, 33)
@@ -77,7 +77,7 @@ ImeDebugGetDisplayText()
     ; ImeDebugTipAppend(debug_tip, 38)
     ; ImeDebugTipAppend(debug_tip, 39)        ; TranslatorResultListUniquify
 
-    ImeDebugTipAppend(debug_tip, 40, 2000)  ; SelectorFixupSelectIndex
+    ; ImeDebugTipAppend(debug_tip, 40, 2000)  ; SelectorFixupSelectIndex
     ; ImeDebugTipAppend(debug_tip, 41)        ; ImeSelectorApplyCaretSelectIndex
     ; ImeDebugTipAppend(debug_tip, 42, 2000)  ; SelectorResultSetSelectIndex
     ; ImeDebugTipAppend(debug_tip, 43)        ; SelectorResultLockWord
