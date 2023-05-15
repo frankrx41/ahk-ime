@@ -116,7 +116,7 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
 
 ;*******************************************************************************
 ;
-TranslatorHistoryDynamicUpdate(input_pinyin, word)
+TranslatorHistoryDynamicWeight(input_pinyin, word)
 {
     local
     global translator_history_result
