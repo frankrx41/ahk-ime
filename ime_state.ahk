@@ -48,7 +48,7 @@ ImeStateEventProcHook(phook, msg, hwnd)
 
 ImeStateRefresh()
 {
-    if(A_IsSuspended || ImeStatePauseWindowActive())
+    if( A_IsSuspended || ImeStatePauseWindowActive() )
     {
         ImeInputterClearString()
         ImeSelectMenuClose()
@@ -110,16 +110,40 @@ ImeModeSetLanguage(mode)
     }
 }
 
+ImeModeGetLanguage()
+{
+    global ime_mode_language
+    return ime_mode_language
+}
+
 ImeModeIsEnglish()
 {
     global ime_mode_language
     return ime_mode_language == "en"
 }
 
-ImeModeGetLanguage()
+ImeModeIsChinese()
 {
     global ime_mode_language
-    return ime_mode_language
+    return ImeModeIsSimChinese() || ImeModeIsTraChinese()
+}
+
+ImeModeIsSimChinese()
+{
+    global ime_mode_language
+    return ime_mode_language == "cn"
+}
+
+ImeModeIsTraChinese()
+{
+    global ime_mode_language
+    return ime_mode_language == "tw"
+}
+
+ImeModeIsJapanese()
+{
+    global ime_mode_language
+    return ime_mode_language == "jp"
 }
 
 ;*******************************************************************************
