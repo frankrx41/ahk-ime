@@ -174,8 +174,8 @@ ImeTooltipUpdate()
             split_index -= 1
         }
         extern_info := ""
-        extern_info .= "[" ImeSelectorGetSelectIndex(split_index) "/" ImeCandidateGetListLength(split_index) "]"
-        extern_info .= " (" ImeCandidateGetWeight(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
+        extern_info .= "[" select_index "/" ImeCandidateGetListLength(split_index) "]"
+        extern_info .= " (" ImeCandidateGetWeight(split_index, select_index) ")"
         current_word := ImeCandidateGetWord(split_index, select_index)
         current_word := SubStr(current_word, word_index, 1)
         radical_list := RadicalWordSplit(current_word)
@@ -191,12 +191,15 @@ ImeTooltipUpdate()
                 radical_words .= radical_word ;. RadicalGetPinyin(radical_word)
             }
         }
-        extern_info .= " {" radical_words "}"
-        extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, ImeSelectorGetSelectIndex(split_index)) ")"
-        extern_info .= " (" ImeProfilerGetTotalTick(8) ")"
-
-        ; global ime_selector_select_list
-        ; extern_info .= " (" ime_selector_select_list.Length() ")"
+        if( radical_words ) {
+            extern_info .= " {" radical_words "}"
+        }
+        extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, select_index) ")"
+        comment := ImeCandidateGetComment(split_index, select_index)
+        if( comment ) {
+            extern_info .= " <" comment ">"
+        }
+        extern_info .= "`n(" ImeProfilerGetTotalTick(8) ")"
 
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
@@ -233,7 +236,7 @@ ImeTooltipShow(tooltip_string)
         }
         x := ime_tooltip_pos.X
         y := ime_tooltip_pos.Y+ime_tooltip_pos.H
-        extern_info := "`n(" ime_tooltip_pos.x "," ime_tooltip_pos.y "," ime_tooltip_pos.t ")"
+        extern_info := "" ;"`n(" ime_tooltip_pos.x "," ime_tooltip_pos.y "," ime_tooltip_pos.t ")"
         tooltip_string .= extern_info
 
         if( last_x && x > last_x ){
