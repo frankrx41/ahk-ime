@@ -46,7 +46,8 @@ PinyinSplitterGetWeight(pinyin, prev_splitted_input:="", update:=false)
     {
         if( !splitted_string_weight_table.HasKey(pinyin) )
         {
-            splitted_string_weight_table[pinyin] := PinyinSqlGetWeight(pinyin)
+            simple_only := update ? true : false
+            splitted_string_weight_table[pinyin] := PinyinSqlGetWeight(pinyin, simple_only)
         }
         if( update ) {
             splitted_string_weight_table[pinyin] += 1

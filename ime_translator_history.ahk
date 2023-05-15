@@ -125,9 +125,11 @@ TranslatorHistoryDynamicUpdate(input_pinyin, word)
     Assert(input_pinyin)
 
     zero_tone_pinyin := RegExReplace(input_pinyin, "[0-5]", "0")
-    auto_pinyin := RegExReplace(zero_tone_pinyin, "0([a-z])[a-z]*0$", "0$1%0")
-    if( auto_pinyin ) {
-        test_pinyin := auto_pinyin
+    simple_pinyin := PinyinSqlSimpleKey(zero_tone_pinyin)
+    ; no need this because `PinyinSqlSimpleKey` not check '_', but I leave it here just in case
+    ; simple_pinyin := StrReplace(simple_pinyin, "_", "0")
+    if( simple_pinyin ) {
+        test_pinyin := simple_pinyin
     } else {
         test_pinyin := zero_tone_pinyin
     }

@@ -128,12 +128,16 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
 
 ;*******************************************************************************
 ; 
-PinyinSqlGetWeight(splitted_input)
+PinyinSqlGetWeight(splitted_input, simple_only := false)
 {
     Assert(splitted_input)
 
     sql_sim_key     := PinyinSqlSimpleKey(splitted_input, false)
-    sql_full_key    := PinyinSqlFullKey(splitted_input, false)
+    if( !simple_only ){
+        sql_full_key := PinyinSqlFullKey(splitted_input, false)
+    } else {
+        sql_full_key := ""
+    }
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
     sql_full_cmd := "SELECT weight FROM 'pinyin' WHERE " . sql_where_cmd
