@@ -1,5 +1,53 @@
 ;*******************************************************************************
 ;
+SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
+{
+    profile_text := ImeProfilerBegin(46)
+    left_split_index := split_index
+    left_select_index := TranslatorFindMaxLengthResultIndex(candidate, left_split_index, left_length)
+    left_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
+    ; left_word_length := 1
+    left_weight  := CandidateGetWeight(candidate, left_split_index, left_select_index) * left_word_length
+    left_word  := CandidateGetWord(candidate, left_split_index, left_select_index)
+
+    right_split_index := split_index+A_Index
+    if( right_split_index > candidate.Length() ){
+        right_weight := 0
+        right_word := ""
+    } else {
+        right_select_index := TranslatorFindMaxLengthResultIndex(candidate, right_split_index, right_length)
+        right_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
+        ; right_word_length := 1
+        right_weight := CandidateGetWeight(candidate, right_split_index, right_select_index) * right_word_length
+        right_word  := CandidateGetWord(candidate, right_split_index, right_select_index)
+    }
+    ; profile_text .= "`n  - [" left_word "(" left_split_index ") ," right_word "(" right_split_index ") ] " left_weight " + " right_weight " = " left_weight + right_weight
+    profile_text .= "`n  - [" left_word "," right_word "] " left_weight " + " right_weight " = " left_weight + right_weight
+    ImeProfilerEnd(46, profile_text)
+
+    return left_weight + right_weight
+}
+
+SelectorFindGraceResultIndex(candidate, split_index, max_length)
+{
+    max_weight := 0
+    better_length := max_length
+    loop, % max_length
+    {
+        weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index)
+        if( weight > max_weight ) {
+            max_weight := weight
+            better_length := A_Index
+        }
+        if( true ) {
+            
+        }
+    }
+    select_index := TranslatorFindMaxLengthResultIndex(candidate, split_index, better_length)
+    return select_index
+}
+
+; Rename to `SelectorFindMaxLengthResultIndex`
 TranslatorFindMaxLengthResultIndex(candidate, split_index, max_length)
 {
     local
@@ -11,9 +59,11 @@ TranslatorFindMaxLengthResultIndex(candidate, split_index, max_length)
             return A_Index
         }
     }
+
     return 0
 }
 
+; Rename to `SelectorFindPossibleMaxLength`
 TranslatorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, split_index)
 {
     local
@@ -102,10 +152,10 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         else
         {
             ; Find a result the no longer than `max_length`
-            if( select_index == 0 || select_word_length > max_length )
-            {
-                select_index := TranslatorFindMaxLengthResultIndex(candidate, split_index, max_length)
-            }
+            select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
+            ; if( select_index == 0 || select_word_length > max_length )
+            ; {
+            ; }
         }
 
         if( origin_select_index != select_index )

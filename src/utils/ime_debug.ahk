@@ -31,7 +31,7 @@ ImeDebugGetDisplayText()
     local debug_tip := ""
     if( true )
     {
-        return debug_tip
+        ; return debug_tip
     }
 
     ; Comment out the debug info you don't want
@@ -84,7 +84,7 @@ ImeDebugGetDisplayText()
     ; ImeDebugTipAppend(debug_tip, 44)        ; SelectorResultIsSelectLock
 
     ; ImeDebugTipAppend(debug_tip, 45)        ; TranslatorFindPossibleMaxLength
-    ImeDebugTipAppend(debug_tip, 46)
+    ImeDebugTipAppend(debug_tip, 46, 2000)        ; SelectorFindGraceResultIndex
     ImeDebugTipAppend(debug_tip, 47)
     ImeDebugTipAppend(debug_tip, 48)
     ImeDebugTipAppend(debug_tip, 49)
