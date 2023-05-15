@@ -104,9 +104,19 @@ CandidateGetListLength(candidata, split_index)
     return candidata[split_index].Length()
 }
 
+ImeCandidateGetListLength(split_index)
+{
+    return CandidateGetListLength(ImeCandidateGet(), split_index)
+}
+
 CandidateGetLegacyPinyin(candidata, split_index, word_index)
 {
     return TranslatorResultGetLegacyPinyin(candidata[split_index, word_index])
+}
+
+ImeCandidateGetLegacyPinyin(split_index, word_index)
+{
+    return CandidateGetLegacyPinyin(ImeCandidateGet(), split_index, word_index)
 }
 
 CandidateGetInputPinyin(candidata, split_index, word_index)
@@ -114,9 +124,19 @@ CandidateGetInputPinyin(candidata, split_index, word_index)
     return TranslatorResultGetInputPinyin(candidata[split_index, word_index])
 }
 
+ImeCandidateGetInputPinyin(split_index, word_index)
+{
+    return CandidateGetInputPinyin(ImeCandidateGet(), split_index, word_index)
+}
+
 CandidateGetWord(candidata, split_index, word_index)
 {
     return TranslatorResultGetWord(candidata[split_index, word_index])
+}
+
+ImeCandidateGetWord(split_index, word_index)
+{
+    return CandidateGetWord(ImeCandidateGet(), split_index, word_index)
 }
 
 CandidateGetWeight(candidata, split_index, word_index)
@@ -124,14 +144,29 @@ CandidateGetWeight(candidata, split_index, word_index)
     return TranslatorResultGetWeight(candidata[split_index, word_index])
 }
 
+ImeCandidateGetWeight(split_index, word_index)
+{
+    return CandidateGetWeight(ImeCandidateGet(), split_index, word_index)
+}
+
 CandidateGetComment(candidata, split_index, word_index)
 {
     return TranslatorResultGetComment(candidata[split_index, word_index])
 }
 
+ImeCandidateGetComment(split_index, word_index)
+{
+    return CandidateGetComment(ImeCandidateGet(), split_index, word_index)
+}
+
 CandidateGetWordLength(candidata, split_index, word_index)
 {
     return TranslatorResultGetWordLength(candidata[split_index, word_index])
+}
+
+ImeCandidateGetWordLength(split_index, word_index)
+{
+    return CandidateGetWordLength(ImeCandidateGet(), split_index, word_index)
 }
 
 ;*******************************************************************************
@@ -148,4 +183,9 @@ CandidateGetFormattedComment(candidata, split_index, word_index)
     } else {
         return ""
     }
+}
+
+ImeCandidateGetFormattedComment(split_index, word_index)
+{
+    return CandidateGetFormattedComment(ImeCandidateGet(), split_index, word_index)
 }
