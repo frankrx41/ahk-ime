@@ -186,6 +186,7 @@ ImeSelectorGetOutputString(as_legacy := false)
                 select_word := ImeCandidateGetWord(split_index, select_index)
                 result_string .= select_word
                 comment := ImeCandidateGetComment(split_index, select_index)
+                ; TODO: add function to check traditional word with "*"
                 if( select_word && SubStr(comment, 1, 1) != "*" )
                 {
                     input_pinyin := ImeCandidateGetInputPinyin(split_index, select_index)
