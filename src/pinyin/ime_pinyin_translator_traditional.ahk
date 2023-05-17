@@ -18,9 +18,8 @@ PinyinTranslatorTraditionalUpdate(ByRef translate_result_list, index, trandition
     word_length     := TranslatorResultGetWordLength(translate_result)
     weight          := TranslatorResultGetWeight(translate_result)
     comment         .= TranslatorResultGetComment(translate_result)
-    input_pinyin    := TranslatorResultGetInputPinyin(translate_result)
 
-    single_result := TranslatorResultMake(legacy_pinyin, tranditional_word, weight, comment, word_length, input_pinyin)
+    single_result := TranslatorResultMake(legacy_pinyin, tranditional_word, weight, comment, word_length)
 
     translate_result_list.RemoveAt(index, 1)
     translate_result_list.InsertAt(index, single_result)
@@ -41,7 +40,6 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
         if( ime_traditional_table[simplified_word] )
         {
             legacy_pinyin   := TranslatorResultGetLegacyPinyin(translate_result)
-            input_pinyin    := TranslatorResultGetInputPinyin(translate_result)
 
             word_length := TranslatorResultGetWordLength(translate_result)
             tranditional_word := ime_traditional_table[simplified_word, 1]
@@ -50,7 +48,7 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
 
             if( ime_traditional_table[simplified_word].Length() > 1 )
             {
-                additional_result_info.Push([A_Index, simplified_word, legacy_pinyin, word_length, input_pinyin])
+                additional_result_info.Push([A_Index, simplified_word, legacy_pinyin, word_length])
             }
         }
         else if( StrLen(simplified_word) > 1 )
@@ -80,13 +78,12 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
         simplified_word := additional_result_info[A_Index, 2]
         legacy_pinyin   := additional_result_info[A_Index, 3]
         length          := additional_result_info[A_Index, 4]
-        input_pinyin    := additional_result_info[A_Index, 5]
         loop, % ime_traditional_table[simplified_word].Length() - 1
         {
             traditional_word := ime_traditional_table[simplified_word, A_Index+1]
             index += 1
             offset_index += 1
-            single_result := TranslatorResultMake(legacy_pinyin, traditional_word, 0, "*", length, input_pinyin)
+            single_result := TranslatorResultMake(legacy_pinyin, traditional_word, 0, "*", length)
             translate_result_list.InsertAt(index, single_result)
         }
     }

@@ -91,12 +91,12 @@ GojuonTranslateFindResult(splitter_result, auto_complete)
     if( ime_gojuon_list.HasKey(splitted_string) )
     {
         gojuon := ime_gojuon_list[splitted_string]
-        translate_result_list := [TranslatorResultMake(splitted_string, gojuon[1], 0, "", 1, splitted_string) 
-            ,TranslatorResultMake(splitted_string, gojuon[2], 1, "", 1, splitted_string)]
+        translate_result_list := [TranslatorResultMake(splitted_string, gojuon[1], 0, "", 1) 
+            ,TranslatorResultMake(splitted_string, gojuon[2], 1, "", 1)]
     }
     else
     {
-        translate_result_list := [TranslatorResultMake(splitted_string, splitted_string, 1, "", 1, splitted_string)]
+        translate_result_list := [TranslatorResultMake(splitted_string, splitted_string, 1, "", 1)]
     }
 
     return translate_result_list
