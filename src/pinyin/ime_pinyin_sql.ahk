@@ -10,24 +10,22 @@
 ; "ta0de1" -> [t_d1]
 ; "z?e0yang0z?i3" -> [z_y_z3]
 ; "s?u0" -> [s_]
-; "wo%0ni" -> [w___n_]
+; "wo0%0ni0" -> [w___n_]
 ;
 PinyinSqlSimpleKey(splitted_input)
 {
     key_value := splitted_input
-    key_value := StrReplace(key_value, "+0", "__")
-    key_value := StrReplace(key_value, "*0", "%_")
     key_value := StrReplace(key_value, "?")
+    ; key_value := RegExReplace(key_value, "%([0-5])", "$1")
     key_value := StrReplace(key_value, "0", "_")
-    key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
+    key_value := RegExReplace(key_value, "([a-z%])[a-z%]+", "$1", occurr_cnt)
+    key_value := RegExReplace(key_value, "%", "_", occurr_cnt)
     return key_value
 }
 
 PinyinSqlFullKey(splitted_input)
 {
     key_value := splitted_input
-    key_value := StrReplace(key_value, "*", "[a-z1-5]*")
-    key_value := StrReplace(key_value, "+", "[a-z]+")
     key_value := RegExReplace(key_value, "([zcs])\?", "$1h^")
     key_value := RegExReplace(key_value, "([n])\?", "$1g^")
     key_value := StrReplace(key_value, "?", ".")

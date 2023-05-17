@@ -16,15 +16,9 @@ SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate:=tr
     return [pinyin, tone, radical, start_pos, end_pos, need_translate, hope_len, is_completed]
 }
 
-SplitterResultMakeAuto(start_pos, end_pos, is_plural := false)
-{
-    symbol := is_plural ? "*" : "+"
-    return [symbol, 0, "", start_pos, end_pos, true, 0, false]
-}
-
 SplitterResultIsAutoSymbol(splitter_result)
 {
-    return IsAutoSymbol(SplitterResultGetPinyin(splitter_result))
+    return SplitterResultGetPinyin(splitter_result) == "%%"
 }
 
 ;*******************************************************************************

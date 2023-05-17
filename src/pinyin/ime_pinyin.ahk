@@ -152,6 +152,16 @@ IsZeroInitials(initials)
     return zero_initials_table.HasKey(initials)
 }
 
+IsInitialsAnyMark(char)
+{
+    return char == "+"
+}
+
+IsVowelsAnyMark(char)
+{
+    return char == "+" || char == "%"
+}
+
 ;*******************************************************************************
 ;
 IsTone(char)
@@ -161,12 +171,12 @@ IsTone(char)
 
 IsRadical(char)
 {
-    return InStr("AEOBPMFDTNLGKHJQXZCSRYW!@#$%^&", char, true)
+    return InStr("AEOBPMFDTNLGKHJQXZCSRYW!@#$^&", char, true)
 }
 
 GetRadical(input_string)
 {
-    RegExMatch(input_string, "^([A-Z!@#$%^&]+)", radical)
+    RegExMatch(input_string, "^([A-Z!@#$^&]+)", radical)
     return radical
 }
 
@@ -174,11 +184,6 @@ IsSymbol(char)
 {
     global symbol_list_string
     return InStr(symbol_list_string, char)
-}
-
-IsAutoSymbol(char)
-{
-    return InStr("*+", char)
 }
 
 ;*******************************************************************************

@@ -27,6 +27,13 @@ PinyinSplitterMaxVowelsLength(input_str, index)
             break
         }
         check_char := SubStr(input_str, index+vowels_max_len, 1)
+        if( IsVowelsAnyMark(check_char) )
+        {
+            if( vowels_max_len == 0 ){
+                vowels_max_len := 1
+            }
+            break
+        }
         if( IsTone(check_char) ){
             break
         }
@@ -36,7 +43,7 @@ PinyinSplitterMaxVowelsLength(input_str, index)
         if( IsRadical(check_char) ){
             break
         }
-        if( IsAutoSymbol(check_char) ){
+        if( IsInitialsAnyMark(check_char) ){
             break
         }
         vowels_max_len += 1
@@ -159,7 +166,7 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string, prev_splitted
 
 IsMustSplit(next_char)
 {
-    return next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) || IsAutoSymbol(next_char)
+    return next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) || IsInitialsAnyMark(next_char)
 }
 
 PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
@@ -175,6 +182,10 @@ PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
         {
             vowels_len := vowels_max_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
+            if( IsVowelsAnyMark(vowels) )
+            {
+                break
+            }
             if( IsCompletePinyin(initials, vowels) )
             {
                 next_char := SubStr(input_str, index+vowels_len, 1)
@@ -195,7 +206,10 @@ PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
     }
     index += vowels_len
 
-    if( !IsCompletePinyin(initials, vowels) ){
+    if( IsVowelsAnyMark(vowels) ){
+        vowels := "%"
+    }
+    else if( !IsCompletePinyin(initials, vowels) ){
         vowels .= "%"
     }
     return vowels
@@ -205,6 +219,9 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 {
     local
     index += 1
+    if( IsInitialsAnyMark(initials) ){
+        initials := "%"
+    }
     if( InStr("zcs", initials) && (SubStr(input_str, index, 1)=="h") ){
         ; zcs + h
         index += 1
@@ -264,7 +281,7 @@ PinyinSplitterInputString(input_string)
         splitter_list := PinyinSplitterInputStringNormal(input_string)
     }
 
-    if( !simple_spell && StrLen(input_string) <= 4 )
+    if( !simple_spell && StrLen(input_string) <= 4 && !InStr(input_string, "+") && !InStr(input_string, "%") )
     {
         try_simple_spliter := true
         loop, % splitter_list.Length()
@@ -301,21 +318,17 @@ PinyinSplitterInputStringSimple(input_string)
         }
 
         initials := SubStr(input_string, string_index, 1)
+        start_string_index := string_index
         string_index += 1
 
-        if( initials == "+" || initials == "*" )
+        if( IsInitials(initials) || IsInitialsAnyMark(initials) )
         {
-            splitter_list.Push( SplitterResultMakeAuto(string_index, string_index) )
-            string_index += 1
-            hope_length_list[hope_length_list.Length()] += 1
-        }
-        else
-        if( IsInitials(initials) )
-        {
-            start_string_index := string_index
+            if( IsVowelsAnyMark(SubStr(input_string, string_index, 1)) ){
+                string_index += 1
+            }
             vowels      := "%"
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
-            radical := GetRadical(SubStr(input_string, string_index))
+            radical     := GetRadical(SubStr(input_string, string_index))
             string_index += StrLen(radical)
 
             make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
@@ -372,7 +385,7 @@ PinyinSplitterInputStringNormal(input_string)
     {
         initials := SubStr(input_string, string_index, 1)
 
-        if( string_index > strlen || IsInitials(initials) || initials == "+" || initials == "*" )
+        if( string_index > strlen || IsInitials(initials) || IsInitialsAnyMark(initials) )
         {
             if( escape_string ) {
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
@@ -386,16 +399,8 @@ PinyinSplitterInputStringNormal(input_string)
             break
         }
 
-        ; Auto
-        if( initials == "+" || initials == "*" )
-        {
-            splitter_list.Push( SplitterResultMakeAuto(string_index, string_index) )
-            string_index += 1
-            hope_length_list[hope_length_list.Length()] += 1
-        }
-        else
         ; 字母，自动分词
-        if( IsInitials(initials) )
+        if( IsInitials(initials) || IsInitialsAnyMark(initials) )
         {
             start_string_index := string_index
 
