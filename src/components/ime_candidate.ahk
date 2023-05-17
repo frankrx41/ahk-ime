@@ -31,7 +31,7 @@ ImeCandidateUpdateResult(splitter_result)
             radical_list.Push(SplitterResultGetRadical(splitter_result[A_Index]))
             test_splitter_result := SplitterResultListGetUntilSkip(splitter_result, A_Index)
             debug_text .= """" SplitterResultListGetDisplayText(test_splitter_result) ""","
-            if( !SplitterResultNeedTranslate(splitter_result[A_Index]) )
+            if( !SplitterResultNeedTranslate(splitter_result[A_Index]) || SplitterResultIsAutoSymbol(splitter_result[A_Index]) )
             {
                 ; Add legacy text
                 test_string := SplitterResultGetPinyin(test_splitter_result[1])

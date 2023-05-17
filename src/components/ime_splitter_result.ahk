@@ -22,6 +22,11 @@ SplitterResultMakeAuto(start_pos, end_pos, is_plural := false)
     return [symbol, 0, "", start_pos, end_pos, true, 0, false]
 }
 
+SplitterResultIsAutoSymbol(splitter_result)
+{
+    return InStr("*+", SplitterResultGetPinyin(splitter_result))
+}
+
 ;*******************************************************************************
 ;
 SplitterResultGetPinyin(splitter_result) {
@@ -132,23 +137,30 @@ SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
 {
     local
     return_splitter_result := []
+    if( SplitterResultIsAutoSymbol(splitter_result_list[start_count]))
+    {
+        return_splitter_result[1] := splitter_result_list[start_count]
+    }
+    else
     if( !SplitterResultNeedTranslate(splitter_result_list[start_count]) )
     {
         return_splitter_result[1] := splitter_result_list[start_count]
     }
-    find_string := ""
-    loop, % splitter_result_list.Length()
+    else
     {
-        if( A_Index < start_count ) {
-            continue
-        }
-        if( SplitterResultNeedTranslate(splitter_result_list[A_Index]) )
+        loop, % splitter_result_list.Length()
         {
-            return_splitter_result.Push(splitter_result_list[A_Index])
-        }
-        else
-        {
-            break
+            if( A_Index < start_count ) {
+                continue
+            }
+            if( SplitterResultNeedTranslate(splitter_result_list[A_Index]) )
+            {
+                return_splitter_result.Push(splitter_result_list[A_Index])
+            }
+            else
+            {
+                break
+            }
         }
     }
     return return_splitter_result
@@ -162,7 +174,6 @@ SplitterResultListGetUntilLength(splitter_result_list, start_count := 1)
     {
         return_splitter_result[1] := splitter_result_list[start_count]
     }
-    find_string := ""
     loop, % splitter_result_list.Length()
     {
         if( A_Index < start_count ) {

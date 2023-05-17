@@ -96,7 +96,9 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
     ; auto_complete := (SubStr(splitted_input, 0, 1) == "*")
     ; splitted_input := RTrim(splitted_input, "*")
 
-    Assert(splitted_input, splitted_input)
+    Assert(splitted_input != "", splitted_input)
+    Assert(splitted_input != "+0")
+    Assert(splitted_input != "*0")
 
     sql_sim_key     := PinyinSqlSimpleKey(splitted_input)
     sql_full_key    := PinyinSqlFullKey(splitted_input)
