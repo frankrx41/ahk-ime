@@ -166,7 +166,7 @@ IsVowelsAnyMark(char)
 ;
 IsTone(char)
 {
-    return char && InStr("12345' ", char)
+    return char != "" && InStr("012345' ", char)
 }
 
 IsRadical(char)
