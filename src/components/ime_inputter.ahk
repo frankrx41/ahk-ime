@@ -128,14 +128,13 @@ ImeInputterUpdateString(input_char)
     {
         ; Splitter
         if( ImeModeIsChinese() ){
-            ime_splitted_list := PinyinSplitterInputString(ime_input_string, auto_complete)
+            ime_splitted_list := PinyinSplitterInputString(ime_input_string)
         } else
         if( ImeModeIsJapanese() ) {
             ime_splitted_list := GojuonSplitterInputString(ime_input_string)
-            auto_complete := false
         }
         ; Translator
-        ImeInputterCallTranslator(auto_complete)
+        ImeInputterCallTranslator()
     }
     else
     {
@@ -145,7 +144,7 @@ ImeInputterUpdateString(input_char)
     ImeProfilerEnd(8)
 }
 
-ImeInputterCallTranslator(auto_complete)
+ImeInputterCallTranslator()
 {
     global ime_splitted_list
     global ime_input_string
@@ -160,7 +159,7 @@ ImeInputterCallTranslator(auto_complete)
     profile_text .= "[" SplitterResultListGetDisplayText(splitter_result) "] (" splitter_result.Length() "/" ime_splitted_list.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
-    candidate := ImeCandidateUpdateResult(splitter_result, auto_complete)
+    candidate := ImeCandidateUpdateResult(splitter_result)
     ImeSelectorUnlockWords(caret_splitted_index, false)
     ImeSelectorFixupSelectIndex(candidate)
 

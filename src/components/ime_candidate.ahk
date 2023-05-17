@@ -11,11 +11,14 @@ ImeCandidateClear()
     global ime_candidata_result_origin  := []
 }
 
-ImeCandidateUpdateResult(splitter_result, auto_complete)
+; splitter_result -> splitter_result_list
+ImeCandidateUpdateResult(splitter_result)
 {
     local
     global ime_candidata_result_filter
     global ime_candidata_result_origin
+
+    auto_complete := SplitterResultListCheckIsAutoComplete(splitter_result)
 
     if( splitter_result.Length() )
     {

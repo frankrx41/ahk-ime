@@ -240,10 +240,10 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(input_string, ByRef auto_complete)
+PinyinSplitterInputString(input_string)
 {
-    ; last char * marks simple spell
     auto_complete := (SubStr(input_string, -1, 2) == "**") || (SubStr(input_string, 0, 1) == "+")
+    ; last char * marks simple spell
     simple_spell := (SubStr(input_string, 0, 1) == "*")
     input_string := RTrim(input_string, "*+")
 
@@ -271,6 +271,11 @@ PinyinSplitterInputString(input_string, ByRef auto_complete)
         {
             splitter_list := PinyinSplitterInputStringSimple(input_string)
         }
+    }
+
+    if( auto_complete )
+    {
+        splitter_list.Push(SplitterResultMakeAutoComplete())
     }
 
     return splitter_list
@@ -454,7 +459,8 @@ PinyinSplitterInputStringTest()
     loop, % test_case.Length()
     {
         input_case := test_case[A_Index]
-        test_result := PinyinSplitterInputString(input_case, auto_complete)
+        test_result := PinyinSplitterInputString(input_case)
+        auto_complete := SplitterResultListCheckIsAutoComplete(test_result)
         msg_string .= "`n""" input_case """ -> [" SplitterResultListGetDisplayText(test_result) "] (" auto_complete ")"
     }
     MsgBox, % msg_string
@@ -468,7 +474,7 @@ PinyinSplitterInputStringUnitTest()
     loop, % test_case.Length()
     {
         input_case := test_case[A_Index]
-        test_result := PinyinSplitterInputString(input_case, auto_complete)
+        test_result := PinyinSplitterInputString(input_case)
         result_str := ""
         loop, % test_result.Length()
         {

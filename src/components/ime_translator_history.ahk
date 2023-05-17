@@ -56,7 +56,7 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
         if( TranslatorResultGetWordLength(translator_history_result[splitted_string, A_Index]) == 1 ){
             pinyin := TranslatorResultGetLegacyPinyin(translator_history_result[splitted_string, A_Index])
             word .= RegExReplace(pinyin, "[0-5]", "0", word_count)
-            Assert( word_count == 1 )
+            Assert( word_count == 1, pinyin . word . word_count )
         }
         if( translator_history_weight.HasKey(word) ){
             translator_history_result[splitted_string, A_Index, 3] := translator_history_weight[word]
