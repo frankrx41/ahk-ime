@@ -6,11 +6,13 @@ ImeStateInitialize()
     global ime_is_active_system_menu
     global ime_active_window_class
     global ime_opt_pause_window_name_list
+    global ime_is_force_simple_spell
     
     ime_mode_language := "en"       ; "cn", "en", "tw", "jp"
     ime_is_active_system_menu := 0  ; 是否打开菜单
     ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
+    ime_is_force_simple_spell := false
 
     DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
     ; Notice: if `ime_mode_language` same as here, state will not update
@@ -144,6 +146,25 @@ ImeModeIsJapanese()
 {
     global ime_mode_language
     return ime_mode_language == "jp"
+}
+
+;*******************************************************************************
+ImeIsForceSimpleSpell()
+{
+    global ime_is_force_simple_spell
+    return ime_is_force_simple_spell
+}
+
+ImeToggleForceSimpleSpell()
+{
+    global ime_is_force_simple_spell
+    ime_is_force_simple_spell := !ime_is_force_simple_spell
+}
+
+ImeSetForceSimpleSpell(force)
+{
+    global ime_is_force_simple_spell
+    ime_is_force_simple_spell := force
 }
 
 ;*******************************************************************************

@@ -267,10 +267,7 @@ PinyinSplitterInputString(input_string)
 {
     ; + or * marks 1 taken
     ; last char * marks simple spell
-    simple_spell := (SubStr(input_string, 0, 1) == "*")
-    if( simple_spell ) {
-        input_string := SubStr(input_string, 1, StrLen(input_string)-1)
-    }
+    simple_spell := ImeIsForceSimpleSpell()
 
     if( simple_spell )
     {
@@ -311,21 +308,36 @@ PinyinSplitterInputStringSimple(input_string)
     strlen              := StrLen(input_string)
     splitter_list       := []
     hope_length_list    := [0]
+    escape_string       := ""
     loop
     {
+        initials := SubStr(input_string, string_index, 1)
+
+        if( string_index > strlen || IsInitials(initials) || IsInitialsAnyMark(initials) )
+        {
+            if( escape_string ) {
+                make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
+                splitter_list.Push(make_result)
+                escape_string := ""
+                hope_length_list.Push(0)
+            }
+        }
+
         if( string_index > strlen ) {
             break
         }
 
-        initials := SubStr(input_string, string_index, 1)
-        start_string_index := string_index
-        string_index += 1
-
         if( IsInitials(initials) || IsInitialsAnyMark(initials) )
         {
-            if( IsVowelsAnyMark(SubStr(input_string, string_index, 1)) ){
-                string_index += 1
+            start_string_index := string_index
+
+            if( IsInitialsAnyMark(initials) ){
+                initials := "%"
             }
+            string_index += 1
+            ; if( IsVowelsAnyMark(SubStr(input_string, string_index, 1)) ){
+            ;     string_index += 1
+            ; }
             vowels      := "%"
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
             radical     := GetRadical(SubStr(input_string, string_index))
@@ -335,6 +347,15 @@ PinyinSplitterInputStringSimple(input_string)
             splitter_list.Push(make_result)
 
             hope_length_list[hope_length_list.Length()] += 1
+        }
+        ; ignore
+        else
+        {
+            if( initials == "'" ){
+                initials := " "
+            }
+            string_index += 1
+            escape_string .= initials
         }
     }
 

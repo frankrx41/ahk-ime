@@ -12,7 +12,8 @@
     ; Auto complete
     NumpadMult::
     *::
-        ImeInputterProcessChar("*")
+        ImeToggleForceSimpleSpell()
+        ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 

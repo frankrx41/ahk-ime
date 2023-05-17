@@ -66,8 +66,7 @@ SplitterResultListGetIndex(splitter_result_list, caret_pos)
                 return A_Index
             }
         }
-        ; TODO: fix this
-        ; Assert(false, SplitterResultListGetDisplayText(splitter_result_list) "," caret_pos)
+        Assert(false, SplitterResultListGetDisplayText(splitter_result_list) "," caret_pos)
     }
     return 1
 }
