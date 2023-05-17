@@ -89,12 +89,14 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 
     if( ImeSelectMenuIsOpen() )
     {
+        ; When select menu open, new input always take as radical
         input_char := Format("{:U}", input_char)
         ImeSelectorSetCaretSelectIndex(1)
     }
     if( IsSymbol(input_char) )
     {
         ; TODO: We should update result when symbol, like ma？ -> 吗？ de。 -> 的。
+        ; Or move this feature to `SelectorFindGraceResultIndex`
     }
 
     caret_pos := ime_input_caret_pos
