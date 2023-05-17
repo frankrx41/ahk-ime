@@ -30,7 +30,13 @@ PinyinSplitterMaxVowelsLength(input_str, index)
         if( IsTone(check_char) ){
             break
         }
-        if( IsRadical(check_char) ) {
+        if( IsRadical(check_char) ){
+            break
+        }
+        if( IsRadical(check_char) ){
+            break
+        }
+        if( IsAutoSymbol(check_char) ){
             break
         }
         vowels_max_len += 1
@@ -153,7 +159,7 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string, prev_splitted
 
 IsMustSplit(next_char)
 {
-    return next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) || InStr("*+", next_char)
+    return next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) || IsAutoSymbol(next_char)
 }
 
 PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)

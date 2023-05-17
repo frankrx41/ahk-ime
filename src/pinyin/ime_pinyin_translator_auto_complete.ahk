@@ -10,7 +10,7 @@ PinyinTranslatorInsertAutoComplete(ByRef translate_result_list, splitter_result)
     splitted_string .= "*"
     take_up_length := splitter_result.Length()
 
-    TranslatorHistoryUpdateKey(splitted_string, take_up_length)
+    TranslatorHistoryUpdateKey(splitted_string)
     TranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 1)
     profile_text := "[""" SplitterResultListConvertToString(splitter_result, 1) """] -> [""" splitted_string """," take_up_length "]"
 

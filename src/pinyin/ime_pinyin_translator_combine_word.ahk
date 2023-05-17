@@ -48,12 +48,12 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
         splitted_string_ab := ""
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result, 1, xy_start_index-1)
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result, xy_start_index+word_xy_length)
-        TranslatorHistoryUpdateKey(splitted_string_ab, splitter_result.Length()-word_xy_length)
+        TranslatorHistoryUpdateKey(splitted_string_ab)
 
         word_ab := TranslatorHistoryGetResultWord(splitted_string_ab)
         if( word_ab ){
             splitted_string_xy := SplitterResultListConvertToString(splitter_result, xy_start_index, word_xy_length)
-            TranslatorHistoryUpdateKey(splitted_string_xy, word_xy_length)
+            TranslatorHistoryUpdateKey(splitted_string_xy)
             word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
             full_word := SubStr(word_ab, 1, 1) . word_xy . SubStr(word_ab, 2)
 

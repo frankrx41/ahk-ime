@@ -34,7 +34,7 @@ TranslatorHistoryHasKey(splitted_string)
 ;   [3]: ["lao3shi2", "老实", "25877", "", 2]
 ;   ...
 ; ]
-TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
+TranslatorHistoryUpdateKey(splitted_string, limit_num:=100)
 {
     local
     global translator_history_result

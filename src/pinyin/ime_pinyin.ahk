@@ -176,6 +176,11 @@ IsSymbol(char)
     return InStr(symbol_list_string, char)
 }
 
+IsAutoSymbol(char)
+{
+    return InStr("*+", char)
+}
+
 ;*******************************************************************************
 ; Initialize
 PinyinInitialize()

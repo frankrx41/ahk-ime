@@ -17,7 +17,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result)
         length_count := max_len-A_Index+1
         splitted_string := SplitterResultListConvertToString(splitter_result, 1, length_count)
         profile_text .= "[" splitted_string "] "
-        TranslatorHistoryUpdateKey(splitted_string, length_count)
+        TranslatorHistoryUpdateKey(splitted_string)
         if( length_count == hope_word_length ) {
             first_weight := TranslatorResultGetWeight(translate_result_list[1])
             last_index := translate_result_list.Length() + 1

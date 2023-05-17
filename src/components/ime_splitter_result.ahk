@@ -24,7 +24,7 @@ SplitterResultMakeAuto(start_pos, end_pos, is_plural := false)
 
 SplitterResultIsAutoSymbol(splitter_result)
 {
-    return InStr("*+", SplitterResultGetPinyin(splitter_result))
+    return IsAutoSymbol(SplitterResultGetPinyin(splitter_result))
 }
 
 ;*******************************************************************************
