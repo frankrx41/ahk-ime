@@ -39,7 +39,7 @@ TranslatorResultMake(pinyin, word, weight, comment, word_length)
 
 TranslatorResultMakeTraditional(ByRef translate_result, tranditional_word)
 {
-    tranditional_translate_result := translate_result
+    tranditional_translate_result := CopyObj(translate_result)
     tranditional_translate_result[2] := tranditional_word
     tranditional_translate_result[6] := 1
     return tranditional_translate_result
