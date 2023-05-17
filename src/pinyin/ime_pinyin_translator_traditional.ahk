@@ -33,11 +33,11 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
 
                 if( A_Index == 1 ) {
                     translate_result_list.RemoveAt(index, 1)
-                    index -= 1
                 }
                 translate_result_list.InsertAt(index, tranditional_translate_result)
                 index += 1
             }
+            index -= 1
         }
         else if( StrLen(simplified_word) > 1 )
         {
