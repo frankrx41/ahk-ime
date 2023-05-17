@@ -122,13 +122,7 @@ TranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_nu
     global translator_history_result
     loop % Min(translator_history_result[splitted_string].Length(), max_num)
     {
-        pinyin  := TranslatorResultGetLegacyPinyin(translator_history_result[splitted_string, A_Index])
-        word    := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
-        weight  := TranslatorResultGetWeight(translator_history_result[splitted_string, A_Index])
-        comment := TranslatorResultGetComment(translator_history_result[splitted_string, A_Index])
-        word_length := TranslatorResultGetWordLength(translator_history_result[splitted_string, A_Index])
-
-        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length + modify_weight)
+        single_result := translator_history_result[splitted_string, A_Index]
         translate_result_list.Push(single_result)
     }
 }
@@ -142,13 +136,7 @@ TranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, in
     loop % loop_cnt
     {
         index   := loop_cnt+1-A_Index
-        pinyin  := TranslatorResultGetLegacyPinyin(translator_history_result[splitted_string, A_Index])
-        word    := TranslatorResultGetWord(translator_history_result[splitted_string, index])
-        weight  := TranslatorResultGetWeight(translator_history_result[splitted_string, index])
-        comment := TranslatorResultGetComment(translator_history_result[splitted_string, index])
-        word_length := TranslatorResultGetWordLength(translator_history_result[splitted_string, index])
-
-        single_result := TranslatorResultMake(pinyin, word, weight, comment, word_length)
+        single_result := translator_history_result[splitted_string, index]
         translate_result_list.InsertAt(insert_at, single_result)
     }
 }
