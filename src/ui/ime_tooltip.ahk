@@ -14,10 +14,10 @@ ImeTooltipInitialize()
 
 ;*******************************************************************************
 ;
-IsTraditionalComment(comment)
+IsHideAbleComment(comment)
 {
     first_char := SubStr(comment, 1, 1)
-    return InStr("*+", first_char)
+    return InStr("*+^", first_char)
 }
 
 ;*******************************************************************************
@@ -79,7 +79,7 @@ ImeTooltipGetDisplaySelectItems()
 
                     end_str_mark := " "
                     comment := ImeCandidateGetFormattedComment(split_index, word_index)
-                    if( IsTraditionalComment(comment) )
+                    if( IsHideAbleComment(comment) && select_index != word_index )
                     {
                         end_str_mark := SubStr(comment, 1, 1)
                         comment := SubStr(comment, 2)
