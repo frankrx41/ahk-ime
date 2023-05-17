@@ -242,10 +242,12 @@ PinyinSplitterGetInitials(input_str, initials, ByRef index)
 ; See: `PinyinSplitterInputStringTest`
 PinyinSplitterInputString(input_string)
 {
-    auto_complete := (SubStr(input_string, -1, 2) == "**") || (SubStr(input_string, 0, 1) == "+")
+    ; + or * marks 1 taken
     ; last char * marks simple spell
     simple_spell := (SubStr(input_string, 0, 1) == "*")
-    input_string := RTrim(input_string, "*+")
+    if( simple_spell ) {
+        input_string := SubStr(input_string, 1, StrLen(input_string)-1)
+    }
 
     if( simple_spell )
     {
@@ -273,11 +275,6 @@ PinyinSplitterInputString(input_string)
         }
     }
 
-    if( auto_complete )
-    {
-        splitter_list.Push(SplitterResultMakeAutoComplete())
-    }
-
     return splitter_list
 }
 
@@ -299,6 +296,14 @@ PinyinSplitterInputStringSimple(input_string)
 
         initials := SubStr(input_string, string_index, 1)
         string_index += 1
+
+        if( initials == "+" || initials == "*" )
+        {
+            splitter_list.Push( SplitterResultMakeAuto(string_index, string_index) )
+            string_index += 1
+            hope_length_list[hope_length_list.Length()] += 1
+        }
+        else
         if( IsInitials(initials) )
         {
             start_string_index := string_index
@@ -361,7 +366,7 @@ PinyinSplitterInputStringNormal(input_string)
     {
         initials := SubStr(input_string, string_index, 1)
 
-        if( string_index > strlen || IsInitials(initials) )
+        if( string_index > strlen || IsInitials(initials) || initials == "+" || initials == "*" )
         {
             if( escape_string ) {
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
@@ -375,6 +380,14 @@ PinyinSplitterInputStringNormal(input_string)
             break
         }
 
+        ; Auto
+        if( initials == "+" || initials == "*" )
+        {
+            splitter_list.Push( SplitterResultMakeAuto(string_index, string_index) )
+            string_index += 1
+            hope_length_list[hope_length_list.Length()] += 1
+        }
+        else
         ; 字母，自动分词
         if( IsInitials(initials) )
         {
@@ -412,10 +425,10 @@ PinyinSplitterInputStringNormal(input_string)
         ; 忽略
         else
         {
-            string_index += 1
             if( initials == "'" ){
                 initials := " "
             }
+            string_index += 1
             escape_string .= initials
         }
     }

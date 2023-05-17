@@ -16,9 +16,9 @@ SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate:=tr
     return [pinyin, tone, radical, start_pos, end_pos, need_translate, hope_len, is_completed]
 }
 
-SplitterResultMakeAutoComplete()
+SplitterResultMakeAuto(start_pos, end_pos)
 {
-    return ["%", 0, "", 0, 0, true, 0, false]
+    return ["%", 0, "", start_pos, end_pos, true, 0, false]
 }
 
 SplitterResultListCheckIsAutoComplete(ByRef splitter_result_list)
