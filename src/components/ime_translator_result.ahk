@@ -26,6 +26,10 @@ TranslatorResultGetInputPinyin(ByRef translate_result) {
     return translate_result[6]
 }
 
+TranslatorResultSetWordLength(ByRef translate_result, length) {
+    translate_result[5] := length
+}
+
 ;*******************************************************************************
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length, input_pinyin)

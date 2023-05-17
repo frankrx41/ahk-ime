@@ -43,10 +43,6 @@ TranslatorHistoryUpdateKey(splitted_string, word_length, limit_num:=100)
     if( !TranslatorHistoryHasKey(splitted_string) )
     {
         translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, limit_num)
-        loop % translator_history_result[splitted_string].Length() {
-            ; word length
-            translator_history_result[splitted_string, A_Index, 5] := word_length
-        }
     }
 
     ; update weight
