@@ -95,6 +95,10 @@
                 ImeSelectorOffsetCaretSelectIndex(+ImeSelectMenuGetColumn())
             }
         } else {
+            if( ImeSelectorGetCaretSelectIndex() == 0 )
+            {
+                ImeSelectorSetCaretSelectIndex(1)
+            }
             ImeSelectMenuOpen()
         }
         ImeTooltipUpdate()
@@ -246,11 +250,11 @@
             ImeSelectorOffsetCaretSelectIndex(+1)
         } else {
             ImeSelectorStoreSelectIndexBeforeMenuOpen()
-            ImeSelectMenuOpen()
             if( ImeSelectorGetCaretSelectIndex() == 0 )
             {
                 ImeSelectorSetCaretSelectIndex(1)
             }
+            ImeSelectMenuOpen()
         }
         ImeTooltipUpdate()
     return
