@@ -16,20 +16,10 @@ SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate:=tr
     return [pinyin, tone, radical, start_pos, end_pos, need_translate, hope_len, is_completed]
 }
 
-SplitterResultMakeAuto(start_pos, end_pos)
+SplitterResultMakeAuto(start_pos, end_pos, is_plural := false)
 {
-    return ["%", 0, "", start_pos, end_pos, true, 0, false]
-}
-
-SplitterResultListCheckIsAutoComplete(ByRef splitter_result_list)
-{
-    local
-    splitter_result_list_len := splitter_result_list.Length()
-    auto_complete := SplitterResultGetPinyin(splitter_result_list[splitter_result_list_len]) == "%"
-    if( auto_complete ){
-        splitter_result_list.RemoveAt(splitter_result_list_len, 1)
-    }
-    return auto_complete
+    symbol := is_plural ? "*" : "+"
+    return [symbol, 0, "", start_pos, end_pos, true, 0, false]
 }
 
 ;*******************************************************************************

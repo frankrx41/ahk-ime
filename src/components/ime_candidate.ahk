@@ -18,7 +18,7 @@ ImeCandidateUpdateResult(splitter_result)
     global ime_candidata_result_filter
     global ime_candidata_result_origin
 
-    auto_complete := SplitterResultListCheckIsAutoComplete(splitter_result)
+    auto_complete := false
 
     if( splitter_result.Length() )
     {

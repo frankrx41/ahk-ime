@@ -10,31 +10,29 @@
 ; "ta0de1" -> [t_d1]
 ; "z?e0yang0z?i3" -> [z_y_z3]
 ; "s?u0" -> [s_]
+; "wo%0ni" -> [w___n_]
 ;
-; If `auto_complete`, will add "%%" at the end
-PinyinSqlSimpleKey(splitted_input, auto_complete:=false)
+PinyinSqlSimpleKey(splitted_input)
 {
     key_value := splitted_input
+    key_value := StrReplace(key_value, "+0", "__")
+    key_value := StrReplace(key_value, "*0", "%_")
     key_value := StrReplace(key_value, "?")
     key_value := StrReplace(key_value, "0", "_")
     key_value := RegExReplace(key_value, "([a-z])[a-z%]+", "$1", occurr_cnt)
-    if( auto_complete ){
-        key_value .= "%%"
-    }
     return key_value
 }
 
-PinyinSqlFullKey(splitted_input, auto_complete:=false)
+PinyinSqlFullKey(splitted_input)
 {
     key_value := splitted_input
+    key_value := StrReplace(key_value, "*", "[a-z1-5]*")
+    key_value := StrReplace(key_value, "+", "[a-z]+")
     key_value := RegExReplace(key_value, "([zcs])\?", "$1h^")
     key_value := RegExReplace(key_value, "([n])\?", "$1g^")
     key_value := StrReplace(key_value, "?", ".")
     key_value := StrReplace(key_value, "^", "?")
     key_value := StrReplace(key_value, "0", "_")
-    if( auto_complete ){
-        key_value .= "%%"
-    }
     return key_value
 }
 
@@ -54,7 +52,6 @@ PinyinSqlGenerateWhereCondition(key_name, key_value, is_full_key:=false)
 
         if( InStr(key_value, "[") || InStr(key_value, "?") || InStr(key_value, ".") )
         {
-            key_value := RegexReplace(key_value, "%%$", "[a-z1-5]*")
             key_value := StrReplace(key_value, "_", "[1-5]")
             key_value := StrReplace(key_value, "%", "[a-z]*")
             sql_where_cmd := " REGEXP '^" key_value "$' "
@@ -96,13 +93,13 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
     Critical
     begin_tick := A_TickCount
 
-    auto_complete := (SubStr(splitted_input, 0, 1) == "*")
-    splitted_input := RTrim(splitted_input, "*")
+    ; auto_complete := (SubStr(splitted_input, 0, 1) == "*")
+    ; splitted_input := RTrim(splitted_input, "*")
 
-    Assert(splitted_input)
+    Assert(splitted_input, splitted_input)
 
-    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, auto_complete)
-    sql_full_key    := PinyinSqlFullKey(splitted_input, auto_complete)
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input)
+    sql_full_key    := PinyinSqlFullKey(splitted_input)
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
     sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd
@@ -122,6 +119,7 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
         result := result_table.Rows
     }
     ; word length
+    auto_complete := true
     if( auto_complete ) {
         loop % result.Length() {
             word_length := StrLen(TranslatorResultGetWord(result[A_Index]))
@@ -145,9 +143,9 @@ PinyinSqlGetWeight(splitted_input, simple_only := false)
 {
     Assert(splitted_input)
 
-    sql_sim_key     := PinyinSqlSimpleKey(splitted_input, false)
+    sql_sim_key     := PinyinSqlSimpleKey(splitted_input)
     if( !simple_only ){
-        sql_full_key := PinyinSqlFullKey(splitted_input, false)
+        sql_full_key := PinyinSqlFullKey(splitted_input)
     } else {
         sql_full_key := ""
     }

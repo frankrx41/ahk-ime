@@ -473,7 +473,7 @@ PinyinSplitterInputStringTest()
     {
         input_case := test_case[A_Index]
         test_result := PinyinSplitterInputString(input_case)
-        auto_complete := SplitterResultListCheckIsAutoComplete(test_result)
+        auto_complete := "N/A"
         msg_string .= "`n""" input_case """ -> [" SplitterResultListGetDisplayText(test_result) "] (" auto_complete ")"
     }
     MsgBox, % msg_string
