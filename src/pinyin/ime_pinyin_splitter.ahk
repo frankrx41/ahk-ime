@@ -267,7 +267,7 @@ PinyinSplitterInputString(input_string)
 {
     ; + or * marks 1 taken
     ; last char * marks simple spell
-    simple_spell := ImeIsForceSimpleSpell()
+    simple_spell := ImeSimpleSpellIsForce()
 
     if( simple_spell )
     {

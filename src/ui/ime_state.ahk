@@ -149,19 +149,20 @@ ImeModeIsJapanese()
 }
 
 ;*******************************************************************************
-ImeIsForceSimpleSpell()
+; Simple spell
+ImeSimpleSpellIsForce()
 {
     global ime_is_force_simple_spell
     return ime_is_force_simple_spell
 }
 
-ImeToggleForceSimpleSpell()
+ImeSimpleSpellToggle()
 {
     global ime_is_force_simple_spell
     ime_is_force_simple_spell := !ime_is_force_simple_spell
 }
 
-ImeSetForceSimpleSpell(force)
+ImeSimpleSpellSetForce(force)
 {
     global ime_is_force_simple_spell
     ime_is_force_simple_spell := force
