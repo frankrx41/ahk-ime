@@ -82,7 +82,7 @@ ImeSelectorFixupSelectIndex(candidate)
 ; "woaini" => ["我爱你", "", ""]
 ; if first word select "卧", then update to ["卧", "爱你", ""]
 ; if last word select "泥", then update to ["我爱", "", "泥"]
-ImeSelectorApplyCaretSelectIndex(lock_result)
+ImeSelectorApplyCaretSelectIndex(lock_result, move_caret:=true)
 {
     local
     global ime_selector_select_list
@@ -110,7 +110,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result)
         ImeSelectorFixupSelectIndex(ImeCandidateGet())
     }
 
-    if( !ImeInputterCaretIsAtEnd() )
+    if( move_caret && !ImeInputterCaretIsAtEnd() )
     {
         ImeInputterCaretMoveByWord(word_length, false)
     }

@@ -239,7 +239,7 @@
                 } else {
                     ImeSelectorOffsetCaretSelectIndex(+1)
                 }
-                ImeSelectorApplyCaretSelectIndex(true)
+                ImeSelectorApplyCaretSelectIndex(true, false)
             }
         }
         ImeTooltipUpdate()
