@@ -49,7 +49,7 @@ ImeCandidateUpdateResult(splitter_result, auto_complete)
                     translate_result_list := GojuonTranslateFindResult(test_splitter_result, auto_complete)
                 }
                 if( translate_result_list.Length() == 0 ){
-                    first_word := SplitterResultListConvertToString(splitter_result, A_Index)
+                    first_word := SplitterResultListConvertToString(splitter_result, A_Index, 1)
                     translate_result_list := [TranslatorResultMake(first_word, first_word, 0, "", 1, first_word)]
                 }
             }
