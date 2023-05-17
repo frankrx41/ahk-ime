@@ -5,6 +5,7 @@
 ;   [3]: 30233      ; weight
 ;   [4]: ""         ; comment
 ;   [5]: 1          ; word length
+;   [6]: 0          ; traditional
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
@@ -21,6 +22,9 @@ TranslatorResultGetComment(ByRef translate_result) {
 TranslatorResultGetWordLength(ByRef translate_result) {
     return translate_result[5]
 }
+TranslatorResultIsTraditional(ByRef translate_result) {
+    return translate_result[6]
+}
 
 TranslatorResultSetWordLength(ByRef translate_result, length) {
     translate_result[5] := length
@@ -30,7 +34,15 @@ TranslatorResultSetWordLength(ByRef translate_result, length) {
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length)
 {
-    return [pinyin, word, weight, comment, word_length]
+    return [pinyin, word, weight, comment, word_length, 0]
+}
+
+TranslatorResultMakeTraditional(ByRef translate_result, tranditional_word)
+{
+    tranditional_translate_result := translate_result
+    tranditional_translate_result[2] := tranditional_word
+    tranditional_translate_result[6] := 1
+    return tranditional_translate_result
 }
 
 TranslatorResultMakeError()
