@@ -168,6 +168,8 @@ ImeInputterCallTranslator(auto_complete)
 ImeInputterIsInputDirty()
 {
     global ime_input_dirty
+    ; Because of we update tranlsator immediately when input update, `ime_input_dirty` should always be false
+    Assert(ime_input_dirty == false)
     return ime_input_dirty
 }
 
