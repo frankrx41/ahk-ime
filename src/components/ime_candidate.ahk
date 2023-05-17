@@ -177,6 +177,9 @@ ImeCandidateIsTraditional(split_index, word_index)
 CandidateGetFormattedComment(candidata, split_index, word_index)
 {
     comment := CandidateGetComment(candidata, split_index, word_index)
+    if( CandidateIsTraditional(candidata, split_index, word_index) ) {
+        comment := "*" . comment
+    }
     return comment
 }
 
