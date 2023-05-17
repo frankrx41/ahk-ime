@@ -167,15 +167,7 @@ ImeCandidateGetWordLength(split_index, word_index)
 CandidateGetFormattedComment(candidata, split_index, word_index)
 {
     comment := CandidateGetComment(candidata, split_index, word_index)
-    if( comment ){
-        if( comment == "name" ){
-            return "名"
-        } else {
-            return comment
-        }
-    } else {
-        return ""
-    }
+    return comment
 }
 
 ImeCandidateGetFormattedComment(split_index, word_index)
