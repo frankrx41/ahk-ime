@@ -189,7 +189,7 @@ ImeSelectorGetOutputString(as_legacy := false)
                 ; TODO: add function to check traditional word with "*"
                 if( select_word && SubStr(comment, 1, 1) != "*" )
                 {
-                    input_pinyin := ImeCandidateGetInputPinyin(split_index, select_index)
+                    input_pinyin := ImeCandidateGetLegacyPinyin(split_index, select_index)
                     TranslatorHistoryDynamicWeight(input_pinyin, select_word)
                 }
             }
