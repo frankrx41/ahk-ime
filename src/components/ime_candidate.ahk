@@ -182,14 +182,15 @@ ImeCandidateIsTop(split_index, word_index)
     return CandidateIsTop(ImeCandidateGet(), split_index, word_index)
 }
 
-CandidateNeedSelect(candidata, split_index, word_index)
+CandidateSkipSelect(candidata, split_index)
 {
-    return TranslatorResultNeedSelect(candidata[split_index, word_index])
+    return TranslatorResultSkipSelect(candidata[split_index, 1])
+    ; candidata[split_index].Length() == 0 || (candidata[split_index].Length() == 1 && )
 }
 
-ImeCandidateNeedSelect(candidata, split_index, word_index)
+ImeCandidateSkipSelect(candidata, split_index)
 {
-    return CandidateNeedSelect(ImeCandidateGet(), split_index, word_index)
+    return CandidateSkipSelect(ImeCandidateGet(), split_index)
 }
 
 ;*******************************************************************************

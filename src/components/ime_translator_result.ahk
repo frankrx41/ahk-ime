@@ -7,7 +7,7 @@
 ;   [5]: 1          ; word length
 ;   [6]: false      ; traditional
 ;   [7]: false      ; top
-;   [8]: true       ; need select
+;   [8]: false      ; skip select
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
@@ -30,7 +30,7 @@ TranslatorResultIsTraditional(ByRef translate_result) {
 TranslatorResultIsTop(ByRef translate_result) {
     return translate_result[7]
 }
-TranslatorResultNeedSelect(ByRef translate_result) {
+TranslatorResultSkipSelect(ByRef translate_result) {
     return translate_result[8]
 }
 
@@ -42,13 +42,13 @@ TranslatorResultSetWordLength(ByRef translate_result, length) {
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length)
 {
-    return [pinyin, word, weight, comment, word_length, false, false, true]
+    return [pinyin, word, weight, comment, word_length, false, false, false]
 }
 
 TranslatorResultMakeNoSelect(pinyin, word)
 {
     translate_result := TranslatorResultMake(pinyin, word, 0, "Skip", 1)
-    translate_result[8] := false
+    translate_result[8] := true
     return translate_result
 }
 
