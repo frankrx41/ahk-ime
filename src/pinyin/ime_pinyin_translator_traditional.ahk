@@ -26,14 +26,12 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
         simplified_word := TranslatorResultGetWord(translate_result)
         if( ime_traditional_table[simplified_word] )
         {
+            translate_result_list.RemoveAt(index, 1)
             loop, % ime_traditional_table[simplified_word].Length()
             {
                 tranditional_word := ime_traditional_table[simplified_word, A_Index]
                 tranditional_translate_result := TranslatorResultMakeTraditional(translate_result, tranditional_word)
 
-                if( A_Index == 1 ) {
-                    translate_result_list.RemoveAt(index, 1)
-                }
                 translate_result_list.InsertAt(index, tranditional_translate_result)
                 index += 1
             }
