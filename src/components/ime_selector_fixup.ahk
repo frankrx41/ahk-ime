@@ -1,12 +1,16 @@
 ;*******************************************************************************
 ;
-SelectorGetFixedWeight(word)
+SelectorGetFixedWeight(word, is_last_word)
 {
     if( StrLen(word) != 1 ) {
         return 0
     }
-    static fixed_word = {"的":1, "我":1, "他":1, "她":1, "它":1, "了":1}
-    if( fixed_word.HasKey(word) ){
+    static fixed_word_last = {"吧":1, "啊":1, "吗":1, "了":1, "的":1}
+    if( is_last_word && fixed_word_last.HasKey(word) ){
+        return +12000
+    }
+    static fixed_word_first = {"我":1, "他":1, "她":1, "它":1}
+    if( fixed_word_first.HasKey(word) ){
         return 0
     }
     return -2200
@@ -42,9 +46,9 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
     }
     ; profile_text .= "`n  - [" left_word "(" left_split_index ") ," right_word "(" right_split_index ") ] " left_weight " + " right_weight " = " left_weight + right_weight
     total_weight := left_weight + right_weight
-    fix_weight := SelectorGetFixedWeight(left_word) + SelectorGetFixedWeight(right_word)
+    fix_weight := SelectorGetFixedWeight(left_word, false) + SelectorGetFixedWeight(right_word, true)
     return_weight := total_weight / ( left_word_length + right_word_length )
-    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight " (" Format("{1:0.f}", return_weight) fix_weight ")"
+    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight " (" Format("{1:0.f}", return_weight) "," fix_weight ")"
     ImeProfilerEnd(46, profile_text)
 
     return return_weight + fix_weight
@@ -177,6 +181,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         }
         else
         {
+            select_index := 0
             if( candidate.Length() == split_index+max_length-1 || CandidateSkipSelect(candidate, split_index+max_length) )
             {
                 ; TODO: Should we check all words instead of first 10 words?
@@ -188,6 +193,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                     }
                 }
             }
+            ImeProfilerTemp(select_index)
             if( !select_index ){
                 select_index := SelectorFindGraceResultIndex(candidate, split_index, candidate.Length()-split_index+1)
             }
