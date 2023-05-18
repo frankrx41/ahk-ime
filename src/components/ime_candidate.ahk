@@ -36,9 +36,9 @@ ImeCandidateUpdateResult(splitter_result)
                 ; Add legacy text
                 test_string := SplitterResultGetPinyin(test_splitter_result[1])
                 if( RegexMatch(test_string, "^\s*$") ) {
-                    translate_result_list := [TranslatorResultMake(test_string, "", 0, "", 1)]
+                    translate_result_list := [TranslatorResultMakeNoSelect(test_string, "")]
                 } else {
-                    translate_result_list := [TranslatorResultMake(test_string, test_string, 0, "", 1)]
+                    translate_result_list := [TranslatorResultMakeNoSelect(test_string, test_string)]
                 }
             }
             else
@@ -53,7 +53,7 @@ ImeCandidateUpdateResult(splitter_result)
                 }
                 if( translate_result_list.Length() == 0 ){
                     first_word := SplitterResultListConvertToString(splitter_result, A_Index, 1)
-                    translate_result_list := [TranslatorResultMake(first_word, first_word, 0, "", 1)]
+                    translate_result_list := [TranslatorResultMakeNoSelect(first_word, first_word)]
                 }
             }
             ; Insert result
@@ -180,6 +180,16 @@ CandidateIsTop(candidata, split_index, word_index)
 ImeCandidateIsTop(split_index, word_index)
 {
     return CandidateIsTop(ImeCandidateGet(), split_index, word_index)
+}
+
+CandidateNeedSelect(candidata, split_index, word_index)
+{
+    return TranslatorResultNeedSelect(candidata[split_index, word_index])
+}
+
+ImeCandidateNeedSelect(candidata, split_index, word_index)
+{
+    return CandidateNeedSelect(ImeCandidateGet(), split_index, word_index)
 }
 
 ;*******************************************************************************
