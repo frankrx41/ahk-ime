@@ -2,14 +2,17 @@
 ;
 SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
 {
-    profile_text := ImeProfilerBegin(46)
     left_split_index := split_index
     left_select_index := SelectorFindMaxLengthResultIndex(candidate, left_split_index, left_length)
     left_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
+    if( left_word_length != left_length ) {
+        return 0
+    }
     ; left_word_length := 1
     left_weight  := CandidateGetWeight(candidate, left_split_index, left_select_index) * left_word_length
     left_word  := CandidateGetWord(candidate, left_split_index, left_select_index)
 
+    profile_text := ImeProfilerBegin(46)
     right_split_index := split_index+A_Index
     if( right_split_index > candidate.Length() || right_length == 0 ){
         right_weight := 0
