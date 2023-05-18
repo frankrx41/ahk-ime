@@ -131,7 +131,7 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, split
 
     if( max_length == candidate.Length() ){
         Assert(split_index == 1)
-        max_length := CandidateGetWordLength(candidate, split_index, 1)
+        ; max_length := CandidateGetWordLength(candidate, split_index, 1)
     }
 
     profile_text .= "`n  - [" split_index "] loop: " loop_cnt " -> " max_length
