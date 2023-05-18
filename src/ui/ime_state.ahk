@@ -9,12 +9,12 @@ ImeStateInitialize()
     global ime_is_force_simple_spell
     global ime_debug_switch
     
-    ime_mode_language := "en"       ; "cn", "en", "tw", "jp"
-    ime_is_active_system_menu := 0  ; 是否打开菜单
-    ime_active_window_class := ""   ; 禁用 IME 的窗口是否被激活
+    ime_mode_language           := "en"         ; "cn", "en", "tw", "jp"
+    ime_is_active_system_menu   := 0            ; 是否打开菜单
+    ime_active_window_class     := ""           ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
-    ime_is_force_simple_spell := false
-    ime_debug_switch := false
+    ime_is_force_simple_spell   := false
+    ime_debug_switch            := false
 
     DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
     ; Notice: if `ime_mode_language` same as here, state will not update
@@ -76,6 +76,10 @@ ImeStateUpdateMode(mode)
         } else {
             ImeHotkeyRegisterShift(last_mode)
         }
+    }
+    if( mode == "tw" )
+    {
+        PinyinTraditionalInitialize()
     }
     ImeIconSetMode(mode)
 }

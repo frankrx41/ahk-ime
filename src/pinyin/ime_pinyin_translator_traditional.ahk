@@ -1,6 +1,11 @@
 PinyinTraditionalInitialize()
 {
-    global ime_traditional_table := {}
+    global ime_traditional_table
+    static ime_traditional_initialize := false
+    if( ime_traditional_initialize ){
+        return
+    }
+    ime_traditional_table := {}
     FileRead, file_content, data\traditional.txt
     Loop, Parse, file_content, `n, `r
     {
@@ -8,6 +13,7 @@ PinyinTraditionalInitialize()
         arr := StrSplit(A_LoopField, "`t")
         ime_traditional_table[arr[1]] := StrSplit(arr[2], " ")
     }
+    ime_traditional_initialize := true
     Assert(ime_traditional_table.Count() != 0)
 }
 

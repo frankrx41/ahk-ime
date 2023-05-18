@@ -515,6 +515,4 @@ PinyinInitialize()
     )
 
     pinyin_table_auto_correct := JSON.Load(full_spelling_json_auto_correct)
-
-    PinyinTraditionalInitialize()
 }
