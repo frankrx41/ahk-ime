@@ -1,11 +1,26 @@
 ;*******************************************************************************
 ;
+SelectorGetFixedWeight(word)
+{
+    if( StrLen(word) != 1 ) {
+        return 0
+    }
+    static fixed_word = {"的":1, "我":1, "他":1, "她":1, "它":1, "了":1}
+    if( fixed_word.HasKey(word) ){
+        return 0
+    }
+    return -2200
+}
+
 SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
 {
     left_split_index := split_index
     left_select_index := SelectorFindMaxLengthResultIndex(candidate, left_split_index, left_length)
     left_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
     if( left_word_length != left_length ) {
+        return 0
+    }
+    if( left_length == 1 && right_length == 1 ) {
         return 0
     }
     ; left_word_length := 1
@@ -27,27 +42,25 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
     }
     ; profile_text .= "`n  - [" left_word "(" left_split_index ") ," right_word "(" right_split_index ") ] " left_weight " + " right_weight " = " left_weight + right_weight
     total_weight := left_weight + right_weight
+    fix_weight := SelectorGetFixedWeight(left_word) + SelectorGetFixedWeight(right_word)
     return_weight := total_weight / ( left_word_length + right_word_length )
-    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight " (" Format("{1:0.f}", return_weight) ")"
+    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight " (" Format("{1:0.f}", return_weight) fix_weight ")"
     ImeProfilerEnd(46, profile_text)
 
-    return return_weight
+    return return_weight + fix_weight
 }
 
 SelectorFindGraceResultIndex(candidate, split_index, max_length)
 {
     max_weight := 0
     better_length := max_length
-    if( max_length > 2 )
+    loop, % max_length
     {
-        loop, % max_length
-        {
-            weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index)
+        weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index)
 
-            if( weight > max_weight ) {
-                max_weight := weight
-                better_length := A_Index
-            }
+        if( weight > max_weight ) {
+            max_weight := weight
+            better_length := A_Index
         }
     }
     select_index := SelectorFindMaxLengthResultIndex(candidate, split_index, better_length)
@@ -90,6 +103,9 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, split
                 break
             }
             if( SelectorResultIsSelectLock(selector_result_list[check_index]) ) {
+                break
+            }
+            if( CandidateSkipSelect(candidate, check_index) ){
                 break
             }
             max_length += 1
@@ -155,8 +171,13 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word "," max_length)
         }
         else
+        if( CandidateSkipSelect(candidate, split_index) )
         {
-            if( max_length == candidate.Length() ) {
+            select_index := 1
+        }
+        else
+        {
+            if( candidate.Length() == split_index+max_length-1 || CandidateSkipSelect(candidate, split_index+max_length-1) ) {
                 select_index := 1
             } else {
                 select_index := SelectorFindGraceResultIndex(candidate, split_index, candidate.Length()-split_index+1)
