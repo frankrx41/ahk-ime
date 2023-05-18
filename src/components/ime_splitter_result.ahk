@@ -129,15 +129,15 @@ SplitterResultListGetRightWordPos(splitter_result_list, caret_pos)
 SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
 {
     local
-    return_splitter_result := []
+    return_splitter_list := []
     if( SplitterResultIsAutoSymbol(splitter_result_list[start_count]))
     {
-        return_splitter_result[1] := splitter_result_list[start_count]
+        return_splitter_list[1] := splitter_result_list[start_count]
     }
     else
     if( !SplitterResultNeedTranslate(splitter_result_list[start_count]) )
     {
-        return_splitter_result[1] := splitter_result_list[start_count]
+        return_splitter_list[1] := splitter_result_list[start_count]
     }
     else
     {
@@ -148,7 +148,7 @@ SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
             }
             if( SplitterResultNeedTranslate(splitter_result_list[A_Index]) )
             {
-                return_splitter_result.Push(splitter_result_list[A_Index])
+                return_splitter_list.Push(splitter_result_list[A_Index])
             }
             else
             {
@@ -156,7 +156,7 @@ SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
             }
         }
     }
-    return return_splitter_result
+    return return_splitter_list
 }
 
 SplitterResultListGetUntilLength(splitter_result_list, start_count := 1)

@@ -83,11 +83,11 @@ GojuonTranslateInitialize()
     global ime_gojuon_list := JSON.Load(gojuon_list_json)
 }
 
-GojuonTranslateFindResult(splitter_result, auto_complete)
+GojuonTranslateFindResult(splitter_result_list, auto_complete)
 {
     global ime_gojuon_list
 
-    splitted_string := SplitterResultGetPinyin(splitter_result[1])
+    splitted_string := SplitterResultGetPinyin(splitter_result_list[1])
     if( ime_gojuon_list.HasKey(splitted_string) )
     {
         gojuon := ime_gojuon_list[splitted_string]

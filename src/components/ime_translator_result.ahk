@@ -7,7 +7,6 @@
 ;   [5]: 1          ; word length
 ;   [6]: false      ; traditional
 ;   [7]: false      ; top
-;   [8]: false      ; skip select
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
@@ -29,9 +28,6 @@ TranslatorResultIsTraditional(ByRef translate_result) {
 }
 TranslatorResultIsTop(ByRef translate_result) {
     return translate_result[7]
-}
-TranslatorResultSkipSelect(ByRef translate_result) {
-    return translate_result[8]
 }
 
 TranslatorResultSetWordLength(ByRef translate_result, length) {

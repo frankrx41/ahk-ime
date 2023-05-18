@@ -39,56 +39,56 @@ IsSoundLike(speech, sounds_to)
 }
 
 ; A-XY-B
-PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_result, match_pinyin, match_word_length, xy_start_index, word_xy_length)
+PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_result_list, match_pinyin, match_word_length, xy_start_index, word_xy_length)
 {
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
-    try_match_pinyin := SplitterResultListConvertToString(splitter_result, xy_start_index, match_word_length)
+    try_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, match_word_length)
     if( IsSoundLike(try_match_pinyin, match_pinyin) )
     {
         splitted_string_ab := ""
-        splitted_string_ab .= SplitterResultListConvertToString(splitter_result, 1, xy_start_index-1)
-        splitted_string_ab .= SplitterResultListConvertToString(splitter_result, xy_start_index+word_xy_length)
+        splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, 1, xy_start_index-1)
+        splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, xy_start_index+word_xy_length)
         TranslatorHistoryUpdateKey(splitted_string_ab)
 
         word_ab := TranslatorHistoryGetResultWord(splitted_string_ab)
         if( word_ab ){
-            splitted_string_xy := SplitterResultListConvertToString(splitter_result, xy_start_index, word_xy_length)
+            splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
             TranslatorHistoryUpdateKey(splitted_string_xy)
             word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
             full_word := SubStr(word_ab, 1, 1) . word_xy . SubStr(word_ab, 2)
 
-            total_word_length := splitter_result.Length()
-            pinyin := SplitterResultListConvertToString(splitter_result, 1, total_word_length)
+            total_word_length := splitter_result_list.Length()
+            pinyin := SplitterResultListConvertToString(splitter_result_list, 1, total_word_length)
             single_result := TranslatorResultMake(pinyin, full_word, 0, "auto", total_word_length)
             translate_result_list.InsertAt(1, single_result)
         }
     }
 }
 
-PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result)
+PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_list)
 {
-    splitter_result := SplitterResultListGetUntilLength(splitter_result)
-    splitted_string := SplitterResultListConvertToString(splitter_result, 1, 0)
+    splitter_result_list := SplitterResultListGetUntilLength(splitter_result_list)
+    splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, 0)
     if( TranslatorHistoryHasResult(splitted_string) ){
         return
     }
 
     profile_text := ImeProfilerBegin(22)
-    if( splitter_result.Length() >= 4 )
+    if( splitter_result_list.Length() >= 4 )
     {
         ; 了个 了会 了朵 了顿
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "le5", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 2)
 
         ; 生我的气
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "wo3de5", 2, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "wo3de5", 2, 2, 2)
 
         ; 他/她
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "ta1de5", 2, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "ta1de5", 2, 2, 2)
     }
-    if( splitter_result.Length() == 3 )
+    if( splitter_result_list.Length() == 3 )
     {
         ; 陪了他
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result, "le5", 1, 2, 1)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 1)
     }
 
     ImeProfilerEnd(22, profile_text)

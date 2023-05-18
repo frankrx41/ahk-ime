@@ -11,8 +11,7 @@ ImeCandidateClear()
     global ime_candidata_result_origin  := []
 }
 
-; splitter_result -> splitter_result_list
-ImeCandidateUpdateResult(splitter_result)
+ImeCandidateUpdateResult(splitter_result_list)
 {
     local
     global ime_candidata_result_filter
@@ -20,22 +19,22 @@ ImeCandidateUpdateResult(splitter_result)
 
     auto_complete := false
 
-    if( splitter_result.Length() )
+    if( splitter_result_list.Length() )
     {
         debug_text := ImeProfilerBegin(30)
         ime_candidata_result_origin := []
-        CandidateSetSplittedList(ime_candidata_result_origin, splitter_result)
+        CandidateSetSplittedList(ime_candidata_result_origin, splitter_result_list)
         radical_list := []
         debug_text := "["
-        loop % splitter_result.Length()
+        loop % splitter_result_list.Length()
         {
-            radical_list.Push(SplitterResultGetRadical(splitter_result[A_Index]))
-            test_splitter_result := SplitterResultListGetUntilSkip(splitter_result, A_Index)
-            debug_text .= """" SplitterResultListGetDisplayText(test_splitter_result) ""","
-            if( !SplitterResultNeedTranslate(splitter_result[A_Index]) || SplitterResultIsAutoSymbol(splitter_result[A_Index]) )
+            radical_list.Push(SplitterResultGetRadical(splitter_result_list[A_Index]))
+            test_splitter_list := SplitterResultListGetUntilSkip(splitter_result_list, A_Index)
+            debug_text .= """" SplitterResultListGetDisplayText(test_splitter_list) ""","
+            if( !SplitterResultNeedTranslate(splitter_result_list[A_Index]) || SplitterResultIsAutoSymbol(splitter_result_list[A_Index]) )
             {
                 ; Add legacy text
-                test_string := SplitterResultGetPinyin(test_splitter_result[1])
+                test_string := SplitterResultGetPinyin(test_splitter_list[1])
                 if( RegexMatch(test_string, "^\s*$") ) {
                     translate_result_list := [TranslatorResultMakeNoSelect(test_string, "")]
                 } else {
@@ -44,16 +43,16 @@ ImeCandidateUpdateResult(splitter_result)
             }
             else
             {
-                Assert(test_splitter_result.Length() >= 1)
+                Assert(test_splitter_list.Length() >= 1)
                 ; Get translate result
                 if( ImeModeIsChinese() ){
-                    translate_result_list := PinyinTranslateFindResult(test_splitter_result, auto_complete)
+                    translate_result_list := PinyinTranslateFindResult(test_splitter_list, auto_complete)
                 } else
                 if( ImeModeIsJapanese() ) {
-                    translate_result_list := GojuonTranslateFindResult(test_splitter_result, auto_complete)
+                    translate_result_list := GojuonTranslateFindResult(test_splitter_list, auto_complete)
                 }
                 if( translate_result_list.Length() == 0 ){
-                    first_word := SplitterResultListConvertToString(splitter_result, A_Index, 1)
+                    first_word := SplitterResultListConvertToString(splitter_result_list, A_Index, 1)
                     translate_result_list := [TranslatorResultMakeNoSelect(first_word, first_word)]
                 }
             }
