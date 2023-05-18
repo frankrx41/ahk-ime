@@ -5,12 +5,13 @@ SelectorGetFixedWeight(word, is_last_word)
     if( StrLen(word) != 1 ) {
         return 0
     }
-    static fixed_word_last = {"吧":1, "啊":1, "吗":1, "了":1, "的":1}
-    if( is_last_word && fixed_word_last.HasKey(word) ){
+    static fixed_word_last = "吧啊吗嘛了的呀哦嗯"
+    if( InStr(fixed_word_last, word) ){
         return +12000
     }
-    static fixed_word_first = {"我":1, "他":1, "她":1, "它":1, "这":1, "那":1, "人":1}
-    if( fixed_word_first.HasKey(word) ){
+
+    static fixed_word_first = "我他她它这那人不但还很就老没难旧"
+    if( InStr(fixed_word_first, word) ){
         return 0
     }
     return -22000
@@ -79,7 +80,7 @@ SelectorFindGraceResultIndex(candidate, split_index, max_length)
         }
     }
     select_index := SelectorFindMaxLengthResultIndex(candidate, split_index, better_length)
-    profile_text .= "`n  - " better_length ", " select_index CandidateGetWord(candidate, split_index, select_index)
+    profile_text .= "`n  - " better_length ", " select_index " """ CandidateGetWord(candidate, split_index, select_index) """"
     ImeProfilerEnd(47, profile_text)
     return select_index
 }
