@@ -17,7 +17,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
         right_word_length := 0
     } else {
         right_select_index := SelectorFindMaxLengthResultIndex(candidate, right_split_index, right_length)
-        right_word_length := CandidateGetWordLength(candidate, right_split_index, left_select_index)
+        right_word_length := CandidateGetWordLength(candidate, right_split_index, right_select_index)
         ; right_word_length := 1
         right_weight := CandidateGetWeight(candidate, right_split_index, right_select_index) * right_word_length
         right_word  := CandidateGetWord(candidate, right_split_index, right_select_index)
