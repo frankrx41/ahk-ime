@@ -77,6 +77,12 @@
         ImeTooltipUpdate()
     return
 
+    +Enter::
+        ImeOutputterPutSelect(true)
+        ; ImeStateUpdateMode("en")
+        ImeTooltipUpdate()
+    return
+
     ]::
         ImeOutputterPutSelect(false, -1)
         ImeTooltipUpdate()
