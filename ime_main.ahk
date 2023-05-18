@@ -21,37 +21,36 @@ global ime_version  := 0.10
 ;*******************************************************************************
 ; Initialize
 ImeProfilerInitialize()
-ImeProfilerBegin(1)
-ImeInputterInitialize()
-ImeOutputterInitialize()
+
+; ImeProfilerBegin(1)
+ImeProfilerFunc(1, "ImeInputterInitialize")
+ImeProfilerFunc(1, "ImeOutputterInitialize")
 
 ; Selector
-ImeSelectMenuInitialize()
-ImeSelectorInitialize()
+ImeProfilerFunc(1, "ImeSelectMenuInitialize")
+ImeProfilerFunc(1, "ImeSelectorInitialize")
 
 ; Translator
-ImeCandidateInitialize()
-TranslatorHistoryInitialize()
+ImeProfilerFunc(1, "ImeCandidateInitialize")
+ImeProfilerFunc(1, "TranslatorHistoryInitialize")
 
 ; Radical
-RadicalInitialize()
+ImeProfilerFunc(1, "RadicalInitialize")
 
-PinyinInitialize()
-GojuonTranslateInitialize()
-
-ImeTooltipInitialize()
-
-ImeHotkeyInitialize()
+ImeProfilerFunc(1, "PinyinInitialize")
+ImeProfilerFunc(1, "GojuonTranslateInitialize")
+ImeProfilerFunc(1, "ImeTooltipInitialize")
+ImeProfilerFunc(1, "ImeHotkeyInitialize")
 ; We need to declare some variables then `ImeStateUpdateMode` used
 ; `ImeStateUpdateMode` is call inside `ImeStateInitialize`
-ImeStateInitialize()
+ImeProfilerFunc(1, "ImeStateInitialize")
 
-ImeDBInitialize()
+ImeProfilerFunc(1, "ImeDBInitialize")
 
 ; We should register hotkey after other modules are initialized
-ImeHotkeyRegisterInitialize()
-ImeProfilerEnd(1)
-; Tooltip, % ImeProfilerGetTotalTick(1)
+ImeProfilerFunc(1, "ImeHotkeyRegisterInitialize")
+
+Tooltip, % ImeProfilerGetDebugInfo(1) "`n " ImeProfilerGetTotalTick(1)
 return
 
 ;*******************************************************************************
