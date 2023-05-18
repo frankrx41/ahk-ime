@@ -184,11 +184,11 @@ ImeTooltipUpdate()
         if( radical_words ) {
             extern_info .= " {" radical_words "}"
         }
-        extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, select_index) ")"
-        comment := ImeCandidateGetComment(split_index, select_index)
-        if( comment ) {
-            extern_info .= " <" comment ">"
-        }
+        extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, select_index) "|" ImeCandidateGetWordLength(split_index, select_index) ")"
+        ; comment := ImeCandidateGetComment(split_index, select_index)
+        ; if( comment ) {
+        ;     extern_info .= " <" comment ">"
+        ; }
         extern_info .= "`n(" ImeProfilerGetTotalTick(8) ")"
 
         ; Debug info
