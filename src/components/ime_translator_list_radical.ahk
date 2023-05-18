@@ -125,13 +125,16 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     }
 
     try_continue_split := false
-    radical_word_list := RadicalWordSplit(test_word)
-    loop, % radical_word_list.Length()
+    if( !RadicalIsAtomic(test_word) )
     {
-        first_word := radical_word_list[A_Index, 1]
-        if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) || RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
-            try_continue_split := true
-            break
+        radical_word_list := RadicalWordSplit(test_word)
+        loop, % radical_word_list.Length()
+        {
+            first_word := radical_word_list[A_Index, 1]
+            if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) || RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
+                try_continue_split := true
+                break
+            }
         }
     }
 
@@ -226,6 +229,8 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
     global radical_match_level_part_match
     global radical_match_level_full_match
 
+    skip_able_count := 1
+
     loop
     {
         if( radical_word_list.Length() == 0 && test_radical == "" ){
@@ -248,17 +253,24 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
         ; e.g. 干 -> 二 丨, "一" H and "二" E both think match
         if( !match_any_part )
         {
-            first_word := radical_word_list[1]
-            remain_radicals := []
-            if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
+            loop, % skip_able_count
             {
-                ever_match_first := true
-                radical_word_list.RemoveAt(1)
-                loop, % remain_radicals.Length()
+                skip_able_index := A_Index
+                first_word := radical_word_list[skip_able_index]
+                remain_radicals := []
+                if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
                 {
-                    radical_word_list.InsertAt(1, remain_radicals[A_Index])
+                    ever_match_first := true
+                    radical_word_list.RemoveAt(1, skip_able_index)
+                    skip_able_count := 1
+                    loop, % remain_radicals.Length()
+                    {
+                        radical_word_list.InsertAt(1, remain_radicals[A_Index])
+                        skip_able_count += 1
+                    }
+                    match_any_part := true
+                    break
                 }
-                match_any_part := true
             }
         }
 
