@@ -6,7 +6,7 @@ RadicalInitialize()
     local
     global ime_radical_table    := {}
     global ime_radicals_pinyin  := {}
-    global ime_radical_atomic   := ""
+    global ime_radical_atomic   := "一丨丿乀丶𠄌乁乛㇕乙𠃊乚亅㇆勹㇉𠃋匚匸冂凵⺆巜丄丅龴厶艹冖罓宀罒㓁癶覀𤇾𦥯丷龷皿亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸刂卩卪厂广耂虍疒⺈弋廴辶㔾𠂔疋肀𠔉𠤏𡿺叵囙夨夬屮丱彑𠂢旡歺辵尢夂匕刀儿几力人入又川寸大飞工弓己已巾口囗马门女山尸士巳兀夕小幺子贝长车斗方风父戈户戸戶火见斤毛木牛片攴气欠犬日氏手殳水瓦王韦文毋心牙曰月支止爪白甘瓜禾立龙矛母目鸟皮生石矢示田玄业臣虫而耳缶艮臼米齐肉色舌页先血羊聿至舟竹⺮自羽貝采釆镸車辰赤豆谷見角克里卤麦身豕辛言邑酉酋走足靑雨齿非金隶鱼鬼韭面首韋頁龹𠂉用电乃为了九万丁个丫不上下"
 
     FileRead, file_content, data\radicals.txt
     Loop, Parse, file_content, `n, `r
@@ -28,21 +28,14 @@ RadicalInitialize()
 
     FileRead, file_content, data\radicals-pinyin.txt
     index := 0
-    radical_atomic_start := true
+
     Loop, Parse, file_content, `n, `r
     {
         line := A_LoopField
-        if( line == "#radical_atomic_end" ) {
-            radical_atomic_start := false
-        }
         if( line && SubStr(line, 1, 1) != ";" )
         {
             arr := StrSplit(line, " ")
             ime_radicals_pinyin[arr[1]] := arr[2]
-            if( radical_atomic_start )
-            {
-                ime_radical_atomic .= arr[1]
-            }
         }
     }
     Assert(ime_radicals_pinyin.Count() != 0)
