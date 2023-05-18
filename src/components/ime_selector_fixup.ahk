@@ -208,7 +208,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             if( candidate.Length() == split_index+max_length-1 || !SplitterResultNeedTranslate(splitted_list[split_index+max_length]) )
             {
                 ; TODO: Should we check all words instead of first 10 words?
-                loop, 10
+                loop, 5
                 {
                     if( CandidateGetWordLength(candidate, split_index, A_Index) == max_length ){
                         select_index := A_Index
