@@ -192,35 +192,6 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     return false
 }
 
-RadicalMatchLastPart(test_word, ByRef test_radical)
-{
-    if( !test_word ){
-        return true
-    }
-
-    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
-        test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
-        return true
-    }
-    if( !RadicalIsFirst(test_word) && RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
-        test_radical := SubStr(test_radical, 2)
-        return true
-    }
-    if( RadicalIsAtomic(test_word) ){
-        return false
-    }
-
-    radical_word_list := RadicalWordSplit(test_word)
-    if( radical_word_list.Length() > 0 ) {
-        last_word := radical_word_list[1, radical_word_list[1].Length()]
-        ; "qianDR" "qianDT" -> 潜
-        Assert(last_word != test_word, test_word, true)
-        return RadicalMatchLastPart(last_word, test_radical)
-    } else {
-        return false
-    }
-}
-
 ;*******************************************************************************
 ; return:
 ;   full match         召 DK
@@ -289,9 +260,14 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
         if( !match_any_part && !match_last_part )
         {
             last_word := radical_word_list[radical_word_list.Length()]
-            if( RadicalMatchLastPart(last_word, test_radical) )
+            remain_radicals := []
+            if( RadicalMatchFirstPart(last_word, test_radical, remain_radicals) )
             {
                 radical_word_list.RemoveAt(radical_word_list.Length())
+                loop, % remain_radicals.Length()
+                {
+                    radical_word_list.Push(remain_radicals[A_Index])
+                }
                 match_any_part := true
                 ; match_last_part := true
             }
