@@ -9,7 +9,7 @@ IsDebugVersion()
 
 GetVersion()
 {
-    return "0.7.1"
+    return ime_version
 }
 
 GetGitHash()

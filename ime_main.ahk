@@ -16,7 +16,7 @@ DetectHiddenWindows, On
 ;*******************************************************************************
 ; Global variable
 global DllFolder    := A_ScriptDir "\dll\" (A_PtrSize=4?"x86":"x64")
-global ime_version  := 0.10
+global ime_version  := "0.7.2"
 
 ;*******************************************************************************
 ; Initialize
@@ -41,7 +41,6 @@ ImeProfilerFunc(1, "PinyinInitialize")
 ImeProfilerFunc(1, "GojuonTranslateInitialize")
 ImeProfilerFunc(1, "ImeTooltipInitialize")
 ImeProfilerFunc(1, "ImeHotkeyInitialize")
-; We need to declare some variables then `ImeStateUpdateMode` used
 ; `ImeStateUpdateMode` is call inside `ImeStateInitialize`
 ImeProfilerFunc(1, "ImeStateInitialize")
 
