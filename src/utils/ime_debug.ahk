@@ -14,7 +14,7 @@ ImeDebugTipAppend(ByRef debug_tip, index, max_length := 100)
         debug_tip .= "(" ImeProfilerGetTotalTick(index) ") "
         debug_info := ImeProfilerGetDebugInfo(index)
         if( StrLen(debug_info) > max_length ){
-            SubStr(debug_info, 1, max_length)
+            debug_info := SubStr(debug_info, 1, max_length)
             debug_info .= "..."
         }
         if( index == 1 ) {

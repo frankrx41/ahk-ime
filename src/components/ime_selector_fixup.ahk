@@ -80,7 +80,7 @@ SelectorFindGraceResultIndex(candidate, split_index, max_length)
         }
     }
     select_index := SelectorFindMaxLengthResultIndex(candidate, split_index, better_length)
-    profile_text .= "`n  - " better_length ", " select_index " """ CandidateGetWord(candidate, split_index, select_index) """"
+    profile_text .= "`n  - " better_length ", " select_index ": """ CandidateGetWord(candidate, split_index, select_index) """"
     ImeProfilerEnd(47, profile_text)
     return select_index
 }
