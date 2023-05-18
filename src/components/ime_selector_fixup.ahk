@@ -99,7 +99,7 @@ SelectorFindMaxLengthResultIndex(candidate, split_index, max_length)
     return 0
 }
 
-SelectorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, split_index)
+SelectorFindPossibleMaxLength(ByRef candidate, ByRef splitted_list, ByRef selector_result_list, split_index)
 {
     local
     ; `max_length` = this word until next unlock word
@@ -112,6 +112,8 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, split
     else
     {
         max_length := 1
+        hope_length_1st := SplitterResultGetHopeLength(splitted_list[split_index])
+        hope_length_2rd := ""
         loop
         {
             loop_cnt += 1
@@ -122,7 +124,13 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef selector_result_list, split
             if( SelectorResultIsSelectLock(selector_result_list[check_index]) ) {
                 break
             }
-            if( CandidateSkipSelect(candidate, check_index) ){
+            if( !SplitterResultNeedTranslate(splitted_list[check_index]) ) {
+                break
+            }
+            if( hope_length_1st == A_Index ){
+                hope_length_2rd := SplitterResultGetHopeLength(splitted_list[check_index]) + hope_length_1st
+            }
+            if( hope_length_2rd == A_Index ){
                 break
             }
             max_length += 1
@@ -148,6 +156,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
     ImeProfilerBegin(40)
     skip_word_count := 0
     selector_result_list := CopyObj(const_selector_result_list)
+    splitted_list := CandidateGetSplittedList(candidate)
     loop % candidate.Length()
     {
         split_index := A_Index
@@ -166,7 +175,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         select_is_lock := SelectorResultIsSelectLock(selector_result_list[split_index])
 
         ; `max_length` = this word until next unlock word
-        max_length := SelectorFindPossibleMaxLength(candidate, selector_result_list, split_index)
+        max_length := SelectorFindPossibleMaxLength(candidate, splitted_list, selector_result_list, split_index)
 
         profile_text .= "`n  - [" split_index "] "
         profile_text .= "skip: " skip_word_count ", lock: " select_is_lock ", max_len: " max_length " "
@@ -188,14 +197,14 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word "," max_length)
         }
         else
-        if( CandidateSkipSelect(candidate, split_index) )
+        if( !SplitterResultNeedTranslate(splitted_list[split_index]) )
         {
             select_index := 1
         }
         else
         {
             select_index := 0
-            if( candidate.Length() == split_index+max_length-1 || CandidateSkipSelect(candidate, split_index+max_length) )
+            if( candidate.Length() == split_index+max_length-1 || !SplitterResultNeedTranslate(splitted_list[split_index+max_length]) )
             {
                 ; TODO: Should we check all words instead of first 10 words?
                 loop, 10

@@ -1,3 +1,18 @@
+;*******************************************************************************
+; Candidate
+;   [0]: splitted_list
+;   [1~]: translator_result
+;
+; Because candidata.Length() will ignore [0], so it still return the length of `translator_result`
+CandidateGetSplittedList(ByRef candidata)
+{
+    return candidata[0]
+}
+
+CandidateSetSplittedList(ByRef candidata, splitted_list)
+{
+    candidata[0] := splitted_list
+}
 
 ;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]

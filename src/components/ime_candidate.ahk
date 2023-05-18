@@ -24,6 +24,7 @@ ImeCandidateUpdateResult(splitter_result)
     {
         debug_text := ImeProfilerBegin(30)
         ime_candidata_result_origin := []
+        ime_candidata_result_origin[0] := splitter_result
         radical_list := []
         debug_text := "["
         loop % splitter_result.Length()
