@@ -320,6 +320,10 @@
         ImeTooltipUpdate()
     return
 
+    F12::
+        ImeDebugToggle()
+    return
+
     ; Ctrl + F12: exit
     ^F12::
         ExitApp,
