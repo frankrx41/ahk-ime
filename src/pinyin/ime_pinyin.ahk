@@ -213,7 +213,7 @@ PinyinInitialize()
                 "o":"o",
                 "ei":"ei","en":"en","eng":"eng",
                 "i":"i","ian":"ian","iao":"iao","ie":"ie","in":"in","ing":"ing",
-                "u":"u","un":"un"
+                "u":"u"
             },
             "p" :{
                 "1":"p",
