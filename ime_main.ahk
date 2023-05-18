@@ -50,7 +50,7 @@ ImeProfilerFunc(1, "ImeDBInitialize")
 ; We should register hotkey after other modules are initialized
 ImeProfilerFunc(1, "ImeHotkeyRegisterInitialize")
 
-Tooltip, % ImeProfilerGetDebugInfo(1) "`n " ImeProfilerGetTotalTick(1)
+; Tooltip, % ImeProfilerGetDebugInfo(1) "`n " ImeProfilerGetTotalTick(1)
 return
 
 ;*******************************************************************************
