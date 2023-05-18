@@ -387,12 +387,15 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
             }
 
             if( match_level == radical_match_level_full_match ) {
+                TranslatorResultAppendComment(translate_result, "1")
                 translate_full_match_result_list.Push(translate_result)
             }
             if( match_level == radical_match_level_last_match ) {
+                TranslatorResultAppendComment(translate_result, "2")
                 translate_last_match_result_list.Push(translate_result)
             }
             if( match_level == radical_match_level_no_radical ) {
+                TranslatorResultAppendComment(translate_result, "3")
                 translate_no_radical_result_list.Push(translate_result)
             }
 

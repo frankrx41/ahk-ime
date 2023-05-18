@@ -34,6 +34,10 @@ TranslatorResultSetWordLength(ByRef translate_result, length) {
     translate_result[5] := length
 }
 
+TranslatorResultAppendComment(ByRef translate_result, comment) {
+    translate_result[4] .= comment
+}
+
 ;*******************************************************************************
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length)
