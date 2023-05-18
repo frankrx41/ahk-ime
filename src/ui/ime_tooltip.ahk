@@ -59,34 +59,24 @@ ImeTooltipGetDisplaySelectItems()
             loop % column_loop
             {
                 item_str := ""
-                ; in_column := word_index / column >= start_index && word_index / column <= start_index + column
                 in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
                 if( word_index <= ImeCandidateGetListLength(split_index) )
                 {
-                    begin_str := "  "
-                    radical_code := ""
                     if( in_column ) {
                         if ( select_index == word_index ) {
                             begin_str := ">["
+                            end_mark := "]"
                         } else {
                             begin_str := Mod(word_index, 10) "."
-                            ; begin_str :=  word_index "."
+                            end_mark := ""
                         }
-                        ; if( radical_code ){
-                        ;     radical_code := "{" radical_code "}"
-                        ; }
+                    } else {
+                        begin_str := "  "
+                        end_mark := ""
                     }
-
-                    end_str_mark := " "
                     comment := ImeCandidateGetFormattedComment(split_index, word_index)
-                    if( IsHideAbleComment(comment) && select_index != word_index )
-                    {
-                        end_str_mark := SubStr(comment, 1, 1)
-                        comment := SubStr(comment, 2)
-                    }
-                    end_str := select_index == word_index ? "]" : end_str_mark
-                    item_str := begin_str . ImeCandidateGetWord(split_index, word_index) . radical_code . end_str . comment
-                    ; item_str := begin_str . ImeGetCandidateWord(word_index) . ImeGetCandidateDebugInfo(word_index) . end_str
+                    word := ImeCandidateGetWord(split_index, word_index)
+                    item_str := begin_str . word . end_mark . comment
                 } else {
                     item_str := ""
                 }
