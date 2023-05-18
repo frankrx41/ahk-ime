@@ -322,6 +322,8 @@
 
     F12::
         ImeDebugToggle()
+        ImeInputterUpdateString("")
+        ImeTooltipUpdate()
     return
 
     ; Ctrl + F12: exit
