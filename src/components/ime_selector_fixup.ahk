@@ -177,12 +177,22 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         }
         else
         {
-            if( candidate.Length() == split_index+max_length-1 || CandidateSkipSelect(candidate, split_index+max_length) ) {
-                select_index := 1
-            } else {
+            if( candidate.Length() == split_index+max_length-1 || CandidateSkipSelect(candidate, split_index+max_length) )
+            {
+                ; TODO: Should we check all words instead of first 10 words?
+                loop, 10
+                {
+                    if( CandidateGetWordLength(candidate, split_index, A_Index) == max_length ){
+                        select_index := A_Index
+                        break
+                    }
+                }
+            }
+            if( !select_index ){
                 select_index := SelectorFindGraceResultIndex(candidate, split_index, candidate.Length()-split_index+1)
             }
         }
+
 
         if( origin_select_index != select_index )
         {
