@@ -78,6 +78,16 @@ ImeProfilerTemp(profile_text)
     ImeProfilerEnd(1, profile_text)
 }
 
+ImeProfilerFunc(index, func_name)
+{
+    local
+    profile_text := ImeProfilerBegin(index)
+    last_tick := A_TickCount
+    Func(func_name).Call()
+    profile_text .= "`n  - " func_name " (" A_TickCount - last_tick ")"
+    ImeProfilerEnd(index, profile_text)
+}
+
 ;*******************************************************************************
 ; Use for print
 ImeProfilerGetTotalTick(index)
