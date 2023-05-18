@@ -296,6 +296,9 @@
     return
 
     ^F5::
+        ToolTip, Clear history
+        Sleep, 500
+        ToolTip,
         TranslatorHistoryClear()
     return
 
