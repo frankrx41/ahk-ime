@@ -24,7 +24,7 @@ ImeCandidateUpdateResult(splitter_result)
     {
         debug_text := ImeProfilerBegin(30)
         ime_candidata_result_origin := []
-        ime_candidata_result_origin[0] := splitter_result
+        CandidateSetSplittedList(ime_candidata_result_origin, splitter_result)
         radical_list := []
         debug_text := "["
         loop % splitter_result.Length()
@@ -103,19 +103,10 @@ CandidateGetTranslatorResult(candidata, split_index, word_index)
 
 ;*******************************************************************************
 ;
-CandidateGetListLength(candidata, split_index)
-{
-    return candidata[split_index].Length()
-}
 
 ImeCandidateGetListLength(split_index)
 {
     return CandidateGetListLength(ImeCandidateGet(), split_index)
-}
-
-CandidateGetLegacyPinyin(candidata, split_index, word_index)
-{
-    return TranslatorResultGetLegacyPinyin(candidata[split_index, word_index])
 }
 
 ImeCandidateGetLegacyPinyin(split_index, word_index)
@@ -123,19 +114,9 @@ ImeCandidateGetLegacyPinyin(split_index, word_index)
     return CandidateGetLegacyPinyin(ImeCandidateGet(), split_index, word_index)
 }
 
-CandidateGetWord(candidata, split_index, word_index)
-{
-    return TranslatorResultGetWord(candidata[split_index, word_index])
-}
-
 ImeCandidateGetWord(split_index, word_index)
 {
     return CandidateGetWord(ImeCandidateGet(), split_index, word_index)
-}
-
-CandidateGetWeight(candidata, split_index, word_index)
-{
-    return TranslatorResultGetWeight(candidata[split_index, word_index])
 }
 
 ImeCandidateGetWeight(split_index, word_index)
@@ -143,19 +124,9 @@ ImeCandidateGetWeight(split_index, word_index)
     return CandidateGetWeight(ImeCandidateGet(), split_index, word_index)
 }
 
-CandidateGetComment(candidata, split_index, word_index)
-{
-    return TranslatorResultGetComment(candidata[split_index, word_index])
-}
-
 ImeCandidateGetComment(split_index, word_index)
 {
     return CandidateGetComment(ImeCandidateGet(), split_index, word_index)
-}
-
-CandidateGetWordLength(candidata, split_index, word_index)
-{
-    return TranslatorResultGetWordLength(candidata[split_index, word_index])
 }
 
 ImeCandidateGetWordLength(split_index, word_index)
@@ -163,35 +134,14 @@ ImeCandidateGetWordLength(split_index, word_index)
     return CandidateGetWordLength(ImeCandidateGet(), split_index, word_index)
 }
 
-CandidateIsTraditional(candidata, split_index, word_index)
-{
-    return TranslatorResultIsTraditional(candidata[split_index, word_index])
-}
-
 ImeCandidateIsTraditional(split_index, word_index)
 {
     return CandidateIsTraditional(ImeCandidateGet(), split_index, word_index)
 }
 
-CandidateIsTop(candidata, split_index, word_index)
-{
-    return TranslatorResultIsTop(candidata[split_index, word_index])
-}
-
 ImeCandidateIsTop(split_index, word_index)
 {
     return CandidateIsTop(ImeCandidateGet(), split_index, word_index)
-}
-
-CandidateSkipSelect(candidata, split_index)
-{
-    return TranslatorResultSkipSelect(candidata[split_index, 1])
-    ; candidata[split_index].Length() == 0 || (candidata[split_index].Length() == 1 && )
-}
-
-ImeCandidateSkipSelect(candidata, split_index)
-{
-    return CandidateSkipSelect(ImeCandidateGet(), split_index)
 }
 
 ;*******************************************************************************

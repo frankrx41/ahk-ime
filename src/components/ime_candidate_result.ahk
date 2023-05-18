@@ -14,6 +14,46 @@ CandidateSetSplittedList(ByRef candidata, splitted_list)
     candidata[0] := splitted_list
 }
 
+CandidateGetListLength(candidata, split_index)
+{
+    return candidata[split_index].Length()
+}
+
+CandidateGetLegacyPinyin(candidata, split_index, word_index)
+{
+    return TranslatorResultGetLegacyPinyin(candidata[split_index, word_index])
+}
+
+CandidateGetWord(candidata, split_index, word_index)
+{
+    return TranslatorResultGetWord(candidata[split_index, word_index])
+}
+
+CandidateGetWeight(candidata, split_index, word_index)
+{
+    return TranslatorResultGetWeight(candidata[split_index, word_index])
+}
+
+CandidateGetComment(candidata, split_index, word_index)
+{
+    return TranslatorResultGetComment(candidata[split_index, word_index])
+}
+
+CandidateGetWordLength(candidata, split_index, word_index)
+{
+    return TranslatorResultGetWordLength(candidata[split_index, word_index])
+}
+
+CandidateIsTraditional(candidata, split_index, word_index)
+{
+    return TranslatorResultIsTraditional(candidata[split_index, word_index])
+}
+
+CandidateIsTop(candidata, split_index, word_index)
+{
+    return TranslatorResultIsTop(candidata[split_index, word_index])
+}
+
 ;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]
 ; find ["我"]
