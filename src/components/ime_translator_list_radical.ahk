@@ -88,6 +88,9 @@ RadicalCheckPinyin(radical, test_pinyin)
     if( radical == "广" && test_pinyin == "C" ){
         return true
     }
+    if( radical == "丿" && test_pinyin == "D" ){
+        return true
+    }
 
     return false
 }
@@ -128,16 +131,30 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         return true
     }
 
-    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
-        test_radical := SubStr(test_radical, 2)
-        return true
+    try_continue_split := false
+    radical_word_list := RadicalWordSplit(test_word)
+    loop, % radical_word_list.Length()
+    {
+        first_word := radical_word_list[A_Index, 1]
+        if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) || RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ){
+            try_continue_split := true
+            break
+        }
     }
-    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
-        test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
-        return true
-    }
-    if( RadicalIsAtomic(test_word) ){
-        return false
+
+    if( !try_continue_split )
+    {
+        if( RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
+            test_radical := SubStr(test_radical, 2)
+            return true
+        }
+        if( RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
+            test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
+            return true
+        }
+        if( RadicalIsAtomic(test_word) ){
+            return false
+        }
     }
 
     ; Backup
@@ -153,10 +170,10 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 
         test_radical := test_radical_backup
         remain_radicals := CopyObj(remain_radicals_backup)
-
+        remain_radicals_length := remain_radicals.Length()
         loop, % radical_word_list[loop_radical_index].Length()-1
         {
-            remain_radicals[remain_radicals.Length()+A_Index] := radical_word_list[loop_radical_index, A_Index+1]
+            remain_radicals[remain_radicals_length+A_Index] := radical_word_list[loop_radical_index, A_Index+1]
         }
 
         if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
