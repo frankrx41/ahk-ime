@@ -7,6 +7,7 @@ RadicalInitialize()
     global ime_radical_table    := {}
     global ime_radicals_pinyin  := {}
     global ime_radical_atomic   := "一丨丿乀丶𠄌乁乛㇕乙𠃊乚亅㇆勹㇉𠃋匚匸冂凵⺆巜丄丅龴厶艹冖罓宀罒㓁癶覀𤇾𦥯龷皿亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸刂卩卪厂广耂虍疒⺈弋廴辶㔾𠂔疋肀𠔉𠤏𡿺叵囙夨夬屮丱彑𠂢旡歺辵尢夂匕刀儿几力人入又川寸大飞工弓己已巾口囗马门女山尸士巳兀夕小幺子贝长车斗方风父戈户戸戶火见斤毛木牛片气日氏手殳水瓦王韦文毋心牙曰月支止爪白甘瓜禾立龙矛母目鸟皮生石矢示田玄业臣虫而耳缶艮臼米齐肉色舌页先血羊聿至舟竹⺮自羽貝采釆镸車辰赤豆谷見角克里卤麦身豕辛言邑酉酋走足靑雨齿非金隶鱼鬼韭面首韋頁龹𠂉用电乃为了九万丁个丫不上下"
+    global ime_radical_first     := "艹冖罓宀罒㓁癶亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸厂广耂虍疒⺈廴辶"
 
     FileRead, file_content, data\radicals.txt
     Loop, Parse, file_content, `n, `r
@@ -95,6 +96,12 @@ RadicalIsAtomic(single_word)
     return InStr(ime_radical_atomic, single_word)
 }
 
+RadicalIsFirst(single_word)
+{
+    global ime_radical_first
+    return InStr(ime_radical_first, single_word)
+}
+
 ;*******************************************************************************
 IsVerb(word)
 {
@@ -131,7 +138,11 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         loop, % radical_word_list.Length()
         {
             first_word := radical_word_list[A_Index, 1]
-            if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) || RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
+            if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) ){
+                try_continue_split := true
+                break
+            }
+            if( !RadicalIsFirst(test_word) && RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
                 try_continue_split := true
                 break
             }
@@ -144,7 +155,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
             test_radical := SubStr(test_radical, 2)
             return true
         }
-        if( RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
+        if( !RadicalIsFirst(test_word) && RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
             test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
             return true
         }
@@ -191,7 +202,7 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
         test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
         return true
     }
-    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
+    if( !RadicalIsFirst(test_word) && RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
         test_radical := SubStr(test_radical, 2)
         return true
     }
