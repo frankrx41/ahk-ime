@@ -136,7 +136,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     loop, % radical_word_list.Length()
     {
         first_word := radical_word_list[A_Index, 1]
-        if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) || RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ){
+        if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) || RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
             try_continue_split := true
             break
         }
