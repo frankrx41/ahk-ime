@@ -82,17 +82,34 @@ TranslatorHistoryUpdateKey(splitted_string, limit_num:=100)
     }
 
     ; update weight
+    ImeProfilerBegin(17)
+    profile_text := ""
     additional_translator_result_list := []
+    first_weight := TranslatorResultGetWeight(translator_history_result[splitted_string, 1])
     for key, value in translator_history_weight {
-        if( PinyinCheckMatch(splitted_string, key) ) {
-            word_length := StrLen(value[1])
-            weight := value[0] + TranslatorResultGetWeight(translator_history_result[splitted_string, 1])
-            loop, % value.Length() {
-                translator_result := TranslatorResultMake(key, value[A_Index], weight+A_Index, "^", word_length)
-                additional_translator_result_list.Push(translator_result)
+        if( PinyinCheckMatch(splitted_string, key) )
+        {
+            base_weight := value[0] + first_weight
+            profile_text .= "`n  - " key ", " base_weight ": "
+            loop, % value.Length()
+            {
+                value_word := value[A_Index]
+                value_weight := base_weight + A_Index
+                profile_text .= value_word " "
+                loop, % translator_history_result[splitted_string].Length()
+                {
+                    translator_result := translator_history_result[splitted_string, A_Index]
+                    if( TranslatorResultGetWord(translator_result) == value_word ){
+                        translator_result_top := TranslatorResultMakeTop(translator_result, value_weight)
+                        translator_history_result[splitted_string].RemoveAt(A_Index, 1)
+                        additional_translator_result_list.Push(translator_result_top)
+                        break
+                    }
+                }
             }
         }
     }
+
     additional_translator_result_list := TranslatorResultListSortByWeight(additional_translator_result_list)
 
     loop, % additional_translator_result_list.Length()
@@ -100,6 +117,8 @@ TranslatorHistoryUpdateKey(splitted_string, limit_num:=100)
         translator_result := additional_translator_result_list[A_Index]
         translator_history_result[splitted_string].InsertAt(A_Index, translator_result)
     }
+
+    ImeProfilerEnd(17, profile_text)
 }
 
 TranslatorHistoryGetResultWord(splitted_string, word_class:="")

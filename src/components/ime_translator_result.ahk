@@ -6,6 +6,7 @@
 ;   [4]: ""         ; comment
 ;   [5]: 1          ; word length
 ;   [6]: 0          ; traditional
+;   [7]: 0          ; top
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
@@ -25,6 +26,9 @@ TranslatorResultGetWordLength(ByRef translate_result) {
 TranslatorResultIsTraditional(ByRef translate_result) {
     return translate_result[6]
 }
+TranslatorResultIsTop(ByRef translate_result) {
+    return translate_result[7]
+}
 
 TranslatorResultSetWordLength(ByRef translate_result, length) {
     translate_result[5] := length
@@ -34,15 +38,23 @@ TranslatorResultSetWordLength(ByRef translate_result, length) {
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length)
 {
-    return [pinyin, word, weight, comment, word_length, 0]
+    return [pinyin, word, weight, comment, word_length, false, false]
 }
 
 TranslatorResultMakeTraditional(ByRef translate_result, tranditional_word)
 {
     tranditional_translate_result := CopyObj(translate_result)
     tranditional_translate_result[2] := tranditional_word
-    tranditional_translate_result[6] := 1
+    tranditional_translate_result[6] := true
     return tranditional_translate_result
+}
+
+TranslatorResultMakeTop(ByRef translate_result, weight)
+{
+    top_translate_result := CopyObj(translate_result)
+    top_translate_result[3] := weight
+    top_translate_result[7] := true
+    return top_translate_result
 }
 
 TranslatorResultMakeError()

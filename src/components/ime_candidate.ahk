@@ -172,6 +172,16 @@ ImeCandidateIsTraditional(split_index, word_index)
     return CandidateIsTraditional(ImeCandidateGet(), split_index, word_index)
 }
 
+CandidateIsTop(candidata, split_index, word_index)
+{
+    return TranslatorResultIsTop(candidata[split_index, word_index])
+}
+
+ImeCandidateIsTop(split_index, word_index)
+{
+    return CandidateIsTop(ImeCandidateGet(), split_index, word_index)
+}
+
 ;*******************************************************************************
 ;
 CandidateGetFormattedComment(candidata, split_index, word_index)
@@ -179,6 +189,9 @@ CandidateGetFormattedComment(candidata, split_index, word_index)
     comment := CandidateGetComment(candidata, split_index, word_index)
     if( CandidateIsTraditional(candidata, split_index, word_index) ) {
         comment := "*" . comment
+    }
+    if( CandidateIsTop(candidata, split_index, word_index) ) {
+        comment := "^" . comment
     }
     return comment
 }
