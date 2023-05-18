@@ -24,22 +24,27 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
     }
     ; profile_text .= "`n  - [" left_word "(" left_split_index ") ," right_word "(" right_split_index ") ] " left_weight " + " right_weight " = " left_weight + right_weight
     total_weight := left_weight + right_weight
-    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight
+    return_weight := total_weight / ( left_word_length + right_word_length )
+    profile_text .= "`n  - [" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight " (" Format("{1:0.f}", return_weight) ")"
     ImeProfilerEnd(46, profile_text)
 
-    return total_weight
+    return return_weight
 }
 
 SelectorFindGraceResultIndex(candidate, split_index, max_length)
 {
     max_weight := 0
     better_length := max_length
-    loop, % max_length
+    if( max_length > 2 )
     {
-        weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index)
-        if( weight > max_weight ) {
-            max_weight := weight
-            better_length := A_Index
+        loop, % max_length
+        {
+            weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index)
+
+            if( weight > max_weight ) {
+                max_weight := weight
+                better_length := A_Index
+            }
         }
     }
     select_index := SelectorFindMaxLengthResultIndex(candidate, split_index, better_length)
@@ -151,8 +156,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             if( max_length == candidate.Length() ) {
                 select_index := 1
             } else {
-                ; Find a result the no longer than `max_length`
-                select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
+                select_index := SelectorFindGraceResultIndex(candidate, split_index, candidate.Length()-split_index+1)
             }
         }
 
