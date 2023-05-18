@@ -72,6 +72,26 @@ RadicalGetPinyin(single_radical)
     return ime_radicals_pinyin[single_radical]
 }
 
+RadicalCheckPinyin(radical, test_pinyin)
+{
+    local
+    radical_pinyin := RadicalGetPinyin(radical)
+    if( radical_pinyin == test_pinyin ){
+        return true
+    }
+    if( InStr("匚匸冂凵⺆", radical) && test_pinyin == "O" ){
+        return true
+    }
+    if( InStr("乁乛㇕乙𠃊乚亅㇆勹㇉𠃋巜丄丅龴厶巛卄廾丌彐卅卝攵卌幵", radical) && test_pinyin == "V" ){
+        return true
+    }
+    if( radical == "广" && test_pinyin == "C" ){
+        return true
+    }
+
+    return false
+}
+
 ; Atomic radical should no continue split
 RadicalIsAtomic(single_word)
 {
@@ -108,12 +128,11 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         return true
     }
 
-    test_pinyin := RadicalGetPinyin(test_word)
-    if( test_pinyin == SubStr(test_radical, 1, 1) ) {
+    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
         test_radical := SubStr(test_radical, 2)
         return true
     }
-    if( test_pinyin == SubStr(test_radical, 0, 1) ) {
+    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
         test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
         return true
     }
@@ -155,12 +174,11 @@ RadicalMatchLastPart(test_word, ByRef test_radical)
         return true
     }
 
-    test_pinyin := RadicalGetPinyin(test_word)
-    if( test_pinyin == SubStr(test_radical, 0, 1) ) {
+    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
         test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
         return true
     }
-    if( test_pinyin == SubStr(test_radical, 1, 1) ) {
+    if( RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
         test_radical := SubStr(test_radical, 2)
         return true
     }
