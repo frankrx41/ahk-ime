@@ -81,7 +81,8 @@ HotkeyOnShift(orgin_mode)
 {
     ; Fix when use {Shift} + {Numpad1} send {NumpadEnd}
     ; system will set {Shift up} event
-    static shift_down_tick := A_TickCount
+    static shift_down_tick  := A_TickCount
+    static double_shift     := A_TickCount
     if( GetKeyState("RShift", "P") ) {
         shift_down_tick := A_TickCount
         return
@@ -93,8 +94,16 @@ HotkeyOnShift(orgin_mode)
     if( ImeSelectMenuIsOpen() ) {
         ImeSelectorToggleSingleMode()
     }
+    if( ImeInputterHasAnyInput() )
+    {
+        if( A_TickCount - double_shift < 500 ) {
+            ImeSimpleSpellToggle()
+            ImeInputterUpdateString("")
+        } else {
+            double_shift := A_TickCount
+        }
+    }
     else
-    if( !ImeInputterHasAnyInput() )
     {
         ImeStateUpdateMode(orgin_mode)
     }

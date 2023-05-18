@@ -9,18 +9,16 @@
         ImeTooltipUpdate()
     return
 
-    ; Auto complete
-    NumpadMult::
-    *::
-        ImeSimpleSpellToggle()
-        ImeInputterUpdateString("")
-        ImeTooltipUpdate()
-    return
-
     ; Simple spell
     NumpadAdd::
     +::
         ImeInputterProcessChar("+")
+        ImeTooltipUpdate()
+    return
+
+    NumpadMult::
+    *::
+        ImeInputterProcessChar("*")
         ImeTooltipUpdate()
     return
 
