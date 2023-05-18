@@ -265,7 +265,7 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
                     skip_able_count := 1
                     loop, % remain_radicals.Length()
                     {
-                        radical_word_list.InsertAt(1, remain_radicals[A_Index])
+                        radical_word_list.InsertAt(A_Index, remain_radicals[A_Index])
                         skip_able_count += 1
                     }
                     match_any_part := true
