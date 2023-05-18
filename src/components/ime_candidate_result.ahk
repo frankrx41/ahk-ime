@@ -95,7 +95,7 @@ CandidateResultListFilterResults(ByRef candidate_result_list, input_radical_list
     {
         split_index := A_Index
         test_result := result_list[split_index]
-        debug_text .= "`n  - [" split_index "] (" test_result.Length() ")"
+        debug_text .= "`n  - [" split_index  ", " CandidateGetLegacyPinyin(result_list, split_index, 1) "] (" test_result.Length() ")"
         if( true ){
             ; TranslatorResultListFilterZeroWeight(test_result)
         }

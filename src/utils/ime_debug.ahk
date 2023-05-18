@@ -49,14 +49,14 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 13)        ; PinyinSplitterCheckDBWeight
     ImeDebugTipAppend(debug_tip, 14)
 
-    ImeDebugTipAppend(debug_tip, 15, 2000)  ; PinyinSqlGetResult - sql
-    ImeDebugTipAppend(debug_tip, 16, 2000)  ; PinyinSqlGetResult - result
+    ImeDebugTipAppend(debug_tip, 15, 200)   ; PinyinSqlGetResult - sql
+    ImeDebugTipAppend(debug_tip, 16, 200)   ; PinyinSqlGetResult - result
     ImeDebugTipAppend(debug_tip, 17)        ; TranslatorHistoryUpdateKey
     ImeDebugTipAppend(debug_tip, 18)
     ImeDebugTipAppend(debug_tip, 19)
 
     ImeDebugTipAppend(debug_tip, 20)        ; PinyinGetTranslateResult
-    ImeDebugTipAppend(debug_tip, 21, 2000)        ; PinyinTranslatorInsertResult
+    ImeDebugTipAppend(debug_tip, 21, 200)   ; PinyinTranslatorInsertResult
     ImeDebugTipAppend(debug_tip, 22)        ; PinyinTranslatorInsertCombineWord
     ImeDebugTipAppend(debug_tip, 23)        ; PinyinTranslatorInsertSimpleSpell
     ImeDebugTipAppend(debug_tip, 24)
@@ -68,7 +68,7 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 29)
 
     ImeDebugTipAppend(debug_tip, 30)        ; ImeCandidateUpdateResult
-    ImeDebugTipAppend(debug_tip, 31, 2000)  ; CandidateResultListFilterResults
+    ImeDebugTipAppend(debug_tip, 31, 200)   ; CandidateResultListFilterResults
     ImeDebugTipAppend(debug_tip, 32)        ; CandidateResultListFindIndex
     ImeDebugTipAppend(debug_tip, 33)
     ImeDebugTipAppend(debug_tip, 34)
@@ -79,14 +79,14 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 38)
     ImeDebugTipAppend(debug_tip, 39)        ; TranslatorResultListUniquify
 
-    ImeDebugTipAppend(debug_tip, 40, 2000)  ; SelectorFixupSelectIndex
+    ImeDebugTipAppend(debug_tip, 40, 200)   ; SelectorFixupSelectIndex
     ImeDebugTipAppend(debug_tip, 41)        ; ImeSelectorApplyCaretSelectIndex
-    ImeDebugTipAppend(debug_tip, 42, 2000)  ; SelectorResultSetSelectIndex
+    ImeDebugTipAppend(debug_tip, 42, 200)   ; SelectorResultSetSelectIndex
     ImeDebugTipAppend(debug_tip, 43)        ; SelectorResultLockWord
-    ImeDebugTipAppend(debug_tip, 44)        ; SelectorResultIsSelectLock
+    ImeDebugTipAppend(debug_tip, 44)
 
     ImeDebugTipAppend(debug_tip, 45)        ; SelectorFindPossibleMaxLength
-    ImeDebugTipAppend(debug_tip, 46, 2000)  ; SelectorFindGraceResultIndex
+    ImeDebugTipAppend(debug_tip, 46, 200)   ; SelectorFindGraceResultIndex
     ImeDebugTipAppend(debug_tip, 47)        ; SelectorFindGraceResultIndex
     ImeDebugTipAppend(debug_tip, 48)
     ImeDebugTipAppend(debug_tip, 49)
@@ -94,7 +94,7 @@ ImeDebugGetDisplayText()
     ImeDebugTipAppend(debug_tip, 1)         ; temp
     ; ImeDebugTipAppend(debug_tip, 8)         ; tick
     debug_tip .= "`n----------------"
-    ImeDebugTipAppend(debug_tip, 4, 2000)   ; assert info
+    ImeDebugTipAppend(debug_tip, 4, 200)   ; assert info
 
     return debug_tip
 }

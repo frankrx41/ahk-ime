@@ -40,10 +40,6 @@ SelectorResultGetSelectIndex(ByRef selector_result)
 
 SelectorResultIsSelectLock(ByRef selector_result)
 {
-    local
-    ImeProfilerBegin(44)
-    profile_text := "`n  - " selector_result[2] " " CallerName()
-    ImeProfilerEnd(44, profile_text)
     return selector_result[2] ? true : false
 }
 
