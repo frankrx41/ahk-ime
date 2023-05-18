@@ -208,7 +208,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             }
             ImeProfilerTemp(select_index)
             if( !select_index ){
-                select_index := SelectorFindGraceResultIndex(candidate, split_index, candidate.Length()-split_index+1)
+                select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
             }
         }
 
