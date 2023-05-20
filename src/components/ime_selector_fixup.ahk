@@ -6,16 +6,13 @@ SelectorGetFixedWeight(word, is_last_word)
         return 0
     }
 
-    static fixed_word_last = "吧啊吗嘛了的呀哦嗯"
-    static fixed_word_first = "我他她它这那人不但还很就老没难旧用新非好"
-
     if( is_last_word ) {
-        if( InStr(fixed_word_last, word) ){
+        if( IsLastWord(word) ){
             return +12000
         }
     }
     else {
-        if( InStr(fixed_word_first, word) || IsVerb(word) ){
+        if( IsFirstWord(word) || IsVerb(word) ){
             return 0
         }
     }
