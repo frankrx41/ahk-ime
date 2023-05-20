@@ -130,7 +130,7 @@ IsLastWord(word)
 
 IsFirstWord(word)
 {
-    static first_word_string = "我他她它这那人不但还很就老没难旧用新非好去是"
+    static first_word_string := "我他她它这那人不但还很就老没难旧用新非好去是大小"
     return InStr(first_word_string, word)
 }
 
