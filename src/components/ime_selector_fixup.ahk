@@ -185,7 +185,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             ; TODO: use `lock_length`
             lock_length := SelectorResultGetLockLength(selector_result_list[split_index])
             Assert( max_length <= lock_length )
-            select_index := CandidateFindIndex(candidate, split_index, lock_word, max_length)
+            select_index := CandidateFindWordSelectIndex(candidate, split_index, lock_word)
             Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word "," max_length)
         }
         else

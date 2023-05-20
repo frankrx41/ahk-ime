@@ -56,13 +56,12 @@ CandidateIsTop(ByRef candidata, split_index, word_index)
 ;   - max_length == 2 return 2
 ; find ["你"]
 ;   return 0
-CandidateFindIndex(ByRef candidate, split_index, find_words, max_length:=0)
+CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
 {
     local
     find_word_len := StrLen(find_words)
-    if( max_length == 0 ) {
-        max_length := find_word_len
-    }
+    max_length := find_word_len
+
     debug_text := ImeProfilerBegin(32)
     debug_text .= split_index "," candidate[split_index].Length()
     select_index := 0
