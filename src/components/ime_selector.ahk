@@ -44,7 +44,7 @@ ImeSelectorSetCaretSelectIndex(select_index)
     local
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
-    select_index := Max(1, Min(ImeCandidateGetListLength(split_index), select_index))
+    select_index := Max(1, Min(ImeCandidateGetTranslatorListLength(split_index), select_index))
     if( !ime_selector_select_list[split_index] ){
         ime_selector_select_list[split_index] := []
     }
@@ -57,7 +57,7 @@ ImeSelectorOffsetCaretSelectIndex(offset)
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index) + offset
-    select_index := Max(1, Min(ImeCandidateGetListLength(split_index), select_index))
+    select_index := Max(1, Min(ImeCandidateGetTranslatorListLength(split_index), select_index))
     SelectorResultSetSelectIndex(ime_selector_select_list[split_index], select_index)
 }
 

@@ -90,22 +90,9 @@ ImeCandidateGet()
 
 ;*******************************************************************************
 ;
-CandidateFindIndex(candidata, split_index, start_words, max_length)
+ImeCandidateGetTranslatorListLength(split_index)
 {
-    return CandidateResultListFindIndex(candidata, split_index, start_words, max_length)
-}
-
-CandidateGetTranslatorResult(candidata, split_index, word_index)
-{
-    return candidata[split_index, word_index]
-}
-
-;*******************************************************************************
-;
-
-ImeCandidateGetListLength(split_index)
-{
-    return CandidateGetListLength(ImeCandidateGet(), split_index)
+    return CandidateGetTranslatorListLength(ImeCandidateGet(), split_index)
 }
 
 ImeCandidateGetLegacyPinyin(split_index, word_index)
@@ -145,18 +132,6 @@ ImeCandidateIsTop(split_index, word_index)
 
 ;*******************************************************************************
 ;
-CandidateGetFormattedComment(candidata, split_index, word_index)
-{
-    comment := CandidateGetComment(candidata, split_index, word_index)
-    if( CandidateIsTraditional(candidata, split_index, word_index) ) {
-        comment := "*" . comment
-    }
-    if( CandidateIsTop(candidata, split_index, word_index) ) {
-        comment := "^" . comment
-    }
-    return comment
-}
-
 ImeCandidateGetFormattedComment(split_index, word_index)
 {
     return CandidateGetFormattedComment(ImeCandidateGet(), split_index, word_index)

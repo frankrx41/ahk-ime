@@ -41,17 +41,17 @@ ImeTooltipGetDisplaySelectItems()
             continue
         }
         start_index     := ImeSelectMenuIsMultiple() ? 0 : Floor((select_index-1) / column) * column
-        column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeCandidateGetListLength(split_index) / column) +1 : 1
+        column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeCandidateGetTranslatorListLength(split_index) / column) +1 : 1
 
         max_item_len    := []
 
         if( column_loop > max_column_loop ) {
             column_loop := max_column_loop
             start_index := Max(0, (Floor((select_index-1) / column)-max_column_loop+2)*column)
-            start_index := Min(start_index, (Floor((ImeCandidateGetListLength(split_index)-1) / column)-max_column_loop+1)*column)
+            start_index := Min(start_index, (Floor((ImeCandidateGetTranslatorListLength(split_index)-1) / column)-max_column_loop+1)*column)
         }
 
-        loop % Min(ImeCandidateGetListLength(split_index)+1, column) {
+        loop % Min(ImeCandidateGetTranslatorListLength(split_index)+1, column) {
             word_index      := start_index + A_Index
             ime_select_str  .= "`n"
             row_index       := A_Index
@@ -60,7 +60,7 @@ ImeTooltipGetDisplaySelectItems()
             {
                 item_str := ""
                 in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
-                if( word_index <= ImeCandidateGetListLength(split_index) )
+                if( word_index <= ImeCandidateGetTranslatorListLength(split_index) )
                 {
                     if( in_column ) {
                         if ( select_index == word_index ) {
@@ -164,7 +164,7 @@ ImeTooltipUpdate()
             split_index -= 1
         }
         extern_info := ""
-        extern_info .= "[" select_index "/" ImeCandidateGetListLength(split_index) "]"
+        extern_info .= "[" select_index "/" ImeCandidateGetTranslatorListLength(split_index) "]"
         extern_info .= " (" ImeCandidateGetWeight(split_index, select_index) ")"
         current_word := ImeCandidateGetWord(split_index, select_index)
         current_word := SubStr(current_word, word_index, 1)
