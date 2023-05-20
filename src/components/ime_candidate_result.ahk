@@ -68,19 +68,23 @@ CandidateGetTranslatorResult(candidata, split_index, word_index)
 ;   - max_length == 2 return 2
 ; find ["你"]
 ;   return 0
-CandidateFindIndex(ByRef candidate, split_index, find_words, max_length)
+CandidateFindIndex(ByRef candidate, split_index, find_words, max_length:=0)
 {
     local
     find_word_len := StrLen(find_words)
+    if( max_length == 0 ) {
+        max_length := find_word_len
+    }
     debug_text := ImeProfilerBegin(32)
     debug_text .= split_index "," candidate[split_index].Length()
     select_index := 0
     loop, % candidate[split_index].Length()
     {
         select_index := A_Index
-        test_result := TranslatorResultGetWord(candidate[split_index, select_index])
-        if( StrLen(test_result) <= max_length && find_words == SubStr(test_result, 1, find_word_len) ){
-            debug_text .= "`n  - [" select_index "] -> """ find_words """ == """ test_result """"
+        test_word := TranslatorResultGetWord(candidate[split_index, select_index])
+        test_word_length := TranslatorResultGetWordLength(candidate[split_index, select_index])
+        if( test_word_length <= max_length && find_words == SubStr(test_word, 1, find_word_len) ){
+            debug_text .= "`n  - [" select_index "] -> """ find_words """ == """ test_word """"
             break
         }
     }
