@@ -1,16 +1,17 @@
 ;*******************************************************************************
 ;
-SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
+SelectorCheckTotalWeight(candidate, split_index, left_length, right_length, ByRef found_word)
 {
     left_split_index := split_index
     left_select_index := CandidateFindMaxLengthSelectIndex(candidate, left_split_index, left_length, true, left_weight)
     left_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
+    found_word := CandidateGetWord(candidate, left_split_index, left_select_index)
     if( left_word_length != left_length ) {
         return 0
     }
-    if( left_length == 1 && right_length == 1 ) {
-        return 0
-    }
+    ; if( left_length == 1 && right_length == 1 ) {
+    ;     return 0
+    ; }
     ; left_word_length := 1
     ; left_weight  := CandidateGetWeight(candidate, left_split_index, left_select_index)
     left_word  := CandidateGetWord(candidate, left_split_index, left_select_index)
@@ -48,7 +49,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
     total_weight := left_weight + right_weight
     ; return_weight := total_weight
     ; profile_text .= "" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight
-    profile_text .= Format("`n  - [{}{}, {}{}] {:.1f} + {:.1f} = {:.1f}", left_word, left_word_length, right_word, right_word_length, left_weight, right_weight, total_weight)
+    profile_text .= Format("`n  - [{}{}, {}{}] {:.1f} + {:.1f} = {:.1f} ({})", left_word, left_word_length, right_word, right_word_length, left_weight, right_weight, total_weight, found_word)
     ImeProfilerEnd(46, profile_text)
 
     return total_weight
@@ -57,20 +58,26 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
 SelectorFindGraceResultIndex(candidate, split_index, max_length)
 {
     max_weight := 0
+    loop_length := Min(max_length, CandidateGetMaxWordLength(candidate, split_index))
     better_length := max_length
     profile_text := ImeProfilerBegin(47)
-    loop, % max_length
+    select_word := "N/A"
+    loop, % loop_length
     {
-        ; TODO: also return check word
-        weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index)
+        weight := SelectorCheckTotalWeight(candidate, split_index, A_Index, max_length-A_Index, word)
 
-        if( weight > max_weight ) {
+        if( max_weight <= weight ) {
             max_weight := weight
             better_length := A_Index
+            ; if( SubStr(word, 1, StrLen(select_word)) != select_word ) {
+            ;     select_word := word
+            ; }
+            select_word := word
         }
     }
-    select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, better_length, true)
-    profile_text .= "`n  - " better_length ", " select_index ": """ CandidateGetWord(candidate, split_index, select_index) """"
+    select_index := CandidateFindWordSelectIndex(candidate, split_index, select_word)
+    ; select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, better_length, true)
+    profile_text .= "`n  - " better_length ", " select_index ", " select_word ": """ CandidateGetWord(candidate, split_index, select_index) """"
     ImeProfilerEnd(47, profile_text)
     return select_index
 }
@@ -196,7 +203,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                 }
             }
             ImeProfilerTemp(select_index)
-            if( select_index && CandidateGetWordLength(candidate, split_index, select_index) != max_length )
+            if( select_index == 0 || (select_index && CandidateGetWordLength(candidate, split_index, select_index) != max_length) )
             {
                 select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
             }

@@ -49,6 +49,11 @@ CandidateIsTop(ByRef candidata, split_index, word_index)
     return TranslatorResultIsTop(candidata[split_index, word_index])
 }
 
+CandidateGetMaxWordLength(ByRef candidata, split_index)
+{
+    return TranslatorResultGetWordLength(candidata[split_index, 1])
+}
+
 ;*******************************************************************************
 ; [1:"我爱你", 2:"我爱", 3:"我"]
 ; find ["我"]
