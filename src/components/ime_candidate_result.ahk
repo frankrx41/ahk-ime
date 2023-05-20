@@ -80,6 +80,20 @@ CandidateFindIndex(ByRef candidate, split_index, find_words, max_length:=0)
     return select_index
 }
 
+CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length)
+{
+    local
+    loop % candidate[split_index].Length()
+    {
+        test_len := CandidateGetWordLength(candidate, split_index, A_Index)
+        if( test_len <= max_length )
+        {
+            return A_Index
+        }
+    }
+    return 0
+}
+
 ;*******************************************************************************
 ;
 CandidateResultListFilterResults(ByRef candidate, input_radical_list)

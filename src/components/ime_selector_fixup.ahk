@@ -26,7 +26,7 @@ SelectorGetFixedWeight(word, is_last_word)
 SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
 {
     left_split_index := split_index
-    left_select_index := SelectorFindMaxLengthResultIndex(candidate, left_split_index, left_length)
+    left_select_index := CandidateFindMaxLengthSelectIndex(candidate, left_split_index, left_length)
     left_word_length := CandidateGetWordLength(candidate, left_split_index, left_select_index)
     if( left_word_length != left_length ) {
         return 0
@@ -49,7 +49,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length)
         right_select_index := 0
         loop, % right_length
         {
-            test_select_index := SelectorFindMaxLengthResultIndex(candidate, right_split_index, A_Index)
+            test_select_index := CandidateFindMaxLengthSelectIndex(candidate, right_split_index, A_Index)
             weight := CandidateGetWeight(candidate, right_split_index, test_select_index)
             if( max_weight <= weight ) {
                 right_select_index := test_select_index
@@ -85,25 +85,10 @@ SelectorFindGraceResultIndex(candidate, split_index, max_length)
             better_length := A_Index
         }
     }
-    select_index := SelectorFindMaxLengthResultIndex(candidate, split_index, better_length)
+    select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, better_length)
     profile_text .= "`n  - " better_length ", " select_index ": """ CandidateGetWord(candidate, split_index, select_index) """"
     ImeProfilerEnd(47, profile_text)
     return select_index
-}
-
-SelectorFindMaxLengthResultIndex(candidate, split_index, max_length)
-{
-    local
-    loop % candidate[split_index].Length()
-    {
-        test_len := CandidateGetWordLength(candidate, split_index, A_Index)
-        if( test_len <= max_length )
-        {
-            return A_Index
-        }
-    }
-
-    return 0
 }
 
 SelectorFindPossibleMaxLength(ByRef candidate, ByRef splitted_list, ByRef selector_result_list, split_index)
