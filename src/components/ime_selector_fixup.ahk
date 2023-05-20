@@ -5,15 +5,21 @@ SelectorGetFixedWeight(word, is_last_word)
     if( StrLen(word) != 1 ) {
         return 0
     }
+
     static fixed_word_last = "吧啊吗嘛了的呀哦嗯"
-    if( InStr(fixed_word_last, word) ){
-        return +12000
+    static fixed_word_first = "我他她它这那人不但还很就老没难旧用新非好"
+
+    if( is_last_word ) {
+        if( InStr(fixed_word_last, word) ){
+            return +12000
+        }
+    }
+    else {
+        if( InStr(fixed_word_first, word) || IsVerb(word) ){
+            return 0
+        }
     }
 
-    static fixed_word_first = "我他她它这那人不但还很就老没难旧"
-    if( InStr(fixed_word_first, word) ){
-        return 0
-    }
     return -22000
 }
 
