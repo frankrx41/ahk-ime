@@ -276,6 +276,20 @@
         ImeTooltipUpdate()
     return
 
+    ; Inputter history
+    ^Up::
+        ImeInputterHistorySummon(+1)
+        ImeInputterUpdateString("")
+        ImeTooltipUpdate()
+    return
+
+    ^Down::
+        ImeInputterHistorySummon(-1)
+        ImeInputterUpdateString("")
+        ImeTooltipUpdate()
+    return
+
+
     ; 更新候选框位置
     ~WheelUp::
     ~WheelDown::
@@ -304,6 +318,7 @@
         Sleep, 500
         ToolTip,
         TranslatorHistoryClear()
+        ImeInputterHistoryClear()
     return
 
     F6::

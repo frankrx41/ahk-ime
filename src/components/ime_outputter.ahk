@@ -21,6 +21,7 @@ ImeOutputterPutSelect(as_legacy, word_by_word:=0)
 
     if( input_string )
     {
+        ImeInputterHistoryPush()
         WinGet, process_name, ProcessName, A
         use_clipboard := ime_send_by_clipboard_process_list[process_name]
         PutString(input_string, use_clipboard)
