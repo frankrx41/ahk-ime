@@ -134,6 +134,12 @@ IsFirstWord(word)
     return InStr(first_word_string, word)
 }
 
+IsPreposition(word)
+{
+    static preposition_string := "与为于从以依向和在将当把拿比用给自被让除靠"
+    return InStr(preposition_string, word)
+}
+
 ;*******************************************************************************
 ;
 RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
