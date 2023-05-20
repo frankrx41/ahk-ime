@@ -49,7 +49,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length, ByRe
     total_weight := left_weight + right_weight
     ; return_weight := total_weight
     ; profile_text .= "" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight
-    profile_text .= Format("`n  - [{}{}, {}{}] {:.1f} + {:.1f} = {:.1f} ({})", left_word, left_word_length, right_word, right_word_length, left_weight, right_weight, total_weight, found_word)
+    profile_text .= Format("`n  - [{}{}, {}{}] {:.2f} + {:.2f} = {:.2f} ({})", left_word, left_word_length, right_word, right_word_length, left_weight, right_weight, total_weight, found_word)
     ImeProfilerEnd(46, profile_text)
 
     return total_weight
