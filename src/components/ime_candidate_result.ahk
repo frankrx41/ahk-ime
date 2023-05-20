@@ -6,12 +6,12 @@
 ; Because candidata.Length() will ignore [0], so it still return the length of `translator_result`
 CandidateGetSplittedList(ByRef candidata)
 {
-    return candidata[0]
+    return candidata["splitted_list"]
 }
 
 CandidateSetSplittedList(ByRef candidata, splitted_list)
 {
-    candidata[0] := splitted_list
+    candidata["splitted_list"] := splitted_list
 }
 
 CandidateGetListLength(candidata, split_index)
