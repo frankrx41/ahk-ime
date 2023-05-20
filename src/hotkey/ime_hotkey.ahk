@@ -279,12 +279,14 @@
     ; Inputter history
     ^Up::
         ImeInputterHistorySummon(+1)
+        ImeInputterCaretMoveToHome(false)
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     ^Down::
         ImeInputterHistorySummon(-1)
+        ImeInputterCaretMoveToHome(false)
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
