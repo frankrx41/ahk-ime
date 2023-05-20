@@ -431,7 +431,8 @@ ImeInputterHistoryPush()
 {
     global ime_input_string_history
     global ime_input_string
-    ime_input_string_history.Push("{" ime_input_string_history.Length() "}" ime_input_string)
+    ime_input_string_history.Push(ime_input_string)
+    ; ime_input_string_history.Push("{" ime_input_string_history.Length() "}" ime_input_string)
     ; ToolTip, % ime_input_string ", " ime_input_string_history.Length()
 }
 
