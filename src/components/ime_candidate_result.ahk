@@ -83,15 +83,17 @@ CandidateFindIndex(ByRef candidate, split_index, find_words, max_length:=0)
 CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length)
 {
     local
+    select_index := 0
     loop % candidate[split_index].Length()
     {
-        test_len := CandidateGetWordLength(candidate, split_index, A_Index)
+        select_index := A_Index
+        test_len := TranslatorResultGetWordLength(candidate[split_index, select_index])
         if( test_len <= max_length )
         {
-            return A_Index
+            break
         }
     }
-    return 0
+    return select_index
 }
 
 ;*******************************************************************************
