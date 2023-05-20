@@ -124,13 +124,13 @@ IsFirstName(word)
 
 IsLastWord(word)
 {
-    static interjection_string := "啊嘛吧呀唉唉哇嘖啧唷喲哟呼噫哦嗯吗了的呀"
+    static interjection_string := "啊嘛吧呀唉唉哇嘖啧唷喲哟呼噫哦嗯吗了的呀声"
     return InStr(interjection_string, word)
 }
 
 IsFirstWord(word)
 {
-    static first_word_string = "我他她它这那人不但还很就老没难旧用新非好"
+    static first_word_string = "我他她它这那人不但还很就老没难旧用新非好去是"
     return InStr(first_word_string, word)
 }
 

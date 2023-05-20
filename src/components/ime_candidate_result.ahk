@@ -79,19 +79,40 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
     return select_index
 }
 
-CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length)
+CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, tyr_first_word, ByRef out_weight:=0)
 {
     local
     select_index := 0
+    max_weight := 0
+    test_max_length := 0
     loop % candidate[split_index].Length()
     {
-        select_index := A_Index
-        test_len := TranslatorResultGetWordLength(candidate[split_index, select_index])
-        if( test_len <= max_length )
+        translator_result := candidate[split_index, A_Index]
+        test_len := TranslatorResultGetWordLength(translator_result)
+        if( ( test_max_length == 0 && test_len <= max_length ) || test_len == test_max_length)
         {
-            break
+            if( test_max_length == 0 ){
+                test_max_length := test_len
+            }
+            weight := TranslatorResultGetWeight(translator_result)
+            word := TranslatorResultGetWord(translator_result)
+            word := SubStr(word, 0, 1)
+            if( tyr_first_word && (IsFirstWord(word) || IsVerb(word)) ) {
+                weight += 12000.1
+            }
+            if( !tyr_first_word && IsLastWord(word) ) {
+                weight += 22000.2
+            }
+            if( max_weight < weight ){
+                max_weight := weight
+                select_index := A_Index
+            }
+            if( weight < max_length - 22001 ) {
+                break
+            }
         }
     }
+    out_weight := max_weight
     return select_index
 }
 
