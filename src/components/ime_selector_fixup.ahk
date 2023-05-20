@@ -94,7 +94,7 @@ SelectorFindGraceResultIndex(candidate, split_index, max_length)
 SelectorFindMaxLengthResultIndex(candidate, split_index, max_length)
 {
     local
-    loop % CandidateGetTranslatorListLength(candidate, split_index)
+    loop % candidate[split_index].Length()
     {
         test_len := CandidateGetWordLength(candidate, split_index, A_Index)
         if( test_len <= max_length )

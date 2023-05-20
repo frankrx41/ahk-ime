@@ -14,11 +14,6 @@ CandidateSetSplittedList(ByRef candidata, splitted_list)
     candidata["splitted_list"] := splitted_list
 }
 
-CandidateGetTranslatorListLength(ByRef candidata, split_index)
-{
-    return candidata[split_index].Length()
-}
-
 CandidateGetLegacyPinyin(ByRef candidata, split_index, word_index)
 {
     return TranslatorResultGetLegacyPinyin(candidata[split_index, word_index])
@@ -52,13 +47,6 @@ CandidateIsTraditional(ByRef candidata, split_index, word_index)
 CandidateIsTop(ByRef candidata, split_index, word_index)
 {
     return TranslatorResultIsTop(candidata[split_index, word_index])
-}
-
-;*******************************************************************************
-;
-CandidateGetTranslatorResult(candidata, split_index, word_index)
-{
-    return candidata[split_index, word_index]
 }
 
 ;*******************************************************************************

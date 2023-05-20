@@ -92,7 +92,7 @@ ImeCandidateGet()
 ;
 ImeCandidateGetTranslatorListLength(split_index)
 {
-    return CandidateGetTranslatorListLength(ImeCandidateGet(), split_index)
+    return ImeCandidateGet()[split_index].Length()
 }
 
 ImeCandidateGetLegacyPinyin(split_index, word_index)
