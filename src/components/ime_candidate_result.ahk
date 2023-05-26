@@ -88,7 +88,7 @@ CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, tyr_
 {
     local
     select_index := 0
-    max_weight := 0
+    max_weight := -1
     test_max_length := 0
     loop % candidate[split_index].Length()
     {
