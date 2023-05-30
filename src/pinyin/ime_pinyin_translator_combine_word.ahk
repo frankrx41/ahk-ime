@@ -22,7 +22,7 @@ IsSoundLike(speech, sounds_to)
     sounds_array := SoundSplit(sounds_to)
 
     loop_count := speech_array.Length()
-    Assert(sounds_array.Length() == speech_array.Length())
+    Assert(sounds_array.Length() == speech_array.Length(), speech "," sounds_to)
 
     loop, % loop_count
     {
@@ -42,7 +42,7 @@ IsSoundLike(speech, sounds_to)
             sounds_pinyin := RegexReplace(speech_pinyin, "([zcs])h", "$1")
         }
 
-        speech_pinyin   := StrReplace(speech_pinyin, "++", ".*")
+        speech_pinyin   := StrReplace(speech_pinyin, "+", ".*")
 
         if( !RegExMatch(sounds_pinyin, speech_pinyin) )
         {
@@ -66,21 +66,27 @@ IsSoundLike(speech, sounds_to)
     return true
 }
 
-GetWordLength(pinyin)
+GetWordMatchLength(pinyin)
 {
     RegExReplace(pinyin, "[12345]", "", tone_count)
-    StrReplace(pinyin, "++", "", auto_count)
+    return tone_count
+}
 
-    return auto_count + tone_count
+GetWordFullLength(pinyin)
+{
+    RegExReplace(pinyin, "[012345]", "", tone_count)
+    return tone_count
 }
 
 ; A-XY-B
 PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_result_list, match_pinyin, match_word_length, xy_start_index, word_xy_length)
 {
     result := false
-    Assert( word_xy_length == GetWordLength(match_pinyin) )
+    Assert( match_word_length == GetWordMatchLength(match_pinyin), match_pinyin ":" match_word_length )
+    Assert( word_xy_length == GetWordFullLength(match_pinyin), match_pinyin ":" word_xy_length )
+
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
-    try_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, match_word_length)
+    try_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
     profile_text := ImeProfilerBegin(26)
     profile_text .= "`n  - " match_pinyin "/" try_match_pinyin ": "
     if( IsSoundLike(try_match_pinyin, match_pinyin) )
@@ -125,7 +131,7 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
     if( splitter_result_list.Length() >= 4 )
     {
         ; 了个 了会 了朵 了顿
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5++", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5+0", 1, 2, 2)
 
         ; 了
         PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 1)
