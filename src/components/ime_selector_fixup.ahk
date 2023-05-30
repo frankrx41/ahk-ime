@@ -19,7 +19,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length, ByRe
     profile_text := ImeProfilerBegin(46)
     right_split_index := split_index+A_Index
     if( right_split_index > candidate.Length() || right_length == 0 ){
-        right_weight := 0
+        right_weight := 28000
         right_word := ""
         right_word_length := 0
     } else {
@@ -208,7 +208,6 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                 select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
             }
         }
-
 
         if( origin_select_index != select_index )
         {

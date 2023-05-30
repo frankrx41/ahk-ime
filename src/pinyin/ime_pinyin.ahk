@@ -449,7 +449,7 @@ PinyinInitialize()
             },
             "l" :{
                 "aun":"uan","oa":"ao",
-                "eg":"eng","ag":"ang","o":"ong","og":"ong","on":"ong","iag":"iang","ig":"ing"
+                "ag":"ang","o":"ong","og":"ong","on":"ong","iag":"iang","ig":"ing"
             },
             "g" :{
                 "aui":"uai","aun":"uan","ie":"ei","oa":"ao",
