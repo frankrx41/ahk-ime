@@ -95,16 +95,16 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, 1, xy_start_index-1)
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, xy_start_index+word_xy_length)
         TranslatorHistoryUpdateKey(splitted_string_ab)
-        profile_text .= "," splitted_string_ab
+        profile_text .= "(" splitted_string_ab ")"
         word_ab := TranslatorHistoryGetResultWord(splitted_string_ab)
         if( word_ab ){
-            profile_text .= "," word_ab
+            profile_text .= word_ab
             splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
             TranslatorHistoryUpdateKey(splitted_string_xy)
             word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
             if( word_xy )
             {
-                profile_text .= "," word_xy
+                profile_text .= ", " word_xy
                 full_word := SubStr(word_ab, 1, 1) . word_xy . SubStr(word_ab, 2)
 
                 total_word_length := splitter_result_list.Length()
