@@ -143,6 +143,10 @@ GetFullInitials(initials)
 IsInitials(initials)
 {
     global pinyin_table
+    if initials is not lower
+    {
+        return false
+    }
     return pinyin_table.HasKey(initials)
 }
 
