@@ -153,6 +153,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     if( !RadicalIsAtomic(test_word) )
     {
         radical_word_list := RadicalWordSplit(test_word)
+        Assert(radical_word_list.Length() != 0 && radical_word_list != "", test_word)
         loop, % radical_word_list.Length()
         {
             first_word := radical_word_list[A_Index, 1]
