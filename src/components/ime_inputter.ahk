@@ -36,6 +36,8 @@ ImeInputterHistoryClear()
     global ime_input_string_history
     ime_input_string_history := []
     ime_input_string_history["select"] := 0
+
+    ime_input_string_history.Push("woconglaibuchengren ziji hui shu")
 }
 
 ImeInputterClearPrevSplitted()
