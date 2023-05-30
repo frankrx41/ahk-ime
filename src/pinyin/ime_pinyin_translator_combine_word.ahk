@@ -55,14 +55,19 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
             splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
             TranslatorHistoryUpdateKey(splitted_string_xy)
             word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
-            full_word := SubStr(word_ab, 1, 1) . word_xy . SubStr(word_ab, 2)
+            if( word_xy )
+            {
+                full_word := SubStr(word_ab, 1, 1) . word_xy . SubStr(word_ab, 2)
 
-            total_word_length := splitter_result_list.Length()
-            pinyin := SplitterResultListConvertToString(splitter_result_list, 1, total_word_length)
-            single_result := TranslatorResultMake(pinyin, full_word, 0, "auto", total_word_length)
-            translate_result_list.InsertAt(1, single_result)
+                total_word_length := splitter_result_list.Length()
+                pinyin := SplitterResultListConvertToString(splitter_result_list, 1, total_word_length)
+                single_result := TranslatorResultMake(pinyin, full_word, 0, "auto", total_word_length)
+                translate_result_list.InsertAt(1, single_result)
+                return true
+            }
         }
     }
+    return false
 }
 
 PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_list)
@@ -78,6 +83,9 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
     {
         ; 了个 了会 了朵 了顿
         PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 2)
+
+        ; 了
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 1)
 
         ; 生我的气
         PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "wo3de5", 2, 2, 2)
