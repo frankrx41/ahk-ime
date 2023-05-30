@@ -16,13 +16,13 @@ SoundSplit(pinyin)
 }
 
 ; wo3de5 - wo0de0
-IsSoundLike(speech, sounds_to)
+IsSoundLike(standard_pinyin, test_pinyin)
 {
-    speech_array := SoundSplit(speech)
-    sounds_array := SoundSplit(sounds_to)
+    speech_array := SoundSplit(standard_pinyin)
+    sounds_array := SoundSplit(test_pinyin)
 
     loop_count := speech_array.Length()
-    Assert(sounds_array.Length() == speech_array.Length(), speech "," sounds_to)
+    Assert(sounds_array.Length() == speech_array.Length(), test_pinyin "," standard_pinyin)
 
     loop, % loop_count
     {
@@ -86,10 +86,10 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
     Assert( word_xy_length == GetWordFullLength(match_pinyin), match_pinyin ":" word_xy_length )
 
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
-    try_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
+    test_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
     profile_text := ImeProfilerBegin(26)
-    profile_text .= "`n  - " match_pinyin "/" try_match_pinyin ": "
-    if( IsSoundLike(try_match_pinyin, match_pinyin) )
+    profile_text .= "`n  - " match_pinyin "/" test_match_pinyin ": "
+    if( IsSoundLike(match_pinyin, test_match_pinyin) )
     {
         splitted_string_ab := ""
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, 1, xy_start_index-1)
@@ -101,7 +101,17 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
             profile_text .= word_ab
             splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
             TranslatorHistoryUpdateKey(splitted_string_xy)
+            profile_text .= ", (" splitted_string_xy ")"
             word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
+            if( !word_xy )
+            {
+                loop, % word_xy_length
+                {
+                    splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index+A_Index-1, 1)
+                    TranslatorHistoryUpdateKey(splitted_string_xy)
+                    word_xy .= TranslatorHistoryGetResultWord(splitted_string_xy)
+                }
+            }
             if( word_xy )
             {
                 profile_text .= ", " word_xy
