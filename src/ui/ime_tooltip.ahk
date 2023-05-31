@@ -178,7 +178,7 @@ ImeTooltipUpdate()
             for index, element in radical_list[A_Index]
             {
                 radical_word := element
-                radical_words .= radical_word ;. RadicalGetPinyin(radical_word)
+                radical_words .= radical_word . RadicalGetPinyin(radical_word)
             }
         }
         if( radical_words ) {
