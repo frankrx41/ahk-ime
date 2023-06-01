@@ -26,12 +26,14 @@ ImeCandidateUpdateResult(splitter_result_list)
         CandidateSetSplittedList(ime_candidata_result_origin, splitter_result_list)
         radical_list := []
         debug_text := "["
+        translate_last_result_list := []
         loop % splitter_result_list.Length()
         {
-            radical_list.Push(SplitterResultGetRadical(splitter_result_list[A_Index]))
-            test_splitter_list := SplitterResultListGetUntilSkip(splitter_result_list, A_Index)
+            splitter_index := A_Index
+            radical_list.Push(SplitterResultGetRadical(splitter_result_list[splitter_index]))
+            test_splitter_list := SplitterResultListGetUntilSkip(splitter_result_list, splitter_index)
             debug_text .= """" SplitterResultListGetDisplayText(test_splitter_list) ""","
-            if( !SplitterResultNeedTranslate(splitter_result_list[A_Index]) || SplitterResultIsAutoSymbol(splitter_result_list[A_Index]) )
+            if( !SplitterResultNeedTranslate(splitter_result_list[splitter_index]) || SplitterResultIsAutoSymbol(splitter_result_list[splitter_index]) )
             {
                 ; Add legacy text
                 test_string := SplitterResultGetPinyin(test_splitter_list[1])
@@ -52,13 +54,25 @@ ImeCandidateUpdateResult(splitter_result_list)
                     translate_result_list := GojuonTranslateFindResult(test_splitter_list, auto_complete)
                 }
                 if( translate_result_list.Length() == 0 ){
-                    first_word := SplitterResultListConvertToString(splitter_result_list, A_Index, 1)
+                    first_word := SplitterResultListConvertToString(splitter_result_list, splitter_index, 1)
                     translate_result_list := [TranslatorResultMakeNoSelect(first_word, first_word)]
                 }
             }
             ; Insert result
             ime_candidata_result_origin.Push(translate_result_list)
+
+            loop, % translate_result_list.Length()
+            {
+                if( TranslatorResultGetWordLength(translate_result_list[A_Index]) + splitter_index-1 == splitter_result_list.Length() ){
+                    translate_last_result_list.Push(translate_result_list[A_Index])
+                } else {
+                    break
+                }
+            }
         }
+
+        ime_candidata_result_origin.Push(translate_last_result_list)
+
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(30, debug_text)
         ime_candidata_result_origin := CandidateResultListFilterResults(ime_candidata_result_origin, radical_list)

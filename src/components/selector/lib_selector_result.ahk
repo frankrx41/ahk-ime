@@ -1,8 +1,8 @@
 ;*******************************************************************************
 ; select result
-;   - 1: current select index, work for selector menu, 0 mark no select, should skip this
-;   - 2: lock word (empty means no lock)
-;   - 3: lock length (0 when no lock)
+;   - [1]: current select index, work for selector menu, 0 mark no select, should skip this
+;   - [2]: lock word (empty means no lock)
+;   - [3]: lock length (0 when no lock)
 ;*******************************************************************************
 ; Set
 SelectorResultSetSelectIndex(ByRef selector_result, select_index)
@@ -51,4 +51,11 @@ SelectorResultGetLockWord(ByRef selector_result)
 SelectorResultGetLockLength(ByRef selector_result)
 {
     return selector_result[3]
+}
+
+;*******************************************************************************
+;
+SelectorResultMake(select_index:=0, lock_word:="", lock_length:=0)
+{
+    return [select_index, lock_word, lock_length]
 }

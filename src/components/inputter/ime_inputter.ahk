@@ -96,6 +96,15 @@ ImeInputterGetCaretSplitIndex()
     return SplitterResultListGetIndex(ime_splitted_list, ime_input_caret_pos)
 }
 
+ImeInputterCaretSplitIndexIsEnd()
+{
+    global ime_input_caret_pos
+    global ime_splitted_list
+    ; global ime_input_string
+    ; MsgBox, % ime_splitted_list.Length() "," ime_input_caret_pos "," StrLen(ime_input_string)
+    return SplitterResultGetEndPos(ime_splitted_list[ime_splitted_list.Length()]) == ime_input_caret_pos
+}
+
 ;*******************************************************************************
 ;
 ImeInputterHasAnyInput()

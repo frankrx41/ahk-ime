@@ -1,6 +1,6 @@
 ImeSelectorInitialize()
 {
-    global ime_selector_select_list
+    global ime_selector_select_list     ; See lib_selector_result.ahk
 
     ImeSelectorSingleModeInitialize()
     ImeSelectorStoreSelectInitialize()
@@ -60,7 +60,20 @@ ImeSelectorFixupSelectIndex(candidate)
 ImeSelectorApplyCaretSelectIndex(lock_result, move_caret:=true)
 {
     local
+
+    Assert(lock_result == true)
+
+    if( !ImeInputterCaretSplitIndexIsEnd() ) {
+        ImeSelectorApplyCaretSelectIndexNormal(move_caret)
+    } else {
+        ImeSelectorApplyCaretSelectIndexLast()
+    }
+}
+
+ImeSelectorApplyCaretSelectIndexNormal(move_caret)
+{
     global ime_selector_select_list
+
     ImeProfilerBegin(41)
     profile_text := ""
 
@@ -68,7 +81,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result, move_caret:=true)
     select_index := ImeSelectorGetSelectIndex(split_index)
     word_length := ImeCandidateGetWordLength(split_index, select_index)
 
-    if( lock_result )
+    if( true )
     {
         SelectorResultUnLockFrontWords(ime_selector_select_list, split_index)
         ; Lock this
@@ -90,7 +103,22 @@ ImeSelectorApplyCaretSelectIndex(lock_result, move_caret:=true)
         ImeInputterCaretMoveByWord(word_length, false)
     }
 
-    profile_text .= "[" split_index "]->[" select_index "," word_length "," lock_result "]"
+    profile_text .= "[" split_index "]->[" select_index "," word_length "]"
+    ImeProfilerEnd(41, profile_text)
+}
+
+ImeSelectorApplyCaretSelectIndexLast()
+{
+    global ime_selector_select_list
+
+    ImeProfilerBegin(41)
+    split_index := ImeInputterGetCaretSplitIndex()
+    select_index := ImeSelectorGetSelectIndex(split_index)
+
+    SelectorResultSetSelectIndex(ime_selector_select_list[split_index],select_index)
+    ImeSelectorFixupSelectIndex(ImeCandidateGet())
+
+    profile_text := "[" split_index "]->[" select_index "]"
     ImeProfilerEnd(41, profile_text)
 }
 

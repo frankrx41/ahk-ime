@@ -8,7 +8,7 @@ SplitterResultListGetIndex(splitter_result_list, caret_pos)
     {
         if( SplitterResultGetEndPos(splitter_result_list[splitter_result_list.Length()]) == caret_pos )
         {
-            return splitter_result_list.Length()
+            return splitter_result_list.Length() + 1
         }
         loop % splitter_result_list.Length()
         {
