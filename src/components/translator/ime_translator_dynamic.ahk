@@ -6,8 +6,8 @@ ImeTranslatorDynamicClear()
 }
 
 ;*******************************************************************************
-;
-PinyinCheckMatch(check_pinyin, complete_pinyin)
+; See `IsSoundLike`
+IsPinyinMatch(check_pinyin, complete_pinyin)
 {
     check_pinyin_index := 1
     last_check_char := ""
@@ -54,7 +54,7 @@ ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
 
     for key, value in translator_history_weight
     {
-        if( PinyinCheckMatch(splitted_string, key) )
+        if( IsPinyinMatch(splitted_string, key) )
         {
             base_weight := value[0] + first_weight
             profile_text .= "`n  - " key ", " base_weight ": "
