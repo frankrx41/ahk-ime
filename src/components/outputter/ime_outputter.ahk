@@ -29,6 +29,6 @@ ImeOutputterPutSelect(as_legacy, word_by_word:=0)
 
     ImeSimpleSpellSetForce(false)
 
-    ImeInputterClearString()
+    ImeInputterClearAll()
     ImeSelectMenuClose()
 }

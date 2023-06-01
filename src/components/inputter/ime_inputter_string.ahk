@@ -32,7 +32,7 @@ ImeInputterClearLastSplitted()
     ime_input_caret_pos := ImeInputterGetLastWordPos()
     if( ime_input_caret_pos == 0 )
     {
-        ImeInputterClearString()
+        ImeInputterClearAll()
         ImeSelectMenuClose()
     }
     else
@@ -86,7 +86,7 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 
     if( immediate_put && StrLen(ime_input_string) == 1 ) {
         ImeOutputterPutSelect(true)
-        ImeInputterClearString()
+        ImeInputterClearAll()
     } else {
         ImeInputterUpdateString(input_char)
     }

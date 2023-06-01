@@ -54,7 +54,7 @@ ImeStateRefresh()
 {
     if( A_IsSuspended || ImeStatePauseWindowActive() )
     {
-        ImeInputterClearString()
+        ImeInputterClearAll()
         ImeSelectMenuClose()
         ImeIconSetMode("")
     }

@@ -68,7 +68,7 @@ HotkeyOnEsc()
         ; Double esc clear all input
         ; else remove only last
         if( A_TickCount - last_esc_tick < 1000 ){
-            ImeInputterClearString()
+            ImeInputterClearAll()
         } else {
             ImeInputterClearLastSplitted()
         }

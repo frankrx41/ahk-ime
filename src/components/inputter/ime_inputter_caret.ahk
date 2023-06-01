@@ -2,7 +2,6 @@ ImeInputterCaretClear()
 {
     global ime_input_caret_pos
     ime_input_caret_pos := 0
-
 }
 
 ImeInputterCaretGet()
@@ -33,10 +32,9 @@ ImeInputterCaretMove(dir)
 }
 
 ; move to initials
-ImeInputterCaretMoveSmartRight()
+ImeInputterCaretMoveSmartRightInner(splitted_list)
 {
     global ime_input_caret_pos
-    global ime_splitted_list
 
     input_string_len := StrLen(ImeInputterStringGetLegacy())
 
@@ -54,7 +52,7 @@ ImeInputterCaretMoveSmartRight()
         ; update word index
         if( last_pos == current_pos )
         {
-            current_start_pos := SplitterResultListGetCurrentWordPos(ime_splitted_list, current_pos)
+            current_start_pos := SplitterResultListGetCurrentWordPos(splitted_list, current_pos)
             if( current_start_pos == current_pos && InStr("zcs", SubStr(ImeInputterStringGetLegacy(), current_start_pos+1, 1)) )
             {
                 if( SubStr(ImeInputterStringGetLegacy(), current_start_pos+2, 1) == "h" )
@@ -66,7 +64,7 @@ ImeInputterCaretMoveSmartRight()
             }
             else
             {
-                right_pos := SplitterResultListGetRightWordPos(ime_splitted_list, current_pos)
+                right_pos := SplitterResultListGetRightWordPos(splitted_list, current_pos)
                 current_pos := right_pos
             }
         }
@@ -75,10 +73,9 @@ ImeInputterCaretMoveSmartRight()
 }
 
 ; graceful: take a white space move as a step
-ImeInputterCaretMoveByWord(dir, graceful:=true)
+ImeInputterCaretMoveByWordInner(dir, graceful, splitted_list)
 {
     global ime_input_caret_pos
-    global ime_splitted_list
 
     move_count := dir > 0 ? dir : (-1 * dir)
     if( dir > 0 ){
@@ -95,7 +92,7 @@ ImeInputterCaretMoveByWord(dir, graceful:=true)
                 }
                 index += 1
                 begin_pos := word_pos
-                word_pos := SplitterResultListGetRightWordPos(ime_splitted_list, word_pos)
+                word_pos := SplitterResultListGetRightWordPos(splitted_list, word_pos)
                 if( graceful && SubStr(ImeInputterStringGetLegacy(), word_pos, 1) == " " && begin_pos+1 != word_pos ) {
                     word_pos := word_pos-1
                 }
@@ -117,14 +114,13 @@ ImeInputterCaretMoveByWord(dir, graceful:=true)
                     word_pos := word_pos-1
                 } else {
                     index += 1
-                    word_pos := SplitterResultListGetLeftWordPos(ime_splitted_list, word_pos)
+                    word_pos := SplitterResultListGetLeftWordPos(splitted_list, word_pos)
                 }
             }
         }
     }
     ime_input_caret_pos := word_pos
 }
-
 
 ;*******************************************************************************
 ; Move to
@@ -171,16 +167,15 @@ ImeInputterCaretMoveToEnd()
     ime_input_caret_pos := StrLen(ImeInputterStringGetLegacy())
 }
 
-ImeInputterCaretMoveToIndex(index)
+ImeInputterCaretMoveToIndexInner(index, ByRef splitted_list)
 {
-    global ime_splitted_list
     global ime_input_caret_pos
-    if( ime_splitted_list.Length() >= index )
+    if( splitted_list.Length() >= index )
     {
-        ime_input_caret_pos := SplitterResultGetStartPos(ime_splitted_list[index])
+        ime_input_caret_pos := SplitterResultGetStartPos(splitted_list[index])
     }
     else
     {
-        ime_input_caret_pos := SplitterResultGetEndPos(ime_splitted_list[index-1])
+        ime_input_caret_pos := SplitterResultGetEndPos(splitted_list[index-1])
     }
 }

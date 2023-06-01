@@ -5,13 +5,13 @@ ImeInputterInitialize()
     global ime_input_dirty
     global ime_splitted_list := []
 
-    ImeInputterClearString()
+    ImeInputterClearAll()
     ImeInputterHistoryClear()
 }
 
 ;*******************************************************************************
 ; Enter port
-ImeInputterClearString()
+ImeInputterClearAll()
 {
     global ime_input_dirty
     global ime_splitted_list
@@ -25,7 +25,6 @@ ImeInputterClearString()
     ImeCandidateClear()
     return
 }
-
 
 ;*******************************************************************************
 ; Update result
@@ -53,7 +52,7 @@ ImeInputterUpdateString(input_char)
     }
     else
     {
-        ImeInputterClearString()
+        ImeInputterClearAll()
     }
 
     ImeProfilerEnd(8)
@@ -111,6 +110,26 @@ ImeInputterCaretIsAtEnd()
 ImeInputterCaretIsAtBegin()
 {
     return ImeInputterCaretGet() == 0
+}
+
+;*******************************************************************************
+;
+ImeInputterCaretMoveSmartRight()
+{
+    global ime_splitted_list
+    return ImeInputterCaretMoveSmartRightInner(ime_splitted_list)
+}
+
+ImeInputterCaretMoveByWord(dir, graceful:=true)
+{
+    global ime_splitted_list
+    return ImeInputterCaretMoveByWordInner(dir, graceful, ime_splitted_list)
+}
+
+ImeInputterCaretMoveToIndex(index)
+{
+    global ime_splitted_list
+    return ImeInputterCaretMoveToIndexInner(index, ime_splitted_list)
 }
 
 ;*******************************************************************************
