@@ -326,7 +326,7 @@
         ToolTip, Clear history
         Sleep, 500
         ToolTip,
-        TranslatorHistoryClear()
+        ImeTranslatorHistoryClear()
         ImeInputterHistoryClear()
     return
 

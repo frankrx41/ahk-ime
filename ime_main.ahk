@@ -32,7 +32,7 @@ ImeProfilerFunc(1, "ImeSelectorInitialize")
 
 ; Translator
 ImeProfilerFunc(1, "ImeCandidateInitialize")
-ImeProfilerFunc(1, "TranslatorHistoryInitialize")
+ImeProfilerFunc(1, "ImeTranslatorHistoryInitialize")
 
 ; Radical
 ImeProfilerFunc(1, "RadicalInitialize")

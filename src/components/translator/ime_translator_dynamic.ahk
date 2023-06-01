@@ -1,4 +1,4 @@
-TranslatorDynamicClear()
+ImeTranslatorDynamicClear()
 {
     ; {[0]: total_index, "bu4shou3": [[0]:1, "部首", "不守"] }
     global translator_history_weight := {}

@@ -94,22 +94,22 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
         splitted_string_ab := ""
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, 1, xy_start_index-1)
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, xy_start_index+word_xy_length)
-        TranslatorHistoryUpdateKey(splitted_string_ab)
+        ImeTranslatorHistoryUpdateKey(splitted_string_ab)
         profile_text .= "(" splitted_string_ab ")"
-        word_ab := TranslatorHistoryGetResultWord(splitted_string_ab)
+        word_ab := ImeTranslatorHistoryGetResultWord(splitted_string_ab)
         if( word_ab ){
             profile_text .= word_ab
             splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
-            TranslatorHistoryUpdateKey(splitted_string_xy)
+            ImeTranslatorHistoryUpdateKey(splitted_string_xy)
             profile_text .= ", (" splitted_string_xy ")"
-            word_xy := TranslatorHistoryGetResultWord(splitted_string_xy)
+            word_xy := ImeTranslatorHistoryGetResultWord(splitted_string_xy)
             if( !word_xy )
             {
                 loop, % word_xy_length
                 {
                     splitted_string_xy := SplitterResultListConvertToString(splitter_result_list, xy_start_index+A_Index-1, 1)
-                    TranslatorHistoryUpdateKey(splitted_string_xy)
-                    word_xy .= TranslatorHistoryGetResultWord(splitted_string_xy)
+                    ImeTranslatorHistoryUpdateKey(splitted_string_xy)
+                    word_xy .= ImeTranslatorHistoryGetResultWord(splitted_string_xy)
                 }
             }
             if( word_xy )
@@ -133,7 +133,7 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
 {
     splitter_result_list := SplitterResultListGetUntilLength(splitter_result_list)
     splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, 0)
-    if( TranslatorHistoryHasResult(splitted_string) ){
+    if( ImeTranslatorHistoryHasResult(splitted_string) ){
         return
     }
 
