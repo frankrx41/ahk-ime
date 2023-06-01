@@ -13,23 +13,23 @@
 #Include, src\hotkey\ime_hotkey_register.ahk
 
 ; Inputer
-#Include, src\components\ime_inputter.ahk
+#Include, src\components\inputter\ime_inputter.ahk
 
 ; Spliter
-#Include, src\components\ime_splitter_result.ahk
+#Include, src\components\splitter\lib_splitter_result.ahk
 
 ; Candidate
-#Include, src\components\ime_candidate.ahk
-#Include, src\components\ime_candidate_result.ahk
+#Include, src\components\candidate\ime_candidate.ahk
+#Include, src\components\candidate\lib_candidate_result.ahk
 
 ; Translator
-#Include, src\components\ime_translator_history.ahk
-#Include, src\components\ime_translator_result.ahk
+#Include, src\components\translator\ime_translator.ahk
+#Include, src\components\translator\lib_translator_result.ahk
 
 ; Filter
-#Include, src\components\ime_translator_list_filter.ahk
-#Include, src\components\ime_translator_list_radical.ahk
-#Include, src\components\ime_translator_list_uniquify.ahk
+#Include, src\components\filter\lib_translator_list_filter.ahk
+#Include, src\components\filter\lib_translator_list_radical.ahk
+#Include, src\components\filter\lib_translator_list_uniquify.ahk
 
 ; pinyin
 #Include, src\pinyin\ime_pinyin.ahk
@@ -45,12 +45,12 @@
 #Include, src\gojuon\ime_gojuon_translator.ahk
 
 ; Selector
-#Include, src\components\ime_selector.ahk
-#Include, src\components\ime_selector_result.ahk
-#Include, src\components\ime_selector_fixup.ahk
+#Include, src\components\selector\ime_selector.ahk
+#Include, src\components\selector\lib_selector_result.ahk
+#Include, src\components\selector\lib_selector_fixup.ahk
 
 ; Outputter
-#Include, src\components\ime_outputter.ahk
+#Include, src\components\outputter\ime_outputter.ahk
 
 ; UI
 #Include, src\ui\ime_state.ahk
