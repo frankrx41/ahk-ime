@@ -1,20 +1,18 @@
 ImeSelectorInitialize()
 {
     global ime_selector_select_list
-    global ime_selector_store_select_index
 
     ImeSelectorSingleModeInitialize()
+    ImeSelectorStoreSelectInitialize()
 }
 
 ImeSelectorClear()
 {
     global ime_selector_select_list
-    global ime_selector_store_select_index
-
     ime_selector_select_list := []
-    ime_selector_store_select_index := 0
 
     ImeSelectorSingleModeClear()
+    ImeSelectorStoreSelectClear()
 }
 
 ;*******************************************************************************
@@ -25,20 +23,6 @@ ImeSelectorGetCaretSelectIndex()
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
     return SelectorResultGetSelectIndex(ime_selector_select_list[split_index])
-}
-
-ImeSelectorStoreSelectIndexBeforeMenuOpen()
-{
-    global ime_selector_store_select_index
-    ime_selector_store_select_index := ImeSelectorGetCaretSelectIndex()
-}
-
-ImeSelectorCancelCaretSelectIndex()
-{
-    global ime_selector_select_list
-    global ime_selector_store_select_index
-    split_index := ImeInputterGetCaretSplitIndex()
-    SelectorResultSetSelectIndex(ime_selector_select_list[split_index], ime_selector_store_select_index)
 }
 
 ImeSelectorSetCaretSelectIndex(select_index)
