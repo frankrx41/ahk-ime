@@ -15,6 +15,7 @@
 ; Inputer
 #Include, src\components\inputter\ime_inputter.ahk
 #Include, src\components\inputter\ime_inputter_history.ahk
+#Include, src\components\inputter\ime_inputter_string.ahk
 
 ; Spliter
 #Include, src\components\splitter\lib_splitter_result.ahk

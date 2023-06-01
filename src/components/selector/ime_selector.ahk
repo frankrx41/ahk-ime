@@ -173,7 +173,7 @@ ImeSelectorGetOutputString(as_legacy := false)
     result_string := ""
     if( as_legacy )
     {
-        result_string := ImeInputterGetLegacyOutputString()
+        result_string := ImeInputterStringGetLegacy()
     }
     else
     {
