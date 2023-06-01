@@ -1,9 +1,3 @@
-ImeInputterStringClear()
-{
-    global ime_input_string
-    ime_input_string    := ""
-}
-
 ;*******************************************************************************
 ;
 ImeInputterClearPrevSplitted()

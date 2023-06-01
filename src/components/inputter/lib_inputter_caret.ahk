@@ -19,10 +19,10 @@ InputterCaretMove(caret_pos, dir, input_string)
 }
 
 ; move to initials
-InputterCaretMoveSmartRight(caret_pos, ByRef splitted_list)
+InputterCaretMoveSmartRight(caret_pos, input_string, ByRef splitted_list)
 {
 
-    input_string_len := StrLen(ImeInputterStringGetLegacy())
+    input_string_len := StrLen(input_string)
 
     loop_count := 1
     current_pos := caret_pos
@@ -39,9 +39,9 @@ InputterCaretMoveSmartRight(caret_pos, ByRef splitted_list)
         if( last_pos == current_pos )
         {
             current_start_pos := SplitterResultListGetCurrentWordPos(splitted_list, current_pos)
-            if( current_start_pos == current_pos && InStr("zcs", SubStr(ImeInputterStringGetLegacy(), current_start_pos+1, 1)) )
+            if( current_start_pos == current_pos && InStr("zcs", SubStr(input_string, current_start_pos+1, 1)) )
             {
-                if( SubStr(ImeInputterStringGetLegacy(), current_start_pos+2, 1) == "h" )
+                if( SubStr(input_string, current_start_pos+2, 1) == "h" )
                 {
                     current_pos += 2
                 } else {
@@ -59,11 +59,11 @@ InputterCaretMoveSmartRight(caret_pos, ByRef splitted_list)
 }
 
 ; graceful: take a white space move as a step
-InputterCaretMoveByWord(caret_pos, dir, graceful, ByRef splitted_list)
+InputterCaretMoveByWord(caret_pos, dir, graceful, input_string, ByRef splitted_list)
 {
     move_count := dir > 0 ? dir : (-1 * dir)
     if( dir > 0 ){
-        if( caret_pos == StrLen(ImeInputterStringGetLegacy()) ){
+        if( caret_pos == StrLen(input_string) ){
             word_pos := 0
         }
         else {
@@ -77,14 +77,14 @@ InputterCaretMoveByWord(caret_pos, dir, graceful, ByRef splitted_list)
                 index += 1
                 begin_pos := word_pos
                 word_pos := SplitterResultListGetRightWordPos(splitted_list, word_pos)
-                if( graceful && SubStr(ImeInputterStringGetLegacy(), word_pos, 1) == " " && begin_pos+1 != word_pos ) {
+                if( graceful && SubStr(input_string, word_pos, 1) == " " && begin_pos+1 != word_pos ) {
                     word_pos := word_pos-1
                 }
             }
         }
     } else {
         if( caret_pos == 0 ){
-            word_pos := StrLen(ImeInputterStringGetLegacy())
+            word_pos := StrLen(input_string)
         } else {
             word_pos := caret_pos
             index := 0
@@ -93,7 +93,7 @@ InputterCaretMoveByWord(caret_pos, dir, graceful, ByRef splitted_list)
                 if( index == move_count ) {
                     break
                 }
-                if( graceful && SubStr(ImeInputterStringGetLegacy(), word_pos, 1) == " " ) {
+                if( graceful && SubStr(input_string, word_pos, 1) == " " ) {
                     index += 1
                     word_pos := word_pos-1
                 } else {
@@ -108,7 +108,7 @@ InputterCaretMoveByWord(caret_pos, dir, graceful, ByRef splitted_list)
 
 ;*******************************************************************************
 ; Move to
-InputterCaretMoveToChar(caret_pos, char, back_to_front, try_rollback:=true)
+InputterCaretMoveToChar(caret_pos, char, input_string, back_to_front, try_rollback:=true)
 {
     local
 
@@ -117,7 +117,7 @@ InputterCaretMoveToChar(caret_pos, char, back_to_front, try_rollback:=true)
         if( A_Index == 1 )
         {
             if( back_to_front ) {
-                start_index := caret_pos - StrLen(ImeInputterStringGetLegacy())
+                start_index := caret_pos - StrLen(input_string)
             } else {
                 start_index := caret_pos + 2
             }
@@ -130,7 +130,7 @@ InputterCaretMoveToChar(caret_pos, char, back_to_front, try_rollback:=true)
                 start_index := 1
             }
         }
-        index := InStr(ImeInputterStringGetLegacy(), char, false, start_index)
+        index := InStr(input_string, char, false, start_index)
         if( index != 0 ) {
             caret_pos := index
             break
