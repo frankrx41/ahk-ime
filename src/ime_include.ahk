@@ -51,6 +51,7 @@
 
 ; Selector
 #Include, src\components\selector\ime_selector.ahk
+#Include, src\components\selector\ime_selector_single_mode.ahk
 #Include, src\components\selector\lib_selector_result.ahk
 #Include, src\components\selector\lib_selector_list_result.ahk
 #Include, src\components\selector\lib_selector_fixup.ahk
