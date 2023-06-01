@@ -17,6 +17,7 @@
 
 ; Spliter
 #Include, src\components\splitter\lib_splitter_result.ahk
+#Include, src\components\splitter\lib_splitter_list_result.ahk
 
 ; Candidate
 #Include, src\components\candidate\ime_candidate.ahk
