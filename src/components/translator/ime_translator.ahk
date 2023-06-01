@@ -62,49 +62,8 @@ TranslatorHistoryGetResultWord(splitted_string, word_class:="")
 TranslatorHistoryGetTopWeightList(splitted_string)
 {
     global translator_history_result
-    global translator_history_weight
-
-    ImeProfilerBegin(17)
-    profile_text := ""
     translator_list := CopyObj(translator_history_result[splitted_string])
-    additional_translator_result_list := []
-    first_weight := TranslatorResultGetWeight(translator_list[1])
-
-    for key, value in translator_history_weight {
-        if( PinyinCheckMatch(splitted_string, key) )
-        {
-            base_weight := value[0] + first_weight
-            profile_text .= "`n  - " key ", " base_weight ": "
-            loop, % value.Length()
-            {
-                value_word := value[A_Index]
-                value_weight := base_weight + A_Index
-                profile_text .= value_word " "
-                loop, % translator_list.Length()
-                {
-                    translator_result := translator_list[A_Index]
-                    if( TranslatorResultGetWord(translator_result) == value_word ){
-                        translator_result_top := TranslatorResultMakeTop(translator_result, value_weight)
-                        translator_list.RemoveAt(A_Index, 1)
-                        additional_translator_result_list.Push(translator_result_top)
-                        break
-                    }
-                }
-            }
-        }
-    }
-
-    additional_translator_result_list := TranslatorResultListSortByWeight(additional_translator_result_list)
-
-    loop, % additional_translator_result_list.Length()
-    {
-        translator_result := additional_translator_result_list[A_Index]
-        translator_list.InsertAt(A_Index, translator_result)
-    }
-
-    ImeProfilerEnd(17, profile_text)
-
-    return translator_list
+    return ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
 }
 
 ;*******************************************************************************
