@@ -188,7 +188,7 @@ ImeSelectorGetOutputString(as_legacy := false)
                 if( select_word && !ImeCandidateIsTraditional(split_index, select_index) )
                 {
                     input_pinyin := ImeCandidateGetLegacyPinyin(split_index, select_index)
-                    TranslatorHistoryDynamicWeight(input_pinyin, select_word)
+                    TranslatorDynamicMark(input_pinyin, select_word)
                 }
             }
         }

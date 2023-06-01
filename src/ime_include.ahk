@@ -25,6 +25,7 @@
 ; Translator
 #Include, src\components\translator\ime_translator.ahk
 #Include, src\components\translator\lib_translator_result.ahk
+#Include, src\components\translator\ime_translator_dynamic.ahk
 
 ; Filter
 #Include, src\components\filter\lib_translator_list_filter.ahk
