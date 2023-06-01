@@ -1,45 +1,31 @@
-ImeInputterCaretClear()
-{
-    global ime_input_caret_pos
-    ime_input_caret_pos := 0
-}
-
-ImeInputterCaretGet()
-{
-    global ime_input_caret_pos
-    return ime_input_caret_pos
-}
-
 ;*******************************************************************************
 ; Move caret
 ; -1 <- | -> +1
-ImeInputterCaretMove(dir)
+InputterCaretMove(caret_pos, dir, input_string)
 {
-    global ime_input_caret_pos
+    input_string_len := StrLen(input_string)
+    caret_pos += dir
 
-    input_string_len := StrLen(ImeInputterStringGetLegacy())
-    ime_input_caret_pos += dir
-
-    if( ime_input_caret_pos < 0 )
+    if( caret_pos < 0 )
     {
-        ime_input_caret_pos := input_string_len
+        caret_pos := input_string_len
     }
     else
-    if( ime_input_caret_pos > input_string_len )
+    if( caret_pos > input_string_len )
     {
-        ime_input_caret_pos := 0
+        caret_pos := 0
     }
+    return caret_pos
 }
 
 ; move to initials
-ImeInputterCaretMoveSmartRightInner(splitted_list)
+InputterCaretMoveSmartRight(caret_pos, ByRef splitted_list)
 {
-    global ime_input_caret_pos
 
     input_string_len := StrLen(ImeInputterStringGetLegacy())
 
     loop_count := 1
-    current_pos := ime_input_caret_pos
+    current_pos := caret_pos
     loop, % loop_count
     {
         last_pos := current_pos
@@ -69,21 +55,19 @@ ImeInputterCaretMoveSmartRightInner(splitted_list)
             }
         }
     }
-    ime_input_caret_pos := current_pos
+    return current_pos
 }
 
 ; graceful: take a white space move as a step
-ImeInputterCaretMoveByWordInner(dir, graceful, splitted_list)
+InputterCaretMoveByWord(caret_pos, dir, graceful, ByRef splitted_list)
 {
-    global ime_input_caret_pos
-
     move_count := dir > 0 ? dir : (-1 * dir)
     if( dir > 0 ){
-        if( ime_input_caret_pos == StrLen(ImeInputterStringGetLegacy()) ){
+        if( caret_pos == StrLen(ImeInputterStringGetLegacy()) ){
             word_pos := 0
         }
         else {
-            word_pos := ime_input_caret_pos
+            word_pos := caret_pos
             index := 0
             loop
             {
@@ -99,10 +83,10 @@ ImeInputterCaretMoveByWordInner(dir, graceful, splitted_list)
             }
         }
     } else {
-        if( ime_input_caret_pos == 0 ){
+        if( caret_pos == 0 ){
             word_pos := StrLen(ImeInputterStringGetLegacy())
         } else {
-            word_pos := ime_input_caret_pos
+            word_pos := caret_pos
             index := 0
             loop
             {
@@ -119,24 +103,23 @@ ImeInputterCaretMoveByWordInner(dir, graceful, splitted_list)
             }
         }
     }
-    ime_input_caret_pos := word_pos
+    return word_pos
 }
 
 ;*******************************************************************************
 ; Move to
-ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
+InputterCaretMoveToChar(caret_pos, char, back_to_front, try_rollback:=true)
 {
     local
-    global ime_input_caret_pos
 
     loop, 2
     {
         if( A_Index == 1 )
         {
             if( back_to_front ) {
-                start_index := ime_input_caret_pos - StrLen(ImeInputterStringGetLegacy())
+                start_index := caret_pos - StrLen(ImeInputterStringGetLegacy())
             } else {
-                start_index := ime_input_caret_pos + 2
+                start_index := caret_pos + 2
             }
         }
         else if( try_rollback )
@@ -149,33 +132,22 @@ ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
         }
         index := InStr(ImeInputterStringGetLegacy(), char, false, start_index)
         if( index != 0 ) {
-            ime_input_caret_pos := index
+            caret_pos := index
             break
         }
     }
+    return caret_pos
 }
 
-ImeInputterCaretMoveToHome()
+InputterCaretMoveToIndex(caret_pos, index, ByRef splitted_list)
 {
-    global ime_input_caret_pos
-    ime_input_caret_pos := 0
-}
-
-ImeInputterCaretMoveToEnd()
-{
-    global ime_input_caret_pos
-    ime_input_caret_pos := StrLen(ImeInputterStringGetLegacy())
-}
-
-ImeInputterCaretMoveToIndexInner(index, ByRef splitted_list)
-{
-    global ime_input_caret_pos
     if( splitted_list.Length() >= index )
     {
-        ime_input_caret_pos := SplitterResultGetStartPos(splitted_list[index])
+        caret_pos := SplitterResultGetStartPos(splitted_list[index])
     }
     else
     {
-        ime_input_caret_pos := SplitterResultGetEndPos(splitted_list[index-1])
+        caret_pos := SplitterResultGetEndPos(splitted_list[index-1])
     }
+    return caret_pos
 }

@@ -15,12 +15,13 @@ ImeInputterClearAll()
 {
     global ime_input_dirty
     global ime_splitted_list
+    global ime_input_caret_pos
 
     ime_input_dirty     := true
     ime_splitted_list   := []
+    ime_input_caret_pos := 0
     
     ImeInputterStringClear()
-    ImeInputterCaretClear()
     ImeSelectorClear()
     ImeCandidateClear()
     return
@@ -91,8 +92,9 @@ ImeInputterIsInputDirty()
 ; Get split index
 ImeInputterGetCaretSplitIndex()
 {
+    global ime_input_caret_pos
     global ime_splitted_list
-    return SplitterResultListGetIndex(ime_splitted_list, ImeInputterCaretGet())
+    return SplitterResultListGetIndex(ime_splitted_list, ime_input_caret_pos)
 }
 
 ;*******************************************************************************
@@ -104,32 +106,55 @@ ImeInputterHasAnyInput()
 
 ImeInputterCaretIsAtEnd()
 {
-    return ImeInputterCaretGet() == StrLen(ImeInputterStringGetLegacy())
+    global ime_input_caret_pos
+    return ime_input_caret_pos == StrLen(ImeInputterStringGetLegacy())
 }
 
 ImeInputterCaretIsAtBegin()
 {
-    return ImeInputterCaretGet() == 0
+    global ime_input_caret_pos
+    return ime_input_caret_pos == 0
 }
 
 ;*******************************************************************************
-;
+; Caret
+ImeInputterCaretMove(dir)
+{
+    global ime_input_caret_pos
+    ime_input_caret_pos := InputterCaretMove(ime_input_caret_pos, dir, ImeInputterStringGetLegacy())
+}
+
 ImeInputterCaretMoveSmartRight()
 {
+    global ime_input_caret_pos
     global ime_splitted_list
-    return ImeInputterCaretMoveSmartRightInner(ime_splitted_list)
+    ime_input_caret_pos := InputterCaretMoveSmartRight(ime_input_caret_pos, ime_splitted_list)
 }
 
 ImeInputterCaretMoveByWord(dir, graceful:=true)
 {
+    global ime_input_caret_pos
     global ime_splitted_list
-    return ImeInputterCaretMoveByWordInner(dir, graceful, ime_splitted_list)
+    ime_input_caret_pos := InputterCaretMoveByWord(ime_input_caret_pos, dir, graceful, ime_splitted_list)
+}
+
+ImeInputterCaretMoveToHome()
+{
+    global ime_input_caret_pos
+    ime_input_caret_pos := 0
+}
+
+ImeInputterCaretMoveToEnd()
+{
+    global ime_input_caret_pos
+    ime_input_caret_pos := StrLen(ImeInputterStringGetLegacy())
 }
 
 ImeInputterCaretMoveToIndex(index)
 {
+    global ime_input_caret_pos
     global ime_splitted_list
-    return ImeInputterCaretMoveToIndexInner(index, ime_splitted_list)
+    ime_input_caret_pos := InputterCaretMoveToIndex(ime_input_caret_pos, index, ime_splitted_list)
 }
 
 ;*******************************************************************************
