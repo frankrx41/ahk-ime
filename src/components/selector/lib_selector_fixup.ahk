@@ -182,21 +182,20 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                             profile_text .= " (" max_length ")"
                             loop
                             {
-                                if( max_length < 0) {
+                                check_index += 1
+                                if( check_index > last_split_index ) {
                                     break
                                 }
-                                check_index += 1
                                 if( max_length > 0 ) {
                                     find_select_index := CandidateFindMaxLengthSelectIndex(candidate, check_index, max_length, false)
                                 } else {
-                                    
                                     find_select_index := 0
                                 }
                                 profile_text .= " [" check_index "]->[" find_select_index "]"
                                 SelectorResultSetSelectIndex(selector_result_list[check_index], find_select_index)
                                 SelectorResultUnLockWord(selector_result_list[check_index])
                                 max_length -= CandidateGetWordLength(candidate, check_index, find_select_index)
-                                if( max_length == 0) {
+                                if( max_length <= 0) {
                                     break
                                 }
                             }
@@ -204,7 +203,6 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                         index += check_length
                     }
                 }
-                profile_text .= "`n    "
             }
         }
         else
@@ -259,18 +257,19 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                     select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
                 }
             }
+            profile_text .= "[" origin_select_index "]->[" select_index "] "
+
+            if( select_index )
+            {
+                select_word_length := CandidateGetWordLength(candidate, split_index, select_index)
+                skip_word_count := select_word_length-1
+                profile_text .= "skip: " skip_word_count " "
+            }
         }
 
         if( origin_select_index != select_index )
         {
             SelectorResultSetSelectIndex(selector_result_list[split_index], select_index)
-        }
-        profile_text .= "[" origin_select_index "]->[" select_index "] "
-        if( select_index )
-        {
-            select_word_length := CandidateGetWordLength(candidate, split_index, select_index)
-            skip_word_count := select_word_length-1
-            profile_text .= "skip: " skip_word_count " "
         }
     }
 
