@@ -384,16 +384,17 @@ ImeInputterCaretMoveToChar(char, back_to_front, try_rollback:=true)
     }
 }
 
-ImeInputterCaretMoveToHome(move_home)
+ImeInputterCaretMoveToHome()
+{
+    global ime_input_caret_pos
+    ime_input_caret_pos := 0
+}
+
+ImeInputterCaretMoveToEnd()
 {
     global ime_input_caret_pos
     global ime_input_string
-
-    if( move_home ){
-        ime_input_caret_pos := 0
-    } else {
-        ime_input_caret_pos := StrLen(ime_input_string)
-    }
+    ime_input_caret_pos := StrLen(ime_input_string)
 }
 
 ImeInputterCaretMoveToIndex(index)

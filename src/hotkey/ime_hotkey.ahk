@@ -266,27 +266,27 @@
 
     NumpadHome::
     Home::
-        ImeInputterCaretMoveToHome(true)
+        ImeInputterCaretMoveToHome()
         ImeTooltipUpdate()
     return
 
     NumpadEnd::
     End::
-        ImeInputterCaretMoveToHome(false)
+        ImeInputterCaretMoveToEnd()
         ImeTooltipUpdate()
     return
 
     ; Inputter history
     ^Up::
         ImeInputterHistorySummon(+1)
-        ImeInputterCaretMoveToHome(false)
+        ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     ^Down::
         ImeInputterHistorySummon(-1)
-        ImeInputterCaretMoveToHome(false)
+        ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
@@ -307,7 +307,7 @@
 #if !ImeModeIsEnglish()
     ^+|::
         ImeInputterHistorySummon(+1)
-        ImeInputterCaretMoveToHome(false)
+        ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
