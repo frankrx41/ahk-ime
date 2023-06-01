@@ -6,7 +6,6 @@ ImeInputterInitialize()
     global ime_input_caret_pos
     global ime_input_dirty
     global ime_splitted_list := []
-    global ime_input_string_history := []   ; ["select"] := current_index
 
     ImeInputterClearString()
     ImeInputterHistoryClear()
@@ -29,15 +28,6 @@ ImeInputterClearString()
     ImeSelectorClear()
     ImeCandidateClear()
     return
-}
-
-ImeInputterHistoryClear()
-{
-    global ime_input_string_history
-    ime_input_string_history := []
-    ime_input_string_history["select"] := 0
-
-    ime_input_string_history.Push("woconglaibuchengren ziji hui shu")
 }
 
 ImeInputterClearPrevSplitted()
@@ -409,31 +399,6 @@ ImeInputterCaretMoveToIndex(index)
     {
         ime_input_caret_pos := SplitterResultGetEndPos(ime_splitted_list[index-1])
     }
-}
-
-;*******************************************************************************
-;
-ImeInputterHistorySummon(offset)
-{
-    global ime_input_string
-    global ime_input_string_history
-    ; ime_input_string_history.Push(ime_input_string)
-    ime_input_string_history["select"] += offset
-    if( ime_input_string_history["select"] <= 0 ){
-        ime_input_string_history["select"] := ime_input_string_history.Length()
-    }
-    if( ime_input_string_history["select"] > ime_input_string_history.Length() ){
-        ime_input_string_history["select"] := 1
-    }
-    select_index := ime_input_string_history["select"]
-    ime_input_string := ime_input_string_history[select_index]
-}
-
-ImeInputterHistoryPush()
-{
-    global ime_input_string_history
-    global ime_input_string
-    ime_input_string_history.Push(ime_input_string)
 }
 
 ;*******************************************************************************
