@@ -305,6 +305,13 @@
 ;*******************************************************************************
 ; Is not English mode
 #if !ImeModeIsEnglish()
+    ^+|::
+        ImeInputterHistorySummon(+1)
+        ImeInputterCaretMoveToHome(false)
+        ImeInputterUpdateString("")
+        ImeTooltipUpdate()
+    return
+
     ; Create word gui
     !`::
         WordCreatorUI(GetSelectText())
