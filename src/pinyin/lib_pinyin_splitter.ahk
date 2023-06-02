@@ -180,6 +180,7 @@ PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input)
     {
         loop
         {
+            ; if( IsInitials() SubStr(input_str, index, 1) == "i"
             vowels_len := vowels_max_len+1-A_Index
             vowels := SubStr(input_str, index, vowels_len)
             if( IsVowelsAnyMark(vowels) )
@@ -431,14 +432,19 @@ PinyinSplitterInputStringNormal(input_string)
             tone_string := SubStr(input_string, string_index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
 
-            if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
-                vowels .= "%"
-            }
-            else
+            if( full_vowels != vowels )
             {
-                ; 转全拼显示
-                vowels := full_vowels ? full_vowels : vowels
+                if( !InStr(vowels, "%") )
+                {
+                    if( !IsCompletePinyin(initials, vowels, tone)){
+                        vowels .= "%"
+                    }
+                    if( initials == "%" ){
+                        
+                    }
+                }
             }
+            Assert(initials, initials "," vowels)
 
             ; Radical
             radical := GetRadical(SubStr(input_string, string_index))

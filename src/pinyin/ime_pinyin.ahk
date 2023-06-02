@@ -74,6 +74,19 @@ IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
     global pinyin_table_auto_correct
+    ; static pinyin_table_initials = []
+
+    ; initials == "%"
+    if( initials == "%" )
+    {
+        for key in pinyin_table
+        {
+            if( IsCompletePinyin(key, vowels, tone) ){
+                return true
+            }
+        }
+        return false
+    }
 
     ; initials like z% c% s%
     initials_has_miss_char := SubStr(initials, 0, 1 ) == "?"
@@ -163,7 +176,7 @@ IsInitialsAnyMark(char)
 
 IsVowelsAnyMark(char)
 {
-    return char == "+" || char == "%"
+    return false ;char == "%"
 }
 
 ;*******************************************************************************
@@ -201,7 +214,7 @@ PinyinInitialize()
     global zero_initials_table := {}
 
     ; 零声母
-    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou"]
+    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou", "%"]
 
     ; 全拼声母韵母表
     full_spelling_json =
