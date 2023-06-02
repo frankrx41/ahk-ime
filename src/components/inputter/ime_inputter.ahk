@@ -11,12 +11,12 @@ ImeInputterInitialize()
 ImeInputterClearAll()
 {
     global ime_input_string
-    global ime_input_dirty
+    global ime_input_is_dirty
     global ime_splitted_list
     global ime_input_caret_pos
 
     ime_input_string    := ""
-    ime_input_dirty     := true
+    ime_input_is_dirty  := true
     ime_splitted_list   := []
     ime_input_caret_pos := 0
 
@@ -32,9 +32,9 @@ ImeInputterUpdateString(input_char)
     local
     global ime_input_string
     global ime_splitted_list
-    global ime_input_dirty
+    global ime_input_is_dirty
 
-    ime_input_dirty := true
+    ime_input_is_dirty := true
     ImeProfilerClear()
     ImeProfilerBegin(8)
 
@@ -55,13 +55,13 @@ ImeInputterUpdateString(input_char)
         ImeInputterClearAll()
     }
 
+    ime_input_is_dirty := false
     ImeProfilerEnd(8)
 }
 
 ImeInputterCallTranslator()
 {
     global ime_splitted_list
-    global ime_input_dirty
 
     ImeProfilerBegin(12)
     profile_text := ""
@@ -75,16 +75,14 @@ ImeInputterCallTranslator()
     candidate := ImeCandidateUpdateResult(splitter_result_list)
     ImeSelectorUnlockWords(caret_splitted_index, false)
     ImeSelectorFixupSelectIndex(candidate)
-
-    ime_input_dirty := false
 }
 
 ImeInputterIsInputDirty()
 {
-    global ime_input_dirty
-    ; Because of we update tranlsator immediately when input update, `ime_input_dirty` should always be false
-    Assert(ime_input_dirty == false)
-    return ime_input_dirty
+    global ime_input_is_dirty
+    ; Because of we update tranlsator immediately when input update, `ime_input_is_dirty` should always be false
+    Assert(ime_input_is_dirty == false)
+    return ime_input_is_dirty
 }
 
 ;*******************************************************************************
