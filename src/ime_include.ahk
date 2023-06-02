@@ -35,6 +35,7 @@
 #Include, src\components\filter\lib_translator_list_filter.ahk
 #Include, src\components\filter\lib_translator_list_radical.ahk
 #Include, src\components\filter\lib_translator_list_uniquify.ahk
+#Include, src\components\filter\lib_word_type.ahk
 
 ; pinyin
 #Include, src\pinyin\ime_pinyin.ahk
