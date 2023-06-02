@@ -140,6 +140,13 @@ IsPreposition(word)
     return InStr(preposition_string, word)
 }
 
+IsNumeral(word)
+{
+    ; https://ja.wikipedia.org/wiki/%E5%8A%A9%E6%95%B0%E8%A9%9E
+    static numeral_string := "丁両个人位体俩俵倆個具冊册出刀分切刎前剑剣劍包匹区區卓双反口句只台叶叺合名品喉回基壶壺头家対封尊尾局巻帐帖席帳幅幕年座张張战戦戰戶户戸手把拍挂振挺掛敗斤日时時晩月服本朵机条杯枚果枝架柄柱栋株條棟棹機灯点燈片献獻玉球画番畫畳疋発皿着石票秒筋篇粒組组缽羽脚腰腳腹膳舆艇艘菓葉著行貫貼败贯贴足躯軀軒輪輿轩轮连通連部鉢錠钵锭門门阶階隻雙面頁領頭顆页领颗首騎骑體點齣"
+    return InStr(numeral_string, word)
+}
+
 ;*******************************************************************************
 ;
 RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
@@ -304,7 +311,7 @@ RadicalCheckWordClass(test_word, test_radical)
     if( InStr(test_radical, "!") && !IsVerb(test_word) ){
         return false
     }
-    if( InStr(test_radical, "#") && !IsMeasure(test_word)){
+    if( InStr(test_radical, "#") && !IsMeasure(test_word) && !IsNumeral(test_word) ){
         return false
     }
     if( InStr(test_radical, "^") && !IsFirstName(test_word)){
