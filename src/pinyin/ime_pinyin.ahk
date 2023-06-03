@@ -74,23 +74,9 @@ IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
     global pinyin_table_auto_correct
-    ; static pinyin_table_initials = []
 
-    ; initials == "%"
-    if( initials == "%" )
-    {
-        for key in pinyin_table
-        {
-            if( IsCompletePinyin(key, vowels, tone) ){
-                return true
-            }
-        }
-        return false
-    }
-
-    ; initials like z% c% s%
-    initials_has_miss_char := SubStr(initials, 0, 1 ) == "?"
-    if( initials_has_miss_char )
+    ; initials like z? c? s?
+    if( SubStr(initials, 0, 1) == "?" )
     {
         initials_without_h := SubStr(initials, 1, 1)
         initials_with_h := initials_without_h . "h"
@@ -100,12 +86,21 @@ IsCompletePinyin(initials, vowels, tone:="'")
     ; vowels content ?
     if( InStr(vowels, "?") )
     {
-        if( SubStr(vowels, 0, 1) == "?" && SubStr(vowels, -1, 1) == "n" ){
+        ; Make sure same as `PinyinSqlFullKey`
+        if( SubStr(vowels, -1, 2) == "n?" )
+        {
             vowels_without_g := SubStr(vowels, 1, StrLen(vowels)-1)
             vowels_with_g := vowels_without_g . "g"
             return IsCompletePinyin(initials, vowels_without_g, tone) || IsCompletePinyin(initials, vowels_with_g, tone)
         }
-        else {
+        else if( SubStr(vowels, -2, 3) == "i?n" )
+        {
+            vowels_without_a := StrReplace(vowels, "?", "")
+            vowels_with_a := StrReplace(vowels, "?", "a")
+            return IsCompletePinyin(initials, vowels_without_a, tone) || IsCompletePinyin(initials, vowels_with_a, tone)
+        }
+        else
+        {
             vowels := StrReplace(vowels, "?", ".")
             vowels := "^" vowels "$"
             for index, element in pinyin_table[initials]
@@ -527,7 +522,18 @@ PinyinInitialize()
             "w" :{
                 "ie":"ei",
                 "eg":"eng","ag":"ang"
+            },
+            
+            "`%" :{
+                "1":"`%",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "o":"o","ong":"ong","ou":"ou",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
+                "i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu",
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo","ue":"ue",
+                "v":"u","van":"uan","ve":"ue","vn":"un"
             }
+
         }
     )
 
