@@ -86,7 +86,7 @@ PinyinSqlGenerateWhereCommand(sim_key, full_key)
 ;   % = has vowels
 ;   a-z = pinyin
 ;   [012345] = tone
-PinyinSqlGetResult(splitted_input, limit_num:=100)
+PinyinSqlGetResult(splitted_input, limit_num)
 {
     local
     Critical
@@ -100,8 +100,10 @@ PinyinSqlGetResult(splitted_input, limit_num:=100)
     sql_full_key    := PinyinSqlFullKey(splitted_input)
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
-    sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE " . sql_where_cmd
-    sql_full_cmd .= " ORDER BY weight DESC" . (limit_num?" LIMIT " limit_num:"")
+    sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE "
+    sql_full_cmd .= sql_where_cmd
+    sql_full_cmd .= " ORDER BY weight DESC"
+    sql_full_cmd .= (limit_num?" LIMIT " limit_num:"")
 
     profile_text := ImeProfilerBegin(15)
     result := []

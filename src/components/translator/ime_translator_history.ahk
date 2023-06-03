@@ -63,6 +63,11 @@ ImeTranslatorHistoryGetTopWeightList(splitted_string)
 ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_num := 100, modify_weight := 0)
 {
     translator_list := ImeTranslatorHistoryGetTopWeightList(splitted_string)
+    if( max_num == 0 )
+    {
+        max_num := translator_list.Length()
+    }
+
     loop % Min(translator_list.Length(), max_num)
     {
         single_result := translator_list[A_Index]
