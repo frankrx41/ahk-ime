@@ -60,7 +60,16 @@ ImeCandidateUpdateResult(splitter_result_list)
             }
             ; Insert result
             ime_candidata_result_origin.Push(translate_result_list)
+        }
 
+        debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
+        ImeProfilerEnd(30, debug_text)
+        ime_candidata_result_origin := CandidateResultListFilterResults(ime_candidata_result_origin, radical_list)
+
+        loop, % ime_candidata_result_origin.Length()
+        {
+            splitter_index := A_Index
+            translate_result_list := ime_candidata_result_origin[A_Index]
             loop, % translate_result_list.Length()
             {
                 if( TranslatorResultGetWordLength(translate_result_list[A_Index]) + splitter_index-1 == splitter_result_list.Length() ){
@@ -70,12 +79,8 @@ ImeCandidateUpdateResult(splitter_result_list)
                 }
             }
         }
-
         ime_candidata_result_origin.Push(translate_last_result_list)
 
-        debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
-        ImeProfilerEnd(30, debug_text)
-        ime_candidata_result_origin := CandidateResultListFilterResults(ime_candidata_result_origin, radical_list)
         ime_candidata_result_filter := CopyObj(ime_candidata_result_origin)
     } else {
         ImeCandidateClear()
