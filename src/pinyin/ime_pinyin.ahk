@@ -411,6 +411,16 @@ PinyinInitialize()
                 "o":"o",
                 "ei":"ei","en":"en","eng":"eng",
                 "u":"u"
+            },
+            
+            "`%" :{
+                "1":"`%",
+                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
+                "o":"o","ong":"ong","ou":"ou",
+                "e":"e","ei":"ei","en":"en","eng":"eng",
+                "i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu",
+                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo","ue":"ue",
+                "v":"u","van":"uan","ve":"ue","vn":"un"
             }
         }
     )
@@ -522,18 +532,7 @@ PinyinInitialize()
             "w" :{
                 "ie":"ei",
                 "eg":"eng","ag":"ang"
-            },
-            
-            "`%" :{
-                "1":"`%",
-                "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
-                "o":"o","ong":"ong","ou":"ou",
-                "e":"e","ei":"ei","en":"en","eng":"eng",
-                "i":"i","ia":"ia","ian":"ian","iang":"iang","iao":"iao","ie":"ie","in":"in","ing":"ing","iu":"iu",
-                "u":"u","ua":"ua","uai":"uai","uan":"uan","uang":"uang","ui":"ui","un":"un","uo":"uo","ue":"ue",
-                "v":"u","van":"uan","ve":"ue","vn":"un"
             }
-
         }
     )
 
