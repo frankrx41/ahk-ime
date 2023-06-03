@@ -89,8 +89,8 @@ IsCompletePinyin(initials, vowels, tone:="'")
         ; Make sure same as `PinyinSqlFullKey`
         if( SubStr(vowels, -1, 2) == "n?" )
         {
-            vowels_without_g := SubStr(vowels, 1, StrLen(vowels)-1)
-            vowels_with_g := vowels_without_g . "g"
+            vowels_without_g := StrReplace(vowels, "?", "")
+            vowels_with_g := StrReplace(vowels, "?", "g")
             return IsCompletePinyin(initials, vowels_without_g, tone) || IsCompletePinyin(initials, vowels_with_g, tone)
         }
         else if( SubStr(vowels, -2, 3) == "i?n" )
