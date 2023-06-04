@@ -42,11 +42,7 @@
 #Include, src\pinyin\ime_pinyin.ahk
 #Include, src\pinyin\lib_pinyin_sql.ahk
 #Include, src\pinyin\lib_pinyin_splitter.ahk
-#Include, src\pinyin\lib_pinyin_splitter_input.ahk
 #Include, src\pinyin\lib_pinyin_translator.ahk
-#Include, src\pinyin\lib_pinyin_translator_auto_complete.ahk
-#Include, src\pinyin\lib_pinyin_translator_combine_word.ahk
-#Include, src\pinyin\lib_pinyin_translator_traditional.ahk
 
 ; gojuon
 #Include, src\gojuon\ime_gojuon_splitter.ahk

@@ -1,3 +1,7 @@
+#Include, src\pinyin\lib_pinyin_translator_auto_complete.ahk
+#Include, src\pinyin\lib_pinyin_translator_combine_word.ahk
+#Include, src\pinyin\lib_pinyin_translator_traditional.ahk
+
 ;*******************************************************************************
 ;
 PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
