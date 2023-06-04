@@ -1,6 +1,7 @@
 #Include, src\pinyin\lib_pinyin_splitter_library.ahk
 #Include, src\pinyin\lib_pinyin_splitter_simple.ahk
 #Include, src\pinyin\lib_pinyin_splitter_normal.ahk
+#Include, src\pinyin\lib_pinyin_splitter_double.ahk
 
 ;*******************************************************************************
 ; In:
