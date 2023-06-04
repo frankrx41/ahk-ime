@@ -12,6 +12,12 @@
 #Include, src\hotkey\ime_hotkey_event.ahk
 #Include, src\hotkey\ime_hotkey_register.ahk
 
+; State
+#Include, src\state\ime_state.ahk
+#Include, src\state\ime_state_debug.ahk
+#Include, src\state\ime_state_simple.ahk
+#Include, src\state\ime_mode.ahk
+
 ; Inputer
 #Include, src\components\inputter\ime_inputter.ahk
 #Include, src\components\inputter\ime_inputter_history.ahk
@@ -61,7 +67,7 @@
 #Include, src\components\outputter\ime_outputter.ahk
 
 ; UI
-#Include, src\ui\ime_state.ahk
+#Include, src\ui\ime_icon.ahk
 #Include, src\ui\ime_select_menu.ahk
 #Include, src\ui\ime_tooltip.ahk
 #Include, src\ui\ime_word_creator.ahk
