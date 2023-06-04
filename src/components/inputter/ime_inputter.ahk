@@ -41,12 +41,7 @@ ImeInputterUpdateString(input_char)
     if( ime_input_string )
     {
         ; Splitter
-        if( ImeModeIsChinese() ){
-            ime_splitted_list := PinyinSplitterInputString(ime_input_string)
-        } else
-        if( ImeModeIsJapanese() ) {
-            ime_splitted_list := GojuonSplitterInputString(ime_input_string)
-        }
+        ime_splitted_list := ImeSplitterInputString(ime_input_string)
         ; Translator
         ImeInputterCallTranslator()
     }
