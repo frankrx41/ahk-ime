@@ -97,7 +97,7 @@ HotkeyOnShift(orgin_mode)
     if( ImeInputterHasAnyInput() )
     {
         if( A_TickCount - double_shift < 500 ) {
-            ImeSimpleSpellToggle()
+            ImeSchemeSimpleToggle()
             ImeInputterUpdateString("")
         } else {
             double_shift := A_TickCount

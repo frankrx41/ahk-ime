@@ -27,7 +27,7 @@ ImeOutputterPutSelect(as_legacy, word_by_word:=0)
         PutString(input_string, use_clipboard)
     }
 
-    ImeSimpleSpellSetForce(false)
+    ImeSchemeSimpleSet(false)
 
     ImeInputterClearAll()
     ImeSelectMenuClose()

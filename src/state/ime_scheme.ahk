@@ -25,13 +25,13 @@ ImeSchemeIsPinyinDouble()
 
 ;*******************************************************************************
 ;
-ImeSimpleSpellToggle()
+ImeSchemeSimpleToggle()
 {
     global ime_scheme_simple
     ime_scheme_simple := !ime_scheme_simple
 }
 
-ImeSimpleSpellSetForce(force)
+ImeSchemeSimpleSet(force)
 {
     global ime_scheme_simple
     ime_scheme_simple := force
