@@ -10,7 +10,7 @@ ImeStateInitialize()
     ime_active_window_class     := ""           ; 禁用 IME 的窗口是否被激活
     ime_opt_pause_window_name_list  := ["Windows.UI.Core.CoreWindow"] ; 禁用 IME 的窗口列表
 
-    ImeModeInitialize()
+    ImeLanguageInitialize()
     ImeSimpleSpellInitialize()
     ImeDebugInitialize()
 
@@ -58,17 +58,17 @@ ImeStateRefresh()
     }
     else
     {
-        ImeStateUpdateMode(ImeModeGetLanguage())
+        ImeStateUpdateMode(ImeLanguageGet())
     }
 }
 
 ImeStateUpdateMode(mode)
 {
     local
-    last_mode := ImeModeGetLanguage()
+    last_mode := ImeLanguageGet()
     if( mode != last_mode )
     {
-        ImeModeSetLanguage(mode)
+        ImeLanguageSet(mode)
         if( mode != "en" ) {
             ImeHotkeyRegisterShift("en")
         } else {
@@ -102,5 +102,5 @@ ImeStatePauseWindowActive()
 
 ImeStateWaitingInput()
 {
-    return !ImeModeIsEnglish() && !ImeStatePauseWindowActive()
+    return !ImeLanguageIsEnglish() && !ImeStatePauseWindowActive()
 }

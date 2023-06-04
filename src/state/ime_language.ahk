@@ -1,4 +1,4 @@
-ImeModeInitialize()
+ImeLanguageInitialize()
 {
     global ime_mode_language
     global ime_mode_scheme
@@ -9,7 +9,7 @@ ImeModeInitialize()
 
 ;*******************************************************************************
 ; Mode
-ImeModeSetLanguage(mode)
+ImeLanguageSet(mode)
 {
     global ime_mode_language
     switch (mode) {
@@ -18,43 +18,43 @@ ImeModeSetLanguage(mode)
     }
 }
 
-ImeModeGetLanguage()
+ImeLanguageGet()
 {
     global ime_mode_language
     return ime_mode_language
 }
 
-ImeModeIsEnglish()
+ImeLanguageIsEnglish()
 {
     global ime_mode_language
     return ime_mode_language == "en"
 }
 
-ImeModeIsPinyinNormal()
+ImeSchemeIsPinyinNormal()
 {
     global ime_mode_scheme
     return ime_mode_scheme == "normal"
 }
 
-ImeModeIsChinese()
+ImeLanguageIsChinese()
 {
     global ime_mode_language
-    return ImeModeIsSimChinese() || ImeModeIsTraChinese()
+    return ImeLanguageIsSimChinese() || ImeLanguageIsTraChinese()
 }
 
-ImeModeIsSimChinese()
+ImeLanguageIsSimChinese()
 {
     global ime_mode_language
     return ime_mode_language == "cn"
 }
 
-ImeModeIsTraChinese()
+ImeLanguageIsTraChinese()
 {
     global ime_mode_language
     return ime_mode_language == "tw"
 }
 
-ImeModeIsJapanese()
+ImeLanguageIsJapanese()
 {
     global ime_mode_language
     return ime_mode_language == "jp"

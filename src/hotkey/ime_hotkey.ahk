@@ -306,7 +306,7 @@
 
 ;*******************************************************************************
 ; Is not English mode
-#if !ImeModeIsEnglish()
+#if !ImeLanguageIsEnglish()
     ^+|::
         ImeInputterHistorySummon(+1)
         ImeInputterCaretMoveToEnd()
@@ -364,7 +364,7 @@
 
 ;*******************************************************************************
 ; Reload script, debug only
-#if WinActive("AHK-Ime") && !ImeModeIsEnglish()
+#if WinActive("AHK-Ime") && !ImeLanguageIsEnglish()
     ~^S::
         ScriptRestart()
     return
@@ -375,7 +375,7 @@
 #Space::
 ImeToggleSuspend:
     Suspend
-    if( A_ThisHotkey == "#Space" && !A_IsSuspended && ImeModeIsEnglish() ){
+    if( A_ThisHotkey == "#Space" && !A_IsSuspended && ImeLanguageIsEnglish() ){
         ImeHotkeyShiftDown()
     }
     ImeInputterClearAll()

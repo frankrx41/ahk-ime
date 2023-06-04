@@ -1,9 +1,9 @@
 ImeTranslateFindResult(splitter_result_list, auto_complete)
 {
-    if( ImeModeIsChinese() ){
+    if( ImeLanguageIsChinese() ){
         translate_result_list := PinyinTranslateFindResult(splitter_result_list, auto_complete)
     } else
-    if( ImeModeIsJapanese() ) {
+    if( ImeLanguageIsJapanese() ) {
         translate_result_list := GojuonTranslateFindResult(splitter_result_list, auto_complete)
     }
     return translate_result_list

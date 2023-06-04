@@ -62,7 +62,7 @@ ImeHotkeyRegisterShift(origin_state)
     static ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
 
     ime_hotkey_on_shift_set_mode := Func("HotkeyOnShift").Bind(origin_state)
-    if( !ImeModeIsEnglish() ) {
+    if( !ImeLanguageIsEnglish() ) {
         Hotkey, If, % ime_is_waiting_input_fn
         Hotkey, Shift, % ime_hotkey_on_shift_set_mode, On
         Hotkey, If

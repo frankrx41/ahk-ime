@@ -1,9 +1,9 @@
 ImeSplitterInputString(input_string)
 {
-    if( ImeModeIsChinese() ){
+    if( ImeLanguageIsChinese() ){
         splitted_list := PinyinSplitterInputString(input_string)
     } else
-    if( ImeModeIsJapanese() ) {
+    if( ImeLanguageIsJapanese() ) {
         splitted_list := GojuonSplitterInputString(input_string)
     }
     return splitted_list
