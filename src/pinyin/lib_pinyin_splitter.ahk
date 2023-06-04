@@ -31,11 +31,10 @@
 ; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(input_string)
+PinyinSplitterInputString(input_string, simple_spell := false)
 {
     ; + or * marks 1 taken
     ; last char * marks simple spell
-    simple_spell := ImeSimpleSpellIsForce()
 
     if( simple_spell )
     {

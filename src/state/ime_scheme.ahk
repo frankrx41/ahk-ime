@@ -1,51 +1,38 @@
 ImeSchemeInitialize()
 {
-    global ime_mode_scheme
-    ime_mode_scheme := "normal"     ; "double", "simple"
+    global ime_scheme_normal := 1
+    global ime_scheme_simple := 0
+    global ime_scheme_double := 0
 }
 
 ImeSchemeIsPinyinNormal()
 {
-    global ime_mode_scheme
-    return ime_mode_scheme == "normal"
+    global ime_scheme_normal
+    return ime_scheme_normal
 }
 
 ImeSchemeIsPinyinSimple()
 {
-    global ime_mode_scheme
-    return ime_mode_scheme == "simple"
+    global ime_scheme_simple
+    return ime_scheme_simple
 }
 
 ImeSchemeIsPinyinDouble()
 {
-    global ime_mode_scheme
-    return ime_mode_scheme == "double"
+    global ime_scheme_double
+    return ime_scheme_double
 }
 
 ;*******************************************************************************
 ;
 ImeSimpleSpellToggle()
 {
-    global ime_mode_scheme
-    if( ImeSchemeIsPinyinSimple() ) {
-        ime_mode_scheme := "normal"
-    } else {
-        ime_mode_scheme := "simple"
-    }
+    global ime_scheme_simple
+    ime_scheme_simple := !ime_scheme_simple
 }
 
 ImeSimpleSpellSetForce(force)
 {
-    global ime_mode_scheme
-    if( force ) {
-        ime_mode_scheme := "simple"
-    } else {
-        ime_mode_scheme := "normal"
-    }
-}
-
-ImeSimpleSpellIsForce()
-{
-    global ime_mode_scheme
-    return ime_mode_scheme == "simple"
+    global ime_scheme_simple
+    ime_scheme_simple := force
 }
