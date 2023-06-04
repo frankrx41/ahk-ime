@@ -28,6 +28,7 @@
 #Include, src\components\candidate\lib_candidate_result.ahk
 
 ; Translator
+#Include, src\components\translator\ime_translator.ahk
 #Include, src\components\translator\ime_translator_history.ahk
 #Include, src\components\translator\ime_translator_dynamic.ahk
 #Include, src\components\translator\lib_translator_result.ahk

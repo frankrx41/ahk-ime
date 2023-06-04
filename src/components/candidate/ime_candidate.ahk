@@ -47,12 +47,7 @@ ImeCandidateUpdateResult(splitter_result_list)
             {
                 Assert(test_splitter_list.Length() >= 1)
                 ; Get translate result
-                if( ImeModeIsChinese() ){
-                    translate_result_list := PinyinTranslateFindResult(test_splitter_list, auto_complete)
-                } else
-                if( ImeModeIsJapanese() ) {
-                    translate_result_list := GojuonTranslateFindResult(test_splitter_list, auto_complete)
-                }
+                translate_result_list := ImeTranslateFindResult(test_splitter_list, auto_complete)
                 if( translate_result_list.Length() == 0 ){
                     first_word := SplitterResultListConvertToString(splitter_result_list, splitter_index, 1)
                     translate_result_list := [TranslatorResultMakeNoSelect(first_word, first_word)]
