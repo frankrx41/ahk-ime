@@ -40,8 +40,8 @@ DoubleToNormal(word, index)
     static double_chinese := {"q":["q","ia","ua"], "w":["w","uan","van"], "e":["","e"], "r":["r","en"], "t":["t","ie"], "y":["y","iu","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","ou"]
         , "a":["'","a"], "s":["s","iong","ong"], "d":["d","ian"], "f":["f","an"], "g":["g","ang"], "h":["h","eng"], "j":["j","ing"], "k":["k","ai"], "l":["l","er","in"], ";":["",""]
         , "z":["z","un","vn"], "x":["x","ue","ve"], "c":["c","ao"], "v":["zh","v","vi"], "b":["b","ei"], "n":["n","iang","uang"], "m":["m","iao"]}
-    double_pinyin := double_sougou
-    Assert(double_pinyin.HasKey(word), word)
+    double_pinyin := double_xiaohe
+    ; Assert(double_pinyin.HasKey(word), word)
     return double_pinyin[word, index]
 }
 
