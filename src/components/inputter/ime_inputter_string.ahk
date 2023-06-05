@@ -94,12 +94,16 @@ ImeInputterGetDisplayString()
     local
     global ime_input_string
     global ime_input_caret_pos
+    global ime_splitted_list
+
     tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
     tooltip_string := StrReplace(tooltip_string, " ", "_")
     tooltip_string .= " (" ime_input_caret_pos "|" ImeInputterGetCaretSplitIndex() ")"
     if( ImeInputterIsInputDirty() ){
         tooltip_string .= " {Enter}"
     }
+
+    tooltip_string .= "`n" SplitterResultListGetDisplayText(ime_splitted_list)
     return tooltip_string
 }
 
