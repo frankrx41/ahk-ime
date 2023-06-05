@@ -89,10 +89,21 @@ PinyinSplitterGetDoubleVowels(input_str, initials, ByRef index, prev_splitted_in
                 vowels_len += 0
                 break
             }
-            if( IsCompletePinyin(initials, vowels) )
+            if( initials )
             {
-                vowels_len += 1
-                break
+                if( IsCompletePinyin(initials, vowels) )
+                {
+                    vowels_len += 1
+                    break
+                }
+            }
+            else
+            {
+                if( IsCompletePinyin(vowels, "") )
+                {
+                    vowels_len += 1
+                    break
+                }
             }
         }
     }
@@ -102,8 +113,17 @@ PinyinSplitterGetDoubleVowels(input_str, initials, ByRef index, prev_splitted_in
     if( IsVowelsAnyMark(vowels) ){
         vowels := "%"
     }
-    else if( !IsCompletePinyin(initials, vowels) ){
-        vowels .= "%"
+    else if( initials )
+    {
+        if( !IsCompletePinyin(initials, vowels) ){
+            vowels .= "%"
+        }
+    }
+    else
+    {
+        if( !IsCompletePinyin(vowels, "") ){
+            vowels .= "%"
+        }
     }
     return vowels
 }
@@ -144,7 +164,7 @@ PinyinSplitterInputStringDouble(input_string)
         }
 
         ; 字母，自动分词
-        if( IsInitials(initials) || IsInitialsAnyMark(initials) )
+        if( IsInitials(initials) || IsInitialsAnyMark(initials) || double_initials == "o" )
         {
             start_string_index := string_index
 
@@ -154,8 +174,16 @@ PinyinSplitterInputStringDouble(input_string)
             tone_string := SubStr(input_string, string_index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
 
-            if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
-                vowels .= "%"
+            if( !InStr(vowels, "%") ) {
+                if( initials ) {
+                    if( !IsCompletePinyin(initials, vowels, tone) ){
+                        vowels .= "%"
+                    }
+                } else {
+                    if( !IsCompletePinyin(vowels, "", tone) ){
+                        vowels .= "%"
+                    }
+                }
             }
             else
             {
