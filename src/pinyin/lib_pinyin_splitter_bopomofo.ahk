@@ -216,11 +216,11 @@ PinyinSplitterInputStringBopomofo(input_string)
         ; 忽略
         else
         {
-            if( initials == "'" ){
-                initials := " "
+            if( bopomofo_initials == "'" ){
+                bopomofo_initials := " "
             }
             string_index += 1
-            escape_string .= initials
+            escape_string .= bopomofo_initials
         }
     }
 

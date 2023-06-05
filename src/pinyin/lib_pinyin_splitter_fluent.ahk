@@ -242,11 +242,11 @@ PinyinSplitterInputStringFluent(input_string)
         ; 忽略
         else
         {
-            if( initials == "'" ){
-                initials := " "
+            if( fluent_initials == "'" ){
+                fluent_initials := " "
             }
             string_index += 1
-            escape_string .= initials
+            escape_string .= fluent_initials
         }
     }
 
