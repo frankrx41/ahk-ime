@@ -26,11 +26,14 @@ Return Value: ToolTip returns hWnd of the ToolTip
 \ X + Y   |   Coordinates where ToolTip should be displayed, e.g. X100 Y200
 \         |   - leave empty to display ToolTip near mouse
 \         |   - you can specify Xcaret Ycaret to display at caret coordinates
+\ E       |   E1.1.1.1 TTM_SETMARGIN
+\ F       |   Font name
+\ H       |   Bold
 \
 \          To hide a ToolTip use ToolTip(Number), to destroy all ToolTip()
 */
 
-ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
+ToolTip(ID="", TEXT="", title="", OPTIONS=""){
 	static
 	static Init := 0
 	static TT_HWND_0 := 0
@@ -82,6 +85,9 @@ ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
 	local b := 0
 	local g := 0
 	local s := 0
+	local e := 0
+	local h := 0
+	local f := 0
 	local #_DetectHiddenWindows := 0
 
 	If !Init
@@ -154,7 +160,11 @@ ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
 			Gosub, TTM_SETTIPBKCOLOR
 	}
 	If (hfont||F!=""){
+		F := StrReplace(F, "_", " ")
 		Gosub, WM_SETFONT
+	}
+	If (E!=""){
+		Gosub, TTM_SETMARGIN
 	}
 	If (!A){
 		Gosub, TTM_UPDATETIPTEXT
@@ -246,7 +256,7 @@ ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
 	Return
 	WM_SETFONT:
 		If (F!=""){
-			S:=(S?"s" S:"") (Style?" bold":" norm")
+			S:=(S?"s" S:"") (H?" bold":" norm")
 			Gui _TTG: Font, %S%, %F%
 			GuiControl _TTG: Font, %htext%
 			hfont:=DllCall("SendMessage", "Ptr", htext, "Uint", 0x31, "Ptr", 0, "Ptr", 0)
@@ -254,7 +264,7 @@ ToolTip(ID="", TEXT="", title="", OPTIONS="", F:="", Style:=""){
 		DllCall("SendMessage", "Ptr", TT_HWND, "Uint", 0x30, "Ptr", hfont, "Ptr", 0)
 	Return
 	TTM_SETMARGIN:
-		VarSetCapacity(RECT,16)
+		VarSetCapacity(RECT,20)
 		Loop,Parse,E,.
 			NumPut(A_LoopField,RECT,(A_Index-1)*4)
 			DllCall("SendMessage", "Uint", TT_HWND, "Uint", %A_ThisLabel%, "Uint", 0, "Uint", &RECT)
