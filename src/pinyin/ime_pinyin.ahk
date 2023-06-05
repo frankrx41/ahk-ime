@@ -74,6 +74,7 @@ IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
     global pinyin_table_auto_correct
+    global bopomofo_table
 
     ; initials like z? c? s?
     if( SubStr(initials, 0, 1) == "?" )
@@ -114,7 +115,7 @@ IsCompletePinyin(initials, vowels, tone:="'")
     }
     else
     {
-        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (pinyin_table_auto_correct[initials, vowels])
+        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (pinyin_table_auto_correct[initials, vowels]) || (bopomofo_table[initials, vowels])
         if( is_complete && tone )
         {
             is_complete := !IsBadTone(initials, vowels, tone)
@@ -133,9 +134,14 @@ GetFullVowels(initials, vowels)
 {
     global pinyin_table
     global pinyin_table_auto_correct
+    global bopomofo_table
 
     if( pinyin_table[initials][vowels] ) {
         return pinyin_table[initials][vowels]
+    }
+    else
+    if( bopomofo_table[initials][vowels] ) {
+        return bopomofo_table[initials][vowels]
     }
     else {
         return pinyin_table_auto_correct[initials][vowels]
@@ -206,6 +212,7 @@ PinyinInitialize()
     global JSON
     global pinyin_table
     global pinyin_table_auto_correct
+    global bopomofo_table
     global zero_initials_table := {}
 
     ; 零声母
@@ -414,7 +421,7 @@ PinyinInitialize()
             },
             "yu" :{
                 "1":"yu",
-                "e":"e","an":"an","un":"un"
+                "e":"e","an":"an","n":"n"
             },
 
             "`%" :{
@@ -539,6 +546,86 @@ PinyinInitialize()
             }
         }
     )
-
     pinyin_table_auto_correct := JSON.Load(full_spelling_json_auto_correct)
+
+
+    bopomofo_spelling_json =
+    (LTrim
+        {
+            "b" :{
+                "ien":"in","ieng":"ing"
+            },
+            "p" :{
+                "ien":"in","ieng":"ing"
+            },
+            "m" :{
+                "ien":"in","ieng":"ing"
+            },
+            "f" :{
+
+            },
+            "d" :{
+                "ieng":"ing","ven":"un","uen":"un","ueng":"ong"
+            },
+            "t" :{
+                "ieng":"ing","ven":"un","uen":"un","ueng":"ong"
+            },
+            "n" :{
+                "ien":"in","ieng":"ing","ueng":"ong"
+            },
+            "l" :{
+                "ien":"in","ieng":"ing","ven":"un","uen":"un","ueng":"ong"
+            },
+            "g" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "k" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "h" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "j" :{
+                "ien":"in","ieng":"ing","veng":"iong"
+            },
+            "q" :{
+                "ien":"in","ieng":"ing","veng":"iong"
+            },
+            "x" :{
+                "ien":"in","ieng":"ing","veng":"iong"
+            },
+            "zh" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "ch" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "sh" :{
+                "ven":"un","uen":"un"
+            },
+            "r" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "z" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "c" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "s" :{
+                "ven":"un","uen":"un","ueng":"ong"
+            },
+            "y" :{
+                "ien":"in","ieng":"ing","ven":"un","uen":"un","ueng":"ong","veng":"ong","eng":"ong"
+            },
+            "w" :{
+
+            },
+            "yu" :{
+                "e":"e","an":"an","un":"un"
+            }
+        }
+    )
+
+    bopomofo_table := JSON.Load(bopomofo_spelling_json)
 }
