@@ -1,20 +1,20 @@
 ; https://pic.pimg.tw/uiop7890/1348566165-395991823.jpg
 ; https://zh.wikipedia.org/wiki/%E6%B3%A8%E9%9F%B3%E8%BC%B8%E5%85%A5%E6%B3%95#%E9%9B%BB%E8%85%A6%E6%B3%A8%E9%9F%B3%E9%8D%B5%E7%9B%A4
-; index == 0 Get initials
+; index == 0 Get initials or tone
 ; index >= 1 Get vowels
 BopomofoToNormal(word, index)
 {
-    if( word == "" ){
+    if( word == "" || word == " " ){
         return ""
     }
     index += 1
     static bopomofo_pinyin := {"1":["b"], "q":["p"], "a":["m"], "z":["f"]
     , "2":["d"], "w":["t"], "s":["n"], "x":["l"]
-    , "3":[""], "e":["g"], "d":["k"], "c":["h"]
-    , "4":[""], "r":["j"], "f":["q"], "v":["x"]
+    , "3":["3"], "e":["g"], "d":["k"], "c":["h"]
+    , "4":["4"], "r":["j"], "f":["q"], "v":["x"]
     , "5":["zh"], "t":["ch"], "g":["sh"], "b":["r"]
-    , "6":[""], "y":["z"], "h":["c"], "n":["s"]
-    , "7":[""], "u":["y","i"], "j":["w","u"], "m":["y","v"]
+    , "6":["2"], "y":["z"], "h":["c"], "n":["s"]
+    , "7":["5"], "u":["y","i"], "j":["w","u"], "m":["y","v"]
     , "8":["a","a"], "i":["o","o"], "k":["e","e"], ",":["e","e"]
     , "9":["ai","ai"], "o":["ei","ei","ui"], "l":["ao","ao"], ".":["ou","ou","iu"]
     , "0":["an","an"], "p":["en","en","in","un"], ";":["ang","ang"], "/":["eng","eng","ing","ong"]
@@ -58,13 +58,50 @@ PinyinSplitterGetBopomofoInitials(input_str, bopomofo_initials, ByRef index)
     return initials
 }
 
+PinyinSplitterCalcBopomofoMaxVowelsLength(input_str, index)
+{
+    local
+    strlen := StrLen(input_str)
+    vowels_max_len := 0
+    loop {
+        ; Max len is 4
+        if( vowels_max_len >= 4 || index+vowels_max_len-A_Index>=strlen ){
+            break
+        }
+        check_bopomofo_char := SubStr(input_str, index+vowels_max_len, 1)
+        check_char := BopomofoToNormal(check_bopomofo_char, 0)
+        if( IsVowelsAnyMark(check_char) )
+        {
+            if( vowels_max_len == 0 ){
+                vowels_max_len := 1
+            }
+            break
+        }
+        if( IsTone(check_char) ){
+            break
+        }
+        if( IsRadical(check_char) ){
+            break
+        }
+        if( IsRadical(check_char) ){
+            break
+        }
+        if( IsInitialsAnyMark(check_char) ){
+            break
+        }
+        vowels_max_len += 1
+    }
+    return vowels_max_len
+}
+
 PinyinSplitterGetBopomofoVowels(input_str, initials, ByRef index, prev_splitted_input)
 {
     local
-    vowels_max_len  := 2
+    vowels_max_len  := PinyinSplitterCalcBopomofoMaxVowelsLength(input_str, index)
     bopomofo_vowels := ""
     vowels_len      := 0
     found_vowels    := false
+    vowels          := ""
     if( vowels_max_len > 0 )
     {
         loop
@@ -143,7 +180,7 @@ PinyinSplitterInputStringBopomofo(input_string)
         }
 
         ; 字母，自动分词
-        if( IsInitials(initials) || IsInitialsAnyMark(initials) )
+        if( IsInitials(SubStr(initials,1,1)) || IsInitialsAnyMark(initials) )
         {
             start_string_index := string_index
 
