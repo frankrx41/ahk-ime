@@ -22,13 +22,13 @@ ImeThemeGetTooltipOption()
 {
     global ime_theme_tooltip_option_string
     tooltip_option := ""
-    if( ImeSchemeIsPinyinDouble() ){
+    if( ImeLanguageIsSimChinese() && ImeSchemeIsPinyinDouble() ){
         tooltip_option .= " Q1 BFFFFFF T111111"
         tooltip_option .= " Q1 B1e1e1e Tccccc1"
         tooltip_option .= " Q1 B373832 Td4d4d4"
     }
     else
-    if( ImeSchemeIsPinyinBopomofo() ){
+    if( ImeLanguageIsTraChinese() && ImeSchemeIsPinyinBopomofo() ){
         tooltip_option .= " Q1 Bd9d9d9 T0033cc"
     }
     else

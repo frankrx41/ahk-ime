@@ -2,13 +2,13 @@ ImeSplitterInputString(input_string)
 {
     if( ImeLanguageIsChinese() ){
         scheme_simple := ImeSchemeIsPinyinSimple()
-        scheme_double := ImeSchemeIsPinyinDouble()
-        scheme_bopomofo := ImeSchemeIsPinyinBopomofo()
+        scheme_double := false
+        scheme_bopomofo := false
         if( ImeLanguageIsSimChinese() ){
-            scheme_bopomofo := false
+            scheme_double := ImeSchemeIsPinyinDouble()
         }
         if( ImeLanguageIsTraChinese() ){
-            scheme_double := false
+            scheme_bopomofo := ImeSchemeIsPinyinBopomofo()
         }
         splitted_list := PinyinSplitterInputString(input_string, scheme_simple, scheme_double, scheme_bopomofo)
     } else
