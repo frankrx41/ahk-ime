@@ -6,6 +6,10 @@
 ;  [A] [S] [D] [F] [G] [H] [J] [K] [L]
 ;   [Z] [X] [C] [YU] [B] [N] [M]
 ;
+; [ ] [ ] [ ] [ ] [ ] [ ] [u] [i] [o/ou] [eng]
+;  [a] [ ] [ ] [ ] [ ] [ ] [ai] [ei] [ao]
+;   [ ] [ ] [ ] [ ] [an] [en] [ang]
+;
 ; [zh] = [z] + [h]
 ;
 ; 声母
@@ -90,8 +94,8 @@ PinyinSplitterCalcFluentMaxVowelsLength(input_str, index)
     strlen := StrLen(input_str)
     vowels_max_len := 0
     loop {
-        ; Max len is 3
-        if( vowels_max_len >= 3 || index+vowels_max_len-1>=strlen ){
+        ; Max len is 4
+        if( vowels_max_len >= 4 || index+vowels_max_len-1>=strlen ){
             break
         }
         check_fluent_char := SubStr(input_str, index+vowels_max_len, 1)
@@ -140,16 +144,26 @@ PinyinSplitterGetFluentVowels(input_str, initials, ByRef index, prev_splitted_in
             }
             else
             {
-                last_vowels := ""
+                last_vowels := "(null)"
                 loop
                 {
                     vowels := FluentToNormal(fluent_vowels, A_Index)
-                    if( last_vowels == vowels || vowels == "" ) {
+                    if( last_vowels == vowels ) {
                         break
                     }
-                    if( IsCompletePinyin(initials, vowels) )
+                    if( vowels ) {
+                        if( IsCompletePinyin(initials, vowels) ) {
+                            found_vowels := true
+                            break
+                        }
+                    }
+                    if( IsCompletePinyin(initials, fluent_vowels) )
                     {
+                        vowels := fluent_vowels
                         found_vowels := true
+                        break
+                    }
+                    if( vowels == "" ){
                         break
                     }
                 }
