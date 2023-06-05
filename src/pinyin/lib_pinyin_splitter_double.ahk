@@ -9,40 +9,40 @@ DoubleToNormal(word, index)
     }
     index += 1
     ; 小鹤双拼
-    static double_vowels_xiaohe := {"q":["q","iu"], "w":["w","ei"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","un"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","ie"]
+    static double_xiaohe := {"q":["q","iu"], "w":["w","ei"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","un"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","ie"]
         , "a":["","a"], "s":["s","iong","ong"], "d":["d","ai"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ing","uai"], "l":["l","iang","uang"]
         , "z":["z","ou"], "x":["x","ia","ua"], "c":["c","ao"], "v":["zh","ui","v"], "b":["b","in"], "n":["n","iao"], "m":["m","ian"]}
     ; 自然码双拼
-    static double_vowels_ziranma := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","ing","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","un"]
+    static double_ziranma := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","ing","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","un"]
         , "a":["","a"], "s":["s","iong","ong"], "d":["d","iang","uang"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ao"], "l":["l","ai"]
         , "z":["z","ei"], "x":["x","ie"], "c":["c","iao"], "v":["zh","ui","v"], "b":["b","ou"], "n":["n","in"], "m":["m","ian"]}
     ; 拼音加加
-    static double_vowels_pinyinpp := {"q":["q","er","ing"], "w":["w","ei"], "e":["","e"], "r":["r","en"], "t":["t","eng"], "y":["y","iong","ong"], "u":["ch","u"], "i":["sh","i"], "o":["","o","uo"], "p":["p","ou"]
+    static double_pinyinpp := {"q":["q","er","ing"], "w":["w","ei"], "e":["","e"], "r":["r","en"], "t":["t","eng"], "y":["y","iong","ong"], "u":["ch","u"], "i":["sh","i"], "o":["","o","uo"], "p":["p","ou"]
         , "a":["","a"], "s":["s","ai"], "d":["d","ao"], "f":["f","an"], "g":["g","ang"], "h":["h","iang","uang"], "j":["j","ian"], "k":["k","oao"], "l":["l","in"]
         , "z":["z","un"], "x":["x","uai","ue"], "c":["c","uan"], "v":["zh","ui","v"], "b":["b","ia","ua"], "n":["n","iu"], "m":["m","ie"]}
     ; 紫光拼音
-    static double_vowels_ziguang := {"q":["q","ao"], "w":["w","en"], "e":["","e"], "r":["r","an"], "t":["t","eng"], "y":["y","in","uai"], "u":["zh","u"], "i":["sh","i"], "o":["","o","uo"], "p":["p","ai"]
+    static double_ziguang := {"q":["q","ao"], "w":["w","en"], "e":["","e"], "r":["r","an"], "t":["t","eng"], "y":["y","in","uai"], "u":["zh","u"], "i":["sh","i"], "o":["","o","uo"], "p":["p","ai"]
         , "a":["ch","a"], "s":["s","ang"], "d":["d","ie"], "f":["f","ian"], "g":["g","iang","uang"], "h":["h","iong","ong"], "j":["j","er","iu"], "k":["k","ei"], "l":["l","uan"], ";":["","ing"]
         , "z":["z","ou"], "x":["x","ia","ua"], "c":["c"], "v":["","v"], "b":["b","iao"], "n":["n","ue","ui"], "m":["m","un"]}
     ; 搜狗拼音
-    static double_vowels_sougou := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","er","uan"], "t":["t","ue","ve"], "y":["y","uai","v"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","un"]
+    static double_sougou := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","er","uan"], "t":["t","ue","ve"], "y":["y","uai","v"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","un"]
         , "a":["","a"], "s":["s","iong","ong"], "d":["d","iang","uang"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ao"], "l":["l","ai"], ";":["","ing"]
         , "z":["z","ei"], "x":["x","ie"], "c":["c","iao"], "v":["zh","ui"], "b":["b","ou"], "n":["n","in"], "m":["m","ian"]}
     ; 微软拼音
-    static double_vowels_microsoft := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","er","uan"], "t":["t","ue"], "y":["y","uai","v"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","un"]
+    static double_microsoft := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","er","uan"], "t":["t","ue"], "y":["y","uai","v"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","un"]
         , "a":["","a"], "s":["s","iong","ong"], "d":["d","iang","uang"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ao"], "l":["l","ai"], ";":["","ing"]
         , "z":["z","ei"], "x":["x","ie"], "c":["c","iao"], "v":["zh","ui","ve"], "b":["b","ou"], "n":["n","in"], "m":["m","ian"]}
     ; 智能 ABC
-    static double_vowels_smart_abc := {"q":["q","ei"], "w":["w","ian"], "e":["ch","e"], "r":["r","er","iu"], "t":["t","iang","uang"], "y":["y","ing"], "u":["","u"], "i":["","i"], "o":["","o","uo"], "p":["p","uan"]
+    static double_smart_abc := {"q":["q","ei"], "w":["w","ian"], "e":["ch","e"], "r":["r","er","iu"], "t":["t","iang","uang"], "y":["y","ing"], "u":["","u"], "i":["","i"], "o":["","o","uo"], "p":["p","uan"]
         , "a":["zh","a"], "s":["s","iong","ong"], "d":["d","ia","ua"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ao"], "l":["l","ai"], ";":["",""]
         , "z":["z","iao"], "x":["x","ie"], "c":["c","in","uai"], "v":["sh","v","ve"], "b":["b","ou"], "n":["n","un"], "m":["m","ue","ui"]}
     ; 中华人民共和国国家标准
-    static double_vowels_chinese := {"q":["q","ia","ua"], "w":["w","uan","van"], "e":["","e"], "r":["r","en"], "t":["t","ie"], "y":["y","iu","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","ou"]
+    static double_chinese := {"q":["q","ia","ua"], "w":["w","uan","van"], "e":["","e"], "r":["r","en"], "t":["t","ie"], "y":["y","iu","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","ou"]
         , "a":["'","a"], "s":["s","iong","ong"], "d":["d","ian"], "f":["f","an"], "g":["g","ang"], "h":["h","eng"], "j":["j","ing"], "k":["k","ai"], "l":["l","er","in"], ";":["",""]
         , "z":["z","un","vn"], "x":["x","ue","ve"], "c":["c","ao"], "v":["zh","v","vi"], "b":["b","ei"], "n":["n","iang","uang"], "m":["m","iao"]}
-    double_vowels := double_vowels_sougou
-    Assert(double_vowels.HasKey(word), word)
-    return double_vowels[word, index]
+    double_pinyin := double_sougou
+    Assert(double_pinyin.HasKey(word), word)
+    return double_pinyin[word, index]
 }
 
 PinyinSplitterGetDoubleInitials(input_str, double_initials, ByRef index)
