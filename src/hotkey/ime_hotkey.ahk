@@ -356,7 +356,15 @@
     return
 
     F7::
-        ImeStateUpdateLanague("tw")
+        if( !ImeLanguageIsTraChinese() ){
+            ImeStateUpdateLanague("tw")
+        } else {
+            if( ImeSchemeIsPinyinBopomofo() ){
+                ImeSchemeBopomofoSet(false)
+            } else {
+                ImeSchemeBopomofoSet(true)
+            }
+        }
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return

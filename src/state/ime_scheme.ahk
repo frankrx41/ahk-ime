@@ -3,7 +3,7 @@ ImeSchemeInitialize()
     global ime_scheme_normal := 1
     global ime_scheme_simple := 0
     global ime_scheme_double := 0
-    global ime_scheme_bpmf   := 0
+    global ime_scheme_bopomofo := 0
 }
 
 ImeSchemeIsPinyinNormal()
@@ -26,8 +26,8 @@ ImeSchemeIsPinyinDouble()
 
 ImeSchemeIsPinyinBopomofo()
 {
-    global ime_scheme_bpmf
-    return ime_scheme_bpmf
+    global ime_scheme_bopomofo
+    return ime_scheme_bopomofo
 }
 
 ;*******************************************************************************
@@ -50,5 +50,11 @@ ImeSchemeDoubleSet(force)
 {
     global ime_scheme_double
     ime_scheme_double := force
+}
+
+ImeSchemeBopomofoSet(force)
+{
+    global ime_scheme_bopomofo
+    ime_scheme_bopomofo := force
 }
 
