@@ -327,9 +327,7 @@
 
     ; Clear history
     ^F5::
-        ToolTip, Clear history
-        Sleep, 500
-        ToolTip,
+        TooltipInfoBlock("Clear history")
         ImeTranslatorHistoryClear()
         ImeInputterHistoryClear()
     return

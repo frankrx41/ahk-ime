@@ -109,11 +109,16 @@ GetSelectText(timeout := 0.5)
     }
 }
 
+TooltipInfoBlock(info, delay:=500)
+{
+    ToolTip, %info%
+    Sleep, %delay%
+    ToolTip,
+}
+
 ScriptRestart()
 {
-    ToolTip, Reload %A_ScriptName%
-    Sleep, 500
-    ToolTip,
+    TooltipInfoBlock("Reload " A_ScriptName)
     Reload
 }
 
