@@ -307,6 +307,7 @@
 ;*******************************************************************************
 ; Is not English mode
 #if !ImeLanguageIsEnglish()
+    ; Summon last input
     ^+|::
         ImeInputterHistorySummon(+1)
         ImeInputterCaretMoveToEnd()
@@ -324,12 +325,28 @@
         ScriptRestart()
     return
 
+    ; Clear history
     ^F5::
         ToolTip, Clear history
         Sleep, 500
         ToolTip,
         ImeTranslatorHistoryClear()
         ImeInputterHistoryClear()
+    return
+
+    ; Reload theme
+    !F5::
+        ImeThemeInitialize(false)
+        ImeInputterUpdateString("")
+        ImeStateRefresh()
+        ImeTooltipUpdate()
+    return
+
+    !+F5::
+        ImeThemeInitialize(true)
+        ImeInputterUpdateString("")
+        ImeStateRefresh()
+        ImeTooltipUpdate()
     return
 
     F6::

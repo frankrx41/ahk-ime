@@ -1,15 +1,8 @@
 ImeTooltipInitialize()
 {
-    local
     global ime_tooltip_pos := ""
 
-    font_size           := 13
-    font_family         := "Microsoft YaHei Mono" ;"Ubuntu Mono derivative Powerline"
-    ; font_family         := "DengXian"
-    font_bold           := false
-    background_color    := "373832"
-    text_color          := "d4d4d4"
-    ToolTip(1, "", "", "Q0 B" background_color " T"  text_color " S" font_size, font_family, font_bold)
+    ImeThemeInitialize()
 }
 
 ;*******************************************************************************
@@ -236,7 +229,7 @@ ImeTooltipShow(tooltip_string)
             y := last_y
         }
 
-        hwnd := ToolTip(1, tooltip_string, "", "x" x " y" y)
+        hwnd := ToolTip(1, tooltip_string, "", "x" x " y" y ImeThemeGetTooltipOption())
         new_x := x
         new_y := y
         WinGetPos, , , w, h, ahk_id %hwnd%
@@ -251,7 +244,7 @@ ImeTooltipShow(tooltip_string)
 
         ; Update tooltip pos
         if( x != new_x || y != new_y ) {
-            ToolTip(1, tooltip_string, "", "x" new_x " y" new_y)
+            ToolTip(1, tooltip_string, "", "x" new_x " y" new_y ImeThemeGetTooltipOption())
             last_x := new_x
             last_y := new_y
         }

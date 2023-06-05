@@ -69,6 +69,7 @@
 ; UI
 #Include, src\ui\ime_icon.ahk
 #Include, src\ui\ime_select_menu.ahk
+#Include, src\ui\ime_theme.ahk
 #Include, src\ui\ime_tooltip.ahk
 #Include, src\ui\ime_word_creator.ahk
 
