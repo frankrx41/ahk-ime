@@ -67,7 +67,9 @@ ImeStateRefresh()
 ImeStateUpdateLanague(language)
 {
     origin_language := ImeLanagueUpdate(language)
-    ImeHotkeyRegisterShift(origin_language)
+    if( origin_language ){
+        ImeHotkeyRegisterShift(origin_language)
+    }
     ImeIconUpdate(true)
 }
 

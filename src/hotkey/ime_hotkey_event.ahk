@@ -77,7 +77,7 @@ HotkeyOnEsc()
     ImeTooltipUpdate()
 }
 
-HotkeyOnShift(orgin_mode)
+HotkeyOnShift(orgin_language)
 {
     ; Fix when use {Shift} + {Numpad1} send {NumpadEnd}
     ; system will set {Shift up} event
@@ -105,7 +105,7 @@ HotkeyOnShift(orgin_mode)
     }
     else
     {
-        ImeStateUpdateLanague(orgin_mode)
+        ImeStateUpdateLanague(orgin_language)
     }
 
     ImeTooltipUpdate()

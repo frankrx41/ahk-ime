@@ -18,6 +18,7 @@ ImeLanguageSet(mode)
 ImeLanguageGet()
 {
     global ime_mode_language
+    Assert(ime_mode_language)
     return ime_mode_language
 }
 
@@ -71,5 +72,6 @@ ImeLanagueUpdate(language)
     {
         PinyinTraditionalInitialize()
     }
+    ; Tooltip, % origin_language ", " last_language ", " language
     return origin_language
 }
