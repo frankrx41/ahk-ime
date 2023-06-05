@@ -208,11 +208,11 @@ PinyinSplitterInputStringDouble(input_string)
         ; 忽略
         else
         {
-            if( initials == "'" ){
-                initials := " "
+            if( double_initials == "'" ){
+                double_initials := " "
             }
             string_index += 1
-            escape_string .= initials
+            escape_string .= double_initials
         }
     }
 
