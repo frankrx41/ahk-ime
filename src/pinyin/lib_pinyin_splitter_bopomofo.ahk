@@ -1,3 +1,112 @@
+; https://pic.pimg.tw/uiop7890/1348566165-395991823.jpg
+; https://zh.wikipedia.org/wiki/%E6%B3%A8%E9%9F%B3%E8%BC%B8%E5%85%A5%E6%B3%95#%E9%9B%BB%E8%85%A6%E6%B3%A8%E9%9F%B3%E9%8D%B5%E7%9B%A4
+; index == 0 Get initials
+; index >= 1 Get vowels
+BopomofoToNormal(word, index)
+{
+    if( word == "" ){
+        return ""
+    }
+    index += 1
+    static bopomofo_pinyin := {"1":["b"], "q":["p"], "a":["m"], "z":["f"]
+    , "2":["d"], "w":["t"], "s":["n"], "x":["l"]
+    , "3":[""], "e":["g"], "d":["k"], "c":["h"]
+    , "4":[""], "r":["j"], "f":["q"], "v":["x"]
+    , "5":["zh"], "t":["ch"], "g":["sh"], "b":["r"]
+    , "6":[""], "y":["z"], "h":["c"], "n":["s"]
+    , "7":[""], "u":["y","i"], "j":["w","u"], "m":["y","v"]
+    , "8":["a","a"], "i":["o","o"], "k":["e","e"], ",":["e","e"]
+    , "9":["ai","ai"], "o":["ei","ei","ui"], "l":["ao","ao"], ".":["ou","ou","iu"]
+    , "0":["an","an"], "p":["en","en","in","un"], ";":["ang","ang"], "/":["eng","eng","ing","ong"]
+    , "-":["er","r"]}
+    Assert(bopomofo_pinyin.HasKey("0"), word)
+    normal_words := ""
+    loop, Parse, word
+    {
+        test_word := A_LoopField
+        ; `. ""` to force as string
+        Assert(bopomofo_pinyin.HasKey(test_word . ""), test_word ", " word)
+
+        normal_word := bopomofo_pinyin[test_word . "", index]
+        if( !normal_word ) {
+            return ""
+        }
+        normal_words .= normal_word
+    }
+    return normal_words
+}
+
+PinyinSplitterGetBopomofoInitials(input_str, bopomofo_initials, ByRef index)
+{
+    local
+    index += 1
+
+    initials := BopomofoToNormal(bopomofo_initials, 0)
+    if( IsInitialsAnyMark(initials) ){
+        initials := "%"
+    }
+    if( InStr("zcs", bopomofo_initials) && (SubStr(input_str, index, 1)=="h") ){
+        ; zcs + h
+        index += 1
+        initials .= "h"
+    }
+    if( InStr("zcs", bopomofo_initials) && (SubStr(input_str, index, 1)=="?") ){
+        index += 1
+        initials .= "?"
+    }
+    initials := Format("{:L}", initials)
+    return initials
+}
+
+PinyinSplitterGetBopomofoVowels(input_str, initials, ByRef index, prev_splitted_input)
+{
+    local
+    vowels_max_len  := 2
+    bopomofo_vowels := ""
+    vowels_len      := 0
+    found_vowels    := false
+    if( vowels_max_len > 0 )
+    {
+        loop
+        {
+            vowels_len := vowels_max_len+1-A_Index
+            bopomofo_vowels := SubStr(input_str, index, vowels_len)
+            if( IsVowelsAnyMark(bopomofo_vowels) )
+            {
+                break
+            }
+            else
+            {
+                last_vowels := ""
+                loop
+                {
+                    vowels := BopomofoToNormal(bopomofo_vowels, A_Index)
+                    if( last_vowels == vowels || vowels == "" ) {
+                        break
+                    }
+                    if( IsCompletePinyin(initials, vowels) )
+                    {
+                        found_vowels := true
+                        break
+                    }
+                }
+            }
+            if( A_Index >= vowels_max_len+1 || found_vowels ){
+                break
+            }
+        }
+    }
+    index += vowels_len
+
+    if( IsVowelsAnyMark(vowels) ){
+        vowels := "%"
+    }
+    else if( !IsCompletePinyin(initials, vowels) ){
+        vowels .= "%"
+    }
+    return vowels
+}
+
 ;*******************************************************************************
 ;
 PinyinSplitterInputStringBopomofo(input_string)
@@ -16,8 +125,8 @@ PinyinSplitterInputStringBopomofo(input_string)
 
     loop
     {
-        double_initials := SubStr(input_string, string_index, 1)
-        initials := DoubleToNormal(double_initials, 0)
+        bopomofo_initials := SubStr(input_string, string_index, 1)
+        initials := BopomofoToNormal(bopomofo_initials, 0)
 
         if( string_index > strlen || IsInitials(initials) || IsInitialsAnyMark(initials) )
         {
@@ -38,8 +147,8 @@ PinyinSplitterInputStringBopomofo(input_string)
         {
             start_string_index := string_index
 
-            initials    := PinyinSplitterGetDoubleInitials(input_string, double_initials, string_index)
-            vowels      := PinyinSplitterGetDoubleVowels(input_string, initials, string_index, prev_splitted_input)
+            initials    := PinyinSplitterGetBopomofoInitials(input_string, bopomofo_initials, string_index)
+            vowels      := PinyinSplitterGetBopomofoVowels(input_string, initials, string_index, prev_splitted_input)
             full_vowels := GetFullVowels(initials, vowels)
             tone_string := SubStr(input_string, string_index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)

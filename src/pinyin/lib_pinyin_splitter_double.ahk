@@ -70,34 +70,33 @@ PinyinSplitterGetDoubleInitials(input_str, double_initials, ByRef index)
 PinyinSplitterGetDoubleVowels(input_str, initials, ByRef index, prev_splitted_input)
 {
     local
-    vowels_max_len  := 1
+
     double_vowels   := ""
     vowels_len      := 0
-    if( vowels_max_len > 0 )
+
+    double_vowels := SubStr(input_str, index, 1)
+    if( IsVowelsAnyMark(double_vowels) )
     {
-        double_vowels := SubStr(input_str, index, 1)
-        if( IsVowelsAnyMark(double_vowels) )
+        vowels_len += 0
+    }
+    else
+    {
+        last_vowels := ""
+        loop
         {
-            vowels_len += 0
-        }
-        else
-        {
-            last_vowels := ""
-            loop
+            vowels := DoubleToNormal(double_vowels, A_Index)
+            if( last_vowels == vowels || vowels == "" ) {
+                vowels_len += 0
+                break
+            }
+            if( IsCompletePinyin(initials, vowels) )
             {
-                vowels := DoubleToNormal(double_vowels, A_Index)
-                if( last_vowels == vowels || vowels == "" ) {
-                    vowels_len += 0
-                    break
-                }
-                if( IsCompletePinyin(initials, vowels) )
-                {
-                    vowels_len += 1
-                    break
-                }
+                vowels_len += 1
+                break
             }
         }
     }
+
     index += vowels_len
 
     if( IsVowelsAnyMark(vowels) ){
