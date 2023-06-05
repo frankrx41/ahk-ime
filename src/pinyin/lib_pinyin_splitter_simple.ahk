@@ -5,6 +5,7 @@ PinyinSplitterInputStringSimple(input_string)
     ImeProfilerBegin(11)
 
     string_index        := 1
+    start_string_index  := 1
     strlen              := StrLen(input_string)
     splitter_list       := []
     hope_length_list    := [0]
