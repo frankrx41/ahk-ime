@@ -46,9 +46,9 @@ FluentToNormal(word, index)
     }
 
     index += 1
-    static fluent_pinyin := {"q":["q"], "w":["w"], "e":["e","e"], "r":["r"], "t":["t"], "y":["y"], "u":["","u"], "i":["","i"], "o":["o","o","ou","iu"], "p":["p","eng"]
-        , "a":["a","a"], "s":["s"], "d":["d"], "f":["f"], "g":["g"], "h":["h"], "j":["j","ai"], "k":["k","ei","ui"], "l":["l","ao"]
-        , "z":["z"], "x":["x"], "c":["c"], "v":["yu","v"], "b":["b","an"], "n":["n","en","in","nu"], "m":["m","ang"]}
+    static fluent_pinyin := {"q":["q"], "w":["w"], "e":["e","e"], "r":["r"], "t":["t"], "y":["y"], "u":["w","u"], "i":["y","i"], "o":["o","o","ou","ong","iong"], "p":["p"]
+        , "a":["a","a"], "s":["s"], "d":["d"], "f":["f"], "g":["g","ng","ang"], "h":["h"], "j":["j"], "k":["k"], "l":["l"]
+        , "z":["z"], "x":["x"], "c":["c"], "v":["yu","v"], "b":["b"], "n":["n","en","in","an"], "m":["m"]}
 
     normal_words := ""
     loop, Parse, word
@@ -59,129 +59,11 @@ FluentToNormal(word, index)
 
         normal_word := fluent_pinyin[test_word . "", index]
         if( !normal_word ) {
-            return ""
+            normal_word .= test_word
         }
         normal_words .= normal_word
     }
     return normal_words
-}
-
-PinyinSplitterGetFluentInitials(input_str, fluent_initials, ByRef index)
-{
-    local
-    index += 1
-
-    initials := FluentToNormal(fluent_initials, 0)
-    if( IsInitialsAnyMark(initials) ){
-        initials := "%"
-    }
-    if( InStr("zcs", fluent_initials) && (SubStr(input_str, index, 1)=="h") ){
-        ; zcs + h
-        index += 1
-        initials .= "h"
-    }
-    if( InStr("zcs", fluent_initials) && (SubStr(input_str, index, 1)=="?") ){
-        index += 1
-        initials .= "?"
-    }
-    initials := Format("{:L}", initials)
-    return initials
-}
-
-PinyinSplitterCalcFluentMaxVowelsLength(input_str, index)
-{
-    local
-    strlen := StrLen(input_str)
-    vowels_max_len := 0
-    loop {
-        ; Max len is 4
-        if( vowels_max_len >= 4 || index+vowels_max_len-1>=strlen ){
-            break
-        }
-        check_fluent_char := SubStr(input_str, index+vowels_max_len, 1)
-        check_char := FluentToNormal(check_fluent_char, 0)
-        if( IsVowelsAnyMark(check_char) )
-        {
-            if( vowels_max_len == 0 ){
-                vowels_max_len := 1
-            }
-            break
-        }
-        if( IsTone(check_char) ){
-            break
-        }
-        if( IsRadical(check_char) ){
-            break
-        }
-        if( IsRadical(check_char) ){
-            break
-        }
-        if( IsInitialsAnyMark(check_char) ){
-            break
-        }
-        vowels_max_len += 1
-    }
-    return vowels_max_len
-}
-
-PinyinSplitterGetFluentVowels(input_str, initials, ByRef index, prev_splitted_input)
-{
-    local
-    vowels_max_len  := PinyinSplitterCalcFluentMaxVowelsLength(input_str, index)
-    fluent_vowels := ""
-    vowels_len      := 0
-    found_vowels    := false
-    vowels          := ""
-    if( vowels_max_len > 0 )
-    {
-        loop
-        {
-            vowels_len := vowels_max_len+1-A_Index
-            fluent_vowels := SubStr(input_str, index, vowels_len)
-            if( IsVowelsAnyMark(fluent_vowels) )
-            {
-                break
-            }
-            else
-            {
-                last_vowels := "(null)"
-                loop
-                {
-                    vowels := FluentToNormal(fluent_vowels, A_Index)
-                    if( last_vowels == vowels ) {
-                        break
-                    }
-                    if( vowels ) {
-                        if( IsCompletePinyin(initials, vowels) ) {
-                            found_vowels := true
-                            break
-                        }
-                    }
-                    if( IsCompletePinyin(initials, fluent_vowels) )
-                    {
-                        vowels := fluent_vowels
-                        found_vowels := true
-                        break
-                    }
-                    if( vowels == "" ){
-                        break
-                    }
-                }
-            }
-            if( A_Index >= vowels_max_len+1 || found_vowels ){
-                break
-            }
-        }
-    }
-    index += vowels_len
-
-    if( IsVowelsAnyMark(vowels) ){
-        vowels := "%"
-    }
-    else if( !IsCompletePinyin(initials, vowels) ){
-        vowels .= "%"
-    }
-    return vowels
 }
 
 ;*******************************************************************************
@@ -224,8 +106,11 @@ PinyinSplitterInputStringFluent(input_string)
         {
             start_string_index := string_index
 
-            initials    := PinyinSplitterGetFluentInitials(input_string, fluent_initials, string_index)
-            vowels      := PinyinSplitterGetFluentVowels(input_string, initials, string_index, prev_splitted_input)
+            initials    := PinyinSplitterGetInitials(input_string, fluent_initials, string_index, "FluentToNormal")
+            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "FluentToNormal", 3)
+            if( !vowels ) {
+                vowels  := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
+            }
             full_vowels := GetFullVowels(initials, vowels)
             tone_string := SubStr(input_string, string_index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)

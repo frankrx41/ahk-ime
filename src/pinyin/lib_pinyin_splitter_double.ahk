@@ -45,89 +45,6 @@ DoubleToNormal(word, index)
     return double_pinyin[word, index]
 }
 
-PinyinSplitterGetDoubleInitials(input_str, double_initials, ByRef index)
-{
-    local
-    index += 1
-
-    initials := DoubleToNormal(double_initials, 0)
-    if( IsInitialsAnyMark(initials) ){
-        initials := "%"
-    }
-    if( InStr("zcs", double_initials) && (SubStr(input_str, index, 1)=="h") ){
-        ; zcs + h
-        index += 1
-        initials .= "h"
-    }
-    if( InStr("zcs", double_initials) && (SubStr(input_str, index, 1)=="?") ){
-        index += 1
-        initials .= "?"
-    }
-    initials := Format("{:L}", initials)
-    return initials
-}
-
-PinyinSplitterGetDoubleVowels(input_str, initials, ByRef index, prev_splitted_input)
-{
-    local
-
-    double_vowels   := ""
-    vowels_len      := 0
-
-    double_vowels := SubStr(input_str, index, 1)
-    if( IsVowelsAnyMark(double_vowels) )
-    {
-        vowels_len += 0
-    }
-    else
-    {
-        last_vowels := ""
-        loop
-        {
-            vowels := DoubleToNormal(double_vowels, A_Index)
-            if( last_vowels == vowels || vowels == "" ) {
-                vowels_len += 0
-                break
-            }
-            if( initials )
-            {
-                if( IsCompletePinyin(initials, vowels) )
-                {
-                    vowels_len += 1
-                    break
-                }
-            }
-            else
-            {
-                if( IsCompletePinyin(vowels, "") )
-                {
-                    vowels_len += 1
-                    break
-                }
-            }
-        }
-    }
-
-    index += vowels_len
-
-    if( IsVowelsAnyMark(vowels) ){
-        vowels := "%"
-    }
-    else if( initials )
-    {
-        if( !IsCompletePinyin(initials, vowels) ){
-            vowels .= "%"
-        }
-    }
-    else
-    {
-        if( !IsCompletePinyin(vowels, "") ){
-            vowels .= "%"
-        }
-    }
-    return vowels
-}
-
 ;*******************************************************************************
 ;
 PinyinSplitterInputStringDouble(input_string)
@@ -168,8 +85,11 @@ PinyinSplitterInputStringDouble(input_string)
         {
             start_string_index := string_index
 
-            initials    := PinyinSplitterGetDoubleInitials(input_string, double_initials, string_index)
-            vowels      := PinyinSplitterGetDoubleVowels(input_string, initials, string_index, prev_splitted_input)
+            initials    := PinyinSplitterGetInitials(input_string, double_initials, string_index, "DoubleToNormal")
+            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "DoubleToNormal", 2)
+            if( !vowels ) {
+                vowels  := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
+            }
             full_vowels := GetFullVowels(initials, vowels)
             tone_string := SubStr(input_string, string_index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
