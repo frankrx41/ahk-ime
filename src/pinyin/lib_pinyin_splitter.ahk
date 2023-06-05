@@ -33,7 +33,7 @@
 ; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false, bopomofo_spell:=false)
+PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false, third_spell:=false, bopomofo_spell:=false)
 {
     ; + or * marks 1 taken
     ; last char * marks simple spell
@@ -53,11 +53,17 @@ PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false
         splitter_list := PinyinSplitterInputStringBopomofo(input_string)
     }
     else
+    if( third_spell )
+    {
+        splitter_list := PinyinSplitterInputStringFluent(input_string)
+    }
+    else
     {
         splitter_list := PinyinSplitterInputStringNormal(input_string)
     }
 
-    if( !simple_spell && !double_spell && StrLen(input_string) <= 4 && !InStr(input_string, "+") && !InStr(input_string, "%") )
+
+    if( !simple_spell && !double_spell && !third_spell && StrLen(input_string) <= 4 && !InStr(input_string, "+") && !InStr(input_string, "%") )
     {
         try_simple_spliter := true
         loop, % splitter_list.Length()

@@ -345,8 +345,12 @@
         if( !ImeLanguageIsSimChinese() ){
             ImeStateUpdateLanague("cn")
         } else {
+            ; double -> third -> normal
             if( ImeSchemeIsPinyinDouble() ){
                 ImeSchemeDoubleSet(false)
+                ImeSchemeThirdSet(true)
+            } else if( ImeSchemeIsPinyinThird() ){
+                ImeSchemeThirdSet(false)
             } else {
                 ImeSchemeDoubleSet(true)
             }
