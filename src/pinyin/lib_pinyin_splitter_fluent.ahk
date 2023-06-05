@@ -1,21 +1,57 @@
 ; index == 0 Get initials
 ; index >= 1 Get vowels
+; http://www.sora-as.jp/pinyin/pinyin.html
+;
+; [Q] [W] [E] [R] [T] [Y] [ ] [ ] [O] [P]
+;  [A] [S] [D] [F] [G] [H] [J] [K] [L]
+;   [Z] [X] [C] [YU] [B] [N] [M]
+;
+; [zh] = [z] + [h]
+;
+; 声母
+; [b] [p] [m] [f]
+; [d] [t] [n] [l]
+; [g] [k] [h]
+; [j] [q] [x]
+; [zh] [ch] [sh] [r]
+; [z] [c] [s]
+;
+; 韵母
+; [a] [o] [e] [i] [u]
+; [ai] [ei]
+; [ao] [ou]
+; [an] [en]
+; [ang] [eng] [ong]
+; [ia] [iao] [ie] [iou/iu] [ian] [iang] [ing] [iong]
+; [ua] [uo] [uai] [uei/ui] [uan] [uen/un] [uang] [ueng]
+; [ve] [uan] [un]
+;
+; https://youtu.be/seaPXehN6no?t=291
+; [in] = [i][en]
+; [ing] = [i][eng]
+; [un] = [v][en]
+; [iong] = [v][eng]
+; [ong] = [u][eng]
+;
+; y = i, w = u, yu = v
+;
 FluentToNormal(word, index)
 {
     if( word == "" || word == " " ){
         return ""
     }
+
     index += 1
-    static fluent_pinyin := {"q":["q"], "w":["w"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","un"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","ie"]
-        , "a":["a","a"], "s":["s","iong","ong"], "d":["d","ai"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ing","uai"], "l":["l","iang","uang"]
-        , "z":["z","ou"], "x":["x","ia","ua"], "c":["c","ao"], "v":["zh","ui","v"], "b":["b","in"], "n":["n","iao"], "m":["m","ian"]}
-    Assert(fluent_pinyin.HasKey("0"), word)
+    static fluent_pinyin := {"q":["q"], "w":["w"], "e":["e","e"], "r":["r"], "t":["t"], "y":["y"], "u":["","u"], "i":["","i"], "o":["o","o","ou","iu"], "p":["p","eng"]
+        , "a":["a","a"], "s":["s"], "d":["d"], "f":["f"], "g":["g"], "h":["h"], "j":["j","ai"], "k":["k","ei","ui"], "l":["l","ao"]
+        , "z":["z"], "x":["x"], "c":["c"], "v":["yu","v"], "b":["b","an"], "n":["n","en","in","nu"], "m":["m","ang"]}
+
     normal_words := ""
     loop, Parse, word
     {
         test_word := A_LoopField
         ; `. ""` to force as string
-        Assert(fluent_pinyin.HasKey(test_word . ""), test_word ", " word)
+        ; Assert(fluent_pinyin.HasKey(test_word . ""), test_word ", " word)
 
         normal_word := fluent_pinyin[test_word . "", index]
         if( !normal_word ) {
@@ -54,8 +90,8 @@ PinyinSplitterCalcFluentMaxVowelsLength(input_str, index)
     strlen := StrLen(input_str)
     vowels_max_len := 0
     loop {
-        ; Max len is 4
-        if( vowels_max_len >= 4 || index+vowels_max_len-A_Index>=strlen ){
+        ; Max len is 3
+        if( vowels_max_len >= 3 || index+vowels_max_len-1>=strlen ){
             break
         }
         check_fluent_char := SubStr(input_str, index+vowels_max_len, 1)
