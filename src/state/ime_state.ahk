@@ -16,7 +16,7 @@ ImeStateInitialize()
 
     DllCall("SetWinEventHook", "UInt", 0x03, "UInt", 0x07, "Ptr", 0, "Ptr", RegisterCallback("ImeStateEventProcHook"), "UInt", 0, "UInt", 0, "UInt", 0)
     ; Notice: if `ime_mode_language` same as here, state will not update
-    ImeStateUpdateMode("cn")
+    ImeStateUpdateLanague("cn")
 
     ; Update system tray
     Menu, Tray, Tip, % "AHK IME `n" GetVersionText()
@@ -58,28 +58,17 @@ ImeStateRefresh()
     }
     else
     {
-        ImeStateUpdateMode(ImeLanguageGet())
+        ImeStateUpdateLanague(ImeLanguageGet())
     }
 }
 
-ImeStateUpdateMode(mode)
+;*******************************************************************************
+;
+ImeStateUpdateLanague(language)
 {
-    local
-    last_mode := ImeLanguageGet()
-    if( mode != last_mode )
-    {
-        ImeLanguageSet(mode)
-        if( mode != "en" ) {
-            ImeHotkeyRegisterShift("en")
-        } else {
-            ImeHotkeyRegisterShift(last_mode)
-        }
-    }
-    if( mode == "tw" )
-    {
-        PinyinTraditionalInitialize()
-    }
-    ImeIconSetMode(mode)
+    origin_language := ImeLanagueUpdate(language)
+    ImeHotkeyRegisterShift(origin_language)
+    ImeIconSetMode(language)
 }
 
 ImeStatePauseWindowActive()

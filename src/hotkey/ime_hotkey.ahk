@@ -77,7 +77,7 @@
 
     +Enter::
         ImeOutputterPutSelect(true)
-        ; ImeStateUpdateMode("en")
+        ; ImeStateUpdateLanague("en")
         ImeTooltipUpdate()
     return
 
@@ -348,19 +348,17 @@
     return
 
     F6::
-        ImeStateUpdateMode("cn")
+        if( !ImeLanguageIsSimChinese() ){
+            ImeStateUpdateLanague("cn")
+        } else {
+            ImeStateUpdateLanague("tw")
+        }
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     F7::
-        ImeStateUpdateMode("tw")
-        ImeInputterUpdateString("")
-        ImeTooltipUpdate()
-    return
-
-    F8::
-        ImeStateUpdateMode("jp")
+        ImeStateUpdateLanague("jp")
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return

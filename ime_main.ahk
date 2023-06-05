@@ -41,7 +41,7 @@ ImeProfilerFunc(1, "PinyinInitialize")
 ImeProfilerFunc(1, "GojuonTranslateInitialize")
 ImeProfilerFunc(1, "ImeTooltipInitialize")
 ImeProfilerFunc(1, "ImeHotkeyInitialize")
-; `ImeStateUpdateMode` is call inside `ImeStateInitialize`
+; `ImeStateUpdateLanague` is call inside `ImeStateInitialize`
 ImeProfilerFunc(1, "ImeStateInitialize")
 
 ImeProfilerFunc(1, "ImeDBInitialize")

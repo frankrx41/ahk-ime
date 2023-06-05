@@ -50,3 +50,26 @@ ImeLanguageIsJapanese()
     global ime_mode_language
     return ime_mode_language == "jp"
 }
+
+;*******************************************************************************
+;
+ImeLanagueUpdate(language)
+{
+    local
+    origin_language := ""
+    last_language := ImeLanguageGet()
+    if( language != last_language )
+    {
+        ImeLanguageSet(language)
+        if( language != "en" ) {
+            origin_language := "en"
+        } else {
+            origin_language := last_language
+        }
+    }
+    if( language == "tw" )
+    {
+        PinyinTraditionalInitialize()
+    }
+    return origin_language
+}

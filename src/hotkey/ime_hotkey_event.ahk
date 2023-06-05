@@ -105,7 +105,7 @@ HotkeyOnShift(orgin_mode)
     }
     else
     {
-        ImeStateUpdateMode(orgin_mode)
+        ImeStateUpdateLanague(orgin_mode)
     }
 
     ImeTooltipUpdate()
