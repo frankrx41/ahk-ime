@@ -183,7 +183,7 @@ IsTone(char)
 
 IsRadical(char)
 {
-    return InStr("AEOBPMFDTNLGKHJQXZCSRYWVUI!@#$^&", char, true)
+    return char != "" && InStr("AEOBPMFDTNLGKHJQXZCSRYWVUI!@#$^&", char, true)
 }
 
 GetRadical(input_string)
@@ -209,7 +209,7 @@ PinyinInitialize()
     global zero_initials_table := {}
 
     ; 零声母
-    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou", "%"]
+    zero_initials := ["a","ai","an","ang","ao","e","ei","en","eng","er","o","ou","yu","%"]
 
     ; 全拼声母韵母表
     full_spelling_json =
@@ -412,7 +412,11 @@ PinyinInitialize()
                 "ei":"ei","en":"en","eng":"eng",
                 "u":"u"
             },
-            
+            "yu" :{
+                "1":"yu",
+                "e":"e","an":"an","un":"un"
+            },
+
             "`%" :{
                 "1":"`%",
                 "a":"a","ai":"ai","an":"an","ang":"ang","ao":"ao",
