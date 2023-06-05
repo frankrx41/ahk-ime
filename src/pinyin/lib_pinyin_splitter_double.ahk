@@ -87,7 +87,7 @@ PinyinSplitterInputStringDouble(input_string)
 
             initials    := PinyinSplitterGetInitials(input_string, double_initials, string_index, "DoubleToNormal")
             vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "DoubleToNormal", 2)
-            if( !vowels ) {
+            if( vowels == "%" ) {
                 vowels  := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
             }
             full_vowels := GetFullVowels(initials, vowels)
