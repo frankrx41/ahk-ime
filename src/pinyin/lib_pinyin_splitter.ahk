@@ -3,6 +3,7 @@
 #Include, src\pinyin\lib_pinyin_splitter_normal.ahk
 #Include, src\pinyin\lib_pinyin_splitter_double.ahk
 #Include, src\pinyin\lib_pinyin_splitter_bopomofo.ahk
+#Include, src\pinyin\lib_pinyin_splitter_fluent.ahk
 
 ;*******************************************************************************
 ; In:
