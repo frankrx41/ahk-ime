@@ -9,11 +9,11 @@ DoubleToNormal(word, index)
     }
     index += 1
     ; 小鹤双拼
-    static double_xiaohe := {"q":["q","iu"], "w":["w","ei"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","un"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","ie"]
+    static double_xiaohe := {"q":["q","iu"], "w":["w","ei"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","un"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","ie"]
         , "a":["","a"], "s":["s","iong","ong"], "d":["d","ai"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ing","uai"], "l":["l","iang","uang"]
         , "z":["z","ou"], "x":["x","ia","ua"], "c":["c","ao"], "v":["zh","ui","v"], "b":["b","in"], "n":["n","iao"], "m":["m","ian"]}
     ; 自然码双拼
-    static double_ziranma := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","ing","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","ou"], "p":["p","un"]
+    static double_ziranma := {"q":["q","iu"], "w":["w","ia","ua"], "e":["","e"], "r":["r","uan"], "t":["t","ue","ve"], "y":["y","ing","uai"], "u":["sh","u"], "i":["ch","i"], "o":["","o","uo"], "p":["p","un"]
         , "a":["","a"], "s":["s","iong","ong"], "d":["d","iang","uang"], "f":["f","en"], "g":["g","eng"], "h":["h","ang"], "j":["j","an"], "k":["k","ao"], "l":["l","ai"]
         , "z":["z","ei"], "x":["x","ie"], "c":["c","iao"], "v":["zh","ui","v"], "b":["b","ou"], "n":["n","in"], "m":["m","ian"]}
     ; 拼音加加
