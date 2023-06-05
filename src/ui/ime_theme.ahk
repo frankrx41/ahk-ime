@@ -17,7 +17,7 @@ ImeThemeInitialize(dark:=false)
         text_color          := "575757"
         ; background_color    := "FFFFFF"
         ; text_color          := "111111"
-        use_theme           := 1
+        use_theme           := 0
     }
 
     ToolTip(1, "", "", " Q" use_theme " B" background_color " T" text_color " F" font_family " H" font_bold)
@@ -27,7 +27,7 @@ ImeThemeInitialize(dark:=false)
     ime_theme_tooltip_option_string .= " S" font_size
     ime_theme_tooltip_option_string .= " E5.1.1.1"
 
-    ime_theme_icon_option_string    := "X2300 Y1200 S11 E2.1.1.1"
+    ime_theme_icon_option_string    := " X2300 Y1200 S11 E2.1.1.1"
 }
 
 ImeThemeGetTooltipOption()
