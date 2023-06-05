@@ -350,6 +350,7 @@
             } else {
                 ImeSchemeDoubleSet(true)
             }
+            ImeStateRefresh()
         }
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
@@ -364,6 +365,7 @@
             } else {
                 ImeSchemeBopomofoSet(true)
             }
+            ImeStateRefresh()
         }
         ImeInputterUpdateString("")
         ImeTooltipUpdate()

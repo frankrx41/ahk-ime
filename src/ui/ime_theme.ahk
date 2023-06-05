@@ -15,7 +15,7 @@ ImeThemeInitialize()
     ime_theme_tooltip_option_string .= " S" font_size
     ime_theme_tooltip_option_string .= " E5.1.1.1"
 
-    ime_theme_icon_option_string    := " X2300 Y1200 S11 E2.1.1.1"
+    ime_theme_icon_option_string    := " X2300 Y1200 S11 E2.1.1.1 Q1"
 }
 
 ImeThemeGetTooltipOption()
@@ -38,15 +38,46 @@ ImeThemeGetTooltipOption()
     return ime_theme_tooltip_option_string . tooltip_option
 }
 
-ImeThemeGetIconOption(mode)
+ImeThemeGetIconOption()
 {
     global ime_theme_icon_option_string
-    tooltip_option := ""
-    switch (mode) {
-    case "en": tooltip_option := " Q1 B1e1e1e T4f4f4f"
-    case "cn": tooltip_option := " Q1 Bff4f4f Tfefefe"
-    case "tw": tooltip_option := " Q1 B0033cc Tfefefe"
-    case "jp": tooltip_option := " Q1 B339933 Tfefefe"
+
+    if( ImeLanguageIsEnglish() ){
+        tooltip_option := " B1e1e1e T4f4f4f"
     }
+    if( ImeLanguageIsSimChinese() ){
+        if( ImeSchemeIsPinyinDouble() ) {
+            tooltip_option := " B373832 Td4d4d4"
+        } else {
+            tooltip_option := " Bff4f4f Tfefefe"
+        }
+    }
+    if( ImeLanguageIsTraChinese() ){
+        if( ImeSchemeIsPinyinBopomofo() ) {
+            tooltip_option := " B3366ff Tfefefe"
+        } else {
+            tooltip_option := " B0033cc Tfefefe"
+        }
+    }
+    if( ImeLanguageIsJapanese() ){
+        tooltip_option := " B339933 Tfefefe"
+    }
+
     return ime_theme_icon_option_string . tooltip_option
+}
+
+ImeThemeGetIconText()
+{
+    if( ImeLanguageIsEnglish() ){
+        return "En"
+    }
+    if( ImeLanguageIsSimChinese() ) {
+        return "中"
+    }
+    if( ImeLanguageIsTraChinese() ){
+        return "漢"
+    }
+    if( ImeLanguageIsJapanese() ){
+        return "日"
+    }
 }

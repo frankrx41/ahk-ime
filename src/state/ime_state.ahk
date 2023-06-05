@@ -54,7 +54,7 @@ ImeStateRefresh()
     {
         ImeInputterClearAll()
         ImeSelectMenuClose()
-        ImeIconSetMode("")
+        ImeIconUpdate(false)
     }
     else
     {
@@ -68,7 +68,7 @@ ImeStateUpdateLanague(language)
 {
     origin_language := ImeLanagueUpdate(language)
     ImeHotkeyRegisterShift(origin_language)
-    ImeIconSetMode(language)
+    ImeIconUpdate(true)
 }
 
 ImeStatePauseWindowActive()
