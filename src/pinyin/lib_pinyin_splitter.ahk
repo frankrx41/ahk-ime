@@ -2,6 +2,7 @@
 #Include, src\pinyin\lib_pinyin_splitter_simple.ahk
 #Include, src\pinyin\lib_pinyin_splitter_normal.ahk
 #Include, src\pinyin\lib_pinyin_splitter_double.ahk
+#Include, src\pinyin\lib_pinyin_splitter_bopomofo.ahk
 
 ;*******************************************************************************
 ; In:
@@ -31,7 +32,7 @@
 ; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(input_string, simple_spell := false, double_spell := false)
+PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false, bopomofo_spell:=false)
 {
     ; + or * marks 1 taken
     ; last char * marks simple spell
@@ -44,6 +45,11 @@ PinyinSplitterInputString(input_string, simple_spell := false, double_spell := f
     if( double_spell )
     {
         splitter_list := PinyinSplitterInputStringDouble(input_string)
+    }
+    else
+    if( bopomofo_spell )
+    {
+        splitter_list := PinyinSplitterInputStringBopomofo(input_string)
     }
     else
     {
