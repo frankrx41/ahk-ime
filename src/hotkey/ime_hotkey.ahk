@@ -333,7 +333,7 @@
     return
 
     ; Reload theme
-    !+F5::
+    +F5::
         TooltipInfoBlock("Reload theme")
         ImeThemeInitialize()
         ImeInputterUpdateString("")
