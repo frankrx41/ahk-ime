@@ -36,3 +36,12 @@ ImeSchemeSimpleSet(force)
     global ime_scheme_simple
     ime_scheme_simple := force
 }
+
+;*******************************************************************************
+;
+ImeSchemeDoubleSet(force)
+{
+    global ime_scheme_double
+    ime_scheme_double := force
+}
+

@@ -333,15 +333,9 @@
     return
 
     ; Reload theme
-    !F5::
-        ImeThemeInitialize(false)
-        ImeInputterUpdateString("")
-        ImeStateRefresh()
-        ImeTooltipUpdate()
-    return
-
     !+F5::
-        ImeThemeInitialize(true)
+        TooltipInfoBlock("Reload theme")
+        ImeThemeInitialize()
         ImeInputterUpdateString("")
         ImeStateRefresh()
         ImeTooltipUpdate()
@@ -351,13 +345,23 @@
         if( !ImeLanguageIsSimChinese() ){
             ImeStateUpdateLanague("cn")
         } else {
-            ImeStateUpdateLanague("tw")
+            if( ImeSchemeIsPinyinDouble() ){
+                ImeSchemeDoubleSet(false)
+            } else {
+                ImeSchemeDoubleSet(true)
+            }
         }
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     F7::
+        ImeStateUpdateLanague("tw")
+        ImeInputterUpdateString("")
+        ImeTooltipUpdate()
+    return
+
+    F8::
         ImeStateUpdateLanague("jp")
         ImeInputterUpdateString("")
         ImeTooltipUpdate()

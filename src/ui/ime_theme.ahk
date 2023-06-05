@@ -1,4 +1,4 @@
-ImeThemeInitialize(dark:=false)
+ImeThemeInitialize()
 {
     local
     global ime_theme_tooltip_option_string  := ""
@@ -6,21 +6,9 @@ ImeThemeInitialize(dark:=false)
     font_size           := 13
     font_family         := "Microsoft_YaHei_Mono" ;"Ubuntu Mono derivative Powerline", "DengXian"
     font_bold           := 0
-    if( dark ) {
-        ; background_color    := "1e1e1e"
-        ; text_color          := "ccccc1"
-        background_color    := "373832"
-        text_color          := "d4d4d4"
-        use_theme           := 1
-    } else {
-        background_color    := "f9f9f9"
-        text_color          := "575757"
-        ; background_color    := "FFFFFF"
-        ; text_color          := "111111"
-        use_theme           := 0
-    }
+    use_theme           := 0
 
-    ToolTip(1, "", "", " Q" use_theme " B" background_color " T" text_color " F" font_family " H" font_bold)
+    ToolTip(1, "", "", " Q" use_theme " F" font_family " H" font_bold)
     ToolTip(4, "", "", " Q1 S11")
 
     ime_theme_tooltip_option_string := ""
@@ -33,7 +21,15 @@ ImeThemeInitialize(dark:=false)
 ImeThemeGetTooltipOption()
 {
     global ime_theme_tooltip_option_string
-    return ime_theme_tooltip_option_string
+    tooltip_option := ""
+    if( ImeSchemeIsPinyinDouble() ){
+        tooltip_option .= " Q1 BFFFFFF T111111"
+        tooltip_option .= " Q1 B1e1e1e Tccccc1"
+        tooltip_option .= " Q1 B373832 Td4d4d4"
+    } else {
+        tooltip_option .= " Q1 Bf9f9f9 T474747"
+    }
+    return ime_theme_tooltip_option_string . tooltip_option
 }
 
 ImeThemeGetIconOption(mode)

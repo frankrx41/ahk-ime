@@ -1,9 +1,13 @@
+; https://zh.wikipedia.org/wiki/%E5%8F%8C%E6%8B%BC
 DoubleVowelsToNormal(word, index)
 {
+    if( word == "" ){
+        return ""
+    }
     static double_vowels := {"q":["iu"], "w":["ei"], "e":["e"], "r":["uan"], "t":["ue","ve"], "y":["un"], "u":["u"], "i":["i"], "o":["o","ou"], "p":["ie"]
         , "a":["a"], "s":["iong","ong"], "d":["ai"], "f":["en"], "g":["eng"], "h":["ang"], "j":["an"], "k":["ing","uai"], "l":["iang","uang"]
         , "z":["ou"], "x":["ia","ua"], "c":["ao"], "v":["ui","v"], "b":["in"], "n":["iao"], "m":["ian"]}
-    Assert(double_vowels.HasKey(word))
+    Assert(double_vowels.HasKey(word), word)
     return double_vowels[word, index]
 }
 

@@ -31,7 +31,7 @@
 ; "haoN" -> [hao0{N}=1] (0)
 ;
 ; See: `PinyinSplitterInputStringTest`
-PinyinSplitterInputString(input_string, simple_spell := false)
+PinyinSplitterInputString(input_string, simple_spell := false, double_spell := false)
 {
     ; + or * marks 1 taken
     ; last char * marks simple spell
@@ -39,6 +39,11 @@ PinyinSplitterInputString(input_string, simple_spell := false)
     if( simple_spell )
     {
         splitter_list := PinyinSplitterInputStringSimple(input_string)
+    }
+    else
+    if( double_spell )
+    {
+        splitter_list := PinyinSplitterInputStringDouble(input_string)
     }
     else
     {
