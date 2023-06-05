@@ -73,7 +73,7 @@ IsBadTone(initials, vowels, tone)
 IsCompletePinyin(initials, vowels, tone:="'")
 {
     global pinyin_table
-    global pinyin_table_auto_correct
+    global auto_correct_table
     global bopomofo_table
 
     ; initials like z? c? s?
@@ -115,7 +115,7 @@ IsCompletePinyin(initials, vowels, tone:="'")
     }
     else
     {
-        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (pinyin_table_auto_correct[initials, vowels]) || (bopomofo_table[initials, vowels])
+        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (auto_correct_table[initials, vowels]) || (bopomofo_table[initials, vowels])
         if( is_complete && tone )
         {
             is_complete := !IsBadTone(initials, vowels, tone)
@@ -126,14 +126,14 @@ IsCompletePinyin(initials, vowels, tone:="'")
 
 IsAutoCorrectPinyin(initials, vowels, tone:="'")
 {
-    global pinyin_table_auto_correct
-    return pinyin_table_auto_correct[initials, vowels]
+    global auto_correct_table
+    return auto_correct_table[initials, vowels]
 }
 
 GetFullVowels(initials, vowels)
 {
     global pinyin_table
-    global pinyin_table_auto_correct
+    global auto_correct_table
     global bopomofo_table
 
     if( pinyin_table[initials][vowels] ) {
@@ -144,7 +144,7 @@ GetFullVowels(initials, vowels)
         return bopomofo_table[initials][vowels]
     }
     else {
-        return pinyin_table_auto_correct[initials][vowels]
+        return auto_correct_table[initials][vowels]
     }
 }
 
@@ -211,7 +211,7 @@ PinyinInitialize()
     local
     global JSON
     global pinyin_table
-    global pinyin_table_auto_correct
+    global auto_correct_table
     global bopomofo_table
     global zero_initials_table := {}
 
@@ -449,7 +449,7 @@ PinyinInitialize()
         }
     }
 
-    full_spelling_json_auto_correct =
+    auto_correct_json =
     (LTrim
         {
             "b" :{
@@ -546,8 +546,7 @@ PinyinInitialize()
             }
         }
     )
-    pinyin_table_auto_correct := JSON.Load(full_spelling_json_auto_correct)
-
+    auto_correct_table := JSON.Load(auto_correct_json)
 
     bopomofo_spelling_json =
     (LTrim
