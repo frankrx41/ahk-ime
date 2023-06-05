@@ -198,3 +198,31 @@ SplitterResultListGetDisplayText(splitter_result_list)
     }
     return SubStr(dsiplay_text, 1, StrLen(dsiplay_text)-1)
 }
+
+SplitterResultListGetDisplayTextGrace(splitter_result_list)
+{
+    local
+    dsiplay_text := ""
+    loop, % splitter_result_list.Length()
+    {
+        dsiplay_text .= "["
+        index := A_Index
+        if( SplitterResultNeedTranslate(splitter_result_list[index]) )
+        {
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result_list[index])
+            dsiplay_text .= SplitterResultGetTone(splitter_result_list[index])
+        }
+        else
+        {
+            dsiplay_text .= SplitterResultGetPinyin(splitter_result_list[index])
+        }
+
+        radical := SplitterResultGetRadical(splitter_result_list[index])
+        if( radical ) {
+            dsiplay_text .= radical
+        }
+
+        dsiplay_text .= "]"
+    }
+    return dsiplay_text
+}

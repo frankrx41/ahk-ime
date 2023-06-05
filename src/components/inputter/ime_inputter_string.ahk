@@ -103,7 +103,7 @@ ImeInputterGetDisplayString()
         tooltip_string .= " {Enter}"
     }
 
-    tooltip_string .= "`n" SplitterResultListGetDisplayText(ime_splitted_list)
+    tooltip_string .= "`n" SplitterResultListGetDisplayTextGrace(ime_splitted_list)
     return tooltip_string
 }
 
