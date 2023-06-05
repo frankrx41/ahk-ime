@@ -18,6 +18,7 @@ ImeThemeInitialize()
     ime_theme_icon_option_string    := " X2300 Y1200 S11 E2.1.1.1 Q1"
 }
 
+; https://www.wincalendar.com/Color-Picker
 ImeThemeGetTooltipOption()
 {
     global ime_theme_tooltip_option_string
@@ -28,11 +29,15 @@ ImeThemeGetTooltipOption()
         tooltip_option .= " Q1 B373832 Td4d4d4"
     }
     else
+    if( ImeLanguageIsSimChinese() && ImeSchemeIsPinyinThird() ){
+        tooltip_option := " Q1 Bccffcc T111111"
+        tooltip_option := " Q1 BE6F6DF T565921"
+    }
+    else
     if( ImeLanguageIsTraChinese() && ImeSchemeIsPinyinBopomofo() ){
         tooltip_option .= " Q1 Bd9d9d9 T0033cc"
     }
-    else
-    {
+    else{
         tooltip_option .= " Q1 Bf9f9f9 T474747"
     }
     return ime_theme_tooltip_option_string . tooltip_option
@@ -48,6 +53,8 @@ ImeThemeGetIconOption()
     if( ImeLanguageIsSimChinese() ){
         if( ImeSchemeIsPinyinDouble() ) {
             tooltip_option := " B373832 Td4d4d4"
+        } else if( ImeSchemeIsPinyinThird() ) {
+            tooltip_option := " BE6F6DF T565921"
         } else {
             tooltip_option := " Bff4f4f Tfefefe"
         }
