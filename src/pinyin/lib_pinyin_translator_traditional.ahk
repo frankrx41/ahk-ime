@@ -9,9 +9,13 @@ PinyinTraditionalInitialize()
     FileRead, file_content, data\traditional.txt
     Loop, Parse, file_content, `n, `r
     {
-        ; Split each line by the tab character
-        arr := StrSplit(A_LoopField, "`t")
-        ime_traditional_table[arr[1]] := StrSplit(arr[2], " ")
+        line := A_LoopField
+        ; Split each line by the tab char
+        if( line != "" && SubStr(line, 1, 1) != ";" )
+        {
+            arr := StrSplit(line, "`t")
+            ime_traditional_table[arr[1]] := StrSplit(arr[2], ",")
+        }
     }
     ime_traditional_initialize := true
     Assert(ime_traditional_table.Count() != 0)
