@@ -38,9 +38,9 @@ ImeCandidateUpdateResult(splitter_result_list)
                 ; Add legacy text
                 test_string := SplitterResultGetPinyin(test_splitter_list[1])
                 if( RegexMatch(test_string, "^\s*$") ) {
-                    translate_result_list := [TranslatorResultMakeNoSelect(test_string, "")]
+                    translate_result_list := [TranslatorResultMakeDisable(test_string, "")]
                 } else {
-                    translate_result_list := [TranslatorResultMakeNoSelect(test_string, test_string)]
+                    translate_result_list := [TranslatorResultMakeDisable(test_string, test_string)]
                 }
             }
             else
@@ -50,7 +50,7 @@ ImeCandidateUpdateResult(splitter_result_list)
                 translate_result_list := ImeTranslateFindResult(test_splitter_list, auto_complete)
                 if( translate_result_list.Length() == 0 ){
                     first_word := SplitterResultListConvertToString(splitter_result_list, splitter_index, 1)
-                    translate_result_list := [TranslatorResultMakeNoSelect(first_word, first_word)]
+                    translate_result_list := [TranslatorResultMakeDisable(first_word, first_word)]
                 }
             }
             ; Insert result

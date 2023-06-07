@@ -360,15 +360,12 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
             }
 
             if( match_level == radical_match_level_full_match ) {
-                TranslatorResultAppendComment(translate_result, "1")
                 translate_full_match_result_list.Push(translate_result)
             }
             if( match_level == radical_match_level_last_match ) {
-                TranslatorResultAppendComment(translate_result, "2")
                 translate_last_match_result_list.Push(translate_result)
             }
             if( match_level == radical_match_level_no_radical ) {
-                TranslatorResultAppendComment(translate_result, "3")
                 translate_no_radical_result_list.Push(translate_result)
             }
 
@@ -389,15 +386,21 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
             ; translate_full_match_result_list[A_Index, 4] := 1
             translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
         }
-        loop, % translate_last_match_result_list.Length()
+        if( translate_last_match_result_list.Length() > 0 )
         {
-            ; translate_last_match_result_list[A_Index, 4] := 2
-            translate_result_list.Push(translate_last_match_result_list[A_Index])
+            translate_result_list.Push(TranslatorResultMakeDisable("", "last m", ""))
+            loop, % translate_last_match_result_list.Length()
+            {
+                translate_result_list.Push(translate_last_match_result_list[A_Index])
+            }
         }
-        loop, % translate_no_radical_result_list.Length()
+        if( translate_no_radical_result_list.Length() )
         {
-            ; translate_no_radical_result_list[A_Index, 4] := 3
-            translate_result_list.Push(translate_no_radical_result_list[A_Index])
+            translate_result_list.Push(TranslatorResultMakeDisable("", "no rad", ""))
+            loop, % translate_no_radical_result_list.Length()
+            {
+                translate_result_list.Push(translate_no_radical_result_list[A_Index])
+            }
         }
 
         if( translate_result_list.Length() == 0 )

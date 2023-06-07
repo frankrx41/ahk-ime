@@ -7,6 +7,7 @@
 ;   [5]: 1          ; word length
 ;   [6]: false      ; traditional: 0 false 1 trad 2 auto trad
 ;   [7]: false      ; top
+;   [8]: false      ; diable
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
@@ -45,9 +46,9 @@ TranslatorResultMake(pinyin, word, weight, comment, word_length)
     return [pinyin, word, weight, comment, word_length, false, false, false]
 }
 
-TranslatorResultMakeNoSelect(pinyin, word)
+TranslatorResultMakeDisable(pinyin, word, comment:="N/A")
 {
-    translate_result := TranslatorResultMake(pinyin, word, 0, "Skip", 1)
+    translate_result := TranslatorResultMake(pinyin, word, 0, comment, 1)
     translate_result[8] := true
     return translate_result
 }
@@ -70,7 +71,7 @@ TranslatorResultMakeTop(ByRef translate_result, weight)
 
 TranslatorResultMakeError()
 {
-    return TranslatorResultMakeNoSelect("", "Error")
+    return TranslatorResultMakeDisable("", "Error")
 }
 
 ;*******************************************************************************
