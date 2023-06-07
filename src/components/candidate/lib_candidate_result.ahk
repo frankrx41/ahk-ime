@@ -41,7 +41,7 @@ CandidateGetWordLength(ByRef candidata, split_index, word_index)
 
 CandidateIsTraditional(ByRef candidata, split_index, word_index)
 {
-    return TranslatorResultGetTraditionalLevel(candidata[split_index, word_index]) != 0
+    return TranslatorResultGetTraditionalLevel(candidata[split_index, word_index]) > 0
 }
 
 ; 0 false 1 trad 2 auto trad
