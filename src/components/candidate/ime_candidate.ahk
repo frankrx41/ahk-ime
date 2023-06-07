@@ -144,6 +144,11 @@ ImeCandidateGetTopLevel(split_index, word_index)
     return CandidateGetTopLevel(ImeCandidateGet(), split_index, word_index)
 }
 
+ImeCandidateIsDisable(split_index, word_index)
+{
+    return CandidateIsDisable(ImeCandidateGet(), split_index, word_index)
+}
+
 ;*******************************************************************************
 ;
 ImeCandidateGetFormattedComment(split_index, word_index)
