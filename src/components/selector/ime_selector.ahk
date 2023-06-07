@@ -19,32 +19,8 @@ ImeSelectorClear()
 ;
 ImeSelectorGetAvailableSelect(new_select, split_index)
 {
-    new_select := Max(1, Min(ImeCandidateGetTranslatorListLength(split_index), new_select))
-    if( !ImeCandidateIsDisable(split_index, new_select) )
-    {
-        return new_select
-    }
-    else
-    {
-        origin_select := ImeSelectorGetSelectIndex(split_index)
-        update_method := origin_select > new_select ? -1 : +1
-        loop
-        {
-            new_select += update_method
-            if( new_select == 0 )
-            {
-                return origin_select
-            }
-            if( ImeCandidateGetTranslatorListLength(split_index) == new_select )
-            {
-                return origin_select
-            }
-            if( !ImeCandidateIsDisable(split_index, new_select) )
-            {
-                return new_select
-            }
-        }
-    }
+    global ime_selector_select_list
+    return SelectorGetAvailableSelect(ime_selector_select_list, ImeCandidateGet(), new_select, split_index)
 }
 
 ;*******************************************************************************
@@ -62,7 +38,6 @@ ImeSelectorSetCaretSelectIndex(select_index)
     local
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
-    ; select_index := Max(1, Min(ImeCandidateGetTranslatorListLength(split_index), select_index))
     select_index := ImeSelectorGetAvailableSelect(select_index, split_index)
     if( !ime_selector_select_list[split_index] ){
         ime_selector_select_list[split_index] := []
@@ -76,7 +51,6 @@ ImeSelectorOffsetCaretSelectIndex(offset)
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index) + offset
-    ; select_index := Max(1, Min(ImeCandidateGetTranslatorListLength(split_index), select_index))
     select_index := ImeSelectorGetAvailableSelect(select_index, split_index)
     SelectorResultSetSelectIndex(ime_selector_select_list[split_index], select_index)
 }

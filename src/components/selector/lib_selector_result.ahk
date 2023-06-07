@@ -59,3 +59,35 @@ SelectorResultMake(select_index:=0, lock_word:="", lock_length:=0)
 {
     return [select_index, lock_word, lock_length]
 }
+
+;*******************************************************************************
+;
+SelectorGetAvailableSelect(ByRef selector_result, ByRef candidata, new_select, split_index)
+{
+    new_select := Max(1, Min(candidata[split_index].Length(), new_select))
+    if( !CandidateIsDisable(candidata, split_index, new_select) )
+    {
+        return new_select
+    }
+    else
+    {
+        origin_select := SelectorResultGetSelectIndex(selector_result[split_index])
+        update_method := origin_select > new_select ? -1 : +1
+        loop
+        {
+            new_select += update_method
+            if( new_select == 0 )
+            {
+                return origin_select
+            }
+            if( candidata[split_index].Length() == new_select )
+            {
+                return origin_select
+            }
+            if( !CandidateIsDisable(candidata, split_index, new_select) )
+            {
+                return new_select
+            }
+        }
+    }
+}
