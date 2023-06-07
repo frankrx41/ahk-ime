@@ -5,7 +5,7 @@
 ;   [3]: 30233      ; weight
 ;   [4]: ""         ; comment
 ;   [5]: 1          ; word length
-;   [6]: false      ; traditional
+;   [6]: false      ; traditional: 0 false 1 trad 2 auto trad
 ;   [7]: false      ; top
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
@@ -23,7 +23,7 @@ TranslatorResultGetComment(ByRef translate_result) {
 TranslatorResultGetWordLength(ByRef translate_result) {
     return translate_result[5]
 }
-TranslatorResultIsTraditional(ByRef translate_result) {
+TranslatorResultGetTraditionalLevel(ByRef translate_result) {
     return translate_result[6]
 }
 TranslatorResultIsTop(ByRef translate_result) {
@@ -52,11 +52,11 @@ TranslatorResultMakeNoSelect(pinyin, word)
     return translate_result
 }
 
-TranslatorResultMakeTraditional(ByRef translate_result, tranditional_word)
+TranslatorResultMakeTraditional(ByRef translate_result, tranditional_word, trand_level)
 {
     tranditional_translate_result := CopyObj(translate_result)
     tranditional_translate_result[2] := tranditional_word
-    tranditional_translate_result[6] := true
+    tranditional_translate_result[6] := trand_level
     return tranditional_translate_result
 }
 

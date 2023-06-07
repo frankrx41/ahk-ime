@@ -41,7 +41,13 @@ CandidateGetWordLength(ByRef candidata, split_index, word_index)
 
 CandidateIsTraditional(ByRef candidata, split_index, word_index)
 {
-    return TranslatorResultIsTraditional(candidata[split_index, word_index])
+    return TranslatorResultGetTraditionalLevel(candidata[split_index, word_index]) != 0
+}
+
+; 0 false 1 trad 2 auto trad
+CandidateGetTraditionalLevel(ByRef candidata, split_index, word_index)
+{
+    return TranslatorResultGetTraditionalLevel(candidata[split_index, word_index])
 }
 
 CandidateIsTop(ByRef candidata, split_index, word_index)
@@ -177,8 +183,12 @@ CandidateResultListFilterResultsSingleMode(ByRef candidate)
 CandidateGetFormattedComment(candidata, split_index, word_index)
 {
     comment := CandidateGetComment(candidata, split_index, word_index)
-    if( CandidateIsTraditional(candidata, split_index, word_index) ) {
+    trad_level := CandidateGetTraditionalLevel(candidata, split_index, word_index)
+    if( trad_level == 1 ) {
         comment := "*" . comment
+    }
+    if( trad_level == 2 ) {
+        comment := "?" . comment
     }
     if( CandidateIsTop(candidata, split_index, word_index) ) {
         comment := "^" . comment
