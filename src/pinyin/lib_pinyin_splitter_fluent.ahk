@@ -50,7 +50,7 @@ FluentToNormal(word, index)
     ;     , "a":["a","a"], "s":["s"], "d":["d"], "f":["f"], "g":["g","ng","ang"], "h":["h"], "j":["j"], "k":["k"], "l":["l"]
     ;     , "z":["z"], "x":["x"], "c":["c"], "v":["yu","v"], "b":["b"], "n":["n","en","in","an"], "m":["m"]}
 
-    static fluent_pinyin := {"q":["q"], "w":["w"], "e":["e","e"], "r":["r"], "t":["t"], "y":["y"], "u":["w","u"], "i":["y","i"], "o":["o","o","ou","ong","iong"], "p":["p"]
+    static fluent_pinyin := {"q":["q"], "w":["w"], "e":["e","e"], "r":["r"], "t":["t"], "y":["y","ai"], "u":["w","u"], "i":["y","i"], "o":["o","o","ou","ong","iong"], "p":["p"]
         , "a":["a","a"], "s":["s"], "d":["d"], "f":["f"], "g":["g","ng","ang"], "h":["h"], "j":["j"], "k":["k"], "l":["l"]
         , "z":["z"], "x":["x"], "c":["c"], "v":["yu","v"], "b":["b"], "n":["n","en","in","an"], "m":["m"]}
     normal_words := ""
@@ -111,18 +111,17 @@ PinyinSplitterInputStringFluent(input_string)
 
             initials    := PinyinSplitterGetInitials(input_string, fluent_initials, string_index, "FluentToNormal")
             vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "FluentToNormal", 3)
-            if( vowels == "%" ) {
-                if( fluent_initials == "i" ){
+            full_vowels := GetFullVowels(initials, vowels)
+            tone_string := SubStr(input_string, string_index, 1)
+            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
+            if( tone && vowels == "%") {
+                if( InStr("izcsxrdq", fluent_initials) ){
                     vowels := "i"
                 }
                 if( fluent_initials == "w" ){
                     vowels := "u"
                 }
             }
-            full_vowels := GetFullVowels(initials, vowels)
-            tone_string := SubStr(input_string, string_index, 1)
-            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
-
             if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
                 vowels .= "%"
             }
