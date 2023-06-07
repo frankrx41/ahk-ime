@@ -50,9 +50,9 @@ CandidateGetTraditionalLevel(ByRef candidata, split_index, word_index)
     return TranslatorResultGetTraditionalLevel(candidata[split_index, word_index])
 }
 
-CandidateIsTop(ByRef candidata, split_index, word_index)
+CandidateGetTopLevel(ByRef candidata, split_index, word_index)
 {
-    return TranslatorResultIsTop(candidata[split_index, word_index])
+    return TranslatorResultGetTopLevel(candidata[split_index, word_index])
 }
 
 CandidateGetMaxWordLength(ByRef candidata, split_index)
@@ -190,8 +190,9 @@ CandidateGetFormattedComment(candidata, split_index, word_index)
     if( trad_level == 2 ) {
         comment := "?" . comment
     }
-    if( CandidateIsTop(candidata, split_index, word_index) ) {
-        comment := "^" . comment
+    top_level := CandidateGetTopLevel(candidata, split_index, word_index)
+    if( top_level > 0 ) {
+        comment := "^" . top_level . comment
     }
     return comment
 }

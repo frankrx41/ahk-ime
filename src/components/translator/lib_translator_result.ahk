@@ -5,8 +5,8 @@
 ;   [3]: 30233      ; weight
 ;   [4]: ""         ; comment
 ;   [5]: 1          ; word length
-;   [6]: false      ; traditional: 0 false 1 trad 2 auto trad
-;   [7]: false      ; top
+;   [6]: false      ; traditional: 0 false, 1 trad, 2 auto trad
+;   [7]: 0          ; top position: 0 no top, 1 1st top, 2 2nd top
 ;   [8]: false      ; diable
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
@@ -27,8 +27,11 @@ TranslatorResultGetWordLength(ByRef translate_result) {
 TranslatorResultGetTraditionalLevel(ByRef translate_result) {
     return translate_result[6]
 }
-TranslatorResultIsTop(ByRef translate_result) {
+TranslatorResultGetTopLevel(ByRef translate_result) {
     return translate_result[7]
+}
+TranslatorResultIsDisable(ByRef translate_result) {
+    return translate_result[8]
 }
 
 TranslatorResultSetWordLength(ByRef translate_result, length) {
@@ -43,7 +46,7 @@ TranslatorResultAppendComment(ByRef translate_result, comment) {
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length)
 {
-    return [pinyin, word, weight, comment, word_length, false, false, false]
+    return [pinyin, word, weight, comment, word_length, 0, 0, false]
 }
 
 TranslatorResultMakeDisable(pinyin, word, comment:="N/A")
@@ -61,7 +64,7 @@ TranslatorResultMakeTraditional(ByRef translate_result, tranditional_word, trand
     return tranditional_translate_result
 }
 
-TranslatorResultMakeTop(ByRef translate_result, weight)
+TranslatorResultMakeTop(ByRef translate_result, weight, top_level:=1)
 {
     top_translate_result := CopyObj(translate_result)
     top_translate_result[3] := weight

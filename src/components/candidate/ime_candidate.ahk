@@ -139,9 +139,9 @@ ImeCandidateIsTraditional(split_index, word_index)
     return CandidateIsTraditional(ImeCandidateGet(), split_index, word_index)
 }
 
-ImeCandidateIsTop(split_index, word_index)
+ImeCandidateGetTopLevel(split_index, word_index)
 {
-    return CandidateIsTop(ImeCandidateGet(), split_index, word_index)
+    return CandidateGetTopLevel(ImeCandidateGet(), split_index, word_index)
 }
 
 ;*******************************************************************************
