@@ -163,7 +163,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         profile_text .= "`n  - [" split_index "] "
         if( split_index == candidate.Length() )
         {
-            Assert(skip_word_count == 0, skip_word_count)
+            Assert(skip_word_count == 0, SplitterResultListGetDisplayText(splitted_list) "`n" skip_word_count)
 
             last_split_index := split_index - 1
             if( select_word_length != 0 )

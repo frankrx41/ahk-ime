@@ -1,6 +1,6 @@
 ;*******************************************************************************
 ; Candidate
-;   [0]: splitted_list
+;   ["splitted_list"]: splitted_list
 ;   [1~]: translator_result
 ;
 ; Because candidata.Length() will ignore [0], so it still return the length of `translator_result`
