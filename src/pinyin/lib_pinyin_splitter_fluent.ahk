@@ -110,7 +110,7 @@ PinyinSplitterInputStringFluent(input_string)
             start_string_index := string_index
 
             initials    := PinyinSplitterGetInitials(input_string, fluent_initials, string_index, "FluentToNormal")
-            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "FluentToNormal", 3)
+            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "FluentToNormal", 4)
             full_vowels := GetFullVowels(initials, vowels)
             tone_string := SubStr(input_string, string_index, 1)
             tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
