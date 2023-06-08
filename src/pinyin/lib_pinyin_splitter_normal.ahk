@@ -227,7 +227,7 @@ PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input, c
                     break
                 }
                 if( IsCompletePinyin(initials, covert_vowels) ) {
-                    if( PinyinSplitterCheckCanSplit(input_str, index, initials, covert_vowels, vowels_len, prev_splitted_input) ){
+                    if( PinyinSplitterCheckCanSplit(input_str, index, initials, vowels, vowels_len, prev_splitted_input) ){
                         vowels := covert_vowels
                         found_vowels := true
                         break
