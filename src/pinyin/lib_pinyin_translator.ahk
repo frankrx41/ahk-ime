@@ -71,6 +71,6 @@ PinyinTranslateFindResult(splitter_result_list, auto_complete)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultListGetDisplayText(splitter_result_list) "] -> ("  translate_result_list.Length() ")" )
+    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultListGetDebugText(splitter_result_list) "] -> ("  translate_result_list.Length() ")" )
     return translate_result_list
 }

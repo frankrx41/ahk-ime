@@ -64,7 +64,7 @@ ImeInputterCallTranslator()
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
 
     splitter_result_list := CopyObj(ime_splitted_list)
-    profile_text .= "[" SplitterResultListGetDisplayText(splitter_result_list) "] (" splitter_result_list.Length() "/" ime_splitted_list.Length() ")" 
+    profile_text .= "[" SplitterResultListGetDebugText(splitter_result_list) "] (" splitter_result_list.Length() "/" ime_splitted_list.Length() ")" 
     ImeProfilerEnd(12, profile_text)
 
     candidate := ImeCandidateUpdateResult(splitter_result_list)

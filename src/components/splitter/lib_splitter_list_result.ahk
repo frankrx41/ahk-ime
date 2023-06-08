@@ -16,7 +16,7 @@ SplitterResultListGetIndex(splitter_result_list, caret_pos)
                 return A_Index
             }
         }
-        Assert(false, SplitterResultListGetDisplayText(splitter_result_list) "," caret_pos)
+        Assert(false, SplitterResultListGetDebugText(splitter_result_list) "," caret_pos)
     }
     return 1
 }
@@ -161,7 +161,7 @@ SplitterResultListConvertToString(splitter_result_list, start_count, ByRef inout
 
 ;*******************************************************************************
 ;
-SplitterResultListGetDisplayText(splitter_result_list)
+SplitterResultListGetDebugText(splitter_result_list)
 {
     local
     dsiplay_text := ""

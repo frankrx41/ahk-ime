@@ -250,6 +250,6 @@ PinyinSplitterInputStringBopomofo(input_string)
     }
 
 
-    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultListGetDisplayText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultListGetDebugText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
     return splitter_return_list
 }
