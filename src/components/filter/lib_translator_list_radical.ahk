@@ -123,7 +123,11 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         radical_word_list := RadicalWordSplit(test_word)
         if( !(radical_word_list.Length() != 0 && radical_word_list != "") )
         {
-            RadicalAddMissWord(test_word)
+            radical_word_list := RadicalWordSplit(GetSimplifiedWord(test_word))
+            if( !(radical_word_list.Length() != 0 && radical_word_list != "") )
+            {
+                RadicalAddMissWord(test_word)
+            }
         }
         loop, % radical_word_list.Length()
         {
