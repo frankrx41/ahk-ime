@@ -104,6 +104,7 @@ RadicalIsFirst(single_word)
 
 RadicalAddMissWord(word)
 {
+    word := word "`n"
     FileAppend, %word%, .\miss_radicals.log
 }
 
