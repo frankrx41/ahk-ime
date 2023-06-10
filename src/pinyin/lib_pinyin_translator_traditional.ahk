@@ -1,11 +1,13 @@
 PinyinTraditionalInitialize()
 {
     global ime_traditional_table
+    global ime_simplified_table
     static ime_traditional_initialize := false
     if( ime_traditional_initialize ){
         return
     }
     ime_traditional_table := {}
+    ime_simplified_table := {}
     FileRead, file_content, data\traditional.txt
     Loop, Parse, file_content, `n, `r
     {
@@ -13,8 +15,10 @@ PinyinTraditionalInitialize()
         ; Split each line by the tab char
         if( line != "" && SubStr(line, 1, 1) != ";" )
         {
-            arr := StrSplit(line, "`t")
-            ime_traditional_table[arr[1]] := StrSplit(arr[2], ",")
+            all_arr := StrSplit(line, "`t")
+            simplified_arr := StrSplit(all_arr[2], ",")
+            ime_traditional_table[all_arr[1]] := simplified_arr
+            ime_simplified_table[simplified_arr[1]] := all_arr[1]
         }
     }
     ime_traditional_initialize := true
@@ -71,4 +75,10 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
         }
         index += 1
     }
+}
+
+GetSimplifiedWord(traditional_word)
+{
+    global ime_simplified_table
+    return ime_simplified_table[traditional_word]
 }
