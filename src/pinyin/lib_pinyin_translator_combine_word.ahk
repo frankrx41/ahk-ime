@@ -156,6 +156,8 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
     {
         ; 陪了他
         PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 1)
+        ; 吃过饭
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "guo4", 1, 2, 1)
     }
 
     ImeProfilerEnd(25, profile_text)
