@@ -4,42 +4,13 @@
 RadicalInitialize()
 {
     local
-    global ime_radical_table    := {}
-    global ime_radicals_pinyin  := {}
-    global ime_radical_atomic   := "一丨丿乀丶𠄌乁乛㇕乙𠃊乚亅㇆勹㇉𠃋匚匸冂凵⺆巜丄丅龴厶艹冖罓宀罒㓁癶覀𤇾𦥯龷皿亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸刂卩卪厂广虍疒⺈弋廴辶㔾𠂔疋肀𠔉𠤏𡿺叵囙夨夬屮丱彑𠂢旡歺辵尢夂匕刀儿几力人入又川寸大飞工弓己已巾口囗马门女山尸士巳兀夕小幺子贝长车斗方风父戈户戸戶火见斤毛木牛片气日氏手殳水瓦王韦文毋心牙曰月支止爪白甘瓜禾立龙矛母目鸟皮生石矢示田玄业臣虫而耳缶艮臼米齐肉色舌页先血羊聿至舟竹⺮自羽貝采釆镸車辰赤豆谷見角克里卤麦身豕辛言邑酉酋走足靑雨齿非金隶鱼鬼韭面首韋頁龹𠂉用电乃为了九万丁个丫不上下冫氵⺌⺗⻊巛"
-    global ime_radical_first    := "艹冖罓宀罒㓁癶亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸厂广耂虍疒⺈廴辶"
+    global ime_radical_table    := {}   ; data\radicals.txt
+    global ime_radicals_pinyin  := {}   ; radicals-pinyin.txt
+    global ime_radical_atomic   := "一丨丿乀丶𠄌乁乛㇕乙𠃊乚亅㇆勹㇉𠃋匚匸冂凵⺆巜龴厶艹冖罓宀罒㓁癶覀𤇾𦥯龷皿亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸刂卩卪厂广虍疒⺈弋廴辶㔾𠂔疋肀𠔉𠤏𡿺叵囙夨夬屮丱彑𠂢旡歺辵尢夂匕刀儿几力人入又川寸大飞工弓己已巾口囗马门女山尸士巳兀夕小幺子贝长车斗方风父戈户戸戶火见斤毛木牛片气日氏手殳水瓦王韦文毋心牙曰月支止爪白甘瓜禾立龙矛母目鸟皮生石矢示田玄业臣虫而耳缶艮臼米齐肉色舌页先血羊聿至舟竹⺮自羽貝采镸車辰赤豆谷見角克里卤麦身豕辛言邑酉酋走足靑雨齿非金隶鱼鬼韭面首韋頁龹𠂉用电乃为了九万丁个丫不上下冫氵⺌⺗⻊巛"
+    global ime_radical_must_first    := "艹冖罓宀罒㓁癶亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸厂广耂虍疒⺈廴辶"
 
-    FileRead, file_content, data\radicals.txt
-    Loop, Parse, file_content, `n, `r
-    {
-        if( SubStr(A_LoopField, 1, 1) != ";" )
-        {
-            ; Split each line by the tab character
-            line_arr := StrSplit(A_LoopField, A_Tab,, 2)
-            radicals_arr := StrSplit(line_arr[2], A_Tab)
-            data := []
-            for index, element in radicals_arr
-            {
-                data.Push(StrSplit(element, " "))
-            }
-            ime_radical_table[line_arr[1]] := data
-        }
-    }
-    Assert(ime_radical_table.Count() != 0)
-
-    FileRead, file_content, data\radicals-pinyin.txt
-    index := 0
-
-    Loop, Parse, file_content, `n, `r
-    {
-        line := A_LoopField
-        if( line && SubStr(line, 1, 1) != ";" )
-        {
-            arr := StrSplit(line, " ")
-            ime_radicals_pinyin[arr[1]] := arr[2]
-        }
-    }
-    Assert(ime_radicals_pinyin.Count() != 0)
+    ime_radical_table := ReadFileToTable("data\radicals.asm")
+    ime_radicals_pinyin := ReadFileToTable("data\radicals-pinyin.asm")
 
     global radical_match_level_no_match      := 7
     global radical_match_level_no_radical    := 4
@@ -69,23 +40,13 @@ RadicalGetPinyin(single_radical)
 RadicalCheckPinyin(radical, test_pinyin)
 {
     local
-    radical_pinyin := RadicalGetPinyin(radical)
-    if( radical_pinyin == test_pinyin ){
-        return true
+    radical_pinyin_list := RadicalGetPinyin(radical)
+    for index, element in radical_pinyin_list
+    {
+        if( element == test_pinyin ){
+            return true
+        }
     }
-    if( InStr("匚匸冂凵⺆", radical) && test_pinyin == "O" ){
-        return true
-    }
-    if( InStr("乁乛㇕乙𠃊乚亅㇆勹㇉𠃋巜丄丅龴厶巛卄廾丌彐卅卝攵卌幵", radical) && test_pinyin == "V" ){
-        return true
-    }
-    if( radical == "广" && test_pinyin == "C" ){
-        return true
-    }
-    if( radical == "丿" && test_pinyin == "D" ){
-        return true
-    }
-
     return false
 }
 
@@ -96,10 +57,10 @@ RadicalIsAtomic(single_word)
     return InStr(ime_radical_atomic, single_word)
 }
 
-RadicalIsFirst(single_word)
+RadicalIsMustFirst(single_word)
 {
-    global ime_radical_first
-    return InStr(ime_radical_first, single_word)
+    global ime_radical_must_first
+    return InStr(ime_radical_must_first, single_word)
 }
 
 RadicalRecordMissWord(word)
@@ -136,7 +97,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
                 try_continue_split := true
                 break
             }
-            if( !RadicalIsFirst(test_word) && RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
+            if( !RadicalIsMustFirst(test_word) && RadicalCheckPinyin(first_word, SubStr(test_radical, 0, 1)) ){
                 try_continue_split := true
                 break
             }
@@ -149,7 +110,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
             test_radical := SubStr(test_radical, 2)
             return true
         }
-        if( !RadicalIsFirst(test_word) && RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
+        if( !RadicalIsMustFirst(test_word) && RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
             test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
             return true
         }
