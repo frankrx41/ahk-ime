@@ -1,6 +1,7 @@
 #Include, src\pinyin\lib_pinyin_translator_auto_complete.ahk
 #Include, src\pinyin\lib_pinyin_translator_combine_word.ahk
 #Include, src\pinyin\lib_pinyin_translator_traditional.ahk
+#Include, src\pinyin\lib_pinyin_translator_resplitter.ahk
 
 ;*******************************************************************************
 ;
@@ -55,6 +56,9 @@ PinyinTranslateFindResult(splitter_result_list, auto_complete)
         ; Insert auto combine word
         PinyinTranslatorInsertCombineWord(translate_result_list, splitter_result_list)
     }
+
+    ; gua'mo -> gu'a'mo
+    PinyinTranslatorInsertReSplitter(translate_result_list, splitter_result_list)
 
     if( ImeLanguageIsTraChinese() )
     {
