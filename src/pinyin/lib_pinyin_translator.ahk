@@ -27,7 +27,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
             first_weight := TranslatorResultGetWeight(translate_result_list[1])
             last_index := translate_result_list.Length() + 1
         }
-        ImeTranslatorHistoryPushResult(translate_result_list, splitted_string, limit_num)
+        ImeTranslatorHistoryPushResult(translate_result_list, splitted_string, length_count, limit_num)
     }
     ImeProfilerEnd(21, profile_text)
 }

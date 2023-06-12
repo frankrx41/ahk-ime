@@ -119,18 +119,18 @@ PinyinSqlGetResult(splitted_input, limit_num)
         result := result_table.Rows
     }
     ; word length
-    auto_complete := true
-    if( auto_complete ) {
-        loop % result.Length() {
-            word_length := StrLen(TranslatorResultGetWord(result[A_Index]))
-            TranslatorResultSetWordLength(result[A_Index], word_length)
-        }
-    } else {
-        word_length := StrLen(TranslatorResultGetWord(result[1]))
-        loop % result.Length() {
-            TranslatorResultSetWordLength(result[A_Index], word_length)
-        }
-    }
+    ; auto_complete := true
+    ; if( auto_complete ) {
+    ;     loop % result.Length() {
+    ;         word_length := StrLen(TranslatorResultGetWord(result[A_Index]))
+    ;         TranslatorResultSetWordLength(result[A_Index], word_length)
+    ;     }
+    ; } else {
+    ;     word_length := StrLen(TranslatorResultGetWord(result[1]))
+    ;     loop % result.Length() {
+    ;         TranslatorResultSetWordLength(result[A_Index], word_length)
+    ;     }
+    ; }
 
     ImeProfilerEnd(15, profile_text . "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
     ImeProfilerEnd(16, ImeProfilerBegin(16) "`n  - [""" splitted_input """] -> (" result.Length() ")")

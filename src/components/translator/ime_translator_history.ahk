@@ -60,7 +60,7 @@ ImeTranslatorHistoryGetTopWeightList(splitted_string)
 
 ;*******************************************************************************
 ; Update `translate_result`
-ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max_num := 100, modify_weight := 0)
+ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, word_length, max_num := 100, modify_weight := 0)
 {
     translator_list := ImeTranslatorHistoryGetTopWeightList(splitted_string)
     if( max_num == 0 )
@@ -71,11 +71,12 @@ ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, max
     loop % Min(translator_list.Length(), max_num)
     {
         single_result := translator_list[A_Index]
+        TranslatorResultSetWordLength(single_result, word_length)
         translate_result_list.Push(single_result)
     }
 }
 
-ImeTranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, insert_at := 1, max_num := 100)
+ImeTranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string, word_length, insert_at := 1, max_num := 100)
 {
     local
     translator_list := ImeTranslatorHistoryGetTopWeightList(splitted_string)
@@ -85,6 +86,7 @@ ImeTranslatorHistoryInsertResultAt(ByRef translate_result_list, splitted_string,
     {
         index := loop_cnt+1-A_Index
         single_result := translator_list[index]
+        TranslatorResultSetWordLength(single_result, word_length)
         translate_result_list.InsertAt(insert_at, single_result)
     }
 }
