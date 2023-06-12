@@ -3,6 +3,7 @@
 #Include, src\utils\ime_assert.ahk
 #Include, src\utils\ime_profiler.ahk
 #Include, src\utils\ime_debug.ahk
+#Include, src\utils\lib_read_table.ahk
 
 ; Version
 #Include, src\ime_version.ahk
