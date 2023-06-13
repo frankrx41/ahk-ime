@@ -1,10 +1,3 @@
-; Check wiki\design.md#Input
-; wo0de0 - wo3de5
-IsPinyinSoundLike(input_pinyin, full_pinyin)
-{
-    return IsSoundLike(full_pinyin, input_pinyin)
-}
-
 PinyinCovertQuestionMarkToRegexFormat(pinyin)
 {
     pinyin := RegExReplace(pinyin, "([zcs])\?", "$1h^")   ; ^ temporary mark "?"
@@ -33,8 +26,9 @@ SoundSplit(pinyin)
     return array
 }
 
-; wo3de5 - wo0de0
-IsSoundLike(full_pinyin, input_pinyin)
+; Check wiki\design.md#Input
+; wo0de0 - wo3de5
+IsPinyinSoundLike(input_pinyin, full_pinyin)
 {
     full_pinyin_list    := SoundSplit(full_pinyin)
     input_pinyin_list   := SoundSplit(input_pinyin)
@@ -74,38 +68,4 @@ IsSoundLike(full_pinyin, input_pinyin)
         return false
     }
     return true
-}
-
-;*******************************************************************************
-; See `IsSoundLike`
-IsPinyinMatch(check_pinyin, complete_pinyin)
-{
-    check_pinyin_index := 1
-    last_check_char := ""
-    loop, Parse, complete_pinyin
-    {
-        check_char := SubStr(check_pinyin, check_pinyin_index, 1)
-        if( IsTone(A_LoopField) ){
-            if( check_char == "0" || A_LoopField == check_char ){
-                check_pinyin_index += 1
-                last_check_char := check_char
-            }
-            else
-            if( A_LoopField != check_char ){
-                return false
-            }
-        }
-        else
-        if( A_LoopField ){
-            if( check_char == "%" || A_LoopField == check_char ) {
-                check_pinyin_index += 1
-                last_check_char := check_char
-            }
-            else
-            if( A_LoopField != check_char && last_check_char != "%" ){
-                return false
-            }
-        }
-    }
-    return check_pinyin_index-1 == StrLen(check_pinyin)
 }
