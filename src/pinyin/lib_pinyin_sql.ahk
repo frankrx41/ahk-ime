@@ -26,11 +26,7 @@ PinyinSqlSimpleKey(splitted_input)
 PinyinSqlFullKey(splitted_input)
 {
     key_value := splitted_input
-    key_value := RegExReplace(key_value, "([zcs])\?", "$1h^")   ; ^ temporary mark "?"
-    key_value := RegExReplace(key_value, "n\?", "ng^")          ; wan? = wan + wang
-    key_value := RegExReplace(key_value, "i\?n", "i.^n")        ; xi?n = xin + xian
-    key_value := StrReplace(key_value, "?", ".")
-    key_value := StrReplace(key_value, "^", "?")
+    key_value := PinyinCovertQuestionMarkToRegexFormat(key_value)
     key_value := StrReplace(key_value, "0", "_")
     return key_value
 }

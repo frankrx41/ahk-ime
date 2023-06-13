@@ -6,40 +6,6 @@ ImeTranslatorDynamicClear()
 }
 
 ;*******************************************************************************
-; See `IsSoundLike`
-IsPinyinMatch(check_pinyin, complete_pinyin)
-{
-    check_pinyin_index := 1
-    last_check_char := ""
-    loop, Parse, complete_pinyin
-    {
-        check_char := SubStr(check_pinyin, check_pinyin_index, 1)
-        if( IsTone(A_LoopField) ){
-            if( check_char == "0" || A_LoopField == check_char ){
-                check_pinyin_index += 1
-                last_check_char := check_char
-            }
-            else
-            if( A_LoopField != check_char ){
-                return false
-            }
-        }
-        else
-        if( A_LoopField ){
-            if( check_char == "%" || A_LoopField == check_char ) {
-                check_pinyin_index += 1
-                last_check_char := check_char
-            }
-            else
-            if( A_LoopField != check_char && last_check_char != "%" ){
-                return false
-            }
-        }
-    }
-    return check_pinyin_index-1 == StrLen(check_pinyin)
-}
-
-;*******************************************************************************
 ;
 ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
 {
@@ -54,7 +20,7 @@ ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
 
     for key, value in translator_history_weight
     {
-        if( IsPinyinMatch(splitted_string, key) )
+        if( IsPinyinSoundLike(splitted_string, key) )
         {
             base_weight := value[0] + first_weight
             profile_text .= "`n  - " key ", " base_weight ": "

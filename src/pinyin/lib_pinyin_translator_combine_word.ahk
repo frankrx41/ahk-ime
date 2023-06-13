@@ -1,71 +1,3 @@
-SoundSplit(pinyin)
-{
-    array := []
-    position := 0
-    loop, Parse, pinyin, % "012345"
-    {
-        ; Calculate the position of the delimiter at the end of this field.
-        position += StrLen(A_LoopField) + 1
-        ; Retrieve the delimiter found by the parsing loop.
-        delimiter := SubStr(pinyin, position, 1)
-        if( A_LoopField ) {
-            array.Push(A_LoopField . delimiter)
-        }
-    }
-    return array
-}
-
-; wo3de5 - wo0de0
-IsSoundLike(standard_pinyin, test_pinyin)
-{
-    speech_array := SoundSplit(standard_pinyin)
-    sounds_array := SoundSplit(test_pinyin)
-
-    loop_count := speech_array.Length()
-    Assert(sounds_array.Length() == speech_array.Length(), test_pinyin "," standard_pinyin)
-
-    loop, % loop_count
-    {
-        speech_i := speech_array[A_Index]
-        sounds_i := sounds_array[A_Index]
-
-        speech_pinyin   := SubStr(speech_i, 1, StrLen(speech_i)-1)
-        speech_tone     := SubStr(speech_i, 0, 1)
-
-        sounds_pinyin   := SubStr(sounds_i, 1, StrLen(sounds_i)-1)
-        sounds_tone     := SubStr(sounds_i, 0, 1)
-
-        ; TODO: check this
-        speech_pinyin   := RegexReplace(speech_pinyin, "([zcs])\?", "$1", replace_count)
-        if( replace_count )
-        {
-            sounds_pinyin := RegexReplace(speech_pinyin, "([zcs])h", "$1")
-        }
-
-        speech_pinyin   := StrReplace(speech_pinyin, "+", ".*")
-
-        if( !RegExMatch(sounds_pinyin, speech_pinyin) )
-        {
-            return false
-        }
-
-        if( speech_tone != sounds_tone )
-        {
-            if( speech_tone != "0" )
-            {
-                if( sounds_tone == "5" )
-                {
-                    if( speech_tone != "1" )
-                    {
-                        return false
-                    }
-                }
-            }
-        }
-    }
-    return true
-}
-
 GetWordMatchLength(pinyin)
 {
     RegExReplace(pinyin, "[12345]", "", tone_count)
@@ -89,7 +21,7 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
     test_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
     profile_text := ImeProfilerBegin(26)
     profile_text .= "`n  - " match_pinyin "/" test_match_pinyin ": "
-    if( IsSoundLike(match_pinyin, test_match_pinyin) )
+    if( IsPinyinSoundLike(test_match_pinyin, match_pinyin) )
     {
         splitted_string_ab := ""
         splitted_string_ab .= SplitterResultListConvertToString(splitter_result_list, 1, xy_start_index-1)

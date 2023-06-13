@@ -50,6 +50,7 @@
 #Include, src\pinyin\ime_pinyin.ahk
 #Include, src\pinyin\lib_pinyin_sql.ahk
 #Include, src\pinyin\lib_pinyin_splitter.ahk
+#Include, src\pinyin\lib_pinyin_sound_check.ahk
 #Include, src\pinyin\lib_pinyin_translator.ahk
 
 ; gojuon
