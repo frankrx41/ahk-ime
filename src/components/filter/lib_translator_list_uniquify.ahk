@@ -1,7 +1,7 @@
 TranslatorResultListUniquify(ByRef translate_result_list)
 {
     local
-    ImeProfilerBegin(39)
+    ImeProfilerBegin()
     store_result := {}
 
     begin_tick := A_TickCount
@@ -19,5 +19,5 @@ TranslatorResultListUniquify(ByRef translate_result_list)
             index += 1
         }
     }
-    ImeProfilerEnd(39)
+    ImeProfilerEnd()
 }

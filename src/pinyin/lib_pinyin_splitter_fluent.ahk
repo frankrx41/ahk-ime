@@ -75,7 +75,7 @@ PinyinSplitterInputStringFluent(input_string)
 {
     local
     Critical
-    ImeProfilerBegin(11)
+    ImeProfilerBegin()
 
     prev_splitted_input := ""
     string_index        := 1
@@ -182,6 +182,6 @@ PinyinSplitterInputStringFluent(input_string)
     }
 
 
-    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultListGetDebugText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    ImeProfilerEnd("NOR: """ input_string """ -> [" SplitterResultListGetDebugText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
     return splitter_return_list
 }

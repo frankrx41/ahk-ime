@@ -8,7 +8,7 @@
 PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
 {
     local
-    profile_text := ImeProfilerBegin(21)
+    profile_text := ImeProfilerBegin()
 
     hope_word_length := SplitterResultGetHopeLength(splitter_result_list[1])
     next_length := SplitterResultGetHopeLength(splitter_result_list[hope_word_length+1])
@@ -30,7 +30,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
         }
         ImeTranslatorHistoryPushResult(translate_result_list, splitted_string, length_count, limit_num)
     }
-    ImeProfilerEnd(21, profile_text)
+    ImeProfilerEnd(profile_text)
 }
 
 ;*******************************************************************************
@@ -38,7 +38,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
 PinyinTranslateFindResult(splitter_result_list, auto_complete)
 {
     local
-    profile_text := ImeProfilerBegin(20)
+    profile_text := ImeProfilerBegin()
 
     translate_result_list := []
 
@@ -78,6 +78,6 @@ PinyinTranslateFindResult(splitter_result_list, auto_complete)
     ;     ...
     ; ]
 
-    ImeProfilerEnd(20, profile_text . "`n  - [" SplitterResultListGetDebugText(splitter_result_list) "] -> ("  translate_result_list.Length() ")" )
+    ImeProfilerEnd(profile_text . "`n  - [" SplitterResultListGetDebugText(splitter_result_list) "] -> ("  translate_result_list.Length() ")" )
     return translate_result_list
 }

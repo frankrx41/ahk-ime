@@ -11,7 +11,7 @@ SelectorResultSetSelectIndex(ByRef selector_result, select_index)
     Assert(selector_result)
     selector_result[1] := select_index
     profile_text := "`n  - " CallerName()
-    ImeProfilerEnd(42, ImeProfilerBegin(42) . profile_text)
+    ImeProfilerDebug(profile_text)
 }
 
 SelectorResultUnLockWord(ByRef selector_result)
@@ -28,7 +28,7 @@ SelectorResultLockWord(ByRef selector_result, select_word, word_length)
     selector_result[2] := select_word
     selector_result[3] := word_length
     profile_text := "`n  ->[" selector_result[1] "," select_word "," word_length "] "
-    ImeProfilerEnd(43, ImeProfilerBegin(43) . profile_text)
+    ImeProfilerDebug(profile_text)
 }
 
 ;*******************************************************************************

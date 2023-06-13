@@ -78,7 +78,7 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
     find_word_len := StrLen(find_words)
     max_length := find_word_len
 
-    debug_text := ImeProfilerBegin(32)
+    debug_text := ImeProfilerBegin()
     debug_text .= split_index "," candidate[split_index].Length()
     select_index := 0
     loop, % candidate[split_index].Length()
@@ -91,7 +91,7 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
             break
         }
     }
-    ImeProfilerEnd(32, debug_text)
+    ImeProfilerEnd(debug_text)
     return select_index
 }
 
@@ -149,7 +149,7 @@ CandidateResultListFilterResults(ByRef candidate, input_radical_list)
     radical_list    := CopyObj(input_radical_list)
 
     debug_text := ""
-    ImeProfilerBegin(31)
+    ImeProfilerBegin()
     loop % result_list.Length()
     {
         split_index := A_Index
@@ -169,7 +169,7 @@ CandidateResultListFilterResults(ByRef candidate, input_radical_list)
     }
 
     ; SelectorFixupSelectIndex()
-    ImeProfilerEnd(31, "[" result_list.Length() "]: " . debug_text)
+    ImeProfilerEnd("[" result_list.Length() "]: " . debug_text)
     return result_list
 }
 

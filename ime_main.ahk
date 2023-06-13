@@ -22,7 +22,7 @@ global ime_version  := "0.7.2"
 ; Initialize
 ImeProfilerInitialize()
 
-ImeProfilerBegin("initialize")
+ImeProfilerBegin()
 ImeProfilerFunc("ImeInputterInitialize")
 ImeProfilerFunc("ImeOutputterInitialize")
 
@@ -49,8 +49,8 @@ ImeProfilerFunc("ImeDBInitialize")
 ; We should register hotkey after other modules are initialized
 ImeProfilerFunc("ImeHotkeyRegisterInitialize")
 
-ImeProfilerEnd("initialize")
-; Tooltip, % ImeProfilerGetDebugInfo("initialize") "`n " ImeProfilerGetTotalTick("initialize")
+ImeProfilerEnd()
+; Tooltip, % ImeProfilerGetDebugInfo("MainInitialize") "`n " ImeProfilerGetTotalTick("MainInitialize")
 return
 
 ;*******************************************************************************

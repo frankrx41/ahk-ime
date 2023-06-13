@@ -33,7 +33,7 @@ Assert(bool, debug_msg:="", show_msgbox:=true)
             }
             in_msgbox := false
         }
-        ImeProfilerEnd(4, ImeProfilerBegin(4) "`n  - " CallerName(0) " """ debug_msg """")
+        ImeProfilerDebug("`n  - " CallerName(0) " """ debug_msg """")
     }
 }
 

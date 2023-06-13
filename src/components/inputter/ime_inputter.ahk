@@ -36,7 +36,7 @@ ImeInputterUpdateString(input_char)
 
     ime_input_is_dirty := true
     ImeProfilerClear()
-    ImeProfilerBegin(8)
+    ImeProfilerBegin()
 
     if( ime_input_string )
     {
@@ -51,21 +51,21 @@ ImeInputterUpdateString(input_char)
     }
 
     ime_input_is_dirty := false
-    ImeProfilerEnd(8)
+    ImeProfilerEnd()
 }
 
 ImeInputterCallTranslator()
 {
     global ime_splitted_list
 
-    ImeProfilerBegin(12)
+    ImeProfilerBegin()
     profile_text := ""
 
     caret_splitted_index := ImeInputterGetCaretSplitIndex()
 
     splitter_result_list := CopyObj(ime_splitted_list)
     profile_text .= "[" SplitterResultListGetDebugText(splitter_result_list) "] (" splitter_result_list.Length() "/" ime_splitted_list.Length() ")" 
-    ImeProfilerEnd(12, profile_text)
+    ImeProfilerEnd(profile_text)
 
     candidate := ImeCandidateUpdateResult(splitter_result_list)
     ImeSelectorUnlockWords(caret_splitted_index, false)

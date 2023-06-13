@@ -6,7 +6,7 @@ PinyinTranslatorInsertReSplitter(ByRef translate_result_list, splitter_result_li
     splitted_string := StrReplace(splitted_string, "%")
 
     profile_text := splitted_string
-    ImeProfilerBegin(27)
+    ImeProfilerBegin()
     if( IsPinyinSoundLike(splitted_string, "gua1mo4") ){
         splitted_string := "gu3a1mo4"
         ImeTranslatorHistoryUpdateKey(splitted_string)
@@ -17,5 +17,5 @@ PinyinTranslatorInsertReSplitter(ByRef translate_result_list, splitter_result_li
         ImeTranslatorHistoryUpdateKey(splitted_string)
         ImeTranslatorHistoryInsertResultAt(translate_result_list, splitted_string, 2)
     }
-    ImeProfilerEnd(27, profile_text)
+    ImeProfilerEnd(profile_text)
 }

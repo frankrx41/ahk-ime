@@ -12,7 +12,7 @@ ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
     local
     global translator_history_weight
 
-    ImeProfilerBegin(17)
+    ImeProfilerBegin()
 
     profile_text := ""
     additional_translator_result_list := []
@@ -51,7 +51,7 @@ ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
         translator_list.InsertAt(A_Index, translator_result)
     }
 
-    ImeProfilerEnd(17, profile_text)
+    ImeProfilerEnd(profile_text)
 
     return translator_list
 }

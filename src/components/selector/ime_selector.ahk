@@ -82,7 +82,7 @@ ImeSelectorApplyCaretSelectIndexNormal(move_caret)
 {
     global ime_selector_select_list
 
-    ImeProfilerBegin(41)
+    ImeProfilerBegin()
     profile_text := ""
 
     split_index := ImeInputterGetCaretSplitIndex()
@@ -112,14 +112,14 @@ ImeSelectorApplyCaretSelectIndexNormal(move_caret)
     }
 
     profile_text .= "[" split_index "]->[" select_index "," word_length "]"
-    ImeProfilerEnd(41, profile_text)
+    ImeProfilerEnd(profile_text)
 }
 
 ImeSelectorApplyCaretSelectIndexLast()
 {
     global ime_selector_select_list
 
-    ImeProfilerBegin(41)
+    ImeProfilerBegin()
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index)
 
@@ -127,7 +127,7 @@ ImeSelectorApplyCaretSelectIndexLast()
     ImeSelectorFixupSelectIndex(ImeCandidateGet())
 
     profile_text := "[" split_index "]->[" select_index "]"
-    ImeProfilerEnd(41, profile_text)
+    ImeProfilerEnd(profile_text)
 }
 
 ImeSelectorUnlockWords(split_index, unlock_front)

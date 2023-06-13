@@ -23,7 +23,7 @@
 ;*******************************************************************************
 ImeProfilerInitialize()
 {
-    global ime_profiler
+    global ime_profiler := {}
     ImeProfilerClear()
 }
 
@@ -34,7 +34,12 @@ ImeProfilerClear()
 
 ;*******************************************************************************
 ;
-ImeProfilerBegin(name)
+ProfilerGetCallerName()
+{
+    return Exception("", -3).what "_"   ; force make name as string
+}
+
+ImeProfilerBeginName(name)
 {
     global ime_profiler
     if( ime_profiler.HasKey(name) ) {
@@ -51,7 +56,7 @@ ImeProfilerBegin(name)
     return ime_profiler[name, 2]
 }
 
-ImeProfilerEnd(name, profile_text:="")
+ImeProfilerEndName(name, profile_text)
 {
     global ime_profiler
     Assert(ime_profiler.HasKey(name) && ime_profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``" ,true)
@@ -60,11 +65,28 @@ ImeProfilerEnd(name, profile_text:="")
     ime_profiler[name, 4] := 0
 }
 
-ImeProfilerDebug(name, profile_text, append_text:=true)
+;*******************************************************************************
+;
+ImeProfilerBegin()
 {
-    profile_text := ImeProfilerBegin(name)
+    local
+    name := ProfilerGetCallerName()
+    return ImeProfilerBeginName(name)
+}
+
+ImeProfilerEnd(profile_text:="")
+{
+    local
+    name := ProfilerGetCallerName()
+    ImeProfilerEndName(name, profile_text)
+}
+
+ImeProfilerDebug(profile_text, append_text:=true)
+{
+    name := ProfilerGetCallerName()
+    profile_text := ImeProfilerBeginName(name)
     profile_text := append_text ? profile_text : ""
-    ImeProfilerEnd(name, profile_text)
+    ImeProfilerEndName(name, profile_text)
 }
 
 ImeProfilerTemp(profile_text)
@@ -75,12 +97,12 @@ ImeProfilerTemp(profile_text)
 ImeProfilerFunc(func_name)
 {
     local
-    name := "profile func"
-    profile_text := ImeProfilerBegin(name)
+    name := ProfilerGetCallerName()
+    profile_text := ImeProfilerBeginName(name)
     last_tick := A_TickCount
     Func(func_name).Call()
     profile_text .= "`n  - " func_name " (" A_TickCount - last_tick ")"
-    ImeProfilerEnd(name, profile_text)
+    ImeProfilerEndName(name, profile_text)
 }
 
 ;*******************************************************************************

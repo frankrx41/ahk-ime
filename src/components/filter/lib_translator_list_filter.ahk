@@ -1,7 +1,7 @@
 TranslatorResultListFilterSingleWord(ByRef translate_result_list)
 {
     local
-    ImeProfilerBegin(37)
+    ImeProfilerBegin()
 
     index := 1
     loop % translate_result_list.Length()
@@ -16,13 +16,13 @@ TranslatorResultListFilterSingleWord(ByRef translate_result_list)
         }
     }
 
-    ImeProfilerEnd(37)
+    ImeProfilerEnd()
 }
 
 TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
 {
     local
-    profile_text := ImeProfilerBegin(35)
+    profile_text := ImeProfilerBegin()
 
     index := 1
     loop % translate_result_list.Length()
@@ -41,6 +41,6 @@ TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
             index += 1
         }
     }
-    ImeProfilerEnd(35, profile_text . "`n  - Remove at: " index)
+    ImeProfilerEnd(profile_text . "`n  - Remove at: " index)
     return
 }

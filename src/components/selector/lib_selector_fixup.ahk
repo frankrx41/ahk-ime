@@ -16,7 +16,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length, ByRe
     ; left_weight  := CandidateGetWeight(candidate, left_split_index, left_select_index)
     left_word  := CandidateGetWord(candidate, left_split_index, left_select_index)
 
-    profile_text := ImeProfilerBegin(46)
+    profile_text := ImeProfilerBegin()
     right_split_index := split_index+A_Index
     if( right_split_index > candidate.Length() || right_length == 0 ){
         right_weight := 28000
@@ -50,7 +50,7 @@ SelectorCheckTotalWeight(candidate, split_index, left_length, right_length, ByRe
     ; return_weight := total_weight
     ; profile_text .= "" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight
     profile_text .= Format("`n  - [{}{}, {}{}] {:.2f} + {:.2f} = {:.2f} ({})", left_word, left_word_length, right_word, right_word_length, left_weight, right_weight, total_weight, found_word)
-    ImeProfilerEnd(46, profile_text)
+    ImeProfilerEnd(profile_text)
 
     return total_weight
 }
@@ -60,7 +60,7 @@ SelectorFindGraceResultIndex(candidate, split_index, max_length)
     max_weight := 0
     loop_length := Min(max_length, CandidateGetMaxWordLength(candidate, split_index))
     better_length := max_length
-    profile_text := ImeProfilerBegin(47)
+    profile_text := ImeProfilerBegin()
     select_word := "N/A"
     loop, % loop_length
     {
@@ -78,7 +78,7 @@ SelectorFindGraceResultIndex(candidate, split_index, max_length)
     select_index := CandidateFindWordSelectIndex(candidate, split_index, select_word)
     ; select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, better_length, true)
     profile_text .= "`n  - " better_length ", " select_index ", " select_word ": """ CandidateGetWord(candidate, split_index, select_index) """"
-    ImeProfilerEnd(47, profile_text)
+    ImeProfilerEnd(profile_text)
     return select_index
 }
 
@@ -86,7 +86,7 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef splitted_list, ByRef select
 {
     local
     ; `max_length` = this word until next unlock word
-    profile_text := ImeProfilerBegin(45)
+    profile_text := ImeProfilerBegin()
     loop_cnt := 0
     if( SelectorResultIsSelectLock(selector_result_list[split_index]) )
     {
@@ -126,7 +126,7 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef splitted_list, ByRef select
     }
 
     profile_text .= "`n  - [" split_index "] loop: " loop_cnt " -> " max_length
-    ImeProfilerEnd(45, profile_text)
+    ImeProfilerEnd(profile_text)
     return max_length
 }
 
@@ -136,7 +136,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
 {
     local
     profile_text := ""
-    ImeProfilerBegin(40)
+    ImeProfilerBegin()
     skip_word_count := 0
     selector_result_list := CopyObj(const_selector_result_list)
     splitted_list := CandidateGetSplittedList(candidate)
@@ -275,7 +275,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         }
     }
 
-    ImeProfilerEnd(40, profile_text)
+    ImeProfilerEnd(profile_text)
 
     return selector_result_list
 }

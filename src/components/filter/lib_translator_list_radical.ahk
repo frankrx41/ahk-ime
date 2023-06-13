@@ -311,7 +311,7 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         loop % translate_result_list.Length()
         {
             translate_result := translate_result_list[index]
-            ImeProfilerBegin(36)
+            ImeProfilerBegin()
             word_value := TranslatorResultGetWord(translate_result)
             should_remove   := false
             match_level     := radical_match_level_no_radical
@@ -349,7 +349,7 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 index += 1
             }
 
-            ImeProfilerEnd(36)
+            ImeProfilerEnd()
         }
 
         ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "

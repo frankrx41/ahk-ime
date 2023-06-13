@@ -38,7 +38,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
     left_vowels_last := SubStr(left_vowels, 0, 1)
     right_initials := SubStr(right_string, 1, 1)
 
-    profile_text := ImeProfilerBegin(13)
+    profile_text := ImeProfilerBegin()
 
     max_test_len := Min(8, right_string_len)
 
@@ -78,7 +78,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
             }
         }
     }
-    ImeProfilerEnd(13, profile_text)
+    ImeProfilerEnd(profile_text)
 
     if( max_word_weight > 0 )
     {
@@ -264,7 +264,7 @@ PinyinSplitterInputStringNormal(input_string)
 {
     local
     Critical
-    ImeProfilerBegin(11)
+    ImeProfilerBegin()
 
     prev_splitted_input := ""
     string_index        := 1
@@ -363,6 +363,6 @@ PinyinSplitterInputStringNormal(input_string)
     }
 
 
-    ImeProfilerEnd(11, "NOR: """ input_string """ -> [" SplitterResultListGetDebugText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
+    ImeProfilerEnd("NOR: """ input_string """ -> [" SplitterResultListGetDebugText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
     return splitter_return_list
 }

@@ -21,7 +21,7 @@ ImeCandidateUpdateResult(splitter_result_list)
 
     if( splitter_result_list.Length() )
     {
-        debug_text := ImeProfilerBegin(30)
+        debug_text := ImeProfilerBegin()
         ime_candidata_result_origin := []
         CandidateSetSplittedList(ime_candidata_result_origin, splitter_result_list)
         radical_list := []
@@ -58,7 +58,7 @@ ImeCandidateUpdateResult(splitter_result_list)
         }
 
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
-        ImeProfilerEnd(30, debug_text)
+        ImeProfilerEnd(debug_text)
         ime_candidata_result_origin := CandidateResultListFilterResults(ime_candidata_result_origin, radical_list)
 
         loop, % ime_candidata_result_origin.Length()
