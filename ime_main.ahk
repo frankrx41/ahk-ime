@@ -50,7 +50,7 @@ ImeProfilerFunc("ImeDBInitialize")
 ImeProfilerFunc("ImeHotkeyRegisterInitialize")
 
 ImeProfilerEnd()
-; Tooltip, % ImeProfilerGetDebugInfo("MainInitialize") "`n " ImeProfilerGetTotalTick("MainInitialize")
+; Tooltip, % ImeProfilerGetProfileText("MainInitialize") "`n " ImeProfilerGetTotalTick("MainInitialize")
 return
 
 ;*******************************************************************************

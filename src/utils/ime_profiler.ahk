@@ -49,7 +49,7 @@ ImeProfilerBeginName(name)
     } else {
         ime_profiler[name] := []
         ime_profiler[name, 1] := 0              ; total tick
-        ime_profiler[name, 2] := ""             ; debug info
+        ime_profiler[name, 2] := ""             ; profile text
         ime_profiler[name, 3] := 1              ; trace count
         ime_profiler[name, 4] := A_TickCount    ; last tick
     }
@@ -81,17 +81,19 @@ ImeProfilerEnd(profile_text:="")
     ImeProfilerEndName(name, profile_text)
 }
 
-ImeProfilerDebug(profile_text, append_text:=true)
+ImeProfilerDebug(profile_text, append:=true)
 {
     name := ProfilerGetCallerName()
     profile_text := ImeProfilerBeginName(name)
-    profile_text := append_text ? profile_text : ""
+    profile_text := append ? profile_text : ""
     ImeProfilerEndName(name, profile_text)
 }
 
 ImeProfilerTemp(profile_text)
 {
-    ImeProfilerDebug("temp", profile_text)
+    name := "Temporary"
+    profile_text := ImeProfilerBeginName(name)
+    ImeProfilerEndName(name, profile_text)
 }
 
 ImeProfilerFunc(func_name)
@@ -107,34 +109,47 @@ ImeProfilerFunc(func_name)
 
 ;*******************************************************************************
 ; Use for print
+ImeProfilerHasKey(name)
+{
+    global ime_profiler
+    return ime_profiler.HasKey(name)
+}
+
 ImeProfilerGetTotalTick(name)
 {
     global ime_profiler
-    return ime_profiler.HasKey(name) ? ime_profiler[name, 1] : "N/A"
+    Assert(ime_profiler.HasKey(name), name)
+    return ime_profiler[name, 1]
 }
 
-ImeProfilerGetDebugInfo(name)
+ImeProfilerGetProfileText(name)
 {
     global ime_profiler
-    return ime_profiler.HasKey(name) ? ime_profiler[name, 2] : "N/A"
+    Assert(ime_profiler.HasKey(name), name)
+    return ime_profiler[name, 2]
 }
 
 ImeProfilerGetCount(name)
 {
     global ime_profiler
-    return ime_profiler.HasKey(name) ? ime_profiler[name, 3] : "N/A"
+    Assert(ime_profiler.HasKey(name), name)
+    return ime_profiler[name, 3]
 }
 
 ;*******************************************************************************
 ;
-ImeProfilerInputBegin()
+ImeProfilerGetNameList()
 {
-    global ime_profiler_timer
-    ime_profiler_timer[1] := A_TickCount
-}
-
-ImeProfilerInputEnd()
-{
-
+    local
+    global ime_profiler
+    name_list := []
+    for key, value in ime_profiler
+    {
+        if( key != "Assert" && key != "Temporary" )
+        {
+            name_list.Push(key)
+        }
+    }
+    return name_list
 }
 
