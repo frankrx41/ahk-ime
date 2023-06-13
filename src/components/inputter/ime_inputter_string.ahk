@@ -128,7 +128,10 @@ ImeInputterGetDisplayString()
         tooltip_string .= " {Enter}"
     }
 
-    tooltip_string .= "`n" SplitterResultListGetDisplayTextGrace(ime_splitted_list)
+    if( ImeSchemeIsPinyinDouble() || ImeSchemeIsPinyinBopomofo() || ImeSchemeIsPinyinSimple() )
+    {
+        tooltip_string .= "`n" SplitterResultListGetDisplayTextGrace(ime_splitted_list)
+    }
     return tooltip_string
 }
 
