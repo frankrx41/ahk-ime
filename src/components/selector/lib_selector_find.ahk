@@ -23,16 +23,18 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
         loop, % right_length
         {
             test_select_index := CandidateFindMaxLengthSelectIndex(candidate, right_split_index, A_Index, false, weight)
-            ImeProfilerTemp(A_Index "," test_select_index)
-            if( CandidateGetWordLength(candidate, right_split_index, test_select_index) < A_Index )
+            if(test_select_index != 0)
             {
-                Assert(right_select_index != 0, , false)
-                break
-            }
-            if( max_weight <= weight ) {
-                max_weight := weight
-                right_select_index := test_select_index
-                right_word_length := A_Index
+                if( CandidateGetWordLength(candidate, right_split_index, test_select_index) < A_Index )
+                {
+                    Assert(right_select_index != 0, , false)
+                    break
+                }
+                if( max_weight <= weight ) {
+                    max_weight := weight
+                    right_select_index := test_select_index
+                    right_word_length := A_Index
+                }
             }
         }
         Assert(right_select_index != 0, , false)
