@@ -62,6 +62,7 @@
 #Include, src\components\selector\ime_selector_single_mode.ahk
 #Include, src\components\selector\ime_selector_store_index.ahk
 #Include, src\components\selector\lib_selector_result.ahk
+#Include, src\components\selector\lib_selector_find.ahk
 #Include, src\components\selector\lib_selector_list_result.ahk
 #Include, src\components\selector\lib_selector_fixup.ahk
 
