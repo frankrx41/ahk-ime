@@ -49,6 +49,7 @@ IsPinyinSoundLike(input_pinyin, full_pinyin)
 
         test_input_pinyin   := PinyinCovertQuestionMarkToRegexFormat(test_input_pinyin)
         test_input_pinyin   := StrReplace(test_input_pinyin, "%", ".*")
+        test_input_pinyin   := "^" test_input_pinyin "$"
 
         if( !RegExMatch(test_full_pinyin, test_input_pinyin) )
         {
