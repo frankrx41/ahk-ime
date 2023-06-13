@@ -18,7 +18,7 @@ ImeCandidateUpdateResult(splitter_result_list)
 
     if( splitter_result_list.Length() )
     {
-        debug_text := ImeProfilerBegin()
+        ImeProfilerBegin()
         ime_candidata := []
         CandidateSetSplittedList(ime_candidata, splitter_result_list)
         radical_list := []

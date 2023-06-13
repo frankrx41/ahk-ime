@@ -1,23 +1,20 @@
 ;*******************************************************************************
 ; This file use for profile
 ;
-; To use it, try follow code
+; To use it, try follow code:
 ; ```
-;   ImeProfilerBegin(<YOUR_PROFILE_ID>)
+;   ImeProfilerBegin()
 ;   <The code you want to profile>
-;   ImeProfilerEnd(<YOUR_PROFILE_ID>, <profile_text>)
+;   ImeProfilerEnd(<profile_text>)
 ; ```
 ;
-; If you just want print some debug info, try
-; ImeProfilerEnd(<YOUR_PROFILE_ID>, ImeProfilerBegin(<YOUR_PROFILE_ID>) "`n  - " <profile_text>)
+; To get profile text, use:
+; ```
+;   ImeProfilerGetProfileText(<FUNCTION_NAME>_)
+; ```
 ;
+; * `ImeProfilerBegin` and `ImeProfilerEnd` must be in same function
 ; * Call `ImeProfilerBegin` before call `ImeProfilerEnd`
-; * Max number of `YOUR_PROFILE_ID` is 50.
-; * "YOUR_PROFILE_INFO" will be clear, If you want to stack it, you need to:
-;   ```
-;   <profile_text> := ImeProfilerBegin(<YOUR_PROFILE_ID>)
-;   ImeProfilerEnd(<YOUR_PROFILE_ID>, "`n  - " <profile_text>)
-;   ```
 ; * `ImeProfilerClear()` will clear all profile, this function will be call every
 ;   time you type a new char or you delete any chars.
 ;*******************************************************************************
@@ -54,15 +51,15 @@ ImeProfilerBeginName(name)
         ime_profiler[name, 3] := 1              ; trace count
         ime_profiler[name, 4] := A_TickCount    ; last tick
     }
-    return ime_profiler[name, 2]
 }
 
-ImeProfilerEndName(name, profile_text)
+ImeProfilerEndName(name, profile_text, append)
 {
     global ime_profiler
     Assert(ime_profiler.HasKey(name) && ime_profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``" ,true)
     ime_profiler[name, 1] += A_TickCount - ime_profiler[name, 4]
-    ime_profiler[name, 2] := profile_text
+    ime_profiler[name, 2] := append ? ime_profiler[name, 2] "`n  - " : "  - "
+    ime_profiler[name, 2] .= profile_text
     ime_profiler[name, 4] := 0
 }
 
@@ -72,42 +69,41 @@ ImeProfilerBegin()
 {
     local
     name := ProfilerGetCallerName()
-    return ImeProfilerBeginName(name)
+    ImeProfilerBeginName(name)
 }
 
-ImeProfilerEnd(profile_text:="")
+ImeProfilerEnd(profile_text:="", append:=true)
 {
     local
     name := ProfilerGetCallerName()
-    ImeProfilerEndName(name, profile_text)
+    ImeProfilerEndName(name, profile_text, append)
 }
 
 ImeProfilerDebug(profile_text, append:=true)
 {
     local
     name := ProfilerGetCallerName()
-    origin_profile_text := ImeProfilerBeginName(name)
-    profile_text := append ? origin_profile_text . profile_text : profile_text
-    ImeProfilerEndName(name, profile_text)
+    ImeProfilerBeginName(name)
+    ImeProfilerEndName(name, profile_text, append)
 }
 
-ImeProfilerTemp(profile_text)
+ImeProfilerTemp(profile_text, append:=true)
 {
     local
     name := "Temporary"
     ImeProfilerBeginName(name)
-    ImeProfilerEndName(name, profile_text)
+    ImeProfilerEndName(name, profile_text, append)
 }
 
 ImeProfilerFunc(func_name)
 {
     local
     name := ProfilerGetCallerName() . func_name
-    profile_text := ImeProfilerBeginName(name)
+    ImeProfilerBeginName(name)
     last_tick := A_TickCount
     Func(func_name).Call()
-    profile_text .= "`n  - " func_name " (" A_TickCount - last_tick ")"
-    ImeProfilerEndName(name, profile_text)
+    profile_text := func_name " (" A_TickCount - last_tick ")"
+    ImeProfilerEndName(name, profile_text, true)
 }
 
 ;*******************************************************************************

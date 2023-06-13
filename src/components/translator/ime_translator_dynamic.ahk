@@ -25,7 +25,7 @@ ImeTranslatorDynamicUpdateWeight(ByRef translator_list, splitted_string)
         if( IsPinyinSoundLike(splitted_string, key) )
         {
             base_weight := value[0] + first_weight
-            profile_text .= "`n  - " splitted_string ", " key ", " base_weight ": "
+            profile_text .= splitted_string ", " key ", " base_weight ": "
             loop, % value.Length()
             {
                 value_word := value[A_Index]

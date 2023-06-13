@@ -42,7 +42,7 @@ ImeDebugGetDisplayText()
     ; Comment out the debug info you don't want
     ; If you want add new debug info, do follow:
     ; ```
-    ;   profile_text := ImeProfilerBegin()
+    ;   ImeProfilerBegin()
     ;   ImeProfilerEnd(profile_text)
     ; ```
     ; See ime_profiler.ahk for detail.

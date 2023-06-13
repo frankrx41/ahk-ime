@@ -89,7 +89,7 @@ PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, weight:=false)
     sql_full_cmd    .= " ORDER BY weight DESC"
     sql_full_cmd    .= limit_num ? " LIMIT " limit_num : ""
 
-    profile_text    := ImeProfilerBegin()
+    ImeProfilerBegin()
     result          := []
     pinyin_db := ImeDBGet()
     if( pinyin_db.GetTable(sql_full_cmd, result_table) )
@@ -103,7 +103,7 @@ PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, weight:=false)
         result := result_table.Rows
     }
 
-    ImeProfilerEnd(profile_text . "`n  - (" A_TickCount - begin_tick ") " . sql_where_cmd)
+    ImeProfilerEnd("(" A_TickCount - begin_tick ") " . sql_where_cmd)
     return result
 }
 
@@ -129,7 +129,7 @@ PinyinSqlGetResult(splitted_input, limit_num)
 
     result := PinyinSqlExecuteGetTable(sql_where_cmd, limit_num)
 
-    ImeProfilerDebug("`n  - [""" splitted_input """] -> (" result.Length() ")")
+    ImeProfilerDebug("[""" splitted_input """] -> (" result.Length() ")")
     return result
 }
 

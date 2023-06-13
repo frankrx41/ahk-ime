@@ -10,7 +10,7 @@ SelectorResultSetSelectIndex(ByRef selector_result, select_index)
     local
     Assert(selector_result)
     selector_result[1] := select_index
-    profile_text := "`n  - " CallerName()
+    profile_text := CallerName()
     ImeProfilerDebug(profile_text)
 }
 

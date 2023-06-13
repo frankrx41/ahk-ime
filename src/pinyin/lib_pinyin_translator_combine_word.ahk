@@ -19,8 +19,8 @@ PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_r
 
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
     test_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)
-    profile_text := ImeProfilerBegin()
-    profile_text .= "`n  - " match_pinyin "/" test_match_pinyin ": "
+    ImeProfilerBegin()
+    profile_text := match_pinyin "/" test_match_pinyin ": "
     if( IsPinyinSoundLike(test_match_pinyin, match_pinyin) )
     {
         splitted_string_ab := ""
@@ -69,7 +69,7 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
         return
     }
 
-    profile_text := ImeProfilerBegin()
+    ImeProfilerBegin()
     if( splitter_result_list.Length() >= 4 )
     {
         ; 了个 了会 了朵 了顿 了口
@@ -97,5 +97,5 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
         PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "guo4", 1, 2, 1)
     }
 
-    ImeProfilerEnd(profile_text)
+    ImeProfilerEnd()
 }

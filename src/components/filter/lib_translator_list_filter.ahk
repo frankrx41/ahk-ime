@@ -22,7 +22,7 @@ TranslatorResultListFilterSingleWord(ByRef translate_result_list)
 TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
 {
     local
-    profile_text := ImeProfilerBegin()
+    ImeProfilerBegin()
 
     index := 1
     loop % translate_result_list.Length()
@@ -41,6 +41,6 @@ TranslatorResultListFilterZeroWeight(ByRef translate_result_list)
             index += 1
         }
     }
-    ImeProfilerEnd(profile_text . "`n  - Remove at: " index)
+    ImeProfilerEnd("Remove at: " index)
     return
 }

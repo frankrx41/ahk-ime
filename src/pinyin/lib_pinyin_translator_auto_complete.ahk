@@ -5,7 +5,7 @@ PinyinTranslatorInsertAutoComplete(ByRef translate_result_list, splitter_result_
 {
     local
 
-    profile_text := ImeProfilerBegin()
+    ImeProfilerBegin()
     splitted_string := SplitterResultListConvertToString(splitter_result_list, 1)
     splitted_string .= "*"
     take_up_length := splitter_result_list.Length()
