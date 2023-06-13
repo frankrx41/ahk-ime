@@ -58,7 +58,7 @@ PinyinTranslateFindResult(splitter_result_list, auto_complete)
     }
 
     ; gua'mo -> gu'a'mo
-    if( translate_result_list.Length() > 1 )
+    if( splitter_result_list.Length() > 1 )
     {
         PinyinTranslatorInsertReSplitter(translate_result_list, splitter_result_list)
     }
