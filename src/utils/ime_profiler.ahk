@@ -90,7 +90,7 @@ ImeProfilerDebug(profile_text, append:=true)
 ImeProfilerTemp(profile_text, append:=true)
 {
     local
-    name := "Temporary"
+    name := "Temporary_"
     ImeProfilerBeginName(name)
     ImeProfilerEndName(name, profile_text, append)
 }

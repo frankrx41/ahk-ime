@@ -59,9 +59,9 @@ ImeDebugGetDisplayText()
         }
     }
 
-    if( ImeProfilerHasKey("Temporary") )
+    if( ImeProfilerHasKey("Temporary_") )
     {
-        debug_text .= ImeDebugGetProfilerText("Temporary", 200)
+        debug_text .= ImeDebugGetProfilerText("Temporary_", 200)
     }
     debug_text .= "`n----------------" ImeDebugGet() "-"
     if( ImeProfilerHasKey("Assert_") )
