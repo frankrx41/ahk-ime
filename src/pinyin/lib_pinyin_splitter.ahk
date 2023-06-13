@@ -57,8 +57,8 @@ PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false
     }
     else
     {
-        splitter_list := PinyinSplitterInputStringFluent(input_string)
-        ; splitter_list := PinyinSplitterInputStringNormal(input_string)
+        ; splitter_list := PinyinSplitterInputStringFluent(input_string)
+        splitter_list := PinyinSplitterInputStringNormal(input_string)
 
         if( StrLen(input_string) <= 4 && !InStr(input_string, "+") && !InStr(input_string, "%") )
         {
