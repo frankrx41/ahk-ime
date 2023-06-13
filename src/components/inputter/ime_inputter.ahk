@@ -22,6 +22,7 @@ ImeInputterClearAll()
 
     ImeSelectorClear()
     ImeCandidateClear()
+    ImeProfilerTickClear()
     return
 }
 
@@ -36,14 +37,16 @@ ImeInputterUpdateString(input_char)
 
     ime_input_is_dirty := true
     ImeProfilerClear()
-    ImeProfilerBegin()
 
     if( ime_input_string )
     {
+        ImeProfilerTickBegin()
         ; Splitter
         ime_splitted_list := ImeSplitterInputString(ime_input_string)
         ; Translator
         ImeInputterCallTranslator()
+    
+        ImeProfilerTickEnd()
     }
     else
     {
@@ -51,7 +54,6 @@ ImeInputterUpdateString(input_char)
     }
 
     ime_input_is_dirty := false
-    ImeProfilerEnd()
 }
 
 ImeInputterCallTranslator()

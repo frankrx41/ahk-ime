@@ -25,6 +25,7 @@ ImeProfilerInitialize()
 {
     global ime_profiler := {}
     ImeProfilerClear()
+    ImeProfilerTickClear()
 }
 
 ImeProfilerClear()
@@ -153,3 +154,31 @@ ImeProfilerGetNameList()
     return name_list
 }
 
+;*******************************************************************************
+;
+ImeProfilerTickBegin()
+{
+    global ime_profiler_tick
+    ime_profiler_tick[4] := A_TickCount
+}
+
+ImeProfilerTickEnd()
+{
+    global ime_profiler_tick
+    ime_profiler_tick[2] := A_TickCount - ime_profiler_tick[4]
+    ime_profiler_tick[1] += ime_profiler_tick[2]
+}
+
+ImeProfilerTickClear()
+{
+    global ime_profiler_tick := []
+    ime_profiler_tick[1] := 0   ; total tick
+    ime_profiler_tick[2] := 0   ; current tick
+    ime_profiler_tick[4] := 0   ; last tick
+}
+
+ImeProfilerTickGetProfileText()
+{
+    global ime_profiler_tick
+    return "(" ime_profiler_tick[2] "/" ime_profiler_tick[1] ")"
+}

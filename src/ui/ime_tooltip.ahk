@@ -182,8 +182,7 @@ ImeTooltipUpdate()
         ; if( comment ) {
         ;     extern_info .= " <" comment ">"
         ; }
-        ; extern_info .= "`n(" ImeProfilerGetProfileText("Tick") ")"
-        extern_info .= "`n"
+        extern_info .= "`n" ImeProfilerTickGetProfileText()
 
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
