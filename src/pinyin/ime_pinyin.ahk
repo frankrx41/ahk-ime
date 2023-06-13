@@ -177,7 +177,7 @@ IsInitialsAnyMark(char)
 
 IsVowelsAnyMark(char)
 {
-    return false ;char == "%"
+    return char == "%"
 }
 
 ;*******************************************************************************
@@ -189,7 +189,7 @@ IsTone(char)
 
 IsRadical(char)
 {
-    return char != "" && InStr("AEOBPMFDTNLGKHJQXZCSRYWVUI!@#$^&", char, true)
+    return char != "" && (InStr("AEOIUBPMFDTNLGKHJQXZCSRYWV", char, true) || InStr("!@#$^&", char, true))
 }
 
 GetRadical(input_string)
