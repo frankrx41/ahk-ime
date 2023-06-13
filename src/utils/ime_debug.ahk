@@ -7,7 +7,7 @@
 ;   - To skip:  `git update-index --skip-worktree src\utils\ime_debug.ahk`
 ;*******************************************************************************
 ; Static
-ImeDebugGetProfilerText(name, max_length := 100)
+ImeDebugGetProfilerText(name)
 {
     local
     debug_text := ""
@@ -15,10 +15,7 @@ ImeDebugGetProfilerText(name, max_length := 100)
     debug_text .= "`n" . name . "*" ImeProfilerGetCount(name) ":"
     debug_text .= "(" ImeProfilerGetTotalTick(name) ") "
     profile_text := ImeProfilerGetProfileText(name)
-    if( StrLen(profile_text) > max_length ){
-        profile_text := SubStr(profile_text, 1, max_length)
-        profile_text .= "..."
-    }
+
     if( name == "Assert_" ) {
         debug_text .= profile_text
     } else {
@@ -61,12 +58,12 @@ ImeDebugGetDisplayText()
 
     if( ImeProfilerHasKey("Temporary_") )
     {
-        debug_text .= ImeDebugGetProfilerText("Temporary_", 200)
+        debug_text .= ImeDebugGetProfilerText("Temporary_")
     }
     debug_text .= "`n----------------" ImeDebugGet() "-"
     if( ImeProfilerHasKey("Assert_") )
     {
-        debug_text .= ImeDebugGetProfilerText("Assert_", 200)
+        debug_text .= ImeDebugGetProfilerText("Assert_")
     }
 
     return debug_text
