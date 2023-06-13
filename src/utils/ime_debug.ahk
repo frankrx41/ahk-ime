@@ -48,22 +48,25 @@ ImeDebugGetDisplayText()
     ; See ime_profiler.ahk for detail.
 
     ; name_list := ImeProfilerGetAllNameList()
-    name_list := ["ImeCandidateUpdateResult_"]
+    name_list := ["SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
 
     for index, element in name_list
     {
-        debug_tip .= ImeDebugGetProfilerText(element)
-        ; debug_tip .= element "`n" ImeDebugGetProfilerText(element) "`n"
+        if( ImeProfilerHasKey(element) )
+        {
+            debug_tip .= ImeDebugGetProfilerText(element)
+            ; debug_tip .= element "`n" ImeDebugGetProfilerText(element) "`n"
+        }
     }
 
     if( ImeProfilerHasKey("Temporary") )
     {
         debug_tip .= ImeDebugGetProfilerText("Temporary", 200)
     }
-    if( ImeProfilerHasKey("Assert") )
+    debug_tip .= "`n----------------" ImeDebugGet() "-"
+    if( ImeProfilerHasKey("Assert_") )
     {
-        debug_tip .= "`n----------------"
-        debug_tip .= ImeDebugGetProfilerText("Assert", 200)
+        debug_tip .= ImeDebugGetProfilerText("Assert_", 200)
     }
 
     return debug_tip
