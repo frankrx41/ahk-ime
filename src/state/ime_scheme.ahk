@@ -1,19 +1,8 @@
 ImeSchemeInitialize()
 {
-    global ime_scheme_normal := 0
-    global ime_scheme_simple := 0
-    global ime_scheme_double := 0
-    global ime_scheme_bopomofo := 0
-    global ime_scheme_third := 0
-
-    ; ime_scheme_normal   := 1
-    ime_scheme_third    := 1
-}
-
-ImeSchemeIsPinyinNormal()
-{
-    global ime_scheme_normal
-    return ime_scheme_normal
+    global ime_scheme_simple := 0       ; 全简拼
+    global ime_scheme_double := 0       ; 双拼
+    global ime_scheme_bopomofo := 0     ; 注音
 }
 
 ImeSchemeIsPinyinSimple()
@@ -34,10 +23,12 @@ ImeSchemeIsPinyinBopomofo()
     return ime_scheme_bopomofo
 }
 
-ImeSchemeIsPinyinThird()
+;*******************************************************************************
+;
+ImeSchemeSimpleSet(force)
 {
-    global ime_scheme_third
-    return ime_scheme_third
+    global ime_scheme_simple
+    ime_scheme_simple := force
 }
 
 ;*******************************************************************************
@@ -48,28 +39,14 @@ ImeSchemeSimpleToggle()
     ime_scheme_simple := !ime_scheme_simple
 }
 
-ImeSchemeSimpleSet(force)
-{
-    global ime_scheme_simple
-    ime_scheme_simple := force
-}
-
-;*******************************************************************************
-;
-ImeSchemeDoubleSet(force)
+ImeSchemeDoubleToggle()
 {
     global ime_scheme_double
-    ime_scheme_double := force
+    ime_scheme_double := !ime_scheme_double
 }
 
-ImeSchemeBopomofoSet(force)
+ImeSchemeBopomofoToggle()
 {
     global ime_scheme_bopomofo
-    ime_scheme_bopomofo := force
-}
-
-ImeSchemeThirdSet(force)
-{
-    global ime_scheme_third
-    ime_scheme_third := force
+    ime_scheme_bopomofo := !ime_scheme_bopomofo
 }
