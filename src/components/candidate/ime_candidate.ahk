@@ -23,7 +23,6 @@ ImeCandidateUpdateResult(splitter_result_list)
         CandidateSetSplittedList(ime_candidata, splitter_result_list)
         radical_list := []
         debug_text := "["
-        translate_last_result_list := []
         loop % splitter_result_list.Length()
         {
             splitter_index := A_Index
@@ -58,6 +57,9 @@ ImeCandidateUpdateResult(splitter_result_list)
         ImeProfilerEnd(debug_text)
         ime_candidata := CandidateResultListFilterResults(ime_candidata, radical_list)
 
+        ; For last word
+        ; We filter result first then add last candidata for optimization
+        translate_last_result_list := []
         loop, % ime_candidata.Length()
         {
             splitter_index := A_Index
@@ -72,8 +74,6 @@ ImeCandidateUpdateResult(splitter_result_list)
             }
         }
         ime_candidata.Push(translate_last_result_list)
-
-        ime_candidata := CopyObj(ime_candidata)
     } else {
         ImeCandidateClear()
     }
