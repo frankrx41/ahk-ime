@@ -95,7 +95,7 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
     return select_index
 }
 
-CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, tyr_first_word, ByRef out_weight:=0)
+CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, ByRef out_weight:=0)
 {
     local
     select_index := 0
@@ -114,26 +114,6 @@ CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, tyr_
             max_weight := weight
             select_index := A_Index
             break
-            ; weight := TranslatorResultGetWeight(translator_result)
-            ; if( test_len == 1 ) {
-            ;     word := TranslatorResultGetWord(translator_result)
-            ;     if( IsPreposition(word) ){
-            ;         weight += 5000.4
-            ;     }
-            ;     if( tyr_first_word && (IsFirstWord(word) || IsVerb(word)) ) {
-            ;         weight += 7500.1
-            ;     }
-            ;     if( !tyr_first_word && IsLastWord(word) ) {
-            ;         weight += 10000.2
-            ;     }
-            ; }
-            ; if( max_weight < weight ){
-            ;     max_weight := weight
-            ;     select_index := A_Index
-            ; }
-            ; if( weight < max_length - 12000 ) {
-            ;     break
-            ; }
         }
     }
     out_weight := max_weight

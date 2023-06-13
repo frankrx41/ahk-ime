@@ -103,7 +103,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                                     break
                                 }
                                 if( max_length > 0 ) {
-                                    find_select_index := CandidateFindMaxLengthSelectIndex(candidate, check_index, max_length, false)
+                                    find_select_index := CandidateFindMaxLengthSelectIndex(candidate, check_index, max_length)
                                 } else {
                                     find_select_index := 0
                                 }
@@ -156,14 +156,14 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                 if( candidate.Length() == check_length || !SplitterResultNeedTranslate(splitted_list[split_index+max_length]) )
                 {
                     if( max_length == 1 ){
-                        select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, 1, false)
+                        select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, 1)
                     }
                     else
                     {
                         if( CandidateGetWordLength(candidate, split_index, 1) == max_length ){
                             select_index := 1
                         } else {
-                            select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, max_length, true)
+                            select_index := CandidateFindMaxLengthSelectIndex(candidate, split_index, max_length)
                         }
                     }
                 }
