@@ -357,12 +357,13 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         ; Show full match word first
         loop, % translate_full_match_result_list.Length()
         {
-            ; translate_full_match_result_list[A_Index, 4] := 1
             translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
         }
         if( translate_last_match_result_list.Length() > 0 )
         {
-            translate_result_list.Push(TranslatorResultMakeDisable("", "last m", ""))
+            if( translate_result_list.Length() > 0 ) {
+                translate_result_list.Push(TranslatorResultMakeDisable("", "----2-", ""))
+            }
             loop, % translate_last_match_result_list.Length()
             {
                 translate_result_list.Push(translate_last_match_result_list[A_Index])
@@ -370,7 +371,9 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         }
         if( translate_no_radical_result_list.Length() )
         {
-            translate_result_list.Push(TranslatorResultMakeDisable("", "no rad", ""))
+            if( translate_result_list.Length() > 0 ) {
+                translate_result_list.Push(TranslatorResultMakeDisable("", "----3-", ""))
+            }
             loop, % translate_no_radical_result_list.Length()
             {
                 translate_result_list.Push(translate_no_radical_result_list[A_Index])
