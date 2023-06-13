@@ -97,7 +97,7 @@ ImeProfilerTemp(profile_text)
 ImeProfilerFunc(func_name)
 {
     local
-    name := ProfilerGetCallerName()
+    name := ProfilerGetCallerName() . func_name
     profile_text := ImeProfilerBeginName(name)
     last_tick := A_TickCount
     Func(func_name).Call()

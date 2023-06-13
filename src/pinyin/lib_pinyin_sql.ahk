@@ -78,10 +78,18 @@ PinyinSqlGenerateWhereCommand(sim_key, full_key)
 
 ;*******************************************************************************
 ;
-PinyinSqlExecute(sql_full_cmd)
+PinyinSqlExecuteGetTable(sql_where_cmd, limit_num)
 {
-    profile_text := ImeProfilerBegin()
-    result := []
+    local
+    begin_tick      := A_TickCount
+
+    sql_full_cmd    := "SELECT key,value,weight,comment FROM 'pinyin' WHERE "
+    sql_full_cmd    .= sql_where_cmd
+    sql_full_cmd    .= " ORDER BY weight DESC"
+    sql_full_cmd    .= (limit_num?" LIMIT " limit_num:"")
+
+    profile_text    := ImeProfilerBegin()
+    result          := []
     pinyin_db := ImeDBGet()
     if( pinyin_db.GetTable(sql_full_cmd, result_table) )
     {
@@ -108,7 +116,6 @@ PinyinSqlGetResult(splitted_input, limit_num)
 {
     local
     Critical
-    begin_tick := A_TickCount
 
     Assert(splitted_input != "", splitted_input)
     Assert(splitted_input != "+0")
@@ -118,12 +125,8 @@ PinyinSqlGetResult(splitted_input, limit_num)
     sql_full_key    := PinyinSqlFullKey(splitted_input)
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
-    sql_full_cmd := "SELECT key,value,weight,comment FROM 'pinyin' WHERE "
-    sql_full_cmd .= sql_where_cmd
-    sql_full_cmd .= " ORDER BY weight DESC"
-    sql_full_cmd .= (limit_num?" LIMIT " limit_num:"")
 
-    result := PinyinSqlExecute(sql_full_cmd)
+    result := PinyinSqlExecuteGetTable(sql_where_cmd, limit_num)
 
     ImeProfilerDebug("`n  - [""" splitted_input """] -> (" result.Length() ")")
     return result
