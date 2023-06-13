@@ -1,29 +1,26 @@
 ImeCandidateInitialize()
 {
-    global ime_candidata_result_filter
-    global ime_candidata_result_origin
+    global ime_candidata
     ImeCandidateClear()
 }
 
 ImeCandidateClear()
 {
-    global ime_candidata_result_filter  := []
-    global ime_candidata_result_origin  := []
+    global ime_candidata := []
 }
 
 ImeCandidateUpdateResult(splitter_result_list)
 {
     local
-    global ime_candidata_result_filter
-    global ime_candidata_result_origin
+    global ime_candidata
 
     auto_complete := false
 
     if( splitter_result_list.Length() )
     {
         debug_text := ImeProfilerBegin()
-        ime_candidata_result_origin := []
-        CandidateSetSplittedList(ime_candidata_result_origin, splitter_result_list)
+        ime_candidata := []
+        CandidateSetSplittedList(ime_candidata, splitter_result_list)
         radical_list := []
         debug_text := "["
         translate_last_result_list := []
@@ -54,17 +51,17 @@ ImeCandidateUpdateResult(splitter_result_list)
                 }
             }
             ; Insert result
-            ime_candidata_result_origin.Push(translate_result_list)
+            ime_candidata.Push(translate_result_list)
         }
 
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
         ImeProfilerEnd(debug_text)
-        ime_candidata_result_origin := CandidateResultListFilterResults(ime_candidata_result_origin, radical_list)
+        ime_candidata := CandidateResultListFilterResults(ime_candidata, radical_list)
 
-        loop, % ime_candidata_result_origin.Length()
+        loop, % ime_candidata.Length()
         {
             splitter_index := A_Index
-            translate_result_list := ime_candidata_result_origin[A_Index]
+            translate_result_list := ime_candidata[A_Index]
             loop, % translate_result_list.Length()
             {
                 if( TranslatorResultGetWordLength(translate_result_list[A_Index]) + splitter_index-1 == splitter_result_list.Length() ){
@@ -74,32 +71,35 @@ ImeCandidateUpdateResult(splitter_result_list)
                 }
             }
         }
-        ime_candidata_result_origin.Push(translate_last_result_list)
+        ime_candidata.Push(translate_last_result_list)
 
-        ime_candidata_result_filter := CopyObj(ime_candidata_result_origin)
+        ime_candidata := CopyObj(ime_candidata)
     } else {
         ImeCandidateClear()
     }
 
-    return ime_candidata_result_filter
+    return ime_candidata
 }
 
 ImeCandidateSetSingleMode(single_mode)
 {
-    global ime_candidata_result_filter
-    global ime_candidata_result_origin
-
+    local
+    global ime_candidata
+    split_index := ImeInputterGetCaretSplitIndex()
+    splitted_list := CandidateGetSplittedList(ime_candidata)
     if( single_mode ){
-        ime_candidata_result_filter := CandidateResultListFilterResultsSingleMode(ime_candidata_result_origin)
+        test_splitter_list := []
+        test_splitter_list.Push(splitted_list[split_index])
     } else {
-        ime_candidata_result_filter := ime_candidata_result_origin
+        test_splitter_list := SplitterResultListGetUntilSkip(splitted_list, split_index)
     }
+    ime_candidata[split_index] := ImeTranslateFindResult(test_splitter_list, false)
 }
 
 ImeCandidateGet()
 {
-    global ime_candidata_result_filter
-    return ime_candidata_result_filter
+    global ime_candidata
+    return ime_candidata
 }
 
 ;*******************************************************************************
