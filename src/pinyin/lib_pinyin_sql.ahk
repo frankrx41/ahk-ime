@@ -78,15 +78,16 @@ PinyinSqlGenerateWhereCommand(sim_key, full_key)
 
 ;*******************************************************************************
 ;
-PinyinSqlExecuteGetTable(sql_where_cmd, limit_num)
+PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, weight:=false)
 {
     local
     begin_tick      := A_TickCount
 
     sql_full_cmd    := "SELECT key,value,weight,comment FROM 'pinyin' WHERE "
     sql_full_cmd    .= sql_where_cmd
+    sql_full_cmd    .= weight ? " AND weight > 0" : ""
     sql_full_cmd    .= " ORDER BY weight DESC"
-    sql_full_cmd    .= (limit_num?" LIMIT " limit_num:"")
+    sql_full_cmd    .= limit_num ? " LIMIT " limit_num : ""
 
     profile_text    := ImeProfilerBegin()
     result          := []
