@@ -170,7 +170,9 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
 
                 if( select_index == 0 || (select_index && CandidateGetWordLength(candidate, split_index, select_index) != max_length) )
                 {
-                    select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)
+                    left_word_max_length := CandidateGetMaxWordLength(candidate, split_index)
+                    test_max_length := SelectorFindPossibleMaxLength(candidate, splitted_list, selector_result_list, split_index + left_word_max_length)
+                    select_index := SelectorFindGraceResultIndex(candidate, split_index, test_max_length+left_word_max_length)
                 }
             }
             profile_text .= "[" origin_select_index "]->[" select_index "] "
