@@ -89,6 +89,31 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
 
 ;*******************************************************************************
 ;
+ImeInputterGetDisplayDebugString(full:=false)
+{
+    local
+    global ime_input_string
+    global ime_input_caret_pos
+    global ime_splitted_list
+
+    if( ime_input_string )
+    {
+        tooltip_string := SubStr(ime_input_string, 1, ime_input_caret_pos) "|" SubStr(ime_input_string, ime_input_caret_pos+1)
+    } else {
+        tooltip_string := ""
+    }
+    tooltip_string := """" tooltip_string """"
+    if( full )
+    {
+        list_string := SplitterResultListGetDisplayTextGrace(ime_splitted_list)
+        if( list_string )
+        {
+            tooltip_string .= "`n" list_string
+        }
+    }
+    return tooltip_string
+}
+
 ImeInputterGetDisplayString()
 {
     local

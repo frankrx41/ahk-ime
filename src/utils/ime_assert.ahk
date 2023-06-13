@@ -14,15 +14,15 @@ Assert(bool, debug_msg:="", show_msgbox:=true)
         git_hash := GetGitHash()
         time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
 
-        debug_info := time_string " [" git_hash "]`n"
-        debug_info .= CallStack()
-        debug_info .= " """ debug_msg """`n"
+        ; debug_msg   := " """ debug_msg """"
+        debug_info  := time_string " [" git_hash "] (" ImeInputterGetDisplayDebugString() ")`n"
+        debug_info  .= CallStack() " """ debug_msg """`n"
 
         FileAppend, %debug_info%, .\debug.log
         mark_key := CallStack(1)
         if( show_msgbox && A_TickCount - disable_tick > 6000 && !assert_ignore_list.HasKey(mark_key) && !in_msgbox ){
             in_msgbox := true
-            Msgbox, 18, Assert, % debug_info "`n" """" debug_msg """" "`n`nAbout: Ignore all assert for 1 minute`nRetry: Always ignore this assert`nIgnore: Ignore this assert once"
+            Msgbox, 18, Assert, % debug_info "---`n" ImeInputterGetDisplayDebugString(true) ":`n" debug_msg "`n---`nAbout:`tIgnore all assert for 1 minute`nRetry:`tAlways ignore this assert`nIgnore:`tIgnore this assert once"
             IfMsgBox, Abort
             {
                 disable_tick := A_TickCount
