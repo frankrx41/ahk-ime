@@ -10,33 +10,33 @@
 ImeDebugGetProfilerText(name, max_length := 100)
 {
     local
-    debug_tip := ""
+    debug_text := ""
 
-    debug_tip .= "`n" . name . "*" ImeProfilerGetCount(name) ":"
-    debug_tip .= "(" ImeProfilerGetTotalTick(name) ") "
-    debug_info := ImeProfilerGetProfileText(name)
-    if( StrLen(debug_info) > max_length ){
-        debug_info := SubStr(debug_info, 1, max_length)
-        debug_info .= "..."
+    debug_text .= "`n" . name . "*" ImeProfilerGetCount(name) ":"
+    debug_text .= "(" ImeProfilerGetTotalTick(name) ") "
+    profile_text := ImeProfilerGetProfileText(name)
+    if( StrLen(profile_text) > max_length ){
+        profile_text := SubStr(profile_text, 1, max_length)
+        profile_text .= "..."
     }
-    if( name == 1 ) {
-        debug_tip .= debug_info
+    if( name == "Assert_" ) {
+        debug_text .= profile_text
     } else {
         ; Show full info
         if( ImeDebugGet() == 2 ) {
-            debug_tip .= debug_info
+            debug_text .= profile_text
         }
     }
-    return debug_tip
+    return debug_text
 }
 
 ImeDebugGetDisplayText()
 {
     local
-    debug_tip := ""
+    debug_text := ""
     if( !ImeDebugGet() )
     {
-        return debug_tip
+        return debug_text
     }
 
     ; Comment out the debug info you don't want
@@ -54,20 +54,20 @@ ImeDebugGetDisplayText()
     {
         if( ImeProfilerHasKey(element) )
         {
-            debug_tip .= ImeDebugGetProfilerText(element)
-            ; debug_tip .= element "`n" ImeDebugGetProfilerText(element) "`n"
+            debug_text .= ImeDebugGetProfilerText(element)
+            ; debug_text .= element "`n" ImeDebugGetProfilerText(element) "`n"
         }
     }
 
     if( ImeProfilerHasKey("Temporary") )
     {
-        debug_tip .= ImeDebugGetProfilerText("Temporary", 200)
+        debug_text .= ImeDebugGetProfilerText("Temporary", 200)
     }
-    debug_tip .= "`n----------------" ImeDebugGet() "-"
+    debug_text .= "`n----------------" ImeDebugGet() "-"
     if( ImeProfilerHasKey("Assert_") )
     {
-        debug_tip .= ImeDebugGetProfilerText("Assert_", 200)
+        debug_text .= ImeDebugGetProfilerText("Assert_", 200)
     }
 
-    return debug_tip
+    return debug_text
 }

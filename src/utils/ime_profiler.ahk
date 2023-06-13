@@ -86,8 +86,8 @@ ImeProfilerDebug(profile_text, append:=true)
 {
     local
     name := ProfilerGetCallerName()
-    profile_text := ImeProfilerBeginName(name)
-    profile_text := append ? profile_text : ""
+    origin_profile_text := ImeProfilerBeginName(name)
+    profile_text := append ? origin_profile_text . profile_text : profile_text
     ImeProfilerEndName(name, profile_text)
 }
 
@@ -95,7 +95,7 @@ ImeProfilerTemp(profile_text)
 {
     local
     name := "Temporary"
-    profile_text := ImeProfilerBeginName(name)
+    ImeProfilerBeginName(name)
     ImeProfilerEndName(name, profile_text)
 }
 
