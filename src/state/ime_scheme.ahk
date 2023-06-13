@@ -6,7 +6,8 @@ ImeSchemeInitialize()
     global ime_scheme_bopomofo := 0
     global ime_scheme_third := 0
 
-    ime_scheme_normal := 1
+    ; ime_scheme_normal   := 1
+    ime_scheme_third    := 1
 }
 
 ImeSchemeIsPinyinNormal()
