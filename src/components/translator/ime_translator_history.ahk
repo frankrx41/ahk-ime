@@ -54,14 +54,14 @@ ImeTranslatorHistoryGetResultWord(splitted_string, word_class:="")
 ImeTranslatorHistoryGetTopWeightList(splitted_string)
 {
     global translator_history_result
-    translator_list := CopyObj(translator_history_result[splitted_string])
-    return ImeTranslatorDynamicUpdateWeight(splitted_string, translator_list)
+    return ImeTranslatorDynamicUpdatePosition(splitted_string, translator_history_result[splitted_string])
 }
 
 ;*******************************************************************************
 ; Update `translate_result`
 ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, word_length, max_num := 100, modify_weight := 0)
 {
+    local
     translator_list := ImeTranslatorHistoryGetTopWeightList(splitted_string)
     if( max_num == 0 )
     {

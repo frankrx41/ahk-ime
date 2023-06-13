@@ -1,11 +1,11 @@
 ;*******************************************************************************
 ; translator_result := []
-;   [1]: "wo3"      ; legacy pinyin
-;   [2]: "我"       ; word value
-;   [3]: 30233      ; weight
-;   [4]: ""         ; comment
-;   [5]: 1          ; word length
-;   [6]: false      ; traditional: 0 false, 1 trad, 2 auto trad
+;   [1]: "wo3"      ; legacy pinyin (SQL)
+;   [2]: "我"       ; word value    (SQL)
+;   [3]: 30233      ; weight        (SQL)
+;   [4]: ""         ; comment       (SQL)
+;   [5]: 1          ; word length   (In some case, "guamo" can has result "谷阿莫", but it only taken 2 length)
+;   [6]: false      ; traditional:  0 false, 1 trad, 2 auto trad
 ;   [7]: 0          ; top position: 0 no top, 1 1st top, 2 2nd top
 ;   [8]: false      ; diable
 ;
