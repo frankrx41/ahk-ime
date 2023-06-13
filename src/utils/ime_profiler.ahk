@@ -23,87 +23,96 @@
 ;*******************************************************************************
 ImeProfilerInitialize()
 {
-    global ime_profiler := []
+    global ime_profiler
     ImeProfilerClear()
 }
 
 ImeProfilerClear()
 {
-    global ime_profiler
-    loop, 50
-    {
-        ime_profiler[A_Index, 1] := 0   ; total tick
-        ime_profiler[A_Index, 2] := ""  ; debug info
-        ime_profiler[A_Index, 3] := 0   ; count
-        ime_profiler[A_Index, 4] := 0   ; last tick
-    }
+    global ime_profiler := {}
 }
 
 ;*******************************************************************************
 ;
-ImeProfilerBegin(index)
+ImeProfilerBegin(name)
 {
     global ime_profiler
-    Assert(ime_profiler[index, 4] == 0, "Please call ``ImeProfilerEnd(" index ")`` before call ``ImeProfilerBegin(" index ")``",true)
-    ime_profiler[index, 3] += 1
-    ime_profiler[index, 4] := A_TickCount
-    return ime_profiler[index, 2]
+    if( ime_profiler.HasKey(name) ) {
+        Assert(ime_profiler[name, 4] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``",true)
+        ime_profiler[name, 3] += 1
+        ime_profiler[name, 4] := A_TickCount
+    } else {
+        ime_profiler[name] := []
+        ime_profiler[name, 1] := 0              ; total tick
+        ime_profiler[name, 2] := ""             ; debug info
+        ime_profiler[name, 3] := 1              ; trace count
+        ime_profiler[name, 4] := A_TickCount    ; last tick
+    }
+    return ime_profiler[name, 2]
 }
 
-ImeProfilerEnd(index, profile_text:="")
+ImeProfilerEnd(name, profile_text:="")
 {
     global ime_profiler
-    Assert(ime_profiler[index, 4] != 0, "Please call ``ImeProfilerBegin(" index ")`` before call ``ImeProfilerEnd(" index ")``" ,true)
-    ime_profiler[index, 1] += A_TickCount - ime_profiler[index, 4]
-    ime_profiler[index, 2] := profile_text
-    ime_profiler[index, 4] := 0
+    Assert(ime_profiler.HasKey(name) && ime_profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``" ,true)
+    ime_profiler[name, 1] += A_TickCount - ime_profiler[name, 4]
+    ime_profiler[name, 2] := profile_text
+    ime_profiler[name, 4] := 0
 }
 
-; ImeProfilerDebug(index, profile_text, stack:=true)
-; {
-;     global ime_profiler
-;     ime_profiler[index, 1] += A_TickCount - ime_profiler[index, 4]
-;     if( stack ){
-;         ime_profiler[index, 2] .= profile_text
-;     } else {
-;         ime_profiler[index, 2] := profile_text
-;     }
-;     ime_profiler[index, 3] += 1
-;     ime_profiler[index, 4] := 0
-; }
+ImeProfilerDebug(name, profile_text, append_text:=true)
+{
+    profile_text := ImeProfilerBegin(name)
+    profile_text := append_text ? profile_text : ""
+    ImeProfilerEnd(name, profile_text)
+}
 
 ImeProfilerTemp(profile_text)
 {
-    ImeProfilerBegin(1)
-    ImeProfilerEnd(1, profile_text)
+    ImeProfilerDebug("temp", profile_text)
 }
 
-ImeProfilerFunc(index, func_name)
+ImeProfilerFunc(func_name)
 {
     local
-    profile_text := ImeProfilerBegin(index)
+    name := "profile func"
+    profile_text := ImeProfilerBegin(name)
     last_tick := A_TickCount
     Func(func_name).Call()
     profile_text .= "`n  - " func_name " (" A_TickCount - last_tick ")"
-    ImeProfilerEnd(index, profile_text)
+    ImeProfilerEnd(name, profile_text)
 }
 
 ;*******************************************************************************
 ; Use for print
-ImeProfilerGetTotalTick(index)
+ImeProfilerGetTotalTick(name)
 {
     global ime_profiler
-    return ime_profiler[index, 1]
+    return ime_profiler.HasKey(name) ? ime_profiler[name, 1] : "N/A"
 }
 
-ImeProfilerGetDebugInfo(index)
+ImeProfilerGetDebugInfo(name)
 {
     global ime_profiler
-    return ime_profiler[index, 2]
+    return ime_profiler.HasKey(name) ? ime_profiler[name, 2] : "N/A"
 }
 
-ImeProfilerGetCount(index)
+ImeProfilerGetCount(name)
 {
     global ime_profiler
-    return ime_profiler[index, 3]
+    return ime_profiler.HasKey(name) ? ime_profiler[name, 3] : "N/A"
 }
+
+;*******************************************************************************
+;
+ImeProfilerInputBegin()
+{
+    global ime_profiler_timer
+    ime_profiler_timer[1] := A_TickCount
+}
+
+ImeProfilerInputEnd()
+{
+
+}
+

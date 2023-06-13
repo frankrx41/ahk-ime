@@ -22,34 +22,35 @@ global ime_version  := "0.7.2"
 ; Initialize
 ImeProfilerInitialize()
 
-; ImeProfilerBegin(1)
-ImeProfilerFunc(1, "ImeInputterInitialize")
-ImeProfilerFunc(1, "ImeOutputterInitialize")
+ImeProfilerBegin("initialize")
+ImeProfilerFunc("ImeInputterInitialize")
+ImeProfilerFunc("ImeOutputterInitialize")
 
 ; Selector
-ImeProfilerFunc(1, "ImeSelectMenuInitialize")
-ImeProfilerFunc(1, "ImeSelectorInitialize")
+ImeProfilerFunc("ImeSelectMenuInitialize")
+ImeProfilerFunc("ImeSelectorInitialize")
 
 ; Translator
-ImeProfilerFunc(1, "ImeCandidateInitialize")
-ImeProfilerFunc(1, "ImeTranslatorHistoryInitialize")
+ImeProfilerFunc("ImeCandidateInitialize")
+ImeProfilerFunc("ImeTranslatorHistoryInitialize")
 
 ; Radical
-ImeProfilerFunc(1, "RadicalInitialize")
+ImeProfilerFunc("RadicalInitialize")
 
-ImeProfilerFunc(1, "PinyinInitialize")
-ImeProfilerFunc(1, "GojuonTranslateInitialize")
-ImeProfilerFunc(1, "ImeTooltipInitialize")
-ImeProfilerFunc(1, "ImeHotkeyInitialize")
+ImeProfilerFunc("PinyinInitialize")
+ImeProfilerFunc("GojuonTranslateInitialize")
+ImeProfilerFunc("ImeTooltipInitialize")
+ImeProfilerFunc("ImeHotkeyInitialize")
 ; `ImeStateUpdateLanague` is call inside `ImeStateInitialize`
-ImeProfilerFunc(1, "ImeStateInitialize")
+ImeProfilerFunc("ImeStateInitialize")
 
-ImeProfilerFunc(1, "ImeDBInitialize")
+ImeProfilerFunc("ImeDBInitialize")
 
 ; We should register hotkey after other modules are initialized
-ImeProfilerFunc(1, "ImeHotkeyRegisterInitialize")
+ImeProfilerFunc("ImeHotkeyRegisterInitialize")
 
-; Tooltip, % ImeProfilerGetDebugInfo(1) "`n " ImeProfilerGetTotalTick(1)
+ImeProfilerEnd("initialize")
+; Tooltip, % ImeProfilerGetDebugInfo("initialize") "`n " ImeProfilerGetTotalTick("initialize")
 return
 
 ;*******************************************************************************
