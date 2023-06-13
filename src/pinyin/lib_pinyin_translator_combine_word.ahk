@@ -73,7 +73,11 @@ PinyinTranslatorInsertCombineWord(ByRef translate_result_list, splitter_result_l
     if( splitter_result_list.Length() >= 4 )
     {
         ; 了个 了会 了朵 了顿
-        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5+0", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5ge4", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5hui3", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5hui4", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5duo3", 1, 2, 2)
+        PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5dun4", 1, 2, 2)
 
         ; 了
         PinyinTranslatorInsertCombineWordMatchAt(translate_result_list, splitter_result_list, "le5", 1, 2, 1)
