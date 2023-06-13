@@ -251,7 +251,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                         }
                     }
                 }
-                ImeProfilerTemp(select_index)
+
                 if( select_index == 0 || (select_index && CandidateGetWordLength(candidate, split_index, select_index) != max_length) )
                 {
                     select_index := SelectorFindGraceResultIndex(candidate, split_index, max_length)

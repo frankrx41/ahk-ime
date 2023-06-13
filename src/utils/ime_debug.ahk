@@ -47,8 +47,9 @@ ImeDebugGetDisplayText()
     ; ```
     ; See ime_profiler.ahk for detail.
 
-    name_list := ImeProfilerGetNameList()
-    
+    ; name_list := ImeProfilerGetAllNameList()
+    name_list := ["ImeCandidateUpdateResult_"]
+
     for index, element in name_list
     {
         debug_tip .= ImeDebugGetProfilerText(element)

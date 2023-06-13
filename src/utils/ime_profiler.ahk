@@ -139,7 +139,7 @@ ImeProfilerGetCount(name)
 
 ;*******************************************************************************
 ;
-ImeProfilerGetNameList()
+ImeProfilerGetAllNameList()
 {
     local
     global ime_profiler
