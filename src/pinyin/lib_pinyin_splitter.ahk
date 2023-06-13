@@ -6,16 +6,19 @@
 #Include, src\pinyin\lib_pinyin_splitter_fluent.ahk
 
 ;*******************************************************************************
+; See: wiki\design.md#Split
 ; In:
 ;   spell:              a-z
-;   tone:               "12345'" and {space}
-;   radical:            A-Z
-;   maybe has h sound:  ?
+;   radical:            A-Z!@#$^&
+;   tone:               "012345'" and {space}
+;   question mark:      ?+
+;   auto complete:      +%
 ; Out:
 ;   spell:              a-z
+;   radical:            A-Z!@#$^&
 ;   tone:               012345
+;   question mark:      ?
 ;   auto complete:      %
-;   maybe has h sound:  ?
 ;
 ; Output always has a tone in last char
 ;
