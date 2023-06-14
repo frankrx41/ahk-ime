@@ -179,7 +179,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             {
                 select_index := SelectorGetAvailableSelect(selector_result_list, candidate, select_index, split_index)
                 select_word_length := CandidateGetWordLength(candidate, split_index, select_index)
-                Assert(select_word_length != "", split_index ", " select_index "`n" CandidateGetWord(candidate, split_index, select_index) "`n" CandidateGetLegacyPinyin(candidate, split_index, select_index), false)
+                Assert(select_word_length != "", "[" split_index ", " select_index "]: (" CandidateGetWord(candidate, split_index, select_index) ", " CandidateGetLegacyPinyin(candidate, split_index, select_index) ")", false)
                 skip_word_count := select_word_length-1
                 profile_text .= "skip: " skip_word_count " "
             }
