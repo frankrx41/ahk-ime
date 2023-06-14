@@ -20,18 +20,12 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
     loop, % max_len
     {
         length_count    := max_len-A_Index+1
-        limit_num       := length_count == 1 ? 800 : 100
+        limit_num       := 40
+        limit_num       := translate_result_list.Length() > 0 && !SplitterResultGetRadical(splitter_result_list[1]) ? 10 : limit_num
+        limit_num       := length_count == hope_word_length && length_count == 1 ? 0 : limit_num
         splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
-        if( length_count == 1 && translate_result_list.Length() > 0 && !SplitterResultGetRadical(splitter_result_list[1]) )
-        {
-            limit_num := 10
-        }
         profile_text .= "[" splitted_string "] "
         ImeTranslatorHistoryUpdateKey(splitted_string)
-        if( length_count == hope_word_length ) {
-            first_weight := TranslatorResultGetWeight(translate_result_list[1])
-            last_index := translate_result_list.Length() + 1
-        }
         ImeTranslatorHistoryPushResult(translate_result_list, splitted_string, length_count, limit_num)
     }
     ImeProfilerEnd(profile_text)
