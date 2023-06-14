@@ -36,7 +36,6 @@ ImeTooltipGetDisplaySelectItems()
         start_index     := ImeSelectMenuIsMultiple() ? 0 : Floor((select_index-1) / column) * column
         column_loop     := ImeSelectMenuIsMultiple() ? Floor(ImeCandidateGetTranslatorListLength(split_index) / column) +1 : 1
 
-        max_item_len    := []
 
         if( column_loop > max_column_loop ) {
             column_loop := max_column_loop
@@ -44,6 +43,7 @@ ImeTooltipGetDisplaySelectItems()
             start_index := Min(start_index, (Floor((ImeCandidateGetTranslatorListLength(split_index)-1) / column)-max_column_loop+1)*column)
         }
 
+        col_max_len     := []
         loop % Min(ImeCandidateGetTranslatorListLength(split_index)+1, column) {
             word_index      := start_index + A_Index
             ime_select_str  .= "`n"
@@ -52,7 +52,9 @@ ImeTooltipGetDisplaySelectItems()
             loop % column_loop
             {
                 item_str := ""
+                column_index := A_Index
                 in_column := (Floor((word_index-1) / column) == Floor((select_index-1) / column))
+                end_mark := ""
                 if( word_index <= ImeCandidateGetTranslatorListLength(split_index) )
                 {
                     if( in_column ) {
@@ -61,24 +63,27 @@ ImeTooltipGetDisplaySelectItems()
                             end_mark := "]"
                         } else {
                             begin_str := Mod(word_index, 10) "."
-                            end_mark := ""
                         }
                     } else {
                         begin_str := "  "
-                        end_mark := ""
                     }
                     comment := ImeCandidateGetFormattedComment(split_index, word_index)
                     word := ImeCandidateGetWord(split_index, word_index)
                     item_str := begin_str . word . end_mark . comment
+                    ; len := StrLen(begin_str) + StrPut(word, "CP936") + StrLen(end_mark) + StrPut(comment, "CP936")
                 } else {
                     item_str := ""
+                    ; len := 0
                 }
+                ; len := begin_str + StrPut(word, "CP936") + end_mark + StrPut(comment, "CP936")
                 len := StrPut(item_str, "CP936")
+
                 if( row_index == 1 ) {
-                    max_item_len[A_Index] := len + 1
+                    col_max_len[column_index] := len - StrLen(end_mark) + 1
                 }
-                loop, % Max(10, max_item_len[A_Index]) - len {
+                loop, % Max(10, col_max_len[column_index]) - len {
                     item_str .= " "
+                    ; item_str .= A_Index
                 }
                 ; item_str .= "(" len ")"
                 ime_select_str .= item_str
