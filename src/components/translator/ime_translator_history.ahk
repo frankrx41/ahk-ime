@@ -31,14 +31,14 @@ ImeTranslatorHistoryHasKey(splitted_string)
 ;   [3]: ["lao3shi2", "老实", "25877", "", 2]
 ;   ...
 ; ]
-ImeTranslatorHistoryUpdateKey(splitted_string, limit_num:=100)
+ImeTranslatorHistoryUpdateKey(splitted_string)
 {
     local
     global translator_history_result
 
     if( !translator_history_result.HasKey(splitted_string) )
     {
-        translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, limit_num)
+        translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, 0)
     }
 }
 
