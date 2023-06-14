@@ -38,20 +38,28 @@ Assert(bool, debug_msg, show_msgbox)
 }
 
 ; https://www.autohotkey.com/board/topic/76062-ahk-l-how-to-get-callstack-solution/
-CallStack(deepness = 5, printLines = 0)
+GetCallStackText(deepness := 5, print_lines := 0)
 {
     stack := ""
+    line_file := A_LineFile
     loop % deepness
     {
         lvl := -2 - deepness + A_Index
-        oEx := Exception("", lvl)
-        oExPrev := Exception("", lvl - 1)
-        FileReadLine, line, % oEx.file, % oEx.line
-        if(line = "`toEx := Exception("""", lvl)")
+        line_numeber := A_LineNumber
+        oExCurr := Exception("", lvl)
+        if( oExCurr.Line == line_numeber + 1 && oExCurr.File == line_file )
+        {
             continue
-        stack .= (stack ? "`n" : "") oEx.file " (" oEx.line ") : " oExPrev.What (printLines ? "`n" line : "")
+        }
+        oExPrev := Exception("", lvl - 1)
+        stack .= "`n" . oExCurr.file " (" oExCurr.line ") : " oExPrev.What
+        if( print_lines )
+        {
+            FileReadLine, line, % oExCurr.file, % oExCurr.line
+            stack .=  "`n  - " LTrim(line)
+        }
     }
-    return stack
+    return LTrim(stack, "`n")
 }
 
 ;*******************************************************************************
