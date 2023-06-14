@@ -3,37 +3,44 @@
 ; Process will auto store failed assert in "".\debug.log"
 ;*******************************************************************************
 ;
-Assert(bool, debug_msg, show_msgbox)
+Assert(bool, debug_msg:="", debug_level:="msgbox")
 {
-    static assert_ignore_list := {}
-    static disable_tick := 0
-    static in_msgbox := false
     local
+    static assert_ignore_list   := {}
+    static disable_tick         := 0
+    static in_msgbox            := false
+    static git_hash             := GetGitHash()
     if( IsDebugVersion() && !bool )
     {
-        git_hash := GetGitHash()
-        time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
-
-        ; debug_msg   := " """ debug_msg """"
-        debug_info  := time_string " [" git_hash "] (" ImeInputterGetDisplayDebugString() ")`n"
-        debug_info  .= CallStack() " """ debug_msg """`n"
-
-        FileAppend, %debug_info%, .\debug.log
-        mark_key := CallStack(1)
-        if( show_msgbox && A_TickCount - disable_tick > 6000 && !assert_ignore_list.HasKey(mark_key) && !in_msgbox ){
-            in_msgbox := true
-            Msgbox, 18, Assert, % debug_info "---`n" ImeInputterGetDisplayDebugString(true) ":`n" debug_msg "`n---`nAbout:`tIgnore all assert for 1 minute`nRetry:`tAlways ignore this assert`nIgnore:`tIgnore this assert once"
-            IfMsgBox, Abort
+        mark_key := GetCallStackText(1)
+        if( !assert_ignore_list.HasKey(mark_key) )
+        {
+            time_string = %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%
+            if( !debug_msg )
             {
-                disable_tick := A_TickCount
+                exception_curr := Exception("", -1)
+                FileReadLine, line, % exception_curr.file, % exception_curr.line
+                debug_msg := RegExReplace(line, "\s+" A_ThisFunc "(.*)", "$1")
             }
-            IfMsgBox, Retry
-            {
-                assert_ignore_list[mark_key] := 1
+            debug_info  := time_string " [" git_hash "] (" ImeInputterGetDisplayDebugString() ")`n"
+            debug_info  .= GetCallStackText(4) " """ debug_msg """`n"
+            FileAppend, %debug_info%, .\debug.log
+
+            if( debug_level == "msgbox" && A_TickCount - disable_tick > 6000 && !in_msgbox ){
+                in_msgbox := true
+                Msgbox, 18, Assert, % debug_info "---`n(" ImeInputterGetDisplayDebugString(true) "):`n" debug_msg "`n---`nAbout:`tIgnore all assert for 1 minute`nRetry:`tAlways ignore this assert`nIgnore:`tIgnore this assert once"
+                IfMsgBox, Abort
+                {
+                    disable_tick := A_TickCount
+                }
+                IfMsgBox, Retry
+                {
+                    assert_ignore_list[mark_key] := 1
+                }
+                in_msgbox := false
             }
-            in_msgbox := false
+            ImeProfilerDebug(CallerName(0) " """ debug_msg """")
         }
-        ImeProfilerDebug(CallerName(0) " """ debug_msg """")
     }
 }
 
