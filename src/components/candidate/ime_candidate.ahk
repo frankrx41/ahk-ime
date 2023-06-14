@@ -20,6 +20,7 @@ ImeCandidateUpdateResult(splitter_result_list)
     {
         ImeProfilerBegin()
         ime_candidata := []
+        translate_last_result_list := []
         CandidateSetSplittedList(ime_candidata, splitter_result_list)
         debug_text := "["
         loop % splitter_result_list.Length()
@@ -49,18 +50,7 @@ ImeCandidateUpdateResult(splitter_result_list)
             }
             ; Insert result
             ime_candidata.Push(translate_result_list)
-        }
 
-        debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
-        ImeProfilerEnd(debug_text)
-
-        ; For last word
-        ; We filter result first then add last candidata for optimization
-        translate_last_result_list := []
-        loop, % ime_candidata.Length()
-        {
-            splitter_index := A_Index
-            translate_result_list := ime_candidata[A_Index]
             loop, % translate_result_list.Length()
             {
                 if( TranslatorResultGetWordLength(translate_result_list[A_Index]) + splitter_index-1 == splitter_result_list.Length() ){
@@ -70,7 +60,11 @@ ImeCandidateUpdateResult(splitter_result_list)
                 }
             }
         }
+        ; Find last word
         ime_candidata.Push(translate_last_result_list)
+
+        debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
+        ImeProfilerEnd(debug_text)
     } else {
         ImeCandidateClear()
     }
