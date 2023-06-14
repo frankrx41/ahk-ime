@@ -27,7 +27,7 @@ ImeTranslatorHistoryHasResult(splitted_string)
 ;   [3]: ["lao3shi2", "老实", "25877", ""]
 ;   ...
 ; ]
-ImeTranslatorHistoryUpdateKey(splitted_string)
+ImeTranslatorHistoryUpdateKey(splitted_string, try_search_zero_weight:=false)
 {
     local
     global translator_history_normal_result
@@ -36,7 +36,10 @@ ImeTranslatorHistoryUpdateKey(splitted_string)
     if( !translator_history_normal_result.HasKey(splitted_string) )
     {
         translator_history_normal_result[splitted_string]       := PinyinSqlGetResult(splitted_string, false, 0)
-        translator_history_zero_weight_result[splitted_string]  := PinyinSqlGetResult(splitted_string, true, 0)
+        if( try_search_zero_weight && translator_history_normal_result[splitted_string].Length() == 0 )
+        {
+            translator_history_zero_weight_result[splitted_string]  := PinyinSqlGetResult(splitted_string, true, 0)
+        }
     }
 }
 
