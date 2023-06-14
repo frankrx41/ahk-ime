@@ -1,12 +1,14 @@
 ImeTranslatorHistoryInitialize()
 {
-    global translator_history_result    ; See ime_translator_result.ahk
+    global translator_history_result                ; See lib_translator_result.ahk
+    global translator_history_zero_weight_result
     ImeTranslatorHistoryClear()
 }
 
 ImeTranslatorHistoryClear()
 {
     global translator_history_result := []
+    global translator_history_zero_weight_result := []
     ImeTranslatorDynamicClear()
 }
 
@@ -18,12 +20,6 @@ ImeTranslatorHistoryHasResult(splitted_string)
 
 ;*******************************************************************************
 ;
-ImeTranslatorHistoryHasKey(splitted_string)
-{
-    global translator_history_result
-    return translator_history_result.HasKey(splitted_string)
-}
-
 ; translator_history_result["lao0shi0"] =
 ; [
 ;   [1]: ["lao3shi1", "老师", "26995", "", 2]
@@ -35,10 +31,12 @@ ImeTranslatorHistoryUpdateKey(splitted_string)
 {
     local
     global translator_history_result
+    global translator_history_zero_weight_result
 
     if( !translator_history_result.HasKey(splitted_string) )
     {
-        translator_history_result[splitted_string] := PinyinSqlGetResult(splitted_string, 0)
+        translator_history_result[splitted_string]              := PinyinSqlGetResult(splitted_string, false, 0)
+        translator_history_zero_weight_result[splitted_string]  := PinyinSqlGetResult(splitted_string, true, 0)
     }
 }
 
@@ -65,10 +63,28 @@ ImeTranslatorHistoryGetTopWeightList(splitted_string)
 
 ;*******************************************************************************
 ; Update `translate_result`
-ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, word_length, max_num := 100, modify_weight := 0)
+ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, word_length, max_num := 100)
 {
     local
     translator_list := ImeTranslatorHistoryGetTopWeightList(splitted_string)
+    if( max_num == 0 )
+    {
+        max_num := translator_list.Length()
+    }
+
+    loop % Min(translator_list.Length(), max_num)
+    {
+        single_result := translator_list[A_Index]
+        TranslatorResultSetWordLength(single_result, word_length)
+        translate_result_list.Push(single_result)
+    }
+}
+
+ImeTranslatorHistoryPushZeroWeightResult(ByRef translate_result_list, splitted_string, word_length, max_num := 100)
+{
+    local
+    global translator_history_result
+    translator_list := CopyObj(translator_history_zero_weight_result[splitted_string])
     if( max_num == 0 )
     {
         max_num := translator_list.Length()

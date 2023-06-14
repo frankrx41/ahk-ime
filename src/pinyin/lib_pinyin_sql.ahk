@@ -78,14 +78,14 @@ PinyinSqlGenerateWhereCommand(sim_key, full_key)
 
 ;*******************************************************************************
 ;
-PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, weight:=false)
+PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, zero_weight)
 {
     local
     begin_tick      := A_TickCount
 
     sql_full_cmd    := "SELECT key,value,weight,comment FROM 'pinyin' WHERE "
     sql_full_cmd    .= sql_where_cmd
-    sql_full_cmd    .= weight ? " AND weight > 0" : ""
+    sql_full_cmd    .= !zero_weight ? " AND weight > 0" : " AND weight == 0"
     sql_full_cmd    .= " ORDER BY weight DESC"
     sql_full_cmd    .= limit_num ? " LIMIT " limit_num : ""
 
@@ -113,7 +113,7 @@ PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, weight:=false)
 ;   % = has vowels
 ;   a-z = pinyin
 ;   [012345] = tone
-PinyinSqlGetResult(splitted_input, limit_num)
+PinyinSqlGetResult(splitted_input, zero_weight, limit_num)
 {
     local
     Critical
@@ -127,7 +127,7 @@ PinyinSqlGetResult(splitted_input, limit_num)
 
     sql_where_cmd := PinyinSqlGenerateWhereCommand(sql_sim_key, sql_full_key)
 
-    result := PinyinSqlExecuteGetTable(sql_where_cmd, limit_num)
+    result := PinyinSqlExecuteGetTable(sql_where_cmd, limit_num, zero_weight)
 
     ImeProfilerDebug("[""" splitted_input """] -> (" result.Length() ")")
     return result
