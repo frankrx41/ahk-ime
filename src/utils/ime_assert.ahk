@@ -9,7 +9,7 @@ Assert(bool, debug_msg:="", debug_level:="msgbox")
     static assert_ignore_list   := {}
     static disable_tick         := 0
     static in_msgbox            := false
-    static git_hash             := GetGitHash()
+    static 
     if( IsDebugVersion() && !bool )
     {
         mark_key := GetCallStackText(1)
@@ -22,6 +22,7 @@ Assert(bool, debug_msg:="", debug_level:="msgbox")
                 FileReadLine, line, % exception_curr.file, % exception_curr.line
                 debug_msg := RegExReplace(line, "\s+" A_ThisFunc "(.*)", "$1")
             }
+            git_hash    := GetGitHash()
             debug_info  := time_string " [" git_hash "] (" ImeInputterGetDisplayDebugString() ")`n"
             debug_info  .= GetCallStackText(4) " """ debug_msg """`n"
             FileAppend, %debug_info%, .\debug.log
@@ -53,16 +54,16 @@ GetCallStackText(deepness := 5, print_lines := 0)
     {
         lvl := -2 - deepness + A_Index
         line_numeber := A_LineNumber
-        oExCurr := Exception("", lvl)
-        if( oExCurr.Line == line_numeber + 1 && oExCurr.File == line_file )
+        exception_curr := Exception("", lvl)
+        if( exception_curr.Line == line_numeber + 1 && exception_curr.File == line_file )
         {
             continue
         }
-        oExPrev := Exception("", lvl - 1)
-        stack .= "`n" . oExCurr.file " (" oExCurr.line ") : " oExPrev.What
+        exception_prev := Exception("", lvl - 1)
+        stack .= "`n" . exception_curr.file " (" exception_curr.line ") : " exception_prev.What
         if( print_lines )
         {
-            FileReadLine, line, % oExCurr.file, % oExCurr.line
+            FileReadLine, line, % exception_curr.file, % exception_curr.line
             stack .=  "`n  - " LTrim(line)
         }
     }
