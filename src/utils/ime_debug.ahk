@@ -44,7 +44,7 @@ ImeDebugGetDisplayText()
         ; See ime_profiler.ahk for detail.
 
         ; name_list := ImeProfilerGetAllNameList()
-        name_list := ["ImeTranslateFindResult_", "SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
+        name_list := ["ImeTranslateFilterResult_", "SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
 
         for index, element in name_list
         {
