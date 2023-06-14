@@ -11,6 +11,12 @@ ImeDebugLevelGet()
     return ime_debug_level
 }
 
+ImeDebugLevelSet(debug_level)
+{
+    global ime_debug_level
+    ime_debug_level := debug_level
+}
+
 ImeDebugLevelToggle()
 {
     global ime_debug_level

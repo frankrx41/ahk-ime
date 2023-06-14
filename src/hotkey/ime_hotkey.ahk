@@ -309,6 +309,7 @@
 #if !ImeLanguageIsEnglish()
     ; Summon last input
     ^+|::
+        ImeDebugLevelSet(1) ; for debug
         ImeInputterHistorySummon(+1)
         ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
