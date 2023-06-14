@@ -122,37 +122,6 @@ CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, ByRe
 
 ;*******************************************************************************
 ;
-CandidateResultListFilterResults(ByRef candidate, input_radical_list)
-{
-    local
-    result_list     := CopyObj(candidate)
-    radical_list    := CopyObj(input_radical_list)
-
-    debug_text := ""
-    ImeProfilerBegin()
-    loop % result_list.Length()
-    {
-        split_index := A_Index
-        test_result := result_list[split_index]
-        debug_text .= "[" split_index  ", " CandidateGetLegacyPinyin(result_list, split_index, 1) "] (" test_result.Length() ")"
-        if( true ){
-            ; TranslatorResultListFilterZeroWeight(test_result)
-        }
-        if( radical_list ){
-            TranslatorResultListFilterByRadical(test_result, radical_list)
-            radical_list.RemoveAt(1)
-        }
-        if( true ){
-            TranslatorResultListUniquify(test_result)
-        }
-        debug_text .= " -> (" test_result.Length() ")"
-    }
-
-    ; SelectorFixupSelectIndex()
-    ImeProfilerEnd("[" result_list.Length() "]: " . debug_text)
-    return result_list
-}
-
 CandidateResultListFilterResultsSingleMode(ByRef candidate)
 {
     result_list := CopyObj(candidate)
