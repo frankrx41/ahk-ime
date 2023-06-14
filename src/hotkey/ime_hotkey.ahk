@@ -391,7 +391,6 @@
 
 ;*******************************************************************************
 ; Win + Space: toggle cn and en
-#Space::
 ImeToggleSuspend:
     Suspend
     if( A_ThisHotkey == "#Space" && !A_IsSuspended && ImeLanguageIsEnglish() ){

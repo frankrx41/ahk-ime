@@ -10,6 +10,8 @@ ImeHotkeyRegisterInitialize()
     , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" , "^Space":"　" }
     global symbol_list_string := ""
 
+    Hotkey, % "#Space", ImeToggleSuspend
+
     ime_is_waiting_input_fn := Func("ImeStateWaitingInput").Bind()
     Hotkey if, % ime_is_waiting_input_fn
     {
