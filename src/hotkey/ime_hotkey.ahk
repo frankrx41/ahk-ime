@@ -280,14 +280,14 @@
 
     ; Inputter history
     ^Up::
-        ImeInputterHistorySummon(+1)
+        ImeInputterStringSet(ImeInputterHistorySummon(+1))
         ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return
 
     ^Down::
-        ImeInputterHistorySummon(-1)
+        ImeInputterStringSet(ImeInputterHistorySummon(-1))
         ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
@@ -310,7 +310,7 @@
     ; Summon last input
     ^+|::
         ImeDebugLevelSet(1) ; for debug
-        ImeInputterHistorySummon(+1)
+        ImeInputterStringSet(ImeInputterHistorySummon(+1))
         ImeInputterCaretMoveToEnd()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()

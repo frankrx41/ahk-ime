@@ -1,4 +1,17 @@
 ;*******************************************************************************
+ImeInputterStringSet(input_string)
+{
+    global ime_input_string
+    ime_input_string := input_string
+}
+
+ImeInputterStringGetLegacy()
+{
+    global ime_input_string
+    return ime_input_string
+}
+
+;*******************************************************************************
 ;
 ImeInputterClearPrevSplitted()
 {
@@ -16,7 +29,6 @@ ImeInputterClearPrevSplitted()
     ImeSelectorSetCaretSelectIndex(1)
     ImeInputterUpdateString("")
 }
-
 
 ImeInputterClearLastSplitted()
 {
@@ -86,7 +98,6 @@ ImeInputterProcessChar(input_char, immediate_put:=false)
     }
 }
 
-
 ;*******************************************************************************
 ;
 ImeInputterGetDisplayDebugString(full:=false)
@@ -133,12 +144,4 @@ ImeInputterGetDisplayString()
         tooltip_string .= "`n" SplitterResultListGetDisplayTextGrace(ime_splitted_list)
     }
     return tooltip_string
-}
-
-;*******************************************************************************
-;
-ImeInputterStringGetLegacy()
-{
-    global ime_input_string
-    return ime_input_string
 }

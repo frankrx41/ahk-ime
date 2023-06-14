@@ -178,6 +178,5 @@ ImeProfilerTickClear()
 ImeProfilerTickGetProfileText()
 {
     global ime_profiler_tick
-    global ime_input_string
-    return Format("({}|{:0.1f}|{})", ime_profiler_tick[2], ime_profiler_tick[1]/StrLen(ime_input_string), ime_profiler_tick[1])
+    return Format("({}|{:0.1f}|{})", ime_profiler_tick[2], ime_profiler_tick[1]/StrLen(ImeInputterStringGetLegacy()), ime_profiler_tick[1])
 }
