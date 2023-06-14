@@ -20,7 +20,13 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
     loop, % max_len
     {
         length_count := max_len-A_Index+1
+        ; If only one word and has no radical, we skip it for optimization
         splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
+        if( length_count == 1 && translate_result_list.Length() > 0 && !SplitterResultGetRadical(splitter_result_list[1]) && !ImeTranslatorHistoryHasKey(splitted_string))
+        {
+            Assert(false)
+            break
+        }
         profile_text .= "[" splitted_string "] "
         limit_num := length_count == 1 ? 800 : 100
         ImeTranslatorHistoryUpdateKey(splitted_string, limit_num)
