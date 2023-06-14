@@ -7,7 +7,11 @@
 ;   - To skip:  `git update-index --skip-worktree src\utils\ime_debug.ahk`
 ;*******************************************************************************
 ; Static
-ImeDebugGetProfilerText(name)
+; debug_level
+;   - 0: hide
+;   - 1: display only hit count and time
+;   - 2: show full
+ImeDebugGetProfilerText(name, debug_level)
 {
     local
     debug_text := ""
@@ -16,14 +20,10 @@ ImeDebugGetProfilerText(name)
     debug_text .= "(" ImeProfilerGetTotalTick(name) ") "
     profile_text := ImeProfilerGetProfileText(name)
 
-    if( name == "Assert_" ) {
+    if( debug_level == 2 ) {
         debug_text .= profile_text
-    } else {
-        ; Show full info
-        if( ImeDebugGet() == 2 ) {
-            debug_text .= profile_text
-        }
     }
+
     return debug_text
 }
 
@@ -31,39 +31,45 @@ ImeDebugGetDisplayText()
 {
     local
     debug_text := ""
-    if( !ImeDebugGet() )
+    if( ImeDebugGet() )
     {
-        return debug_text
-    }
+        ; Comment out the debug info you don't want
+        ; If you want add new debug info, do follow:
+        ; ```
+        ;   ImeProfilerBegin()
+        ;   ImeProfilerEnd(profile_text)
+        ; ```
+        ; See ime_profiler.ahk for detail.
 
-    ; Comment out the debug info you don't want
-    ; If you want add new debug info, do follow:
-    ; ```
-    ;   ImeProfilerBegin()
-    ;   ImeProfilerEnd(profile_text)
-    ; ```
-    ; See ime_profiler.ahk for detail.
+        ; name_list := ImeProfilerGetAllNameList()
+        name_list := ["SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
 
-    ; name_list := ImeProfilerGetAllNameList()
-    name_list := ["SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
-
-    for index, element in name_list
-    {
-        if( ImeProfilerHasKey(element) )
+        debug_level := ImeDebugGet()
+        for index, element in name_list
         {
-            debug_text .= ImeDebugGetProfilerText(element)
-            ; debug_text .= element "`n" ImeDebugGetProfilerText(element) "`n"
+            if( ImeProfilerHasKey(element) )
+            {
+                debug_text .= ImeDebugGetProfilerText(element, debug_level)
+            }
+        }
+
+        if( ImeProfilerHasKey("Temporary_") )
+        {
+            debug_text .= ImeDebugGetProfilerText("Temporary_", 2)
+        }
+        debug_text .= "`n----------------" ImeDebugGet() "-"
+        if( ImeProfilerHasKey("Assert_") )
+        {
+            debug_text .= ImeDebugGetProfilerText("Assert_", 2)
         }
     }
-
-    if( ImeProfilerHasKey("Temporary_") )
+    else
     {
-        debug_text .= ImeDebugGetProfilerText("Temporary_")
-    }
-    debug_text .= "`n----------------" ImeDebugGet() "-"
-    if( ImeProfilerHasKey("Assert_") )
-    {
-        debug_text .= ImeDebugGetProfilerText("Assert_")
+        if( ImeProfilerHasKey("Assert_") )
+        {
+            debug_text .= "`n----------------" ImeDebugGet() "-"
+            debug_text .= ImeDebugGetProfilerText("Assert_", 2)
+        }
     }
 
     return debug_text
