@@ -1,26 +1,26 @@
 ImeTranslatorHistoryInitialize()
 {
-    global translator_history_result                ; See lib_translator_result.ahk
+    global translator_history_normal_result         ; See lib_translator_result.ahk
     global translator_history_zero_weight_result
     ImeTranslatorHistoryClear()
 }
 
 ImeTranslatorHistoryClear()
 {
-    global translator_history_result := []
+    global translator_history_normal_result := []
     global translator_history_zero_weight_result := []
     ImeTranslatorDynamicClear()
 }
 
 ImeTranslatorHistoryHasResult(splitted_string)
 {
-    global translator_history_result
-    return translator_history_result[splitted_string].Length() > 0
+    global translator_history_normal_result
+    return translator_history_normal_result[splitted_string].Length() > 0
 }
 
 ;*******************************************************************************
 ;
-; translator_history_result["lao0shi0"] =
+; translator_history_normal_result["lao0shi0"] =
 ; [
 ;   [1]: ["lao3shi1", "老师", "26995", "", 2]
 ;   [2]: ["lao3shi4", "老是", "25921", "", 2]
@@ -30,22 +30,22 @@ ImeTranslatorHistoryHasResult(splitted_string)
 ImeTranslatorHistoryUpdateKey(splitted_string)
 {
     local
-    global translator_history_result
+    global translator_history_normal_result
     global translator_history_zero_weight_result
 
-    if( !translator_history_result.HasKey(splitted_string) )
+    if( !translator_history_normal_result.HasKey(splitted_string) )
     {
-        translator_history_result[splitted_string]              := PinyinSqlGetResult(splitted_string, false, 0)
+        translator_history_normal_result[splitted_string]       := PinyinSqlGetResult(splitted_string, false, 0)
         translator_history_zero_weight_result[splitted_string]  := PinyinSqlGetResult(splitted_string, true, 0)
     }
 }
 
 ImeTranslatorHistoryGetResultWord(splitted_string, word_class:="")
 {
-    global translator_history_result
+    global translator_history_normal_result
     loop
     {
-        word := TranslatorResultGetWord(translator_history_result[splitted_string, A_Index])
+        word := TranslatorResultGetWord(translator_history_normal_result[splitted_string, A_Index])
         if( word_class == "" ){
             return word
         }
@@ -57,8 +57,8 @@ ImeTranslatorHistoryGetResultWord(splitted_string, word_class:="")
 ;
 ImeTranslatorHistoryGetTopWeightList(splitted_string)
 {
-    global translator_history_result
-    return ImeTranslatorDynamicUpdatePosition(splitted_string, translator_history_result[splitted_string])
+    global translator_history_normal_result
+    return ImeTranslatorDynamicUpdatePosition(splitted_string, translator_history_normal_result[splitted_string])
 }
 
 ;*******************************************************************************
@@ -83,7 +83,7 @@ ImeTranslatorHistoryPushResult(ByRef translate_result_list, splitted_string, wor
 ImeTranslatorHistoryPushZeroWeightResult(ByRef translate_result_list, splitted_string, word_length, max_num := 100)
 {
     local
-    global translator_history_result
+    global translator_history_zero_weight_result
     translator_list := CopyObj(translator_history_zero_weight_result[splitted_string])
     if( max_num == 0 )
     {
