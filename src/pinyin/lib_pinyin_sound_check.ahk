@@ -34,7 +34,7 @@ IsPinyinSoundLike(input_pinyin, full_pinyin)
     input_pinyin_list   := SoundSplit(input_pinyin)
 
     loop_count := full_pinyin_list.Length() / 2
-    ; Assert(input_pinyin_list.Length() == full_pinyin_list.Length(), input_pinyin "," full_pinyin)
+    ; Assert(input_pinyin_list.Length() == full_pinyin_list.Length(), input_pinyin "," full_pinyin, false)
     if( input_pinyin_list.Length() != full_pinyin_list.Length() )
     {
         return false

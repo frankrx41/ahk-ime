@@ -78,7 +78,7 @@ ImeInputterIsInputDirty()
 {
     global ime_input_is_dirty
     ; Because of we update tranlsator immediately when input update, `ime_input_is_dirty` should always be false
-    Assert(ime_input_is_dirty == false, , false)
+    Assert(ime_input_is_dirty == false, "", false)
     return ime_input_is_dirty
 }
 

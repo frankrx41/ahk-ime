@@ -9,7 +9,7 @@ IsMustSplit(next_char)
 PinyinSplitterGetWeight(pinyin, prev_splitted_input:="", update:=false)
 {
     static splitted_string_weight_table := {}
-    Assert(pinyin)
+    Assert(pinyin, "", false)
     if( prev_splitted_input == "" )
     {
         if( !splitted_string_weight_table.HasKey(pinyin) )

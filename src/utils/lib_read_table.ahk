@@ -45,7 +45,7 @@ ReadStringToTable(file_content, mark0:="`t", mark1:=",", mark2:=" ")
             data_table[line_arr[1]] := value_data
         }
     }
-    Assert(data_table.Count() != 0)
+    Assert(data_table.Count() != 0, "", false)
 
     return data_table
 }

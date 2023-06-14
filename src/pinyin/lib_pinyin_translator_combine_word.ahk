@@ -14,8 +14,8 @@ GetWordFullLength(pinyin)
 PinyinTranslatorInsertCombineWordMatchAt(ByRef translate_result_list, splitter_result_list, match_pinyin, match_word_length, xy_start_index, word_xy_length)
 {
     result := false
-    Assert( match_word_length == GetWordMatchLength(match_pinyin), match_pinyin ":" match_word_length )
-    Assert( word_xy_length == GetWordFullLength(match_pinyin), match_pinyin ":" word_xy_length )
+    Assert( match_word_length == GetWordMatchLength(match_pinyin), match_pinyin ":" match_word_length, false )
+    Assert( word_xy_length == GetWordFullLength(match_pinyin), match_pinyin ":" word_xy_length, false )
 
     ; RegExReplace(match_pinyin, "[012345]",, match_word_length)
     test_match_pinyin := SplitterResultListConvertToString(splitter_result_list, xy_start_index, word_xy_length)

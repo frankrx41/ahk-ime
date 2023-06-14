@@ -16,7 +16,7 @@ SplitterResultListGetIndex(splitter_result_list, caret_pos)
                 return A_Index
             }
         }
-        Assert(false, SplitterResultListGetDebugText(splitter_result_list) "," caret_pos)
+        Assert(false, SplitterResultListGetDebugText(splitter_result_list) "," caret_pos, false)
     }
     return 1
 }

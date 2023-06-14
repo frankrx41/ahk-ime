@@ -78,7 +78,7 @@ WordCreatorUI( input_text )
 WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
 {
     local
-    Assert(key && value && weight)
+    Assert(key && value && weight, "", false)
     weight := Max(0, weight)
     sim := PinyinSqlSimpleKey(key)
 

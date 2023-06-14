@@ -58,7 +58,7 @@ FluentToNormal(word, index)
     {
         test_word := A_LoopField
         ; `. ""` to force as string
-        ; Assert(fluent_pinyin.HasKey(test_word . ""), test_word ", " word)
+        ; Assert(fluent_pinyin.HasKey(test_word . ""), test_word ", " word, false)
 
         normal_word := fluent_pinyin[test_word . "", index]
         if( !normal_word ) {

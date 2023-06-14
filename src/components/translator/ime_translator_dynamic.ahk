@@ -109,7 +109,7 @@ ImeTranslatorDynamicMark(pinyin, word)
     global translator_history_weight
     global translator_history_lock_top
 
-    Assert(pinyin)
+    Assert(pinyin, "", false)
 
     if( translator_history_lock_top.HasKey(pinyin) )
     {

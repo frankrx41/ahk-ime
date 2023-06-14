@@ -19,13 +19,13 @@ BopomofoToNormal(word, index)
     , "9":["ai","ai"], "o":["ei","ei","ui"], "l":["ao","ao"], ".":["ou","ou","iu"]
     , "0":["an","an"], "p":["en","en","in","un"], ";":["ang","ang"], "/":["eng","eng","ing","ong"]
     , "-":["er","r"]}
-    Assert(bopomofo_pinyin.HasKey("0"), word)
+    Assert(bopomofo_pinyin.HasKey("0"), word, false)
     normal_words := ""
     loop, Parse, word
     {
         test_word := A_LoopField
         ; `. ""` to force as string
-        Assert(bopomofo_pinyin.HasKey(test_word . ""), test_word ", " word)
+        Assert(bopomofo_pinyin.HasKey(test_word . ""), test_word ", " word, false)
 
         normal_word := bopomofo_pinyin[test_word . "", index]
         if( !normal_word ) {

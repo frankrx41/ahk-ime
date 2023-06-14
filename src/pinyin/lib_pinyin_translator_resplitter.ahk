@@ -1,6 +1,6 @@
 PinyinTranslatorInsertReSplitter(ByRef translate_result_list, splitter_result_list)
 {
-    Assert( splitter_result_list.Length() > 1 )
+    Assert( splitter_result_list.Length() > 1, "", false )
     splitted_string := SplitterResultListConvertToString(splitter_result_list, 1)
     ; For make sure "ma0l%0 can not match "ma3liao4"
     splitted_string := StrReplace(splitted_string, "%")

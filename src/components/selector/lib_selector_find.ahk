@@ -27,7 +27,7 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
             {
                 if( CandidateGetWordLength(candidate, right_split_index, test_select_index) < A_Index )
                 {
-                    Assert(right_select_index != 0, , false)
+                    Assert(right_select_index != 0, "", false)
                     break
                 }
                 if( max_weight <= weight ) {
@@ -37,7 +37,7 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
                 }
             }
         }
-        Assert(right_select_index != 0, , false)
+        Assert(right_select_index != 0, "", false)
         ; right_word_length := CandidateGetWordLength(candidate, right_split_index, right_select_index)
         right_weight := max_weight
         right_word  := CandidateGetWord(candidate, right_split_index, right_select_index)

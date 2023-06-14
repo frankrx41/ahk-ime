@@ -37,7 +37,7 @@ SelectorFindPossibleMaxLength(ByRef candidate, ByRef splitted_list, ByRef select
     }
 
     if( max_length == candidate.Length() ){
-        Assert(split_index == 1)
+        Assert(split_index == 1, "", false)
         ; max_length := CandidateGetWordLength(candidate, split_index, 1)
     }
 
@@ -79,7 +79,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
         profile_text .= "[" split_index "] "
         if( split_index == candidate.Length() )
         {
-            Assert(skip_word_count == 0, SplitterResultListGetDebugText(splitted_list) "`n" skip_word_count)
+            Assert(skip_word_count == 0, SplitterResultListGetDebugText(splitted_list) "`n" skip_word_count, false)
 
             last_split_index := split_index - 1
             if( select_word_length != 0 )
@@ -130,7 +130,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
 
             if( skip_word_count )
             {
-                Assert( !SelectorResultIsSelectLock(selector_result_list[split_index]) )
+                Assert( !SelectorResultIsSelectLock(selector_result_list[split_index]), "", false )
                 select_index := 0
                 skip_word_count -= 1
             }
@@ -140,9 +140,9 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
                 lock_word := SelectorResultGetLockWord(selector_result_list[split_index])
                 ; TODO: use `lock_length`
                 lock_length := SelectorResultGetLockLength(selector_result_list[split_index])
-                Assert( max_length <= lock_length )
+                Assert( max_length <= lock_length, "", false )
                 select_index := CandidateFindWordSelectIndex(candidate, split_index, lock_word)
-                Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word "," max_length)
+                Assert(select_index, "[" split_index "]" lock_length "," select_index "," lock_word "," max_length, false)
             }
             else
             if( !SplitterResultNeedTranslate(splitted_list[split_index]) )
@@ -179,7 +179,7 @@ SelectorFixupSelectIndex(candidate, const_selector_result_list)
             {
                 select_index := SelectorGetAvailableSelect(selector_result_list, candidate, select_index, split_index)
                 select_word_length := CandidateGetWordLength(candidate, split_index, select_index)
-                Assert(select_word_length != "", split_index ", " select_index "`n" CandidateGetWord(candidate, split_index, select_index) "`n" CandidateGetLegacyPinyin(candidate, split_index, select_index))
+                Assert(select_word_length != "", split_index ", " select_index "`n" CandidateGetWord(candidate, split_index, select_index) "`n" CandidateGetLegacyPinyin(candidate, split_index, select_index), false)
                 skip_word_count := select_word_length-1
                 profile_text .= "skip: " skip_word_count " "
             }

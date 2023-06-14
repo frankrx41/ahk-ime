@@ -41,7 +41,7 @@ DoubleToNormal(word, index)
         , "a":["'","a"], "s":["s","iong","ong"], "d":["d","ian"], "f":["f","an"], "g":["g","ang"], "h":["h","eng"], "j":["j","ing"], "k":["k","ai"], "l":["l","er","in"], ";":["",""]
         , "z":["z","un","vn"], "x":["x","ue","ve"], "c":["c","ao"], "v":["zh","v","vi"], "b":["b","ei"], "n":["n","iang","uang"], "m":["m","iao"]}
     double_pinyin := double_xiaohe
-    ; Assert(double_pinyin.HasKey(word), word)
+    ; Assert(double_pinyin.HasKey(word), word, false)
     return double_pinyin[word, index]
 }
 

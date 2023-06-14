@@ -41,7 +41,7 @@ ImeProfilerBeginName(name)
 {
     global ime_profiler
     if( ime_profiler.HasKey(name) ) {
-        Assert(ime_profiler[name, 4] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``",true)
+        Assert(ime_profiler[name, 4] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``", true)
         ime_profiler[name, 3] += 1
         ime_profiler[name, 4] := A_TickCount
     } else {
@@ -56,7 +56,7 @@ ImeProfilerBeginName(name)
 ImeProfilerEndName(name, profile_text, append)
 {
     global ime_profiler
-    Assert(ime_profiler.HasKey(name) && ime_profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``" ,true)
+    Assert(ime_profiler.HasKey(name) && ime_profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``", true)
     ime_profiler[name, 1] += A_TickCount - ime_profiler[name, 4]
     ime_profiler[name, 2] := append ? ime_profiler[name, 2] "`n  - " : "  - "
     ime_profiler[name, 2] .= profile_text
@@ -117,21 +117,21 @@ ImeProfilerHasKey(name)
 ImeProfilerGetTotalTick(name)
 {
     global ime_profiler
-    Assert(ime_profiler.HasKey(name), name)
+    Assert(ime_profiler.HasKey(name), name, false)
     return ime_profiler[name, 1]
 }
 
 ImeProfilerGetProfileText(name)
 {
     global ime_profiler
-    Assert(ime_profiler.HasKey(name), name)
+    Assert(ime_profiler.HasKey(name), name, false)
     return ime_profiler[name, 2]
 }
 
 ImeProfilerGetCount(name)
 {
     global ime_profiler
-    Assert(ime_profiler.HasKey(name), name)
+    Assert(ime_profiler.HasKey(name), name, false)
     return ime_profiler[name, 3]
 }
 

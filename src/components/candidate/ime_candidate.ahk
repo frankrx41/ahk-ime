@@ -41,7 +41,7 @@ ImeCandidateUpdateResult(splitter_result_list)
             }
             else
             {
-                Assert(test_splitter_list.Length() >= 1)
+                Assert(test_splitter_list.Length() >= 1, "", false)
                 ; Get translate result
                 translate_result_list := ImeTranslateFindResult(test_splitter_list, auto_complete)
                 if( translate_result_list.Length() == 0 ){

@@ -69,7 +69,7 @@ ImeSelectorApplyCaretSelectIndex(lock_result, move_caret:=true)
 {
     local
 
-    Assert(lock_result == true)
+    Assert(lock_result == true, "", false)
 
     if( !ImeInputterCaretSplitIndexIsEnd() ) {
         ImeSelectorApplyCaretSelectIndexNormal(move_caret)

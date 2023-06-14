@@ -24,7 +24,7 @@ RadicalInitialize()
 RadicalWordSplit(single_word)
 {
     global ime_radical_table
-    ; Assert(ime_radical_table.HasKey(single_word), single_word)
+    ; Assert(ime_radical_table.HasKey(single_word), single_word, false)
     return ime_radical_table[single_word]
 }
 
@@ -32,8 +32,8 @@ RadicalGetPinyin(single_radical)
 {
     local
     global ime_radicals_pinyin
-    Assert(single_radical != "")
-    Assert(ime_radicals_pinyin.HasKey(single_radical), "Miss pinyin for """ single_radical "," Asc(single_radical) """" )
+    Assert(single_radical != "", "", false)
+    Assert(ime_radicals_pinyin.HasKey(single_radical), "Miss pinyin for """ single_radical ", " Asc(single_radical) """", false)
     return ime_radicals_pinyin[single_radical]
 }
 

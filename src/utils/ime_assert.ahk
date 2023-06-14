@@ -3,7 +3,7 @@
 ; Process will auto store failed assert in "".\debug.log"
 ;*******************************************************************************
 ;
-Assert(bool, debug_msg:="", show_msgbox:=true)
+Assert(bool, debug_msg, show_msgbox)
 {
     static assert_ignore_list := {}
     static disable_tick := 0

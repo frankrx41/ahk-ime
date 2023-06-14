@@ -18,7 +18,7 @@ ImeLanguageSet(mode)
 ImeLanguageGet()
 {
     global ime_mode_language
-    Assert(ime_mode_language)
+    Assert(ime_mode_language, "", false)
     return ime_mode_language
 }
 

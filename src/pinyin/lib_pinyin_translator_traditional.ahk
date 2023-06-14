@@ -9,7 +9,7 @@ PinyinTraditionalInitialize()
     ime_traditional_table := ReadFileToTable("data\traditional.asm")
     ime_traditional_initialize := true
 
-    Assert(ime_traditional_table.Count() != 0)
+    Assert(ime_traditional_table.Count() != 0, "", false)
 }
 
 PinyinTranslatorCovertTraditional(ByRef translate_result_list)
@@ -66,5 +66,5 @@ PinyinTranslatorCovertTraditional(ByRef translate_result_list)
 
 GetSimplifiedWord(traditional_word)
 {
-    Assert(false)
+    Assert(false, "", false)
 }

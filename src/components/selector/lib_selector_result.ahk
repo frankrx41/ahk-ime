@@ -8,7 +8,7 @@
 SelectorResultSetSelectIndex(ByRef selector_result, select_index)
 {
     local
-    Assert(selector_result)
+    Assert(selector_result, "", false)
     selector_result[1] := select_index
     profile_text := CallerName()
     ImeProfilerDebug(profile_text)
@@ -16,7 +16,7 @@ SelectorResultSetSelectIndex(ByRef selector_result, select_index)
 
 SelectorResultUnLockWord(ByRef selector_result)
 {
-    Assert(selector_result)
+    Assert(selector_result, "", false)
     selector_result[2] := ""
     selector_result[3] := 0
 }
@@ -24,7 +24,7 @@ SelectorResultUnLockWord(ByRef selector_result)
 SelectorResultLockWord(ByRef selector_result, select_word, word_length)
 {
     local
-    Assert(selector_result)
+    Assert(selector_result, "", false)
     selector_result[2] := select_word
     selector_result[3] := word_length
     profile_text := "`n  ->[" selector_result[1] "," select_word "," word_length "] "
