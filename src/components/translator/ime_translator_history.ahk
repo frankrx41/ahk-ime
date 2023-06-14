@@ -18,6 +18,12 @@ ImeTranslatorHistoryHasResult(splitted_string)
 
 ;*******************************************************************************
 ;
+ImeTranslatorHistoryHasKey(splitted_string)
+{
+    global translator_history_result
+    return translator_history_result.HasKey(splitted_string)
+}
+
 ; translator_history_result["lao0shi0"] =
 ; [
 ;   [1]: ["lao3shi1", "老师", "26995", "", 2]
