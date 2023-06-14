@@ -16,12 +16,13 @@ ImeDebugGetProfilerText(name, debug_level)
     local
     debug_text := ""
 
-    debug_text .= "`n" . name . "*" ImeProfilerGetCount(name) ":"
-    debug_text .= "(" ImeProfilerGetTotalTick(name) ") "
-    profile_text := ImeProfilerGetProfileText(name)
-
-    if( debug_level == 2 ) {
-        debug_text .= profile_text
+    if( debug_level >= 1 )
+    {
+        debug_text .= "`n" . name . "*" ImeProfilerGetCount(name) ":"
+        debug_text .= "(" ImeProfilerGetTotalTick(name) ") "
+    }
+    if( debug_level >= 2 ) {
+        debug_text .= ImeProfilerGetProfileText(name)
     }
 
     return debug_text
@@ -31,7 +32,8 @@ ImeDebugGetDisplayText()
 {
     local
     debug_text := ""
-    if( ImeDebugGet() )
+    debug_level := ImeDebugLevelGet()
+    if( debug_level > 0 )
     {
         ; Comment out the debug info you don't want
         ; If you want add new debug info, do follow:
@@ -44,7 +46,6 @@ ImeDebugGetDisplayText()
         ; name_list := ImeProfilerGetAllNameList()
         name_list := ["SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
 
-        debug_level := ImeDebugGet()
         for index, element in name_list
         {
             if( ImeProfilerHasKey(element) )
@@ -57,7 +58,7 @@ ImeDebugGetDisplayText()
         {
             debug_text .= ImeDebugGetProfilerText("Temporary_", 2)
         }
-        debug_text .= "`n----------------" ImeDebugGet() "-"
+        debug_text .= "`n----------------" debug_level "-"
         if( ImeProfilerHasKey("Assert_") )
         {
             debug_text .= ImeDebugGetProfilerText("Assert_", 2)
@@ -67,7 +68,7 @@ ImeDebugGetDisplayText()
     {
         if( ImeProfilerHasKey("Assert_") )
         {
-            debug_text .= "`n----------------" ImeDebugGet() "-"
+            debug_text .= "`n----------------" debug_level "-"
             debug_text .= ImeDebugGetProfilerText("Assert_", 2)
         }
     }

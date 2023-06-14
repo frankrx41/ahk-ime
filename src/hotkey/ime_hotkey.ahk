@@ -370,7 +370,7 @@
     return
 
     F12::
-        ImeDebugToggle()
+        ImeDebugLevelToggle()
         ImeInputterUpdateString("")
         ImeTooltipUpdate()
     return

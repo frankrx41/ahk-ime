@@ -1,22 +1,21 @@
-ImeDebugInitialize()
+ImeDebugLevelInitialize()
 {
-    global ime_debug_switch
-    ime_debug_switch            := 0            ; 0 hide 1 show tick only 2 show full
+    global ime_debug_level := 0     ; 0 hide 1 show tick only 2 show full
 }
 
 ;*******************************************************************************
 ; Debug
-ImeDebugGet()
+ImeDebugLevelGet()
 {
-    global ime_debug_switch
-    return ime_debug_switch
+    global ime_debug_level
+    return ime_debug_level
 }
 
-ImeDebugToggle()
+ImeDebugLevelToggle()
 {
-    global ime_debug_switch
-    ime_debug_switch += 1
-    if( ime_debug_switch >= 3 ) {
-        ime_debug_switch := 0
+    global ime_debug_level
+    ime_debug_level += 1
+    if( ime_debug_level >= 3 ) {
+        ime_debug_level := 0
     }
 }
