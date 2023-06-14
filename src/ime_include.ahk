@@ -3,6 +3,7 @@
 #Include, src\utils\ime_assert.ahk
 #Include, src\utils\ime_profiler.ahk
 #Include, src\utils\ime_debug.ahk
+#Include, src\state\ime_debug_level.ahk
 #Include, src\utils\lib_read_table.ahk
 
 ; Version
@@ -17,7 +18,6 @@
 #Include, src\state\ime_language.ahk
 #Include, src\state\ime_scheme.ahk
 #Include, src\state\ime_state.ahk
-#Include, src\state\ime_state_debug.ahk
 
 ; Inputer
 #Include, src\components\inputter\ime_inputter.ahk

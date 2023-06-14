@@ -23,6 +23,7 @@ global ime_version  := "0.7.2"
 ImeProfilerInitialize()
 
 ImeProfilerBegin()
+ImeProfilerFunc("ImeDebugLevelInitialize")
 ImeProfilerFunc("ImeInputterInitialize")
 ImeProfilerFunc("ImeOutputterInitialize")
 
