@@ -22,9 +22,9 @@ ImeTranslatorHistoryHasResult(splitted_string)
 ;
 ; translator_history_normal_result["lao0shi0"] =
 ; [
-;   [1]: ["lao3shi1", "老师", "26995", "", 2]
-;   [2]: ["lao3shi4", "老是", "25921", "", 2]
-;   [3]: ["lao3shi2", "老实", "25877", "", 2]
+;   [1]: ["lao3shi1", "老师", "26995", ""]
+;   [2]: ["lao3shi4", "老是", "25921", ""]
+;   [3]: ["lao3shi2", "老实", "25877", ""]
 ;   ...
 ; ]
 ImeTranslatorHistoryUpdateKey(splitted_string)
