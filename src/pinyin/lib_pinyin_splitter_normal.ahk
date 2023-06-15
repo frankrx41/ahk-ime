@@ -38,40 +38,45 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
 
     ImeProfilerBegin()
 
-    max_test_len := Min(8, right_string_len)
+    max_test_len := Min(6, right_string_len)
 
     max_word_weight := 0
     result_word := ""
     loop,
     {
-        test_len := max_test_len - A_Index + 1
+        test_len := max_test_len - A_Index
         if( test_len <= 0 ) {
             break
         }
         next_char := SubStr(right_string, test_len+1, 1)
-        if( IsMustSplit(next_char) || IsInitials(next_char) )
+        if( next_char && (IsMustSplit(next_char) || IsInitials(next_char)) )
         {
-            test_right_string := SubStr(right_string, 1, test_len)
-            if( IsCompletePinyin(left_vowels_last, test_right_string) )
+            index := 1
+            vowel := PinyinSplitterGetVowels(SubStr(right_string, test_len+1, 4), next_char, index, "")
+            if( vowel && vowel != "%" )
             {
-                full_vowels := GetFullVowels(left_vowels_last, test_right_string)
-                test_word := left_initials . left_vowels_cut_last "0" left_vowels_last . full_vowels "0"
-                word_weight := PinyinSplitterGetWeight(test_word, prev_splitted_input)
-                if( word_weight > max_word_weight ){
-                    max_word_weight := word_weight
-                    result_word := left_initials . left_vowels_cut_last
+                test_right_string := SubStr(right_string, 1, test_len)
+                if( IsCompletePinyin(left_vowels_last, test_right_string) )
+                {
+                    full_vowels := GetFullVowels(left_vowels_last, test_right_string)
+                    test_word := left_initials . left_vowels_cut_last "0" left_vowels_last . full_vowels "0"
+                    word_weight := PinyinSplitterGetWeight(test_word, prev_splitted_input)
+                    if( word_weight > max_word_weight ){
+                        max_word_weight := word_weight
+                        result_word := left_initials . left_vowels_cut_last
+                    }
                 }
-            }
 
-            test_right_string_cut := SubStr(right_string, 2, test_len-1)
-            if( IsCompletePinyin(right_initials, test_right_string_cut) )
-            {
-                full_vowels := GetFullVowels(right_initials, test_right_string_cut)
-                test_word := left_initials . left_vowels "0" right_initials . full_vowels "0"
-                word_weight := PinyinSplitterGetWeight(test_word, prev_splitted_input)
-                if( word_weight > max_word_weight ){
-                    max_word_weight := word_weight
-                    result_word := left_initials . left_vowels
+                test_right_string_cut := SubStr(right_string, 2, test_len-1)
+                if( IsCompletePinyin(right_initials, test_right_string_cut) )
+                {
+                    full_vowels := GetFullVowels(right_initials, test_right_string_cut)
+                    test_word := left_initials . left_vowels "0" right_initials . full_vowels "0"
+                    word_weight := PinyinSplitterGetWeight(test_word, prev_splitted_input)
+                    if( word_weight > max_word_weight ){
+                        max_word_weight := word_weight
+                        result_word := left_initials . left_vowels
+                    }
                 }
             }
         }
