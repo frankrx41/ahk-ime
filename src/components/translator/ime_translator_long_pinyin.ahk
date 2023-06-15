@@ -1,30 +1,32 @@
 ImeTranslatorLongPinyinInitialize()
 {
     global translator_long_pinyin_list
-    translator_long_pinyin_list := ReadFileToTable("data\dictonary_long_pinyin.asm")
+    translator_long_pinyin_list := ReadFileToTable("data\dictonary_long_pinyin.asm", "`t", "", "")
 }
 
-ImeTranslatorLongPinyinHas(pinyin)
+ImeTranslatorLongPinyinHas(splitted_string)
 {
     local
     global translator_long_pinyin_list
     found_value := false
     ImeProfilerBegin()
+    time_start  := A_TickCount
+    profile_text := splitted_string ": "
     for key, value in translator_long_pinyin_list
     {
-        if( SubStr(pinyin, 1, 1) != SubStr(key, 1, 1) )
+        if( IsPinyinSoundLike(splitted_string, key) )
         {
-            continue
+            profile_text .= "->" key
+            found_value := true
+            break
+        } else {
+            ImeTranslatorHistoryUpdateKeyEmpty(splitted_string)
         }
-        else
-        {
-            if( IsPinyinSoundLikeFast(pinyin, key) )
-            {
-                found_value := true
-                break
-            }
+        if( A_TickCount - time_start > 50 ) {
+            profile_text .= "TIME OUT"
+            break
         }
     }
-    ImeProfilerEnd()
+    ImeProfilerEnd(profile_text)
     return found_value
 }
