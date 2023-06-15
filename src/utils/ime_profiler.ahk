@@ -143,8 +143,11 @@ ImeProfilerGeneralGetTotalCallTime(name)
 {
     global ime_profiler_general
     name .= "_"
-    Assert(ime_profiler_general.HasKey(name), name, false)
-    return Format("{:0.1f}", ime_profiler_general[name, "total_time"])
+    if( ime_profiler_general.HasKey(name) ) {
+        return Format("{:.0f}", ime_profiler_general[name, "total_time"])
+    } else {
+        return "NA"
+    }
 }
 
 ImeProfilerGeneralGetProfileText(name)
@@ -168,7 +171,7 @@ ImeProfilerGeneralGetLastCallTime(name)
     global ime_profiler_general
     name .= "_"
     if( ime_profiler_general.HasKey(name) ) {
-        return Format("{:0.1f}", ime_profiler_general[name, "last_call_time"])
+        return Format("{:.0f}", ime_profiler_general[name, "last_call_time"])
     }
     else {
         return "NA"
@@ -182,7 +185,7 @@ ImeProfilerTickGetTotalCallTime(name)
     global ime_profiler_tick
     name .= "_"
     Assert(ime_profiler_tick.HasKey(name), name, false)
-    return Format("{:0.1f}", ime_profiler_tick[name, "total_time"])
+    return Format("{:.0f}", ime_profiler_tick[name, "total_time"])
 }
 
 ImeProfilerTickGetLastCallTime(name)
@@ -190,7 +193,7 @@ ImeProfilerTickGetLastCallTime(name)
     global ime_profiler_tick
     name .= "_"
     Assert(ime_profiler_tick.HasKey(name), name, false)
-    return Format("{:0.1f}", ime_profiler_tick[name, "last_call_time"])
+    return Format("{:.0f}", ime_profiler_tick[name, "last_call_time"])
 }
 
 ;*******************************************************************************
@@ -234,7 +237,7 @@ ImeProfilerTickGetProfileText()
     global ime_profiler_tick
     global ime_profiler_general
 
-    profile_text := Format("({}|{:0.1f}|{})"
+    profile_text := Format("({}|{:.1f}|{})"
         , ImeProfilerTickGetLastCallTime("ImeInputterUpdateString")
         , ImeProfilerTickGetTotalCallTime("ImeInputterUpdateString")/StrLen(ImeInputterStringGetLegacy())
         , ImeProfilerTickGetTotalCallTime("ImeInputterUpdateString"))
@@ -246,14 +249,10 @@ ImeProfilerTickGetProfileText()
         , ImeProfilerGeneralGetTotalCallTime("PinyinSqlGetWeight")
         , ImeProfilerGeneralGetTotalCallTime("PinyinSqlExecuteGetTable") )
 
-    profile_text .= Format(" / ({},{},{})"
-        , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFindResult")
-        , ImeProfilerGeneralGetTotalCallTime("PinyinTranslateFindResult")
-        , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFilterResult") )
-
-    ; profile_text .= Format(" / ({},{})"
-    ;     , ImeProfilerGeneralGetTotalCallTime("TranslatorResultListFilterByRadical")
-    ;     , ImeProfilerGeneralGetTotalCallTime("RadicalCheckMatchLevel") )
+    ; profile_text .= Format(" / ({},{},{})"
+    ;     , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFindResult")
+    ;     , ImeProfilerGeneralGetTotalCallTime("PinyinTranslateFindResult")
+    ;     , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFilterResult") )
 
     return profile_text
 }
