@@ -24,7 +24,11 @@ ImeTranslatorHistoryGetWeight(splitted_string)
 {
     global translator_history_normal_result
     ImeTranslatorHistoryUpdateKey(splitted_string)
-    return TranslatorResultGetWeight(translator_history_normal_result[splitted_string, 1])
+    if( translator_history_normal_result[splitted_string].Length() > 0 ) {
+        return TranslatorResultGetWeight(translator_history_normal_result[splitted_string, 1])
+    } else {
+        return -1
+    }
 }
 
 ;*******************************************************************************
