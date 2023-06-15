@@ -46,7 +46,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
 
 ;*******************************************************************************
 ; Get translate result *ONLY* for splitter_result[1]
-PinyinTranslateFindResult(splitter_result_list, auto_complete)
+PinyinTranslateFindResult(splitter_result_list, auto_complete:=false)
 {
     local
     ImeProfilerBegin()

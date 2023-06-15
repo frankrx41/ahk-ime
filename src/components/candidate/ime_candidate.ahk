@@ -14,8 +14,6 @@ ImeCandidateUpdateResult(splitter_result_list)
     local
     global ime_candidata
 
-    auto_complete := false
-
     if( splitter_result_list.Length() )
     {
         ImeProfilerBegin()
@@ -42,7 +40,7 @@ ImeCandidateUpdateResult(splitter_result_list)
             {
                 Assert(test_splitter_list.Length() >= 1, "", false)
                 ; Get translate result
-                translate_result_list := ImeTranslateFindResult(test_splitter_list, auto_complete)
+                translate_result_list := ImeTranslateFindResult(test_splitter_list)
                 if( translate_result_list.Length() == 0 ){
                     first_word := SplitterResultListConvertToString(splitter_result_list, splitter_index, 1)
                     translate_result_list := [TranslatorResultMake(first_word, first_word, 0, "", 1)]
@@ -84,7 +82,7 @@ ImeCandidateSetSingleMode(single_mode)
     } else {
         test_splitter_list := SplitterResultListGetUntilSkip(splitted_list, split_index)
     }
-    ime_candidata[split_index] := ImeTranslateFindResult(test_splitter_list, false)
+    ime_candidata[split_index] := ImeTranslateFindResult(test_splitter_list)
 }
 
 ImeCandidateGet()

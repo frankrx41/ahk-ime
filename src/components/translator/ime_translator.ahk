@@ -1,10 +1,10 @@
-ImeTranslateFindResult(splitter_result_list, auto_complete, keep_zero_weight:=true)
+ImeTranslateFindResult(splitter_result_list, keep_zero_weight:=true)
 {
     if( ImeLanguageIsChinese() ){
-        translate_result_list := PinyinTranslateFindResult(splitter_result_list, auto_complete)
+        translate_result_list := PinyinTranslateFindResult(splitter_result_list)
     } else
     if( ImeLanguageIsJapanese() ) {
-        translate_result_list := GojuonTranslateFindResult(splitter_result_list, auto_complete)
+        translate_result_list := GojuonTranslateFindResult(splitter_result_list)
     }
 
     ImeTranslateFilterResult(translate_result_list, splitter_result_list, keep_zero_weight)

@@ -83,7 +83,7 @@ GojuonTranslateInitialize()
     global ime_gojuon_list := JSON.Load(gojuon_list_json)
 }
 
-GojuonTranslateFindResult(splitter_result_list, auto_complete)
+GojuonTranslateFindResult(splitter_result_list)
 {
     global ime_gojuon_list
 
