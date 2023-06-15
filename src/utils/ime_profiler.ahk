@@ -166,8 +166,12 @@ ImeProfilerGeneralGetLastCallTime(name)
 {
     global ime_profiler_general
     name .= "_"
-    Assert(ime_profiler_general.HasKey(name), name, false)
-    return Format("{:0.1f}", ime_profiler_general[name, "last_call_time"])
+    if( ime_profiler_general.HasKey(name) ) {
+        return Format("{:0.1f}", ime_profiler_general[name, "last_call_time"])
+    }
+    else {
+        return "NA"
+    }
 }
 
 ;*******************************************************************************
