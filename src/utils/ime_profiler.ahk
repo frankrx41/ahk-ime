@@ -27,6 +27,23 @@ ImeProfilerInitialize()
 ImeProfilerGeneralClear()
 {
     global ime_profiler_general := {}
+    global ime_performance_frequency := 0
+    DllCall("QueryPerformanceFrequency", "Int64*", ime_performance_frequency)
+}
+
+;*******************************************************************************
+;
+GetPerformanceCounter()
+{
+    counter := 0
+    DllCall("QueryPerformanceCounter", "Int64*", counter)
+    return counter
+}
+
+GetCounterMilliseconds(counter_after, counter_before)
+{
+    global ime_performance_frequency
+    return (counter_after - counter_before) * 1000 / ime_performance_frequency
 }
 
 ;*******************************************************************************
@@ -39,29 +56,29 @@ ProfilerGetCallerName()
 ImeProfilerBeginName(ByRef profiler, name)
 {
     if( profiler.HasKey(name) ) {
-        Assert(profiler[name, 4] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``", "msgbox")
-        profiler[name, 3] += 1
-        profiler[name, 4] := A_TickCount
+        Assert(profiler[name, "last_counter"] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``", "msgbox")
+        profiler[name, "trace_count"]   += 1
+        profiler[name, "last_counter"]  := GetPerformanceCounter()
     } else {
         profiler[name] := []
-        profiler[name, 1] := 0              ; total time
-        profiler[name, 2] := ""             ; profile text
-        profiler[name, 3] := 1              ; trace count
-        profiler[name, 4] := A_TickCount    ; last tick
-        profiler[name, 5] := 0              ; last time
+        profiler[name, "total_time"]    := 0
+        profiler[name, "profile_text"]  := ""
+        profiler[name, "trace_count"]   := 1
+        profiler[name, "last_counter"]  := GetPerformanceCounter()
+        profiler[name, "last_call_time"] := 0
     }
 }
 
 ImeProfilerEndName(ByRef profiler, name, profile_text, append)
 {
-    Assert(profiler.HasKey(name) && profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``", "msgbox")
-    profiler[name, 5] := A_TickCount - profiler[name, 4]
-    profiler[name, 1] += profiler[name, 5]
+    Assert(profiler.HasKey(name) && profiler[name, "last_counter"] != 0, profiler.HasKey(name) "," profiler[name, "last_counter"], "msgbox")
+    profiler[name, "last_call_time"] := GetCounterMilliseconds(GetPerformanceCounter(), profiler[name, "last_counter"])
+    profiler[name, "total_time"] += profiler[name, "last_call_time"]
     if( profile_text ) {
-        profiler[name, 2] := append ? profiler[name, 2] "`n  - " : "  - "
-        profiler[name, 2] .= profile_text
+        profiler[name, "profile_text"] := append ? profiler[name, "profile_text"] "`n  - " : "  - "
+        profiler[name, "profile_text"] .= profile_text
     }
-    profiler[name, 4] := 0
+    profiler[name, "last_counter"] := 0
 }
 
 ;*******************************************************************************
@@ -117,28 +134,58 @@ ImeProfilerFunc(func_name)
 ImeProfilerGeneralHasKey(name)
 {
     global ime_profiler_general
+    name .= "_"
     return ime_profiler_general.HasKey(name)
 }
 
 ImeProfilerGeneralGetTotalTick(name)
 {
     global ime_profiler_general
+    name .= "_"
     Assert(ime_profiler_general.HasKey(name), name, false)
-    return ime_profiler_general[name, 1]
+    return Format("{:0.1f}", ime_profiler_general[name, "total_time"])
 }
 
 ImeProfilerGeneralGetProfileText(name)
 {
     global ime_profiler_general
+    name .= "_"
     Assert(ime_profiler_general.HasKey(name), name, false)
-    return ime_profiler_general[name, 2]
+    return ime_profiler_general[name, "profile_text"]
 }
 
 ImeProfilerGeneralGetCount(name)
 {
     global ime_profiler_general
+    name .= "_"
     Assert(ime_profiler_general.HasKey(name), name, false)
-    return ime_profiler_general[name, 3]
+    return ime_profiler_general[name, "trace_count"]
+}
+
+ImeProfilerGeneralGetLastCallTime(name)
+{
+    global ime_profiler_general
+    name .= "_"
+    Assert(ime_profiler_general.HasKey(name), name, false)
+    return Format("{:0.1f}", ime_profiler_general[name, "last_call_time"])
+}
+
+;*******************************************************************************
+;
+ImeProfilerTickGetTotalCallTime(name)
+{
+    global ime_profiler_tick
+    name .= "_"
+    Assert(ime_profiler_tick.HasKey(name), name, false)
+    return Format("{:0.1f}", ime_profiler_tick[name, "total_time"])
+}
+
+ImeProfilerTickGetLastCallTime(name)
+{
+    global ime_profiler_tick
+    name .= "_"
+    Assert(ime_profiler_tick.HasKey(name), name, false)
+    return Format("{:0.1f}", ime_profiler_tick[name, "last_call_time"])
 }
 
 ;*******************************************************************************
@@ -150,10 +197,7 @@ ImeProfilerGeneralGetAllNameList()
     name_list := []
     for key, value in ime_profiler_general
     {
-        if( key != "Assert" && key != "Temporary" )
-        {
-            name_list.Push(key)
-        }
+        name_list.Push(key)
     }
     return name_list
 }
@@ -185,26 +229,25 @@ ImeProfilerTickGetProfileText()
     global ime_profiler_tick
     global ime_profiler_general
 
-    profiler := ime_profiler_tick["ImeInputterUpdateString_"]
     profile_text := Format("({}|{:0.1f}|{})"
-        , profiler[5]
-        , profiler[1]/StrLen(ImeInputterStringGetLegacy())
-        , profiler[1])
+        , ImeProfilerTickGetLastCallTime("ImeInputterUpdateString")
+        , ImeProfilerTickGetTotalCallTime("ImeInputterUpdateString")/StrLen(ImeInputterStringGetLegacy())
+        , ImeProfilerTickGetTotalCallTime("ImeInputterUpdateString"))
     profile_text .= Format(" / ({},{},{})"
-        , ime_profiler_general["PinyinSplitterInputStringNormal_", 5]
-        , ime_profiler_general["ImeCandidateUpdateResult_", 5]
-        , ime_profiler_general["SelectorFixupSelectIndex_", 5] )
+        , ImeProfilerGeneralGetLastCallTime("PinyinSplitterInputStringNormal")
+        , ImeProfilerGeneralGetLastCallTime("ImeCandidateUpdateResult")
+        , ImeProfilerGeneralGetLastCallTime("SelectorFixupSelectIndex") )
     profile_text .= Format(" / ({},{})"
-        , ime_profiler_general["PinyinSqlGetWeight_", 1]
-        , ime_profiler_general["PinyinSqlExecuteGetTable_", 1] )
+        , ImeProfilerGeneralGetLastCallTime("PinyinSqlGetWeight")
+        , ImeProfilerGeneralGetLastCallTime("PinyinSqlExecuteGetTable") )
 
     profile_text .= Format(" / ({},{})"
-        , ime_profiler_general["PinyinTranslateFindResult_", 1]
-        , ime_profiler_general["PinyinTranslatorInsertResult_", 1])
+        , ImeProfilerGeneralGetLastCallTime("PinyinTranslateFindResult")
+        , ImeProfilerGeneralGetLastCallTime("PinyinTranslatorInsertResult") )
 
     profile_text .= Format(" / ({},{})"
-        , ime_profiler_general["TranslatorResultListFilterByRadical_", 1]
-        , ime_profiler_general["RadicalCheckMatchLevel_", 1] )
+        , ImeProfilerGeneralGetLastCallTime("TranslatorResultListFilterByRadical")
+        , ImeProfilerGeneralGetLastCallTime("RadicalCheckMatchLevel") )
 
     return profile_text
 }
