@@ -36,7 +36,7 @@ ImeInputterUpdateString(input_char)
     global ime_input_is_dirty
 
     ime_input_is_dirty := true
-    ImeProfilerClear()
+    ImeProfilerGeneralClear()
 
     if( ime_input_string )
     {

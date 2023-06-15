@@ -15,19 +15,18 @@
 ;
 ; * `ImeProfilerBegin` and `ImeProfilerEnd` must be in same function
 ; * Call `ImeProfilerBegin` before call `ImeProfilerEnd`
-; * `ImeProfilerClear()` will clear all profile, this function will be call every
+; * `ImeProfilerDataClear()` will clear all profile, this function will be call every
 ;   time you type a new char or you delete any chars.
 ;*******************************************************************************
 ImeProfilerInitialize()
 {
-    global ime_profiler := {}
-    ImeProfilerClear()
+    ImeProfilerGeneralClear()
     ImeProfilerTickClear()
 }
 
-ImeProfilerClear()
+ImeProfilerGeneralClear()
 {
-    global ime_profiler := {}
+    global ime_profiler_general := {}
 }
 
 ;*******************************************************************************
@@ -70,86 +69,86 @@ ImeProfilerEndName(ByRef profiler, name, profile_text, append)
 ImeProfilerBegin()
 {
     local
-    global ime_profiler
+    global ime_profiler_general
     name := ProfilerGetCallerName()
-    ImeProfilerBeginName(ime_profiler, name)
+    ImeProfilerBeginName(ime_profiler_general, name)
 }
 
 ImeProfilerEnd(profile_text:="", append:=true)
 {
     local
-    global ime_profiler
+    global ime_profiler_general
     name := ProfilerGetCallerName()
-    ImeProfilerEndName(ime_profiler, name, profile_text, append)
+    ImeProfilerEndName(ime_profiler_general, name, profile_text, append)
 }
 
 ImeProfilerDebug(profile_text, append:=true)
 {
     local
-    global ime_profiler
+    global ime_profiler_general
     name := ProfilerGetCallerName()
-    ImeProfilerBeginName(ime_profiler, name)
-    ImeProfilerEndName(ime_profiler, name, profile_text, append)
+    ImeProfilerBeginName(ime_profiler_general, name)
+    ImeProfilerEndName(ime_profiler_general, name, profile_text, append)
 }
 
 ImeProfilerTemp(profile_text, append:=true)
 {
     local
-    global ime_profiler
+    global ime_profiler_general
     name := "Temporary_"
-    ImeProfilerBeginName(ime_profiler, name)
-    ImeProfilerEndName(ime_profiler, name, profile_text, append)
+    ImeProfilerBeginName(ime_profiler_general, name)
+    ImeProfilerEndName(ime_profiler_general, name, profile_text, append)
 }
 
 ImeProfilerFunc(func_name)
 {
     local
-    global ime_profiler
+    global ime_profiler_general
     name := ProfilerGetCallerName() . func_name
-    ImeProfilerBeginName(ime_profiler, name)
+    ImeProfilerBeginName(ime_profiler_general, name)
     last_tick := A_TickCount
     Func(func_name).Call()
     profile_text := func_name " (" A_TickCount - last_tick ")"
-    ImeProfilerEndName(ime_profiler, name, profile_text, true)
+    ImeProfilerEndName(ime_profiler_general, name, profile_text, true)
 }
 
 ;*******************************************************************************
 ; Use for print
-ImeProfilerHasKey(name)
+ImeProfilerGeneralHasKey(name)
 {
-    global ime_profiler
-    return ime_profiler.HasKey(name)
+    global ime_profiler_general
+    return ime_profiler_general.HasKey(name)
 }
 
-ImeProfilerGetTotalTick(name)
+ImeProfilerGeneralGetTotalTick(name)
 {
-    global ime_profiler
-    Assert(ime_profiler.HasKey(name), name, false)
-    return ime_profiler[name, 1]
+    global ime_profiler_general
+    Assert(ime_profiler_general.HasKey(name), name, false)
+    return ime_profiler_general[name, 1]
 }
 
-ImeProfilerGetProfileText(name)
+ImeProfilerGeneralGetProfileText(name)
 {
-    global ime_profiler
-    Assert(ime_profiler.HasKey(name), name, false)
-    return ime_profiler[name, 2]
+    global ime_profiler_general
+    Assert(ime_profiler_general.HasKey(name), name, false)
+    return ime_profiler_general[name, 2]
 }
 
-ImeProfilerGetCount(name)
+ImeProfilerGeneralGetCount(name)
 {
-    global ime_profiler
-    Assert(ime_profiler.HasKey(name), name, false)
-    return ime_profiler[name, 3]
+    global ime_profiler_general
+    Assert(ime_profiler_general.HasKey(name), name, false)
+    return ime_profiler_general[name, 3]
 }
 
 ;*******************************************************************************
 ;
-ImeProfilerGetAllNameList()
+ImeProfilerGeneralGetAllNameList()
 {
     local
-    global ime_profiler
+    global ime_profiler_general
     name_list := []
-    for key, value in ime_profiler
+    for key, value in ime_profiler_general
     {
         if( key != "Assert" && key != "Temporary" )
         {
@@ -184,12 +183,12 @@ ImeProfilerTickClear()
 ImeProfilerTickGetProfileText()
 {
     global ime_profiler_tick
-    global ime_profiler
+    global ime_profiler_general
 
     profiler := ime_profiler_tick["ImeInputterUpdateString_"]
 
     return Format("({}|{:0.1f}|{}) / ({},{},{}) / ({},{})", profiler[5], profiler[1]/StrLen(ImeInputterStringGetLegacy()), profiler[1]
-    , ime_profiler["PinyinSplitterInputStringNormal_", 5]
-    , ime_profiler["ImeCandidateUpdateResult_", 5], ime_profiler["SelectorFixupSelectIndex_", 5]
-    , ime_profiler["PinyinSqlGetWeight_", 1], ime_profiler["PinyinSqlExecuteGetTable_", 1])
+    , ime_profiler_general["PinyinSplitterInputStringNormal_", 5]
+    , ime_profiler_general["ImeCandidateUpdateResult_", 5], ime_profiler_general["SelectorFixupSelectIndex_", 5]
+    , ime_profiler_general["PinyinSqlGetWeight_", 1], ime_profiler_general["PinyinSqlExecuteGetTable_", 1])
 }

@@ -18,11 +18,11 @@ ImeDebugGetProfilerText(name, debug_level)
 
     if( debug_level >= 1 )
     {
-        debug_text .= "`n" . name . "*" ImeProfilerGetCount(name) ":"
-        debug_text .= "(" ImeProfilerGetTotalTick(name) ") "
+        debug_text .= "`n" . name . "*" ImeProfilerGeneralGetCount(name) ":"
+        debug_text .= "(" ImeProfilerGeneralGetTotalTick(name) ") "
     }
     if( debug_level >= 2 ) {
-        debug_text .= ImeProfilerGetProfileText(name)
+        debug_text .= ImeProfilerGeneralGetProfileText(name)
     }
 
     return debug_text
@@ -46,7 +46,7 @@ ImeDebugGetDisplayText()
         name_list := ["ImeTranslateFilterResult_", "SelectorFindGraceResultIndex_", "SelectorCheckTotalWeight_"]
         name_list := ["PinyinSqlExecuteGetTable_", "PinyinSqlGetResult_"]
         name_list := ["PinyinSqlExecuteGetTable_"]
-        name_list := ImeProfilerGetAllNameList()
+        name_list := ImeProfilerGeneralGetAllNameList()
 
         name_list := ["PinyinSplitterInputStringNormal_", "PinyinSplitterCheckDBWeight_", "PinyinSqlGetWeight_", "ImeCandidateUpdateResult_", "SelectorFixupSelectIndex_", "PinyinSqlExecuteGetTable_"]
 
@@ -54,25 +54,25 @@ ImeDebugGetDisplayText()
 
         for index, element in name_list
         {
-            if( ImeProfilerHasKey(element) )
+            if( ImeProfilerGeneralHasKey(element) )
             {
                 debug_text .= ImeDebugGetProfilerText(element, debug_level)
             }
         }
 
-        if( ImeProfilerHasKey("Temporary_") )
+        if( ImeProfilerGeneralHasKey("Temporary_") )
         {
             debug_text .= ImeDebugGetProfilerText("Temporary_", 2)
         }
         debug_text .= "`n----------------" debug_level "-"
-        if( ImeProfilerHasKey("Assert_") )
+        if( ImeProfilerGeneralHasKey("Assert_") )
         {
             debug_text .= ImeDebugGetProfilerText("Assert_", 2)
         }
     }
     else
     {
-        if( ImeProfilerHasKey("Assert_") )
+        if( ImeProfilerGeneralHasKey("Assert_") )
         {
             debug_text .= "`n----------------" debug_level "-"
             debug_text .= ImeDebugGetProfilerText("Assert_", 2)
