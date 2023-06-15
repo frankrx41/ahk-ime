@@ -273,9 +273,9 @@ PinyinSplitterInputStringNormal(input_string)
 
     loop
     {
-        initials := SubStr(input_string, string_index, 1)
+        check_mark := SubStr(input_string, string_index, 1)
 
-        if( string_index > strlen || IsInitials(initials) || IsInitialsAnyMark(initials) )
+        if( string_index > strlen || IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark) )
         {
             if( escape_string ) {
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
@@ -290,28 +290,33 @@ PinyinSplitterInputStringNormal(input_string)
         }
 
         ; 字母，自动分词
-        if( IsInitials(initials) || IsInitialsAnyMark(initials) )
+        if( IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark) )
         {
             start_string_index := string_index
 
-            initials    := PinyinSplitterGetInitials(input_string, initials, string_index)
-            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
-            full_vowels := GetFullVowels(initials, vowels)
-            tone_string := SubStr(input_string, string_index, 1)
-            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
-
-            if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
-                vowels .= "%"
-            }
-            else
+            if( !IsRepeatMark(check_mark) )
             {
-                ; 转全拼显示
-                vowels := full_vowels ? full_vowels : vowels
-            }
+                initials    := PinyinSplitterGetInitials(input_string, check_mark, string_index)
+                vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
+                full_vowels := GetFullVowels(initials, vowels)
+                tone_string := SubStr(input_string, string_index, 1)
+                tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
 
-            ; Radical
-            radical := GetRadical(SubStr(input_string, string_index))
-            string_index += StrLen(radical)
+                if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
+                    vowels .= "%"
+                }
+                else
+                {
+                    ; 转全拼显示
+                    vowels := full_vowels ? full_vowels : vowels
+                }
+
+                ; Radical
+                radical := GetRadical(SubStr(input_string, string_index))
+                string_index += StrLen(radical)
+            } else {
+                string_index += 1
+            }
 
             make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
             splitter_list.Push(make_result)
@@ -326,11 +331,11 @@ PinyinSplitterInputStringNormal(input_string)
         ; 忽略
         else
         {
-            if( initials == "'" ){
-                initials := " "
+            if( check_mark == "'" ){
+                check_mark := " "
             }
             string_index += 1
-            escape_string .= initials
+            escape_string .= check_mark
         }
     }
 

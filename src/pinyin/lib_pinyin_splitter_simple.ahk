@@ -12,9 +12,9 @@ PinyinSplitterInputStringSimple(input_string)
     escape_string       := ""
     loop
     {
-        initials := SubStr(input_string, string_index, 1)
+        check_mark := SubStr(input_string, string_index, 1)
 
-        if( string_index > strlen || IsInitials(initials) || IsInitialsAnyMark(initials) )
+        if( string_index > strlen || IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark))
         {
             if( escape_string ) {
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
@@ -28,25 +28,33 @@ PinyinSplitterInputStringSimple(input_string)
             break
         }
 
-        if( IsInitials(initials) || IsInitialsAnyMark(initials) )
+        if( IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark))
         {
             start_string_index := string_index
 
-            if( IsInitialsAnyMark(initials) ){
-                initials := "%"
+            if( !IsRepeatMark(check_mark) )
+            {
+                if( IsInitialsAnyMark(check_mark) ){
+                    initials := "%"
+                } else {
+                    initials := check_mark
+                }
+                string_index += 1
+                ; if( IsVowelsAnyMark(SubStr(input_string, string_index, 1)) ){
+                ;     string_index += 1
+                ; }
+                vowels      := "%"
+                tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
+                radical     := GetRadical(SubStr(input_string, string_index))
+                string_index += StrLen(radical)
             }
-            string_index += 1
-            ; if( IsVowelsAnyMark(SubStr(input_string, string_index, 1)) ){
-            ;     string_index += 1
-            ; }
-            vowels      := "%"
-            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
-            radical     := GetRadical(SubStr(input_string, string_index))
-            string_index += StrLen(radical)
+            else
+            {
+                string_index += 1
+            }
 
             make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)
             splitter_list.Push(make_result)
-
             hope_length_list[hope_length_list.Length()] += 1
         }
         ; ignore

@@ -180,6 +180,11 @@ IsVowelsAnyMark(char)
     return char == "%"
 }
 
+IsRepeatMark(char)
+{
+    return char == "-"
+}
+
 ;*******************************************************************************
 ;
 IsTone(char)
