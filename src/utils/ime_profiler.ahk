@@ -186,7 +186,7 @@ ImeProfilerTickGetProfileText()
     global ime_profiler_general
 
     profiler := ime_profiler_tick["ImeInputterUpdateString_"]
-    profile_text := Format("({}|{:0.1f}|{}) / ({},{},{}) / ({},{})"
+    profile_text := Format("({}|{:0.1f}|{})"
         , profiler[5]
         , profiler[1]/StrLen(ImeInputterStringGetLegacy())
         , profiler[1])
