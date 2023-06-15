@@ -186,10 +186,17 @@ ImeProfilerTickGetProfileText()
     global ime_profiler_general
 
     profiler := ime_profiler_tick["ImeInputterUpdateString_"]
+    profile_text := Format("({}|{:0.1f}|{}) / ({},{},{}) / ({},{})"
+        , profiler[5]
+        , profiler[1]/StrLen(ImeInputterStringGetLegacy())
+        , profiler[1])
+    profile_text .= Format(" / ({},{},{})"
+        , ime_profiler_general["PinyinSplitterInputStringNormal_", 5]
+        , ime_profiler_general["ImeCandidateUpdateResult_", 5],
+        , ime_profiler_general["SelectorFixupSelectIndex_", 5] )
+    profile_text .= Format(" / ({},{})"
+        , ime_profiler_general["PinyinSqlGetWeight_", 1]
+        , ime_profiler_general["PinyinSqlExecuteGetTable_", 1] )
 
-    return Format("({}|{:0.1f}|{}) / ({},{},{}) / ({},{}) / {}", profiler[5], profiler[1]/StrLen(ImeInputterStringGetLegacy()), profiler[1]
-    , ime_profiler_general["PinyinSplitterInputStringNormal_", 5]
-    , ime_profiler_general["ImeCandidateUpdateResult_", 5], ime_profiler_general["SelectorFixupSelectIndex_", 5]
-    , ime_profiler_general["PinyinSqlGetWeight_", 1], ime_profiler_general["PinyinSqlExecuteGetTable_", 1]
-    , ime_profiler_general["ImeTranslatorLongPinyinHas_", 1])
+    return profile_text
 }
