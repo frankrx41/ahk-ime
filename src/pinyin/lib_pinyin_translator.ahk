@@ -26,8 +26,11 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
         }
         length_count    := max_len-A_Index+1
         limit_num       := 40
-        limit_num       := length_count != 1 && has_radical || length_count == hope_word_length ? 0 : limit_num
-        limit_num       := length_count == 1 && SplitterResultGetRadical(splitter_result_list[1]) ? 0 : limit_num
+        if( length_count == 1 ) {
+            limit_num   := SplitterResultGetRadical(splitter_result_list[1]) ? 0 : limit_num
+        } else {
+            limit_num   := has_radical || length_count == hope_word_length ? 0 : limit_num
+        }
 
         splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
         profile_text .= "[" splitted_string "] "
