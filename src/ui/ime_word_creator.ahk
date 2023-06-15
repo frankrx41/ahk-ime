@@ -107,7 +107,7 @@ WordCreatorUpdateDB(DB, key, value, weight:=28000, comment:="")
         Msgbox, % msgbox_style, % msgbox_title, % msgbox_info
         ImeTranslatorHistoryClear()
     } else {
-        Assert(0, DB.ErrorMsg, true)
+        Assert(0, DB.ErrorMsg, "msgbox")
     }
 }
 
@@ -122,13 +122,13 @@ WordCreatorDBGetInfo(DB, key, value, ByRef weight, ByRef comment)
     {
         if( result_table.RowCount != 0 )
         {
-            Assert(result_table.RowCount == 1, sql_cmd, true)
+            Assert(result_table.RowCount == 1, sql_cmd, "msgbox")
             ; Msgbox, % result_table.Rows[1, 1]
             weight := result_table.Rows[1, 1]
             comment := result_table.Rows[1, 2]
         }
     } else {
-        Assert(0, DB.ErrorMsg, true)
+        Assert(0, DB.ErrorMsg, "msgbox")
     }
 }
 

@@ -39,7 +39,7 @@ ProfilerGetCallerName()
 ImeProfilerBeginName(ByRef profiler, name)
 {
     if( profiler.HasKey(name) ) {
-        Assert(profiler[name, 4] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``", true)
+        Assert(profiler[name, 4] == 0, "Please call ``ImeProfilerEnd(" name ")`` before call ``ImeProfilerBegin(" name ")``", "msgbox")
         profiler[name, 3] += 1
         profiler[name, 4] := A_TickCount
     } else {
@@ -54,7 +54,7 @@ ImeProfilerBeginName(ByRef profiler, name)
 
 ImeProfilerEndName(ByRef profiler, name, profile_text, append)
 {
-    Assert(profiler.HasKey(name) && profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``", true)
+    Assert(profiler.HasKey(name) && profiler[name, 4] != 0, "Please call ``ImeProfilerBegin(" name ")`` before call ``ImeProfilerEnd(" name ")``", "msgbox")
     profiler[name, 5] := A_TickCount - profiler[name, 4]
     profiler[name, 1] += profiler[name, 5]
     if( profile_text ) {

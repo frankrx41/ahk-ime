@@ -128,7 +128,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
     {
         loop_radical_index := A_Index
         first_word := radical_word_list[loop_radical_index, 1]
-        Assert(first_word != test_word, test_word, true)
+        Assert(first_word != test_word, test_word, "msgbox")
 
         test_radical := test_radical_backup
         remain_radicals := CopyObj(remain_radicals_backup)
