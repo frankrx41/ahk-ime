@@ -95,11 +95,10 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
     return select_index
 }
 
-CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, ByRef out_weight:=0)
+CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length)
 {
     local
     select_index := 0
-    max_weight := -1
     test_max_length := 0
     loop % candidate[split_index].Length()
     {
@@ -111,12 +110,10 @@ CandidateFindMaxLengthSelectIndex(ByRef candidate, split_index, max_length, ByRe
                 test_max_length := test_len
             }
             weight := TranslatorResultGetWeight(translator_result)
-            max_weight := weight
             select_index := A_Index
             break
         }
     }
-    out_weight := max_weight
     return select_index
 }
 

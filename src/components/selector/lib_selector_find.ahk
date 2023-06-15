@@ -2,13 +2,14 @@
 ;
 SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length, ByRef left_word)
 {
-    left_select_index   := CandidateFindMaxLengthSelectIndex(candidate, left_split_index, left_length, left_weight)
+    left_select_index   := CandidateFindMaxLengthSelectIndex(candidate, left_split_index, left_length)
     left_word_length    := CandidateGetWordLength(candidate, left_split_index, left_select_index)
     left_word           := CandidateGetWord(candidate, left_split_index, left_select_index)
     if( left_word_length != left_length ) {
         ; Assert(false)
         return 0
     }
+    left_weight := CandidateGetWeight(candidate, left_split_index, left_select_index)
     if( SplitterResultGetHopeLength(CandidateGetSplittedList(candidate)[left_split_index]) == left_length && left_select_index ) {
         return 1000000
     }
@@ -26,18 +27,20 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
         right_word_length := 0
         loop, % right_length
         {
-            test_select_index := CandidateFindMaxLengthSelectIndex(candidate, right_split_index, A_Index, weight)
-            if(test_select_index != 0)
+            find_word_length := A_Index
+            found_select_index := CandidateFindMaxLengthSelectIndex(candidate, right_split_index, find_word_length)
+            if( found_select_index != 0 )
             {
-                if( CandidateGetWordLength(candidate, right_split_index, test_select_index) < A_Index )
+                found_word_length := CandidateGetWordLength(candidate, right_split_index, found_select_index)
+                if( found_word_length < find_word_length )
                 {
-                    Assert(right_select_index != 0, "", false)
                     break
                 }
-                if( max_weight <= weight ) {
-                    max_weight := weight
-                    right_select_index := test_select_index
-                    right_word_length := A_Index
+                found_weight := CandidateGetWeight(candidate, right_split_index, found_select_index)
+                if( max_weight <= found_weight ) {
+                    max_weight := found_weight
+                    right_select_index := found_select_index
+                    right_word_length := find_word_length
                 }
             }
         }
