@@ -162,8 +162,11 @@ ImeProfilerGeneralGetTraceCount(name)
 {
     global ime_profiler_general
     name .= "_"
-    Assert(ime_profiler_general.HasKey(name), name, false)
-    return ime_profiler_general[name, "trace_count"]
+    if( ime_profiler_general.HasKey(name) ) {
+        return ime_profiler_general[name, "trace_count"]
+    } else {
+        return "NA"
+    }
 }
 
 ImeProfilerGeneralGetLastCallTime(name)
@@ -245,9 +248,12 @@ ImeProfilerTickGetProfileText()
         , ImeProfilerGeneralGetTotalCallTime("PinyinSplitterInputStringNormal")
         , ImeProfilerGeneralGetTotalCallTime("ImeCandidateUpdateResult")
         , ImeProfilerGeneralGetTotalCallTime("SelectorFixupSelectIndex") )
-    profile_text .= Format(" / ({},{})"
-        , ImeProfilerGeneralGetTotalCallTime("PinyinSqlGetWeight")
-        , ImeProfilerGeneralGetTotalCallTime("PinyinSqlExecuteGetTable") )
+    if( ImeProfilerGeneralHasKey("PinyinSqlExecuteGetTable") )
+    {
+        profile_text .= Format(" / ({}|{})"
+            , ImeProfilerGeneralGetTraceCount("PinyinSqlExecuteGetTable")
+            , ImeProfilerGeneralGetTotalCallTime("PinyinSqlExecuteGetTable") )
+    }
 
     ; profile_text .= Format(" / ({},{},{})"
     ;     , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFindResult")

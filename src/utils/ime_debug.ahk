@@ -50,6 +50,7 @@ ImeDebugGetDisplayText()
         name_list := ["PinyinSqlGetWeight"]
         name_list := ["TranslatorResultListFilterByRadical"]
         name_list := ["ImeTranslateFilterResult", "SelectorFindGraceResultIndex", "SelectorCheckTotalWeight"]
+        name_list := ["SelectorCheckTotalWeight", "SelectorFindGraceResultIndex"]
 
         for index, element in name_list
         {

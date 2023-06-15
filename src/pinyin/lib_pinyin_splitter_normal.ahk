@@ -14,8 +14,8 @@ PinyinSplitterGetWeight(splitted_string, prev_splitted_input:="")
     {
         if( !splitted_string_weight_table.HasKey(splitted_string) )
         {
-            splitted_string_weight_table[splitted_string] := ImeTranslatorHistoryGetWeight(splitted_string)
             ; splitted_string_weight_table[splitted_string] := PinyinSqlGetWeight(splitted_string)
+            splitted_string_weight_table[splitted_string] := ImeTranslatorHistoryGetWeight(splitted_string)
         }
         return splitted_string_weight_table[splitted_string]
     }
