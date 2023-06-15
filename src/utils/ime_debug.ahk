@@ -18,8 +18,8 @@ ImeDebugGetProfilerText(name, debug_level)
 
     if( debug_level >= 1 )
     {
-        debug_text .= "`n" . name . "*" ImeProfilerGeneralGetCount(name) ":"
-        debug_text .= "(" ImeProfilerGeneralGetTotalTick(name) ") "
+        debug_text .= "`n" . name . "*" ImeProfilerGeneralGetTraceCount(name) ":"
+        debug_text .= "(" ImeProfilerGeneralGetTotalCallTime(name) ") "
     }
     if( debug_level >= 2 ) {
         debug_text .= ImeProfilerGeneralGetProfileText(name)

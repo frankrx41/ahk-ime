@@ -20,6 +20,9 @@
 ;*******************************************************************************
 ImeProfilerInitialize()
 {
+    global ime_performance_frequency := 0
+    DllCall("QueryPerformanceFrequency", "Int64*", ime_performance_frequency)
+
     ImeProfilerGeneralClear()
     ImeProfilerTickClear()
 }
@@ -27,8 +30,6 @@ ImeProfilerInitialize()
 ImeProfilerGeneralClear()
 {
     global ime_profiler_general := {}
-    global ime_performance_frequency := 0
-    DllCall("QueryPerformanceFrequency", "Int64*", ime_performance_frequency)
 }
 
 ;*******************************************************************************
@@ -138,7 +139,7 @@ ImeProfilerGeneralHasKey(name)
     return ime_profiler_general.HasKey(name)
 }
 
-ImeProfilerGeneralGetTotalTick(name)
+ImeProfilerGeneralGetTotalCallTime(name)
 {
     global ime_profiler_general
     name .= "_"
@@ -154,7 +155,7 @@ ImeProfilerGeneralGetProfileText(name)
     return ime_profiler_general[name, "profile_text"]
 }
 
-ImeProfilerGeneralGetCount(name)
+ImeProfilerGeneralGetTraceCount(name)
 {
     global ime_profiler_general
     name .= "_"
@@ -238,20 +239,21 @@ ImeProfilerTickGetProfileText()
         , ImeProfilerTickGetTotalCallTime("ImeInputterUpdateString")/StrLen(ImeInputterStringGetLegacy())
         , ImeProfilerTickGetTotalCallTime("ImeInputterUpdateString"))
     profile_text .= Format(" / ({},{},{})"
-        , ImeProfilerGeneralGetLastCallTime("PinyinSplitterInputStringNormal")
-        , ImeProfilerGeneralGetLastCallTime("ImeCandidateUpdateResult")
-        , ImeProfilerGeneralGetLastCallTime("SelectorFixupSelectIndex") )
+        , ImeProfilerGeneralGetTotalCallTime("PinyinSplitterInputStringNormal")
+        , ImeProfilerGeneralGetTotalCallTime("ImeCandidateUpdateResult")
+        , ImeProfilerGeneralGetTotalCallTime("SelectorFixupSelectIndex") )
     profile_text .= Format(" / ({},{})"
-        , ImeProfilerGeneralGetLastCallTime("PinyinSqlGetWeight")
-        , ImeProfilerGeneralGetLastCallTime("PinyinSqlExecuteGetTable") )
+        , ImeProfilerGeneralGetTotalCallTime("PinyinSqlGetWeight")
+        , ImeProfilerGeneralGetTotalCallTime("PinyinSqlExecuteGetTable") )
 
-    profile_text .= Format(" / ({},{})"
-        , ImeProfilerGeneralGetLastCallTime("PinyinTranslateFindResult")
-        , ImeProfilerGeneralGetLastCallTime("PinyinTranslatorInsertResult") )
+    profile_text .= Format(" / ({},{},{})"
+        , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFindResult")
+        , ImeProfilerGeneralGetTotalCallTime("PinyinTranslateFindResult")
+        , ImeProfilerGeneralGetTotalCallTime("ImeTranslateFilterResult") )
 
-    profile_text .= Format(" / ({},{})"
-        , ImeProfilerGeneralGetLastCallTime("TranslatorResultListFilterByRadical")
-        , ImeProfilerGeneralGetLastCallTime("RadicalCheckMatchLevel") )
+    ; profile_text .= Format(" / ({},{})"
+    ;     , ImeProfilerGeneralGetTotalCallTime("TranslatorResultListFilterByRadical")
+    ;     , ImeProfilerGeneralGetTotalCallTime("RadicalCheckMatchLevel") )
 
     return profile_text
 }
