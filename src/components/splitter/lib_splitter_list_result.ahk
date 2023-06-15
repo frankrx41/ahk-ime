@@ -226,3 +226,16 @@ SplitterResultListGetDisplayTextGrace(splitter_result_list)
     }
     return dsiplay_text
 }
+
+;*******************************************************************************
+;
+SplitterResultListHasAnyRadical(splitter_result_list)
+{
+    loop, % splitter_result_list.Length()
+    {
+        if( SplitterResultGetRadical(splitter_result_list[A_Index]) ){
+            return true
+        }
+    }
+    return false
+}
