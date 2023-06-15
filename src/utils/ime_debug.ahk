@@ -48,7 +48,9 @@ ImeDebugGetDisplayText()
         name_list := ["PinyinSqlExecuteGetTable_"]
         name_list := ImeProfilerGetAllNameList()
 
-        name_list := ["ImeInputterUpdateString_", "ImeInputterCallTranslator_", "ImeCandidateUpdateResult_", "SelectorFixupSelectIndex_", "PinyinSplitterInputStringNormal_", "PinyinSqlExecuteGetTable_", "PinyinSplitterCheckDBWeight_", "PinyinSqlGetWeight_"]
+        name_list := ["PinyinSplitterInputStringNormal_", "PinyinSplitterCheckDBWeight_", "PinyinSqlGetWeight_", "ImeCandidateUpdateResult_", "SelectorFixupSelectIndex_", "PinyinSqlExecuteGetTable_"]
+
+        ; name_list := ["PinyinSqlGetWeight_"]
 
         for index, element in name_list
         {
