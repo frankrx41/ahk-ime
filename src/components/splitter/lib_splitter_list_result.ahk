@@ -76,7 +76,7 @@ SplitterResultListGetRightWordPos(splitter_result_list, caret_pos)
 
 ;*******************************************************************************
 ;
-SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
+SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1, max_length := 5)
 {
     local
     return_splitter_list := []
@@ -91,6 +91,7 @@ SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
     }
     else
     {
+        splitter_result_list_length := 0
         loop, % splitter_result_list.Length()
         {
             if( A_Index < start_count ) {
@@ -99,9 +100,13 @@ SplitterResultListGetUntilSkip(splitter_result_list, start_count := 1)
             if( SplitterResultNeedTranslate(splitter_result_list[A_Index]) )
             {
                 return_splitter_list.Push(splitter_result_list[A_Index])
+                splitter_result_list_length += 1
             }
             else
             {
+                break
+            }
+            if( splitter_result_list_length >= max_length ) {
                 break
             }
         }
