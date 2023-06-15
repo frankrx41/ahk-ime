@@ -192,7 +192,7 @@ ImeProfilerTickGetProfileText()
         , profiler[1])
     profile_text .= Format(" / ({},{},{})"
         , ime_profiler_general["PinyinSplitterInputStringNormal_", 5]
-        , ime_profiler_general["ImeCandidateUpdateResult_", 5],
+        , ime_profiler_general["ImeCandidateUpdateResult_", 5]
         , ime_profiler_general["SelectorFixupSelectIndex_", 5] )
     profile_text .= Format(" / ({},{})"
         , ime_profiler_general["PinyinSqlGetWeight_", 1]
