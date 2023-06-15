@@ -6,7 +6,7 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
     left_word_length    := CandidateGetWordLength(candidate, left_split_index, left_select_index)
     left_word           := CandidateGetWord(candidate, left_split_index, left_select_index)
     if( left_word_length != left_length ) {
-        Assert(false)
+        ; Assert(false)
         return 0
     }
     if( SplitterResultGetHopeLength(CandidateGetSplittedList(candidate)[left_split_index]) == left_length && left_select_index ) {

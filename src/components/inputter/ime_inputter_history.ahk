@@ -4,9 +4,9 @@ ImeInputterHistoryClear()
     ime_input_string_history := []      ; ["select"] := current_index
     ime_input_string_history["select"] := 0
 
+    ImeInputterHistoryPush("woconglaibuchengren ziji hui shu")
     ImeInputterHistoryPush("haomiao yinei")
     ImeInputterHistoryPush("zaichanganaotuolijinxingtudigaige")
-    ImeInputterHistoryPush("woconglaibuchengren ziji hui shu")
     ; ImeInputterHistoryPush("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
     ; ImeInputterHistoryPush("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
     ImeInputterHistoryPush("wohenaini")
