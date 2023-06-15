@@ -198,5 +198,13 @@ ImeProfilerTickGetProfileText()
         , ime_profiler_general["PinyinSqlGetWeight_", 1]
         , ime_profiler_general["PinyinSqlExecuteGetTable_", 1] )
 
+    profile_text .= Format(" / ({},{})"
+        , ime_profiler_general["PinyinTranslateFindResult_", 1]
+        , ime_profiler_general["PinyinTranslatorInsertResult_", 1])
+
+    profile_text .= Format(" / ({},{})"
+        , ime_profiler_general["TranslatorResultListFilterByRadical_", 1]
+        , ime_profiler_general["RadicalCheckMatchLevel_", 1] )
+
     return profile_text
 }

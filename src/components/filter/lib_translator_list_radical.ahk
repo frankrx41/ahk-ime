@@ -257,27 +257,27 @@ RadicalCheckMatchLevel(test_word, test_radical)
     global radical_match_level_part_match
     global radical_match_level_full_match
 
-    if( !RadicalCheckWordClass(test_word, test_radical) ){
-        return radical_match_level_no_match
-    }
-    ; You also need to update `GetRadical`
-    test_radical := RegExReplace(test_radical, "[!@#$^&=]")
-
-    radical_word_list := CopyObj(RadicalWordSplit(test_word))
-    if( !radical_word_list ){
-        return radical_match_level_no_radical
-    }
+    ImeProfilerBegin()
     match_level := radical_match_level_no_match
-    for index, element in radical_word_list
-    {
-        result := RadicalIsFullMatchList(test_word, test_radical, element)
-        if( result < match_level ){
-            match_level := result
-        }
-        if( result == radical_match_level_full_match ){
-            break
+    if( RadicalCheckWordClass(test_word, test_radical) ){
+        ; You also need to update `GetRadical`
+        test_radical := RegExReplace(test_radical, "[!@#$^&=]")
+
+        radical_word_list := CopyObj(RadicalWordSplit(test_word))
+        if( radical_word_list ){
+            for index, element in radical_word_list
+            {
+                result := RadicalIsFullMatchList(test_word, test_radical, element)
+                if( result < match_level ){
+                    match_level := result
+                }
+                if( result == radical_match_level_full_match ){
+                    break
+                }
+            }
         }
     }
+    ImeProfilerEnd()
     return match_level
 }
 
@@ -308,10 +308,10 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
     translate_last_match_result_list := []
     translate_no_radical_result_list := []
 
+    ImeProfilerBegin()
     index := 1
     loop % translate_result_list.Length()
     {
-        ImeProfilerBegin()
         translate_result := translate_result_list[index]
         word_value      := TranslatorResultGetWord(translate_result)
         if( RadicalCheckRepeatIsOk(word_value, radical_list) )
@@ -353,8 +353,6 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         } else {
             index += 1
         }
-
-        ImeProfilerEnd()
     }
 
     ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
@@ -389,4 +387,5 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
     {
         translate_result_list.Push(TranslatorResultMakeError())
     }
+    ImeProfilerEnd()
 }
