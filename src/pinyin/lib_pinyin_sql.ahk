@@ -137,6 +137,7 @@ PinyinSqlGetResult(splitted_input, zero_weight, limit_num)
 ; 
 PinyinSqlGetWeight(splitted_input, simple_only := false)
 {
+    ImeProfilerBegin()
     Assert(splitted_input, "", false)
 
     sql_sim_key     := PinyinSqlSimpleKey(splitted_input)
@@ -158,6 +159,7 @@ PinyinSqlGetWeight(splitted_input, simple_only := false)
             result := result_table.Rows[1, 1]
         }
     }
+    ImeProfilerEnd()
     return result
 }
 
