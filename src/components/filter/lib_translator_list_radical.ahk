@@ -261,7 +261,7 @@ RadicalCheckMatchLevel(test_word, test_radical)
         return radical_match_level_no_match
     }
     ; You also need to update `GetRadical`
-    test_radical := RegExReplace(test_radical, "[!@#$%^&]")
+    test_radical := RegExReplace(test_radical, "[!@#$^&=]")
 
     radical_word_list := CopyObj(RadicalWordSplit(test_word))
     if( !radical_word_list ){
@@ -281,6 +281,18 @@ RadicalCheckMatchLevel(test_word, test_radical)
     return match_level
 }
 
+RadicalCheckRepeatIsOk(words, radical_list)
+{
+    loop, % radical_list.Length()
+    {
+        if( InStr(radical_list[A_Index], "=") && SubStr(words, A_Index, 1) != SubStr(words, A_Index-1, 1) )
+        {
+            return false
+        }
+    }
+    return true
+}
+
 ;*******************************************************************************
 ; radical_list: ["SS", "YZ", "RE"]
 TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
@@ -292,29 +304,19 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
     global radical_match_level_part_match
     global radical_match_level_full_match
 
-    need_filter := false
-    for index, value in radical_list
-    {
-        if( value != "" ){
-            need_filter := true
-            break
-        }
-    }
+    translate_full_match_result_list := []
+    translate_last_match_result_list := []
+    translate_no_radical_result_list := []
 
-    if( need_filter )
+    index := 1
+    loop % translate_result_list.Length()
     {
-        translate_full_match_result_list := []
-        translate_last_match_result_list := []
-        translate_no_radical_result_list := []
-
-        index := 1
-        loop % translate_result_list.Length()
+        ImeProfilerBegin()
+        translate_result := translate_result_list[index]
+        word_value      := TranslatorResultGetWord(translate_result)
+        if( RadicalCheckRepeatIsOk(word_value, radical_list) )
         {
-            translate_result := translate_result_list[index]
-            ImeProfilerBegin()
-            word_value := TranslatorResultGetWord(translate_result)
-            should_remove   := false
-            match_level     := radical_match_level_no_radical
+            match_level := radical_match_level_no_radical
             ; loop each character of "我爱你"
             loop % TranslatorResultGetWordLength(translate_result)
             {
@@ -332,57 +334,59 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                     }
                 }
             }
-
-            if( match_level == radical_match_level_full_match ) {
-                translate_full_match_result_list.Push(translate_result)
-            }
-            if( match_level == radical_match_level_last_match ) {
-                translate_last_match_result_list.Push(translate_result)
-            }
-            if( match_level == radical_match_level_no_radical ) {
-                translate_no_radical_result_list.Push(translate_result)
-            }
-
-            if( match_level != radical_match_level_part_match ) {
-                translate_result_list.RemoveAt(index)
-            } else {
-                index += 1
-            }
-
-            ImeProfilerEnd()
+        } else {
+            match_level := radical_match_level_no_match
         }
 
-        ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+        if( match_level == radical_match_level_full_match ) {
+            translate_full_match_result_list.Push(translate_result)
+        }
+        if( match_level == radical_match_level_last_match ) {
+            translate_last_match_result_list.Push(translate_result)
+        }
+        if( match_level == radical_match_level_no_radical ) {
+            translate_no_radical_result_list.Push(translate_result)
+        }
 
-        ; Show full match word first
-        loop, % translate_full_match_result_list.Length()
+        if( match_level != radical_match_level_part_match ) {
+            translate_result_list.RemoveAt(index)
+        } else {
+            index += 1
+        }
+
+        ImeProfilerEnd()
+    }
+
+    ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
+
+    ; Show full match word first
+    loop, % translate_full_match_result_list.Length()
+    {
+        translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
+    }
+    if( translate_last_match_result_list.Length() > 0 )
+    {
+        if( translate_result_list.Length() > 0 ) {
+            translate_result_list.Push(TranslatorResultMakeDisable("", "----2-", ""))
+        }
+        loop, % translate_last_match_result_list.Length()
         {
-            translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
+            translate_result_list.Push(translate_last_match_result_list[A_Index])
         }
-        if( translate_last_match_result_list.Length() > 0 )
+    }
+    if( translate_no_radical_result_list.Length() )
+    {
+        if( translate_result_list.Length() > 0 ) {
+            translate_result_list.Push(TranslatorResultMakeDisable("", "----3-", ""))
+        }
+        loop, % translate_no_radical_result_list.Length()
         {
-            if( translate_result_list.Length() > 0 ) {
-                translate_result_list.Push(TranslatorResultMakeDisable("", "----2-", ""))
-            }
-            loop, % translate_last_match_result_list.Length()
-            {
-                translate_result_list.Push(translate_last_match_result_list[A_Index])
-            }
+            translate_result_list.Push(translate_no_radical_result_list[A_Index])
         }
-        if( translate_no_radical_result_list.Length() )
-        {
-            if( translate_result_list.Length() > 0 ) {
-                translate_result_list.Push(TranslatorResultMakeDisable("", "----3-", ""))
-            }
-            loop, % translate_no_radical_result_list.Length()
-            {
-                translate_result_list.Push(translate_no_radical_result_list[A_Index])
-            }
-        }
+    }
 
-        if( translate_result_list.Length() == 0 )
-        {
-            translate_result_list.Push(TranslatorResultMakeError())
-        }
+    if( translate_result_list.Length() == 0 )
+    {
+        translate_result_list.Push(TranslatorResultMakeError())
     }
 }
