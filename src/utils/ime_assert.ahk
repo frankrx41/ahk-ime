@@ -60,7 +60,8 @@ GetCallStackText(deepness := 5, print_lines := 0)
             continue
         }
         exception_prev := Exception("", lvl - 1)
-        stack .= "`n" . StrReplace(exception_curr.file, A_ScriptDir) " (" exception_curr.line ") : " exception_prev.What
+        stack .= "`n" . exception_curr.file " (" exception_curr.line ") : " exception_prev.What
+        ; stack .= "`n" . StrReplace(exception_curr.file, A_ScriptDir) " (" exception_curr.line ") : " exception_prev.What
         if( print_lines )
         {
             FileReadLine, line, % exception_curr.file, % exception_curr.line
