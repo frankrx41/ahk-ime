@@ -3,6 +3,9 @@
 IsBadTone(initials, vowels, tone)
 {
     static pinyin_bad_tones
+    if( tone == "0" || tone == "'" ){
+        return false
+    }
     pinyin_bad_tones := { "a3": 1
         ,"a4": 1
         ,"ca2": 1
@@ -70,7 +73,7 @@ IsBadTone(initials, vowels, tone)
     return pinyin_bad_tones.HasKey(initials . vowels . tone)
 }
 
-IsCompletePinyin(initials, vowels, tone:="'")
+IsCompletePinyin(initials, vowels, tone:="'", allow_correct:=true)
 {
     global pinyin_table
     global auto_correct_table
@@ -115,7 +118,12 @@ IsCompletePinyin(initials, vowels, tone:="'")
     }
     else
     {
-        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels]) || (auto_correct_table[initials, vowels]) || (bopomofo_table[initials, vowels])
+        is_complete := (IsZeroInitials(initials) && vowels == "") || (pinyin_table[initials, vowels])
+        if( !is_complete && allow_correct )
+        {
+            is_complete := auto_correct_table[initials, vowels]
+            ; || (bopomofo_table[initials, vowels])
+        }
         if( is_complete && tone )
         {
             is_complete := !IsBadTone(initials, vowels, tone)

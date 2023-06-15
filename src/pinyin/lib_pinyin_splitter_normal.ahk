@@ -108,6 +108,9 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string, prev_splitted
     left_vowels_cut := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
     if( IsCompletePinyin(left_initials, left_vowels_cut) )
     {
+        if( !IsCompletePinyin(left_initials, left_vowels, "'", false) ) {
+            return false
+        }
         return PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_splitted_input)
     }
     else
