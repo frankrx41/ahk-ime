@@ -43,14 +43,6 @@ ImeTranslatorHistoryUpdateKey(splitted_string, try_search_zero_weight:=false)
     }
 }
 
-ImeTranslatorHistoryUpdateKeyEmpty(splitted_string)
-{
-    global translator_history_normal_result
-    global translator_history_zero_weight_result
-    translator_history_normal_result := []
-    translator_history_zero_weight_result := []
-}
-
 ImeTranslatorHistoryGetResultWord(splitted_string, word_class:="")
 {
     global translator_history_normal_result
@@ -62,12 +54,6 @@ ImeTranslatorHistoryGetResultWord(splitted_string, word_class:="")
         }
     }
     return ""
-}
-
-ImeTranslatorHistoryHasKey(splitted_string)
-{
-    global translator_history_normal_result
-    return translator_history_normal_result.HasKey(splitted_string)
 }
 
 ;*******************************************************************************

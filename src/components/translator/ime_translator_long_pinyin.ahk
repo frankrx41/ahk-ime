@@ -19,8 +19,6 @@ ImeTranslatorLongPinyinHas(splitted_string)
             profile_text .= "->" key
             found_value := true
             break
-        } else {
-            ImeTranslatorHistoryUpdateKeyEmpty(splitted_string)
         }
         if( A_TickCount - time_start > 50 ) {
             profile_text .= "TIME OUT"

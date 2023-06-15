@@ -16,7 +16,7 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
     max_len := hope_word_length + next_length
     profile_text := "(" next_length "," max_len "," hope_word_length "): "
 
-    max_len := Min(max_len, 8)
+    max_len := Min(max_len, 5)
     has_radical := SplitterResultListHasAnyRadical(splitter_result_list)
     
     loop, % max_len
@@ -26,12 +26,9 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
         ; }
         length_count    := max_len-A_Index+1
         splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
-        if( length_count > 5 && !ImeTranslatorHistoryHasKey(splitted_string) )
-        {
-            if( !ImeTranslatorLongPinyinHas(splitted_string) ) {
-                continue
-            }
-        }
+        ; if( length_count > 5 && !ImeTranslatorLongPinyinHas(splitted_string) ) {
+        ;     continue
+        ; }
 
         limit_num       := 40
         if( length_count == 1 ) {
