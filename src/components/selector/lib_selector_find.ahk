@@ -6,13 +6,9 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
     left_word_length    := CandidateGetWordLength(candidate, left_split_index, left_select_index)
     left_word           := CandidateGetWord(candidate, left_split_index, left_select_index)
     if( left_word_length != left_length ) {
-        ; Assert(false)
         return 0
     }
     left_weight := CandidateGetWeight(candidate, left_split_index, left_select_index)
-    if( SplitterResultGetHopeLength(CandidateGetSplittedList(candidate)[left_split_index]) == left_length && left_select_index ) {
-        return 1000000
-    }
 
     ImeProfilerBegin()
 
@@ -45,15 +41,12 @@ SelectorCheckTotalWeight(candidate, left_split_index, left_length, right_length,
             }
         }
         Assert(right_select_index != 0, "", false)
-        ; right_word_length := CandidateGetWordLength(candidate, right_split_index, right_select_index)
         right_weight := max_weight
         right_word  := CandidateGetWord(candidate, right_split_index, right_select_index)
     }
-    ; profile_text .= "[" left_word "(" left_split_index ") ," right_word "(" right_split_index ") ] " left_weight " + " right_weight " = " left_weight + right_weight
     total_weight := left_weight + right_weight
-    ; return_weight := total_weight
-    ; profile_text .= "" left_word left_word_length "," right_word right_word_length "] " left_weight " + " right_weight " = " total_weight
-    profile_text := Format("[{}{}/{}, {}{}/{}] {:.2f} + {:.2f} = {:.2f} ({})", left_word, left_word_length, left_length, right_word, right_word_length, right_length, left_weight, right_weight, total_weight, left_word)
+    profile_text := Format("[{}{}/{}, {}{}/{}]", left_word, left_word_length, left_length, right_word, right_word_length, right_length)
+    profile_text .= Format("{:.1f} + {:.1f} = {:.1f} ({})", left_weight, right_weight, total_weight, left_word)
     ImeProfilerEnd(profile_text)
 
     return total_weight
