@@ -6,7 +6,7 @@ IsMustSplit(next_char)
 
 ;*******************************************************************************
 ;
-PinyinSplitterGetWeight(pinyin, prev_splitted_input:="", update:=false)
+PinyinSplitterGetWeight(pinyin, prev_splitted_input:="")
 {
     static splitted_string_weight_table := {}
     Assert(pinyin, "", false)
@@ -15,9 +15,6 @@ PinyinSplitterGetWeight(pinyin, prev_splitted_input:="", update:=false)
         if( !splitted_string_weight_table.HasKey(pinyin) )
         {
             splitted_string_weight_table[pinyin] := PinyinSqlGetWeight(pinyin, false)
-        }
-        if( update ) {
-            splitted_string_weight_table[pinyin] += 1
         }
         return splitted_string_weight_table[pinyin]
     }

@@ -159,7 +159,7 @@ PinyinSqlGetWeight(splitted_input, simple_only := false)
             result := result_table.Rows[1, 1]
         }
     }
-    ImeProfilerEnd()
+    ImeProfilerEnd(splitted_input)
     return result
 }
 
