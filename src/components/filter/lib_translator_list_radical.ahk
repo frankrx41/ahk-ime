@@ -283,7 +283,7 @@ RadicalCheckMatchLevel(test_word, test_radical)
 
 RadicalCheckRepeatIsOk(words, radical_list)
 {
-    loop, % radical_list.Length()
+    loop, % StrLen(words)
     {
         if( InStr(radical_list[A_Index], "=") && SubStr(words, A_Index, 1) != SubStr(words, A_Index-1, 1) )
         {
