@@ -155,7 +155,8 @@ Class SQLiteDB {
             This.ErrorMsg := "Invalid query handle!"
             Return False
          }
-         RC := DllCall("SQlite3.dll\sqlite3_step", "Ptr", This._Handle, "Cdecl Int")
+         global sqlite_dll
+         RC := DllCall(sqlite_dll.sqlite3_step, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_step failed!"
             This.ErrorCode := ErrorLevel
@@ -171,7 +172,7 @@ Class SQLiteDB {
             This.ErrorCode := RC
             Return False
          }
-         RC := DllCall("SQlite3.dll\sqlite3_data_count", "Ptr", This._Handle, "Cdecl Int")
+         RC := DllCall(sqlite_dll.sqlite3_data_count, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_data_count failed!"
             This.ErrorCode := ErrorLevel
@@ -185,7 +186,7 @@ Class SQLiteDB {
          Row := []
          Loop, %RC% {
             Column := A_Index - 1
-            ColumnType := DllCall("SQlite3.dll\sqlite3_column_type", "Ptr", This._Handle, "Int", Column, "Cdecl Int")
+            ColumnType := DllCall(sqlite_dll.sqlite3_column_type, "Ptr", This._Handle, "Int", Column, "Cdecl Int")
             If (ErrorLevel) {
                This.ErrorMsg := "DllCall sqlite3_column_type failed!"
                This.ErrorCode := ErrorLevel
@@ -194,8 +195,8 @@ Class SQLiteDB {
             If (ColumnType = SQLITE_NULL) {
                Row[A_Index] := ""
             } Else If (ColumnType = SQLITE_BLOB) {
-               BlobPtr := DllCall("SQlite3.dll\sqlite3_column_blob", "Ptr", This._Handle, "Int", Column, "Cdecl UPtr")
-               BlobSize := DllCall("SQlite3.dll\sqlite3_column_bytes", "Ptr", This._Handle, "Int", Column, "Cdecl Int")
+               BlobPtr := DllCall(sqlite_dll.sqlite3_column_blob, "Ptr", This._Handle, "Int", Column, "Cdecl UPtr")
+               BlobSize := DllCall(sqlite_dll.sqlite3_column_bytes, "Ptr", This._Handle, "Int", Column, "Cdecl Int")
                If (BlobPtr = 0) || (BlobSize = 0) {
                   Row[A_Index] := ""
                } Else {
@@ -207,7 +208,7 @@ Class SQLiteDB {
                   DllCall("Kernel32.dll\RtlMoveMemory", "Ptr", Addr, "Ptr", BlobPtr, "Ptr", BlobSize)
                }
             } Else {
-               StrPtr := DllCall("SQlite3.dll\sqlite3_column_text", "Ptr", This._Handle, "Int", Column, "Cdecl UPtr")
+               StrPtr := DllCall(sqlite_dll.sqlite3_column_text, "Ptr", This._Handle, "Int", Column, "Cdecl UPtr")
                If (ErrorLevel) {
                   This.ErrorMsg := "DllCall sqlite3_column_text failed!"
                   This.ErrorCode := ErrorLevel
@@ -233,7 +234,8 @@ Class SQLiteDB {
             This.ErrorMsg := "Invalid query handle!"
             Return False
          }
-         RC := DllCall("SQlite3.dll\sqlite3_reset", "Ptr", This._Handle, "Cdecl Int")
+         global sqlite_dll
+         RC := DllCall(sqlite_dll.sqlite3_reset, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_reset failed!"
             This.ErrorCode := ErrorLevel
@@ -259,7 +261,8 @@ Class SQLiteDB {
          This.ErrorCode := 0
          If !(This._Handle)
             Return True
-         RC := DllCall("SQlite3.dll\sqlite3_finalize", "Ptr", This._Handle, "Cdecl Int")
+         global sqlite_dll
+         RC := DllCall(sqlite_dll.sqlite3_finalize, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_finalize failed!"
             This.ErrorCode := ErrorLevel
@@ -346,7 +349,8 @@ Class SQLiteDB {
                Return False
             }
             ; Let SQLite always create a copy of the BLOB
-            RC := DllCall("SQlite3.dll\sqlite3_bind_blob", "Ptr", This._Handle, "Int", Index, "Ptr", Param3
+            global sqlite_dll
+            RC := DllCall(sqlite_dll.sqlite3_bind_blob, "Ptr", This._Handle, "Int", Index, "Ptr", Param3
                         , "Int", Param4, "Ptr", -1, "Cdecl Int")
             If (ErrorLeveL) {
                This.ErrorMsg := "DllCall sqlite3_bind_blob failed!"
@@ -366,7 +370,7 @@ Class SQLiteDB {
                This.ErrorMsg := "Invalid value for double!"
                Return False
             }
-            RC := DllCall("SQlite3.dll\sqlite3_bind_double", "Ptr", This._Handle, "Int", Index, "Double", Param3
+            RC := DllCall(sqlite_dll.sqlite3_bind_double, "Ptr", This._Handle, "Int", Index, "Double", Param3
                         , "Cdecl Int")
             If (ErrorLeveL) {
                This.ErrorMsg := "DllCall sqlite3_bind_double failed!"
@@ -386,7 +390,7 @@ Class SQLiteDB {
                This.ErrorMsg := "Invalid value for int!"
                Return False
             }
-            RC := DllCall("SQlite3.dll\sqlite3_bind_int", "Ptr", This._Handle, "Int", Index, "Int", Param3
+            RC := DllCall(sqlite_dll.sqlite3_bind_int, "Ptr", This._Handle, "Int", Index, "Int", Param3
                         , "Cdecl Int")
             If (ErrorLeveL) {
                This.ErrorMsg := "DllCall sqlite3_bind_int failed!"
@@ -403,7 +407,7 @@ Class SQLiteDB {
             ; Param3 = zero-terminated string
             This._DB._StrToUTF8(Param3, UTF8)
             ; Let SQLite always create a copy of the text
-            RC := DllCall("SQlite3.dll\sqlite3_bind_text", "Ptr", This._Handle, "Int", Index, "Ptr", &UTF8
+            RC := DllCall(sqlite_dll.sqlite3_bind_text, "Ptr", This._Handle, "Int", Index, "Ptr", &UTF8
                         , "Int", -1, "Ptr", -1, "Cdecl Int")
             If (ErrorLeveL) {
                This.ErrorMsg := "DllCall sqlite3_bind_text failed!"
@@ -433,7 +437,8 @@ Class SQLiteDB {
             This.ErrorMsg := "Invalid statement handle!"
             Return False
          }
-         RC := DllCall("SQlite3.dll\sqlite3_step", "Ptr", This._Handle, "Cdecl Int")
+         global sqlite_dll
+         RC := DllCall(sqlite_dll.sqlite3_step, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_step failed!"
             This.ErrorCode := ErrorLevel
@@ -461,7 +466,8 @@ Class SQLiteDB {
             This.ErrorMsg := "Invalid statement handle!"
             Return False
          }
-         RC := DllCall("SQlite3.dll\sqlite3_reset", "Ptr", This._Handle, "Cdecl Int")
+         global sqlite_dll
+         RC := DllCall(sqlite_dll.sqlite3_reset, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_reset failed!"
             This.ErrorCode := ErrorLevel
@@ -473,7 +479,7 @@ Class SQLiteDB {
             Return False
          }
          If (ClearBindings) {
-            RC := DllCall("SQlite3.dll\sqlite3_clear_bindings", "Ptr", This._Handle, "Cdecl Int")
+            RC := DllCall(sqlite_dll.sqlite3_clear_bindings, "Ptr", This._Handle, "Cdecl Int")
             If (ErrorLevel) {
                This.ErrorMsg := "DllCall sqlite3_clear_bindings failed!"
                This.ErrorCode := ErrorLevel
@@ -499,7 +505,8 @@ Class SQLiteDB {
          This.ErrorCode := 0
          If !(This._Handle)
             Return True
-         RC := DllCall("SQlite3.dll\sqlite3_finalize", "Ptr", This._Handle, "Cdecl Int")
+         global sqlite_dll
+         RC := DllCall(sqlite_dll.sqlite3_finalize, "Ptr", This._Handle, "Cdecl Int")
          If (ErrorLevel) {
             This.ErrorMsg := "DllCall sqlite3_finalize failed!"
             This.ErrorCode := ErrorLevel
@@ -524,6 +531,7 @@ Class SQLiteDB {
       This._Handle := 0                 ; Database handle                               (Pointer)
       This._Queries := {}               ; Valid queries                                 (Object)
       This._Stmts := {}                 ; Valid prepared statements                     (Object)
+      global sqlite_dll
       If (This.Base._RefCount = 0) {
          SQLiteDLL := This.Base._SQLiteDLL
          If !FileExist(SQLiteDLL)
@@ -531,11 +539,12 @@ Class SQLiteDB {
                IniRead, SQLiteDLL, %A_ScriptDir%\SQLiteDB.ini, Main, DllPath, %SQLiteDLL%
                This.Base._SQLiteDLL := SQLiteDLL
          }
-         If !(DLL := DllCall("LoadLibrary", "Str", This.Base._SQLiteDLL, "UPtr")) {
+         sqlite_dll := LoadLibrary(This.Base._SQLiteDLL)
+         If (!sqlite_dll) {
             MsgBox, 16, SQLiteDB Error, % "DLL " . SQLiteDLL . " does not exist!"
             ExitApp
          }
-         This.Base.Version := StrGet(DllCall("SQlite3.dll\sqlite3_libversion", "Cdecl UPtr"), "UTF-8")
+         This.Base.Version := StrGet(DllCall(sqlite_dll.sqlite3_libversion, "Cdecl UPtr"), "UTF-8")
          SQLVersion := StrSplit(This.Base.Version, ".")
          MinVersion := StrSplit(This.Base._MinVersion, ".")
          If (SQLVersion[1] < MinVersion[1]) || ((SQLVersion[1] = MinVersion[1]) && (SQLVersion[2] < MinVersion[2])){
@@ -577,7 +586,8 @@ Class SQLiteDB {
    ; PRIVATE _ErrMsg
    ; ===================================================================================================================
    _ErrMsg() {
-      If (RC := DllCall("SQLite3.dll\sqlite3_errmsg", "Ptr", This._Handle, "Cdecl UPtr"))
+      global sqlite_dll
+      If (RC := DllCall(sqlite_dll.sqlite3_errmsg, "Ptr", This._Handle, "Cdecl UPtr"))
          Return StrGet(&RC, "UTF-8")
       Return ""
    }
@@ -585,13 +595,15 @@ Class SQLiteDB {
    ; PRIVATE _ErrCode
    ; ===================================================================================================================
    _ErrCode() {
-      Return DllCall("SQLite3.dll\sqlite3_errcode", "Ptr", This._Handle, "Cdecl Int")
+      global sqlite_dll
+      Return DllCall(sqlite_dll.sqlite3_errcode, "Ptr", This._Handle, "Cdecl Int")
    }
    ; ===================================================================================================================
    ; PRIVATE _Changes
    ; ===================================================================================================================
    _Changes() {
-      Return DllCall("SQLite3.dll\sqlite3_changes", "Ptr", This._Handle, "Cdecl Int")
+      global sqlite_dll
+      Return DllCall(sqlite_dll.sqlite3_changes, "Ptr", This._Handle, "Cdecl Int")
    }
    ; ===================================================================================================================
    ; PRIVATE _Returncode
@@ -678,7 +690,8 @@ Class SQLiteDB {
       }
       This._Path := DBPath
       This._StrToUTF8(DBPath, UTF8)
-      RC := DllCall("SQlite3.dll\sqlite3_open_v2", "Ptr", &UTF8, "UPtrP", HDB, "Int", Flags, "Ptr", 0, "Cdecl Int")
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_open_v2, "Ptr", &UTF8, "UPtrP", HDB, "Int", Flags, "Ptr", 0, "Cdecl Int")
       If (ErrorLevel) {
          This._Path := ""
          This.ErrorMsg := "DLLCall sqlite3_open_v2 failed!"
@@ -706,9 +719,10 @@ Class SQLiteDB {
       This.SQL := ""
       If !(This._Handle)
          Return True
+      global sqlite_dll
       For Each, Query in This._Queries
-         DllCall("SQlite3.dll\sqlite3_finalize", "Ptr", Query, "Cdecl Int")
-      RC := DllCall("SQlite3.dll\sqlite3_close", "Ptr", This._Handle, "Cdecl Int")
+         DllCall(sqlite_dll.sqlite3_finalize, "Ptr", Query, "Cdecl Int")
+      RC := DllCall(sqlite_dll.sqlite3_close, "Ptr", This._Handle, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DLLCall sqlite3_close failed!"
          This.ErrorCode := ErrorLevel
@@ -775,7 +789,8 @@ Class SQLiteDB {
       If (FO := Func(Callback)) && (FO.MinParams = 4)
          CBPtr := RegisterCallback(Callback, "F C", 4, &SQL)
       This._StrToUTF8(SQL, UTF8)
-      RC := DllCall("SQlite3.dll\sqlite3_exec", "Ptr", This._Handle, "Ptr", &UTF8, "Int", CBPtr, "Ptr", Object(This)
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_exec, "Ptr", This._Handle, "Ptr", &UTF8, "Int", CBPtr, "Ptr", Object(This)
                   , "UPtrP", Err, "Cdecl Int")
       CallError := ErrorLevel
       If (CBPtr)
@@ -788,7 +803,7 @@ Class SQLiteDB {
       If (RC) {
          This.ErrorMsg := StrGet(Err, "UTF-8")
          This.ErrorCode := RC
-         DllCall("SQLite3.dll\sqlite3_free", "Ptr", Err, "Cdecl")
+         DllCall(sqlite_dll.sqlite3_free, "Ptr", Err, "Cdecl")
          Return False
       }
       This.Changes := This._Changes()
@@ -824,7 +839,8 @@ Class SQLiteDB {
       If (MaxResult < -2)
          MaxResult := 0
       This._StrToUTF8(SQL, UTF8)
-      RC := DllCall("SQlite3.dll\sqlite3_get_table", "Ptr", This._Handle, "Ptr", &UTF8, "UPtrP", Table
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_get_table, "Ptr", This._Handle, "Ptr", &UTF8, "UPtrP", Table
                   , "IntP", Rows, "IntP", Cols, "UPtrP", Err, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DLLCall sqlite3_get_table failed!"
@@ -834,14 +850,14 @@ Class SQLiteDB {
       If (RC) {
          This.ErrorMsg := StrGet(Err, "UTF-8")
          This.ErrorCode := RC
-         DllCall("SQLite3.dll\sqlite3_free", "Ptr", Err, "Cdecl")
+         DllCall(sqlite_dll.sqlite3_free, "Ptr", Err, "Cdecl")
          Return False
       }
       TB := new This._Table
       TB.ColumnCount := Cols
       TB.RowCount := Rows
       If (MaxResult = -1) {
-         DllCall("SQLite3.dll\sqlite3_free_table", "Ptr", Table, "Cdecl")
+         DllCall(sqlite_dll.sqlite3_free_table, "Ptr", Table, "Cdecl")
          If (ErrorLevel) {
             This.ErrorMsg := "DLLCall sqlite3_free_table failed!"
             This.ErrorCode := ErrorLevel
@@ -873,7 +889,7 @@ Class SQLiteDB {
       }
       If (GetRows)
          TB.HasRows := True
-      DllCall("SQLite3.dll\sqlite3_free_table", "Ptr", Table, "Cdecl")
+      DllCall(sqlite_dll.sqlite3_free_table, "Ptr", Table, "Cdecl")
       If (ErrorLevel) {
          TB := ""
          This.ErrorMsg := "DLLCall sqlite3_free_table failed!"
@@ -907,8 +923,9 @@ Class SQLiteDB {
          Return False
       }
       Stmt := 0
+      global sqlite_dll
       This._StrToUTF8(SQL, UTF8)
-      RC := DllCall("SQlite3.dll\sqlite3_prepare_v2", "Ptr", This._Handle, "Ptr", &UTF8, "Int", -1
+      RC := DllCall(sqlite_dll.sqlite3_prepare_v2, "Ptr", This._Handle, "Ptr", &UTF8, "Int", -1
                   , "UPtrP", Stmt, "Ptr", 0, "Cdecl Int")
       If (ErrorLeveL) {
          This.ErrorMsg := A_ThisFunc . ": DllCall sqlite3_prepare_v2 failed!"
@@ -921,7 +938,7 @@ Class SQLiteDB {
          Return False
       }
       ST := New This._Statement
-      ST.ParamCount := DllCall("SQlite3.dll\sqlite3_bind_parameter_count", "Ptr", Stmt, "Cdecl Int")
+      ST.ParamCount := DllCall(sqlite_dll.sqlite3_bind_parameter_count, "Ptr", Stmt, "Cdecl Int")
       ST._Handle := Stmt
       ST._DB := This
       This._Stmts[Stmt] := Stmt
@@ -946,8 +963,9 @@ Class SQLiteDB {
          Return False
       }
       Query := 0
+      global sqlite_dll
       This._StrToUTF8(SQL, UTF8)
-      RC := DllCall("SQlite3.dll\sqlite3_prepare_v2", "Ptr", This._Handle, "Ptr", &UTF8, "Int", -1
+      RC := DllCall(sqlite_dll.sqlite3_prepare_v2, "Ptr", This._Handle, "Ptr", &UTF8, "Int", -1
                   , "UPtrP", Query, "Ptr", 0, "Cdecl Int")
       If (ErrorLeveL) {
          This.ErrorMsg := "DLLCall sqlite3_prepare_v2 failed!"
@@ -959,7 +977,7 @@ Class SQLiteDB {
          This.ErrorCode := RC
          Return False
       }
-      RC := DllCall("SQlite3.dll\sqlite3_column_count", "Ptr", Query, "Cdecl Int")
+      RC := DllCall(sqlite_dll.sqlite3_column_count, "Ptr", Query, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DLLCall sqlite3_column_count failed!"
          This.ErrorCode := ErrorLevel
@@ -973,7 +991,7 @@ Class SQLiteDB {
       ColumnCount := RC
       Names := []
       Loop, %RC% {
-         StrPtr := DllCall("SQlite3.dll\sqlite3_column_name", "Ptr", Query, "Int", A_Index - 1, "Cdecl UPtr")
+         StrPtr := DllCall(sqlite_dll.sqlite3_column_name, "Ptr", Query, "Int", A_Index - 1, "Cdecl UPtr")
          If (ErrorLevel) {
             This.ErrorMsg := "DLLCall sqlite3_column_name failed!"
             This.ErrorCode := ErrorLevel
@@ -981,7 +999,7 @@ Class SQLiteDB {
          }
          Names[A_Index] := StrGet(StrPtr, "UTF-8")
       }
-      RC := DllCall("SQlite3.dll\sqlite3_step", "Ptr", Query, "Cdecl Int")
+      RC := DllCall(sqlite_dll.sqlite3_step, "Ptr", Query, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DLLCall sqlite3_step failed!"
          This.ErrorCode := ErrorLevel
@@ -989,7 +1007,7 @@ Class SQLiteDB {
       }
       If (RC = This._ReturnCode("SQLITE_ROW"))
          HasRows := True
-      RC := DllCall("SQlite3.dll\sqlite3_reset", "Ptr", Query, "Cdecl Int")
+      RC := DllCall(sqlite_dll.sqlite3_reset, "Ptr", Query, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DLLCall sqlite3_reset failed!"
          This.ErrorCode := ErrorLevel
@@ -1026,7 +1044,8 @@ Class SQLiteDB {
          This.ErrorMsg := "Invalid database handle!"
          Return False
       }
-      RC := DllCall("SQLite3.dll\sqlite3_create_function", "Ptr", This._Handle, "AStr", Name, "Int", Args, "Int", Enc
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_create_function, "Ptr", This._Handle, "AStr", Name, "Int", Args, "Int", Enc
                                                          , "Ptr", Param, "Ptr", Func, "Ptr", 0, "Ptr", 0, "Cdecl Int")
       If (ErrorLeveL) {
          This.ErrorMsg := "DllCall sqlite3_create_function failed!"
@@ -1055,7 +1074,8 @@ Class SQLiteDB {
          Return False
       }
       RowID := 0
-      RC := DllCall("SQLite3.dll\sqlite3_last_insert_rowid", "Ptr", This._Handle, "Cdecl Int64")
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_last_insert_rowid, "Ptr", This._Handle, "Cdecl Int64")
       If (ErrorLevel) {
          This.ErrorMsg := "DllCall sqlite3_last_insert_rowid failed!"
          This.ErrorCode := ErrorLevel
@@ -1079,7 +1099,8 @@ Class SQLiteDB {
          Return False
       }
       Rows := 0
-      RC := DllCall("SQLite3.dll\sqlite3_total_changes", "Ptr", This._Handle, "Cdecl Int")
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_total_changes, "Ptr", This._Handle, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DllCall sqlite3_total_changes failed!"
          This.ErrorCode := ErrorLevel
@@ -1105,7 +1126,8 @@ Class SQLiteDB {
       }
       If Timeout Is Not Integer
          Timeout := 1000
-      RC := DllCall("SQLite3.dll\sqlite3_busy_timeout", "Ptr", This._Handle, "Int", Timeout, "Cdecl Int")
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_busy_timeout, "Ptr", This._Handle, "Int", Timeout, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := "DllCall sqlite3_busy_timeout failed!"
          This.ErrorCode := ErrorLevel
@@ -1138,14 +1160,15 @@ Class SQLiteDB {
       VarSetCapacity(OP, 16, 0)
       StrPut(Quote ? "%Q" : "%q", &OP, "UTF-8")
       This._StrToUTF8(Str, UTF8)
-      Ptr := DllCall("SQLite3.dll\sqlite3_mprintf", "Ptr", &OP, "Ptr", &UTF8, "Cdecl UPtr")
+      global sqlite_dll
+      Ptr := DllCall(sqlite_dll.sqlite3_mprintf, "Ptr", &OP, "Ptr", &UTF8, "Cdecl UPtr")
       If (ErrorLevel) {
          This.ErrorMsg := "DllCall sqlite3_mprintf failed!"
          This.ErrorCode := ErrorLevel
          Return False
       }
       Str := This._UTF8ToStr(Ptr)
-      DllCall("SQLite3.dll\sqlite3_free", "Ptr", Ptr, "Cdecl")
+      DllCall(sqlite_dll.sqlite3_free, "Ptr", Ptr, "Cdecl")
       Return True
    }
    ; ===================================================================================================================
@@ -1176,7 +1199,8 @@ Class SQLiteDB {
       }
       Query := 0
       This._StrToUTF8(SQL, UTF8)
-      RC := DllCall("SQlite3.dll\sqlite3_prepare_v2", "Ptr", This._Handle, "Ptr", &UTF8, "Int", -1
+      global sqlite_dll
+      RC := DllCall(sqlite_dll.sqlite3_prepare_v2, "Ptr", This._Handle, "Ptr", &UTF8, "Int", -1
                   , "UPtrP", Query, "Ptr", 0, "Cdecl Int")
       If (ErrorLeveL) {
          This.ErrorMsg := A_ThisFunc . ": DllCall sqlite3_prepare_v2 failed!"
@@ -1194,7 +1218,7 @@ Class SQLiteDB {
             This.ErrorCode := ErrorLevel
             Return False
          }
-         RC := DllCall("SQlite3.dll\sqlite3_bind_blob", "Ptr", Query, "Int", BlobNum, "Ptr", Blob.Addr
+         RC := DllCall(sqlite_dll.sqlite3_bind_blob, "Ptr", Query, "Int", BlobNum, "Ptr", Blob.Addr
                      , "Int", Blob.Size, "Ptr", SQLITE_STATIC, "Cdecl Int")
          If (ErrorLeveL) {
             This.ErrorMsg := A_ThisFunc . ": DllCall sqlite3_bind_blob failed!"
@@ -1207,7 +1231,7 @@ Class SQLiteDB {
             Return False
          }
       }
-      RC := DllCall("SQlite3.dll\sqlite3_step", "Ptr", Query, "Cdecl Int")
+      RC := DllCall(sqlite_dll.sqlite3_step, "Ptr", Query, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := A_ThisFunc . ": DllCall sqlite3_step failed!"
          This.ErrorCode := ErrorLevel
@@ -1218,7 +1242,7 @@ Class SQLiteDB {
          This.ErrorCode := RC
          Return False
       }
-      RC := DllCall("SQlite3.dll\sqlite3_finalize", "Ptr", Query, "Cdecl Int")
+      RC := DllCall(sqlite_dll.sqlite3_finalize, "Ptr", Query, "Cdecl Int")
       If (ErrorLevel) {
          This.ErrorMsg := A_ThisFunc . ": DllCall sqlite3_finalize failed!"
          This.ErrorCode := ErrorLevel
@@ -1243,10 +1267,11 @@ Class SQLiteDB {
 ; ======================================================================================================================
 SQLiteDB_RegExp(Context, ArgC, Values) {
    Result := 0
+   global sqlite_dll
    If (ArgC = 2) {
-      AddrN := DllCall("SQLite3.dll\sqlite3_value_text", "Ptr", NumGet(Values + 0, "UPtr"), "Cdecl UPtr")
-      AddrH := DllCall("SQLite3.dll\sqlite3_value_text", "Ptr", NumGet(Values + A_PtrSize, "UPtr"), "Cdecl UPtr")
+      AddrN := DllCall(sqlite_dll.sqlite3_value_text, "Ptr", NumGet(Values + 0, "UPtr"), "Cdecl UPtr")
+      AddrH := DllCall(sqlite_dll.sqlite3_value_text, "Ptr", NumGet(Values + A_PtrSize, "UPtr"), "Cdecl UPtr")
       Result := RegExMatch(StrGet(AddrH, "UTF-8"), StrGet(AddrN, "UTF-8"))
    }
-   DllCall("SQLite3.dll\sqlite3_result_int", "Ptr", Context, "Int", !!Result, "Cdecl") ; 0 = false, 1 = trus
+   DllCall(sqlite_dll.sqlite3_result_int, "Ptr", Context, "Int", !!Result, "Cdecl") ; 0 = false, 1 = trus
 }
