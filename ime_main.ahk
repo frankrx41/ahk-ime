@@ -1,5 +1,6 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 
+; https://www.autohotkey.com/boards/viewtopic.php?t=6413
 ;OPTIMIZATIONS START
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
