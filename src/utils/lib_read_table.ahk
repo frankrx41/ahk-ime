@@ -1,14 +1,14 @@
 ; Key`tvalue1 value2
 ; Ignore string start with ";"
-ReadFileToTable(file_name)
+ReadFileToTable(file_name, mark0:="`t", mark1:=",", mark2:=" ")
 {
     FileRead, file_content, %file_name%
-    return ReadStringToTable(file_content)
+    return ReadStringToTable(file_content, mark0, mark1, mark2)
 }
 
 ReadStringToValueData(string, mark1, mark2)
 {
-    if( InStr(string, mark2) )
+    if( mark2 && InStr(string, mark2) )
     {
         data_array := StrSplit(string, mark1)
         data := []
@@ -24,7 +24,14 @@ ReadStringToValueData(string, mark1, mark2)
     }
     else
     {
-        return StrSplit(string, mark1)
+        if( mark1 )
+        {
+            return StrSplit(string, mark1)
+        }
+        else
+        {
+            return string
+        }
     }
 }
 
