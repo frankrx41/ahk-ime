@@ -16,15 +16,20 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
     max_len := hope_word_length + next_length
     profile_text := "(" next_length "," max_len "," hope_word_length "): "
 
-    max_len := Min(max_len, 5)
+    max_len := Min(max_len, 8)
     has_radical := SplitterResultListHasAnyRadical(splitter_result_list)
     
     loop, % max_len
     {
-        if( translate_result_list.Length() > 0 ) {
-            ; break
-        }
+        ; if( translate_result_list.Length() > 0 ) {
+        ;     break
+        ; }
         length_count    := max_len-A_Index+1
+        splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
+        if( length_count >= 5 && !ImeTranslatorLongPinyinHas(splitted_string) ) {
+            continue
+        }
+
         limit_num       := 40
         if( length_count == 1 ) {
             limit_num   := SplitterResultGetRadical(splitter_result_list[1]) ? 0 : limit_num
@@ -32,7 +37,6 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
             limit_num   := has_radical || length_count == hope_word_length ? 0 : limit_num
         }
 
-        splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
         profile_text .= "[" splitted_string "] "
         ImeTranslatorHistoryUpdateKey(splitted_string, length_count == 1)
         ImeTranslatorHistoryPushResult(translate_result_list, splitted_string, length_count, limit_num)

@@ -28,7 +28,7 @@ SoundSplit(pinyin)
 
 ; Check wiki\design.md#Input
 ; wo0de0 - wo3de5
-IsPinyinSoundLike(input_pinyin, full_pinyin)
+IsPinyinSoundLikeSlow(input_pinyin, full_pinyin)
 {
     full_pinyin_list    := SoundSplit(full_pinyin)
     input_pinyin_list   := SoundSplit(input_pinyin)
@@ -69,4 +69,41 @@ IsPinyinSoundLike(input_pinyin, full_pinyin)
         return false
     }
     return true
+}
+
+IsPinyinSoundLike(input_pinyin, full_pinyin)
+{
+    IsPinyinSoundLikeSlow(input_pinyin, full_pinyin)
+}
+
+IsPinyinSoundLikeFast(input_pinyin, full_pinyin)
+{
+    check_pinyin_index := 1
+    last_check_char := ""
+    loop, Parse, full_pinyin
+    {
+        check_char := SubStr(input_pinyin, check_pinyin_index, 1)
+        if( IsTone(A_LoopField) ){
+            if( check_char == "0" || A_LoopField == check_char ){
+                check_pinyin_index += 1
+                last_check_char := check_char
+            }
+            else
+            if( A_LoopField != check_char ){
+                return false
+            }
+        }
+        else
+        if( A_LoopField ){
+            if( check_char == "%" || A_LoopField == check_char ) {
+                check_pinyin_index += 1
+                last_check_char := check_char
+            }
+            else
+            if( A_LoopField != check_char && last_check_char != "%" ){
+                return false
+            }
+        }
+    }
+    return check_pinyin_index-1 == StrLen(input_pinyin)
 }

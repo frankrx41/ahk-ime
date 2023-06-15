@@ -34,6 +34,7 @@ ImeProfilerFunc("ImeSelectorInitialize")
 ; Translator
 ImeProfilerFunc("ImeCandidateInitialize")
 ImeProfilerFunc("ImeTranslatorHistoryInitialize")
+ImeProfilerFunc("ImeTranslatorLongPinyinInitialize")
 
 ; Radical
 ImeProfilerFunc("RadicalInitialize")
