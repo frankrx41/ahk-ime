@@ -60,7 +60,7 @@ PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false
         ; splitter_list := PinyinSplitterInputStringFluent(input_string)
         splitter_list := PinyinSplitterInputStringNormal(input_string)
 
-        if( StrLen(input_string) <= 4 && !InStr(input_string, "+") && !InStr(input_string, "%") )
+        if( StrLen(input_string) <= 4 && !InStr(input_string, "+") && !InStr(input_string, "%") && StrLen(input_string) < splitter_list.Length() )
         {
             try_simple_spliter := true
             loop, % splitter_list.Length()
