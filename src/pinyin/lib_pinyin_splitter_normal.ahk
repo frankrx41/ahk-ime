@@ -6,21 +6,22 @@ IsMustSplit(next_char)
 
 ;*******************************************************************************
 ;
-PinyinSplitterGetWeight(pinyin, prev_splitted_input:="")
+PinyinSplitterGetWeight(splitted_string, prev_splitted_input:="")
 {
     static splitted_string_weight_table := {}
-    Assert(pinyin, "", false)
+    Assert(splitted_string, "", false)
     if( prev_splitted_input == "" )
     {
-        if( !splitted_string_weight_table.HasKey(pinyin) )
+        if( !splitted_string_weight_table.HasKey(splitted_string) )
         {
-            splitted_string_weight_table[pinyin] := PinyinSqlGetWeight(pinyin, false)
+            splitted_string_weight_table[splitted_string] := ImeTranslatorHistoryGetWeight(splitted_string)
+            ; splitted_string_weight_table[splitted_string] := PinyinSqlGetWeight(splitted_string)
         }
-        return splitted_string_weight_table[pinyin]
+        return splitted_string_weight_table[splitted_string]
     }
     else
     {
-        return Max(PinyinSplitterGetWeight(prev_splitted_input . pinyin), PinyinSplitterGetWeight(pinyin))
+        return Max(PinyinSplitterGetWeight(prev_splitted_input . splitted_string), PinyinSplitterGetWeight(splitted_string))
     }
 }
 

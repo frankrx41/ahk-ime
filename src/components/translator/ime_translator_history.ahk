@@ -20,6 +20,15 @@ ImeTranslatorHistoryHasResult(splitted_string)
 
 ;*******************************************************************************
 ;
+ImeTranslatorHistoryGetWeight(splitted_string)
+{
+    global translator_history_normal_result
+    ImeTranslatorHistoryUpdateKey(splitted_string)
+    return TranslatorResultGetWeight(translator_history_normal_result[splitted_string, 1])
+}
+
+;*******************************************************************************
+;
 ; translator_history_normal_result["lao0shi0"] =
 ; [
 ;   [1]: ["lao3shi1", "老师", "26995", ""]
