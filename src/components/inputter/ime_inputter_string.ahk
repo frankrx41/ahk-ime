@@ -2,6 +2,7 @@
 ImeInputterStringSet(input_string)
 {
     global ime_input_string
+    ImeProfilerTickClear()
     ime_input_string := input_string
 }
 
