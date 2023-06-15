@@ -64,6 +64,12 @@ ImeTranslatorHistoryGetResultWord(splitted_string, word_class:="")
     return ""
 }
 
+ImeTranslatorHistoryHasKey(splitted_string)
+{
+    global translator_history_normal_result
+    return translator_history_normal_result.HasKey(splitted_string)
+}
+
 ;*******************************************************************************
 ;
 ImeTranslatorHistoryGetTopWeightList(splitted_string)

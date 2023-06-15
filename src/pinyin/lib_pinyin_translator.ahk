@@ -26,8 +26,11 @@ PinyinTranslatorInsertResult(ByRef translate_result_list, splitter_result_list)
         ; }
         length_count    := max_len-A_Index+1
         splitted_string := SplitterResultListConvertToString(splitter_result_list, 1, length_count)
-        if( length_count >= 5 && !ImeTranslatorLongPinyinHas(splitted_string) ) {
-            continue
+        if( length_count > 5 && !ImeTranslatorHistoryHasKey(splitted_string) )
+        {
+            if( !ImeTranslatorLongPinyinHas(splitted_string) ) {
+                continue
+            }
         }
 
         limit_num       := 40

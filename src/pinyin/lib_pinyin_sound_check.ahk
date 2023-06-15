@@ -73,7 +73,7 @@ IsPinyinSoundLikeSlow(input_pinyin, full_pinyin)
 
 IsPinyinSoundLike(input_pinyin, full_pinyin)
 {
-    IsPinyinSoundLikeSlow(input_pinyin, full_pinyin)
+    return IsPinyinSoundLikeSlow(input_pinyin, full_pinyin)
 }
 
 IsPinyinSoundLikeFast(input_pinyin, full_pinyin)
@@ -90,7 +90,7 @@ IsPinyinSoundLikeFast(input_pinyin, full_pinyin)
             }
             else
             if( A_LoopField != check_char ){
-                return false
+                return Asc(check_char) - Asc(A_LoopField)
             }
         }
         else
@@ -101,9 +101,12 @@ IsPinyinSoundLikeFast(input_pinyin, full_pinyin)
             }
             else
             if( A_LoopField != check_char && last_check_char != "%" ){
-                return false
+                a := Asc(A_LoopField)
+                b := Asc(check_char)
+                c := a - b 
+                return Asc(check_char) - Asc(A_LoopField)
             }
         }
     }
-    return check_pinyin_index-1 == StrLen(input_pinyin)
+    return (check_pinyin_index-1) - StrLen(input_pinyin)
 }
