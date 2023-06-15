@@ -316,6 +316,7 @@ PinyinSplitterInputStringNormal(input_string)
                 string_index += StrLen(radical)
             } else {
                 string_index += 1
+                radical .= check_mark
             }
 
             make_result := SplitterResultMake(initials . vowels, tone, radical, start_string_index, string_index-1)

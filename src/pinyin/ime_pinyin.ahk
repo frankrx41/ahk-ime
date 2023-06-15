@@ -182,7 +182,7 @@ IsVowelsAnyMark(char)
 
 IsRepeatMark(char)
 {
-    return char == "-"
+    return char == "="
 }
 
 ;*******************************************************************************
