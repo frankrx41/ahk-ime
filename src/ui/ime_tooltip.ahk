@@ -192,7 +192,7 @@ ImeTooltipUpdate()
         ; Debug info
         debug_tip := ImeDebugGetDisplayText()
 
-        inputter_string := ImeInputterGetDisplayString()
+        inputter_string := ImeInputterGetDisplayString(false)
         tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info debug_tip
         ; tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info
     }

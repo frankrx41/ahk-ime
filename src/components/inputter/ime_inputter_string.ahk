@@ -126,7 +126,7 @@ ImeInputterGetDisplayDebugString(full:=false)
     return tooltip_string
 }
 
-ImeInputterGetDisplayString()
+ImeInputterGetDisplayString(display_splitted := false)
 {
     local
     global ime_input_string
@@ -140,7 +140,7 @@ ImeInputterGetDisplayString()
         tooltip_string .= " {Enter}"
     }
 
-    if( ImeSchemeIsPinyinDouble() || ImeSchemeIsPinyinBopomofo() || ImeSchemeIsPinyinSimple() )
+    if( display_splitted || ImeSchemeIsPinyinDouble() || ImeSchemeIsPinyinBopomofo() || ImeSchemeIsPinyinSimple() )
     {
         tooltip_string .= "`n" SplitterResultListGetDisplayTextGrace(ime_splitted_list)
     }
