@@ -8,7 +8,6 @@ ImeHotkeyRegisterInitialize()
     , "^+6":"……", "^+7":"＆", "^+8":"＊", "^+9":"「", "^+0":"」", "^-":"－", "^+-":"——", "^=":"＝", "^+=":"＋"
     , "^[":"【", "^]":"】", "^+[":"（", "^+]":"）", "^\":"、", "^;":"；", "^+;": "：", "^'":"＇", "^+'":"＂"
     , "^+,":"《","^+.":"》", "^,":"，", "^.":"。", "^+/":"？" , "^Space":"　" }
-    global symbol_list_string := ""
 
     Hotkey, % "#Space", ImeToggleSuspend
 
@@ -20,7 +19,6 @@ ImeHotkeyRegisterInitialize()
         {
             func := Func("HotkeyOnSymbol").Bind(char)
             Hotkey, %key%, %func%
-            symbol_list_string .= char
         }
         loop 26
         {

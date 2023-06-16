@@ -213,7 +213,8 @@ GetRadical(input_string)
 
 IsSymbol(char)
 {
-    global symbol_list_string
+    ; see `ImeHotkeyRegisterInitialize`
+    static symbol_list_string := "``～！＠#$％…＆＊「」－—＝＋（）【】、；：＇＂《》，。？　"
     return InStr(symbol_list_string, char)
 }
 
