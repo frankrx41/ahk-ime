@@ -20,42 +20,6 @@ PinyinSplitterCheckCanSplit(input_str, index, initials, vowels, vowels_len, prev
 
 ;*******************************************************************************
 ; `allow_max_len`: max length may be 4, e.g. "iong" "uang"
-PinyinSplitterCalcMaxVowelsLength(input_str, index, covert_func, allow_max_len)
-{
-    local
-    strlen := StrLen(input_str)
-    vowels_max_len := 0
-    loop {
-        if( vowels_max_len >= allow_max_len || index+vowels_max_len-1>=strlen ){
-            break
-        }
-        check_char := SubStr(input_str, index+vowels_max_len, 1)
-        check_char := Func(covert_func).Call(check_char, 0)
-
-        if( IsVowelsAnyMark(check_char) )
-        {
-            if( vowels_max_len == 0 ){
-                vowels_max_len := 1
-            }
-            break
-        }
-        if( IsTone(check_char) ){
-            break
-        }
-        if( IsRadical(check_char) ){
-            break
-        }
-        if( IsRadical(check_char) ){
-            break
-        }
-        if( IsInitialsAnyMark(check_char) ){
-            break
-        }
-        vowels_max_len += 1
-    }
-    return vowels_max_len
-}
-
 PinyinSplitterCalcMaxVowelsLength2(input_str, allow_max_len:=4)
 {
     local
@@ -131,63 +95,6 @@ PinyinSplitterGetVowels2(input_str, initials, prev_splitted_input, ByRef test_in
         }
     }
     test_index := vowels_len
-
-    if( IsVowelsAnyMark(vowels) ){
-        vowels := "%"
-    }
-    else if( initials ) {
-        if( !IsCompletePinyin(initials, vowels) ){
-            vowels .= "%"
-        }
-    } else {
-        if( !IsCompletePinyin(vowels, "") ){
-            vowels .= "%"
-        }
-    }
-
-    return vowels
-}
-
-
-PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input, covert_func:="NormalToNormal", allow_max_len:=4)
-{
-    local
-    vowels_max_len  := PinyinSplitterCalcMaxVowelsLength(input_str, index, covert_func, allow_max_len)
-    vowels          := ""
-    vowels_len      := 0
-    found_vowels    := false
-    if( vowels_max_len > 0 )
-    {
-        loop
-        {
-            vowels_len := vowels_max_len+1-A_Index
-            vowels := SubStr(input_str, index, vowels_len)
-            if( IsVowelsAnyMark(vowels) )
-            {
-                break
-            }
-            last_vowels := ""
-            loop
-            {
-                covert_vowels := Func(covert_func).Call(vowels, A_Index)
-                if( last_vowels == covert_vowels ) {
-                    break
-                }
-                if( IsCompletePinyin(initials, covert_vowels) ) {
-                    if( PinyinSplitterCheckCanSplit(input_str, index, initials, vowels, vowels_len, prev_splitted_input) ){
-                        vowels := covert_vowels
-                        found_vowels := true
-                        break
-                    }
-                }
-                last_vowels := covert_vowels
-            }
-            if( A_Index >= vowels_max_len+1 || found_vowels ){
-                break
-            }
-        }
-    }
-    index += vowels_len
 
     if( IsVowelsAnyMark(vowels) ){
         vowels := "%"

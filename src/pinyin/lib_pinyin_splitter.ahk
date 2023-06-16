@@ -3,9 +3,9 @@
 #Include, src\pinyin\lib_pinyin_splitter_library_grace.ahk
 #Include, src\pinyin\lib_pinyin_splitter_simple.ahk
 #Include, src\pinyin\lib_pinyin_splitter_normal.ahk
-#Include, src\pinyin\lib_pinyin_splitter_double.ahk
-#Include, src\pinyin\lib_pinyin_splitter_bopomofo.ahk
-#Include, src\pinyin\lib_pinyin_splitter_fluent.ahk
+; #Include, src\pinyin\lib_pinyin_splitter_double.ahk
+; #Include, src\pinyin\lib_pinyin_splitter_bopomofo.ahk
+; #Include, src\pinyin\lib_pinyin_splitter_fluent.ahk
 
 ;*******************************************************************************
 ; See: wiki\design.md#Split
@@ -47,16 +47,16 @@ PinyinSplitterInputString(input_string, simple_spell:=false, double_spell:=false
     {
         splitter_list := PinyinSplitterInputStringSimple(input_string)
     }
-    else
-    if( double_spell )
-    {
-        splitter_list := PinyinSplitterInputStringDouble(input_string)
-    }
-    else
-    if( bopomofo_spell )
-    {
-        splitter_list := PinyinSplitterInputStringBopomofo(input_string)
-    }
+    ; else
+    ; if( double_spell )
+    ; {
+    ;     splitter_list := PinyinSplitterInputStringDouble(input_string)
+    ; }
+    ; else
+    ; if( bopomofo_spell )
+    ; {
+    ;     splitter_list := PinyinSplitterInputStringBopomofo(input_string)
+    ; }
     else
     {
         ; splitter_list := PinyinSplitterInputStringFluent(input_string)

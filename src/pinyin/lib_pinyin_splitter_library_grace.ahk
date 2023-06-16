@@ -32,7 +32,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
     max_word_weight := 0
     result_word := ""
 
-    max_test_len := PinyinSplitterCalcMaxVowelsLength(right_string, 1, "NormalToNormal", 4)
+    max_test_len := PinyinSplitterCalcMaxVowelsLength2(right_string, 4)
     initials := SubStr(left_vowels, 0, 1)
     loop,
     {
@@ -63,7 +63,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
 
     profile_text .= " / "
 
-    max_test_len := PinyinSplitterCalcMaxVowelsLength(SubStr(right_string, 2), 1, "NormalToNormal", 4)
+    max_test_len := PinyinSplitterCalcMaxVowelsLength2(SubStr(right_string, 2), 4)
     initials := SubStr(right_string, 1, 1)
     loop,
     {
