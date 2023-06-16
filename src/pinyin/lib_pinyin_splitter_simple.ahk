@@ -14,7 +14,7 @@ PinyinSplitterInputStringSimple(input_string)
     {
         check_mark := SubStr(input_string, string_index, 1)
 
-        if( string_index > strlen || IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark))
+        if( string_index > strlen || IsNeedSplit(check_mark) )
         {
             if( escape_string ) {
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
@@ -28,25 +28,31 @@ PinyinSplitterInputStringSimple(input_string)
             break
         }
 
-        if( IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark))
+        if( IsNeedSplit(check_mark))
         {
             start_string_index := string_index
 
             if( !IsRepeatMark(check_mark) )
             {
+                test_index := 0
                 if( IsInitialsAnyMark(check_mark) ){
                     initials := "%"
                 } else {
                     initials := check_mark
                 }
                 string_index += 1
-                ; if( IsVowelsAnyMark(SubStr(input_string, string_index, 1)) ){
-                ;     string_index += 1
-                ; }
+
                 vowels      := "%"
-                tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
-                radical     := GetRadical(SubStr(input_string, string_index))
-                string_index += StrLen(radical)
+                empty_tone  := IsEmptyTone(SubStr(input_string, string_index, 1))
+                tone        := PinyinSplitterGetTone2(SubStr(input_string, string_index), test_index)
+                string_index += test_index
+
+                if( !empty_tone ) {
+                    radical := PinyinSplitterGetRadical(SubStr(input_string, string_index), test_index)
+                    string_index += test_index
+                } else {
+                    radical := 0
+                }
             }
             else
             {

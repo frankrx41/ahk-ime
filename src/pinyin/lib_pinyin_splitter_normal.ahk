@@ -57,6 +57,7 @@ PinyinSplitterInputStringNormal(input_string)
                 tone        := PinyinSplitterGetTone2(SubStr(input_string, string_index), test_index)
                 string_index += test_index
 
+                ; Assert( !(!InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone)) )
                 if( !empty_tone ) {
                     radical := PinyinSplitterGetRadical(SubStr(input_string, string_index), test_index)
                     string_index += test_index
@@ -79,7 +80,7 @@ PinyinSplitterInputStringNormal(input_string)
                 hope_length_list.Push(0)
             }
         }
-        ; 忽略
+        ; Ignore
         else
         {
             if( check_mark == "'" ){

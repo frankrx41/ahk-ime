@@ -23,15 +23,20 @@ PinyinSplitterGetTone2(input_str, ByRef test_index)
     local
     test_index := 0
     tone := SubStr(input_str, 1, 1)
-    if( IsEmptyTone(tone) )
-    {
+    ; if( IsBadTone(initials, vowels, tone) ) {
+    ;     tone := 0
+    ; }
+    ; else
+    if( IsEmptyTone(tone) ) {
         test_index := 1
         tone := 0
-    } else
+    }
+    else
     if( IsTone(tone) )
     {
         test_index := 1
-    } else
+    }
+    else
     {
         tone := 0
     }

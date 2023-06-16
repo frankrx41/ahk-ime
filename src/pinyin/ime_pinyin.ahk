@@ -3,7 +3,7 @@
 IsBadTone(initials, vowels, tone)
 {
     static pinyin_bad_tones
-    if( tone == "0" || tone == "'" ){
+    if( tone == "0" || IsEmptyTone(tone) ){
         return false
     }
     pinyin_bad_tones := { "a3": 1
