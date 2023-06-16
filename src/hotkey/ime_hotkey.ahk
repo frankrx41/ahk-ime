@@ -293,13 +293,18 @@
         ImeTooltipUpdate()
     return
 
-
     ; 更新候选框位置
     ~WheelUp::
     ~WheelDown::
     ~LButton up::
         Sleep, 10
         ImeTooltipUpdatePos()
+        ImeTooltipUpdate()
+    return
+
+    !C::
+        CopyTooltipText()
+        ImeInputterClearAll()
         ImeTooltipUpdate()
     return
 #if ; ImeInputterHasAnyInput()

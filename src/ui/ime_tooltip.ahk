@@ -1,7 +1,7 @@
 ImeTooltipInitialize()
 {
     global ime_tooltip_pos := ""
-
+    global ime_tooltip_text
     ImeThemeInitialize()
 }
 
@@ -137,10 +137,11 @@ ImeTooltipUpdatePos()
 ImeTooltipUpdate()
 {
     local
+    global ime_tooltip_text
 
     if( !ImeInputterHasAnyInput() )
     {
-        tooltip_string := ""
+        ime_tooltip_text := ""
     }
     else
     {
@@ -193,11 +194,11 @@ ImeTooltipUpdate()
         debug_tip := ImeDebugGetDisplayText()
 
         inputter_string := ImeInputterGetDisplayString(false)
-        tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info debug_tip
-        ; tooltip_string := inputter_string "`n" ime_select_str "`n" extern_info
+        ime_tooltip_text := inputter_string "`n" ime_select_str "`n" extern_info debug_tip
+        ; ime_tooltip_text := inputter_string "`n" ime_select_str "`n" extern_info
     }
 
-    ImeTooltipShow(tooltip_string)
+    ImeTooltipShow(ime_tooltip_text)
     return
 }
 
@@ -254,4 +255,11 @@ ImeTooltipShow(tooltip_string)
             last_y := new_y
         }
     }
+}
+
+CopyTooltipText()
+{
+    global ime_tooltip_text
+    Clipboard := ime_tooltip_text
+    return
 }
