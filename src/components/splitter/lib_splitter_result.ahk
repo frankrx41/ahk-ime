@@ -56,3 +56,10 @@ SplitterResultGetHopeLength(splitter_result) {
 SplitterResultIsCompleted(splitter_result) {
     return splitter_result["is_complete"]
 }
+
+;*******************************************************************************
+;
+SplitterResultSetHopeLength(splitter_result, hope_length)
+{
+    splitter_result["hope_length"] := hope_length
+}

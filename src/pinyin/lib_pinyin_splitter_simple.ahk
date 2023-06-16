@@ -79,8 +79,8 @@ PinyinSplitterInputStringSimple(input_string)
         }
     }
 
-    splitter_return_list := PinyinSplitterUpdateHopeLength(splitter_list, hope_length_list)
+    PinyinSplitterUpdateHopeLength(splitter_list, hope_length_list)
 
-    ImeProfilerEnd("""" input_string """ -> [" SplitterResultListGetDebugText(splitter_return_list) "] " "(" splitter_return_list.Length() ")")
-    return splitter_return_list
+    ImeProfilerEnd("""" input_string """ -> [" SplitterResultListGetDebugText(splitter_list) "] " "(" splitter_list.Length() ")")
+    return splitter_list
 }

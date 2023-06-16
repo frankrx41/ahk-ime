@@ -69,17 +69,11 @@ PinyinSplitterParseRadical(input_string, ByRef parsing_length)
 PinyinSplitterUpdateHopeLength(ByRef splitter_list, ByRef hope_length_list)
 {
     local
-    splitter_return_list := []
+
     loop, % splitter_list.Length()
     {
         splitter_result := splitter_list[A_Index]
-        pinyin          := SplitterResultGetPinyin(splitter_result)
-        tone            := SplitterResultGetTone(splitter_result)
-        radical         := SplitterResultGetRadical(splitter_result)
-        start_pos       := SplitterResultGetStartPos(splitter_result)
-        end_pos         := SplitterResultGetEndPos(splitter_result)
         need_translate  := SplitterResultNeedTranslate(splitter_result)
-
         if( need_translate ){
             if( hope_length_list[1] == 0 ){
                 hope_length_list.RemoveAt(1)
@@ -89,9 +83,6 @@ PinyinSplitterUpdateHopeLength(ByRef splitter_list, ByRef hope_length_list)
         } else {
             hope_length := 1
         }
-
-        make_result := SplitterResultMake(pinyin, tone, radical, start_pos, end_pos, need_translate, hope_length)
-        splitter_return_list.Push(make_result)
+        SplitterResultSetHopeLength(splitter_result, hope_length)
     }
-    return splitter_return_list
 }
