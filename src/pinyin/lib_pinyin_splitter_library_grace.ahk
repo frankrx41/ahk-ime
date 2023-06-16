@@ -22,7 +22,7 @@ PinyinSplitterGetWeight(splitted_string, prev_splitted_input:="")
 ; [banan]: [nan->ba0nan0(-1)][na->ba0na0(25373)] / [an->ban0an0(26693)]
 ; [xieru]: [eru] / [ru->xie0ru0(26688)]
 ; [wanan]: [nan->wa0nan0(-1)][na->wa0na0(23056)] / [an->wan0an0(26606)]
-PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_splitted_input)
+PinyinSplitterCheckIsMaxWeightWord(left_initials, left_vowels, right_string, prev_splitted_input)
 {
     right_string_len := StrLen(right_string)
     left_vowels_cut_last := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
@@ -32,7 +32,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
     max_word_weight := 0
     result_word := ""
 
-    max_test_len := PinyinSplitterCalcMaxVowelsLength2(right_string, 4)
+    max_test_len := PinyinSplitterCalcMaxVowelsLength(right_string, 4)
     initials := SubStr(left_vowels, 0, 1)
     loop,
     {
@@ -63,7 +63,7 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
 
     profile_text .= " / "
 
-    max_test_len := PinyinSplitterCalcMaxVowelsLength2(SubStr(right_string, 2), 4)
+    max_test_len := PinyinSplitterCalcMaxVowelsLength(SubStr(right_string, 2), 4)
     initials := SubStr(right_string, 1, 1)
     loop,
     {
@@ -129,7 +129,7 @@ PinyinSplitterIsGraceful(left_initials, left_vowels, right_string, prev_splitted
         if( !IsInitials(SubStr(left_vowels, 0, 1)) ) {
             return true
         }
-        return PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_splitted_input)
+        return PinyinSplitterCheckIsMaxWeightWord(left_initials, left_vowels, right_string, prev_splitted_input)
     }
     else
     {

@@ -85,14 +85,14 @@ PinyinSplitterInputStringDouble(input_string)
         {
             start_string_index := string_index
 
-            initials    := PinyinSplitterGetInitials(input_string, double_initials, string_index, "DoubleToNormal")
-            vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input, "DoubleToNormal", 2)
+            initials    := PinyinSplitterParseInitials(input_string, double_initials, string_index, "DoubleToNormal")
+            vowels      := PinyinSplitterParseVowels(input_string, initials, string_index, prev_splitted_input, "DoubleToNormal", 2)
             if( vowels == "%" ) {
-                vowels  := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
+                vowels  := PinyinSplitterParseVowels(input_string, initials, string_index, prev_splitted_input)
             }
             full_vowels := GetFullVowels(initials, vowels)
             tone_string := SubStr(input_string, string_index, 1)
-            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
+            tone        := PinyinSplitterParseTone(input_string, initials, vowels, string_index)
 
             if( !InStr(vowels, "%") ) {
                 if( initials ) {

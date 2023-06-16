@@ -1,6 +1,6 @@
 ;*******************************************************************************
 ;
-IsBadTone(initials, vowels, tone)
+IsIllegalTone(initials, vowels, tone)
 {
     static pinyin_bad_tones
     if( tone == "0" || IsEmptyTone(tone) ){
@@ -126,7 +126,7 @@ IsCompletePinyin(initials, vowels, tone:="'", allow_correct:=true)
         }
         if( is_complete && tone )
         {
-            is_complete := !IsBadTone(initials, vowels, tone)
+            is_complete := !IsIllegalTone(initials, vowels, tone)
         }
         return is_complete
     }

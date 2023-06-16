@@ -20,7 +20,7 @@ PinyinSplitterCheckCanSplit(input_str, index, initials, vowels, vowels_len, prev
 
 ;*******************************************************************************
 ; `allow_max_len`: max length may be 4, e.g. "iong" "uang"
-PinyinSplitterCalcMaxVowelsLength2(input_str, allow_max_len:=4)
+PinyinSplitterCalcMaxVowelsLength(input_str, allow_max_len:=4)
 {
     local
     strlen := StrLen(input_str)
@@ -55,13 +55,13 @@ PinyinSplitterCalcMaxVowelsLength2(input_str, allow_max_len:=4)
     return vowels_max_len
 }
 
-PinyinSplitterGetVowels2(input_str, initials, prev_splitted_input, ByRef test_index)
+PinyinSplitterParseVowels(input_str, initials, prev_splitted_input, ByRef parsing_length)
 {
     local
-    vowels_max_len  := PinyinSplitterCalcMaxVowelsLength2(input_str, 4)
+    vowels_max_len  := PinyinSplitterCalcMaxVowelsLength(input_str, 4)
     vowels          := ""
     vowels_len      := 0
-    test_index      := 0
+    parsing_length      := 0
     found_vowels    := false
     if( vowels_max_len > 0 )
     {
@@ -94,7 +94,7 @@ PinyinSplitterGetVowels2(input_str, initials, prev_splitted_input, ByRef test_in
             }
         }
     }
-    test_index := vowels_len
+    parsing_length := vowels_len
 
     if( IsVowelsAnyMark(vowels) ){
         vowels := "%"

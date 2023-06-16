@@ -34,7 +34,7 @@ PinyinSplitterInputStringSimple(input_string)
 
             if( !IsRepeatMark(check_mark) )
             {
-                test_index := 0
+                parsing_length := 0
                 if( IsInitialsAnyMark(check_mark) ){
                     initials := "%"
                 } else {
@@ -44,12 +44,12 @@ PinyinSplitterInputStringSimple(input_string)
 
                 vowels      := "%"
                 empty_tone  := IsEmptyTone(SubStr(input_string, string_index, 1))
-                tone        := PinyinSplitterGetTone2(SubStr(input_string, string_index), test_index)
-                string_index += test_index
+                tone        := PinyinSplitterParseTone(SubStr(input_string, string_index), parsing_length)
+                string_index += parsing_length
 
                 if( !empty_tone ) {
-                    radical := PinyinSplitterGetRadical(SubStr(input_string, string_index), test_index)
-                    string_index += test_index
+                    radical := PinyinSplitterParseRadical(SubStr(input_string, string_index), parsing_length)
+                    string_index += parsing_length
                 } else {
                     radical := 0
                 }

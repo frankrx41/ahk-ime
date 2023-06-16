@@ -44,23 +44,23 @@ PinyinSplitterInputStringNormal(input_string)
             start_string_index := string_index
             if( !IsRepeatMark(check_mark) )
             {
-                test_index  := 0
-                initials    := PinyinSplitterGetInitials2(SubStr(input_string, string_index), test_index)
-                string_index += test_index
+                parsing_length  := 0
+                initials    := PinyinSplitterParseInitials(SubStr(input_string, string_index), parsing_length)
+                string_index += parsing_length
 
-                vowels      := PinyinSplitterGetVowels2(SubStr(input_string, string_index), initials, prev_splitted_input, test_index)
+                vowels      := PinyinSplitterParseVowels(SubStr(input_string, string_index), initials, prev_splitted_input, parsing_length)
                 full_vowels := GetFullVowels(initials, vowels)
                 vowels      := full_vowels ? full_vowels : vowels
-                string_index += test_index
+                string_index += parsing_length
 
                 empty_tone  := IsEmptyTone(SubStr(input_string, string_index, 1))
-                tone        := PinyinSplitterGetTone2(SubStr(input_string, string_index), test_index)
-                string_index += test_index
+                tone        := PinyinSplitterParseTone(SubStr(input_string, string_index), parsing_length)
+                string_index += parsing_length
 
                 ; Assert( !(!InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone)) )
                 if( !empty_tone ) {
-                    radical := PinyinSplitterGetRadical(SubStr(input_string, string_index), test_index)
-                    string_index += test_index
+                    radical := PinyinSplitterParseRadical(SubStr(input_string, string_index), parsing_length)
+                    string_index += parsing_length
                 } else {
                     radical := 0
                 }

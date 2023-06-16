@@ -188,7 +188,7 @@ PinyinSplitterInputStringBopomofo(input_string)
             vowels      := PinyinSplitterGetBopomofoVowels(input_string, initials, string_index, prev_splitted_input)
             full_vowels := GetFullVowels(initials, vowels)
             tone_string := SubStr(input_string, string_index, 1)
-            tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
+            tone        := PinyinSplitterParseTone(input_string, initials, vowels, string_index)
 
             if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
                 vowels .= "%"

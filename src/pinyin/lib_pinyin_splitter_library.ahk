@@ -1,23 +1,25 @@
 ;*******************************************************************************
 ; Return 012345, marks tone
-; Update `test_index`
-PinyinSplitterGetTone2(input_str, ByRef test_index)
+; Update `parsing_length`
+PinyinSplitterParseTone(input_str, ByRef parsing_length)
 {
     local
-    test_index := 0
+    parsing_length := 0
     tone := SubStr(input_str, 1, 1)
-    ; if( IsBadTone(initials, vowels, tone) ) {
+    ; We not check the tone is illegal or not
+    ; So if illegal, it will show the origin input
+    ; if( IsIllegalTone(initials, vowels, tone) ) {
     ;     tone := 0
     ; }
     ; else
     if( IsEmptyTone(tone) ) {
-        test_index := 1
+        parsing_length := 1
         tone := 0
     }
     else
     if( IsTone(tone) )
     {
-        test_index := 1
+        parsing_length := 1
     }
     else
     {
@@ -27,21 +29,21 @@ PinyinSplitterGetTone2(input_str, ByRef test_index)
 }
 
 ;*******************************************************************************
-;
-PinyinSplitterGetInitials2(input_str, ByRef test_index)
+; Return initials and update parsing_length
+PinyinSplitterParseInitials(input_str, ByRef parsing_length)
 {
     local
-    test_index := 1
+    parsing_length := 1
     initials := SubStr(input_str, 1, 1)
     if( IsInitialsAnyMark(initials) ){
         initials := "%"
     }
     if( InStr("zcs", initials) && (SubStr(input_str, 2, 1)=="h") ){
-        test_index += 1
+        parsing_length += 1
         initials .= "h"
     }
     if( InStr("zcs", initials) && (SubStr(input_str, 2, 1)=="?") ){
-        test_index += 1
+        parsing_length += 1
         initials .= "?"
     }
     Assert(Asc(initials) == Asc(Format("{:L}", initials)))
@@ -53,9 +55,11 @@ IsNeedSplit(check_mark)
     return IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark)
 }
 
-PinyinSplitterGetRadical(input_string, ByRef test_index)
+;*******************************************************************************
+;
+PinyinSplitterParseRadical(input_string, ByRef parsing_length)
 {
     radical := GetRadical(input_string)
-    test_index := StrLen(radical)
+    parsing_length := StrLen(radical)
     return radical
 }
