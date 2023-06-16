@@ -55,7 +55,7 @@ PinyinSplitterCalcMaxVowelsLength(input_str, allow_max_len:=4)
     return vowels_max_len
 }
 
-PinyinSplitterParseVowels(input_str, initials, prev_splitted_input, ByRef parsing_length)
+PinyinSplitterParseVowels(input_str, initials, prev_splitted_input, ByRef parsing_length, covert_func:="NormalToNormal")
 {
     local
     vowels_max_len  := PinyinSplitterCalcMaxVowelsLength(input_str, 4)
@@ -76,7 +76,7 @@ PinyinSplitterParseVowels(input_str, initials, prev_splitted_input, ByRef parsin
             last_vowels := ""
             loop
             {
-                covert_vowels := Func("NormalToNormal").Call(vowels, A_Index)
+                covert_vowels := Func(covert_func).Call(vowels, A_Index)
                 if( last_vowels == covert_vowels ) {
                     break
                 }
