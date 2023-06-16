@@ -26,7 +26,7 @@ PinyinSplitterCalcMaxVowelsLength(input_str, allow_max_len:=4)
     strlen := StrLen(input_str)
     vowels_max_len := 0
     loop {
-        if( vowels_max_len >= allow_max_len || vowels_max_len-1>=strlen ){
+        if( vowels_max_len >= allow_max_len || vowels_max_len>=strlen ){
             break
         }
         check_char := SubStr(input_str, vowels_max_len+1, 1)
@@ -61,7 +61,7 @@ PinyinSplitterParseVowels(input_str, initials, prev_splitted_input, ByRef parsin
     vowels_max_len  := PinyinSplitterCalcMaxVowelsLength(input_str, 4)
     vowels          := ""
     vowels_len      := 0
-    parsing_length      := 0
+    parsing_length  := 0
     found_vowels    := false
     if( vowels_max_len > 0 )
     {
