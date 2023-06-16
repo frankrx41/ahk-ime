@@ -1,286 +1,8 @@
-
-IsMustSplit(next_char)
-{
-    return next_char == "" || IsRadical(next_char) || IsTone(next_char) || IsSymbol(next_char) || IsInitialsAnyMark(next_char)
-}
-
-;*******************************************************************************
-;
-PinyinSplitterGetWeight(splitted_string, prev_splitted_input:="")
-{
-    static splitted_string_weight_table := {}
-    Assert(splitted_string, "", false)
-    if( prev_splitted_input == "" )
-    {
-        if( !splitted_string_weight_table.HasKey(splitted_string) )
-        {
-            ; splitted_string_weight_table[splitted_string] := PinyinSqlGetWeight(splitted_string)
-            splitted_string_weight_table[splitted_string] := ImeTranslatorHistoryGetWeight(splitted_string)
-        }
-        return splitted_string_weight_table[splitted_string]
-    }
-    else
-    {
-        return Max(PinyinSplitterGetWeight(prev_splitted_input . splitted_string), PinyinSplitterGetWeight(splitted_string))
-    }
-}
-
-; [banan]: [nan->ba0nan0(-1)][na->ba0na0(25373)] / [an->ban0an0(26693)]
-; [xieru]: [eru] / [ru->xie0ru0(26688)]
-; [wanan]: [nan->wa0nan0(-1)][na->wa0na0(23056)] / [an->wan0an0(26606)]
-PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_splitted_input)
-{
-    right_string_len := StrLen(right_string)
-    left_vowels_cut_last := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
-
-    ImeProfilerBegin()
-    profile_text := "[" left_initials left_vowels SubStr(right_string, 1, 4) "]: "
-    max_word_weight := 0
-    result_word := ""
-
-    max_test_len := PinyinSplitterCalcMaxVowelsLength(right_string, 1, "NormalToNormal", 4)
-    initials := SubStr(left_vowels, 0, 1)
-    loop,
-    {
-        test_len := max_test_len - A_Index + 1
-        if( test_len < 1 || left_vowels_cut_last == "" ) {
-            break
-        }
-        next_char := SubStr(right_string, test_len+1, 1)
-        if( next_char == "" || IsMustSplit(next_char) || IsInitials(next_char) )
-        {
-            test_vowels := SubStr(right_string, 1, test_len)
-            profile_text .= "[" initials test_vowels
-            if( IsCompletePinyin(initials, test_vowels, "", false) )
-            {
-                full_vowels := GetFullVowels(initials, test_vowels)
-                test_word := left_initials . left_vowels_cut_last "0" initials . full_vowels "0"
-                ; if( IsCompletePinyin(left_initials, left_vowels_cut_last) && IsCompletePinyin(initials, full_vowels) )
-                word_weight := PinyinSplitterGetWeight(test_word, prev_splitted_input)
-                if( word_weight > max_word_weight ){
-                    max_word_weight := word_weight
-                    result_word := left_initials . left_vowels_cut_last
-                }
-                profile_text .= "->" test_word "(" word_weight ")"
-            }
-            profile_text .= "]"
-        }
-    }
-
-    profile_text .= " / "
-
-    max_test_len := PinyinSplitterCalcMaxVowelsLength(SubStr(right_string, 2), 1, "NormalToNormal", 4)
-    initials := SubStr(right_string, 1, 1)
-    loop,
-    {
-        test_len := max_test_len - A_Index + 1
-        if( test_len < 1 || left_vowels == "" ) {
-            break
-        }
-        next_char := SubStr(right_string, test_len+2, 1)
-        if( next_char == "" || IsMustSplit(next_char) || IsInitials(next_char) )
-        {
-            test_vowels := SubStr(right_string, 2, test_len)
-            profile_text .= "[" initials test_vowels
-            if( IsCompletePinyin(initials, test_vowels, "", false) )
-            {
-                full_vowels := GetFullVowels(initials, test_vowels)
-                test_word := left_initials . left_vowels "0" initials . full_vowels "0"
-                word_weight := PinyinSplitterGetWeight(test_word, prev_splitted_input)
-                if( word_weight > max_word_weight ){
-                    max_word_weight := word_weight
-                    result_word := left_initials . left_vowels
-                }
-                profile_text .= "->" test_word "(" word_weight ")"
-            }
-            profile_text .= "]"
-        }
-    }
-
-    ImeProfilerEnd(profile_text)
-
-    if( max_word_weight > 0 )
-    {
-        return (left_initials . left_vowels) == result_word
-    }
-
-    first_char := SubStr(right_string, 1, 1)
-    if( IsZeroInitials(first_char) ){
-        if( !IsCompletePinyin(first_char, SubStr(right_string, 2, 1)) && !IsCompletePinyin(first_char, SubStr(right_string, 2, 2)) ){
-            return false
-        }
-    }
-
-    return true
-}
-
-PinyinSplitterIsGraceful(left_initials, left_vowels, right_string, prev_splitted_input)
-{
-    next_char := SubStr(right_string, 1, 1)
-    if( !right_string || IsTone(next_char) ){
-        return true
-    }
-
-    right_initials := SubStr(left_vowels, 0, 1)
-    if( right_initials == "?" ){
-        return true
-    }
-
-    left_vowels_cut := SubStr(left_vowels, 1, StrLen(left_vowels)-1)
-    if( IsCompletePinyin(left_initials, left_vowels_cut) )
-    {
-        if( !IsCompletePinyin(left_initials, left_vowels, "'", false) ) {
-            return false
-        }
-        if( !IsInitials(SubStr(left_vowels, 0, 1)) ) {
-            return true
-        }
-        return PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_splitted_input)
-    }
-    else
-    {
-        return true
-    }
-}
-
 ;*******************************************************************************
 ;
 NormalToNormal(word, index)
 {
     return word
-}
-
-;*******************************************************************************
-;
-PinyinSplitterGetInitials(input_str, initials, ByRef index, covert_func:="NormalToNormal")
-{
-    local
-    index += 1
-    
-    initials := Func(covert_func).Call(initials, 0)
-    if( IsInitialsAnyMark(initials) ){
-        initials := "%"
-    }
-    if( InStr("zcs", initials) && (SubStr(input_str, index, 1)=="h") ){
-        ; zcs + h
-        index += 1
-        initials .= "h"
-    }
-    if( InStr("zcs", initials) && (SubStr(input_str, index, 1)=="?") ){
-        index += 1
-        initials .= "?"
-    }
-    initials := Format("{:L}", initials)
-    return initials
-}
-
-;*******************************************************************************
-; `allow_max_len`: max length may be 4, e.g. "iong" "uang"
-PinyinSplitterCalcMaxVowelsLength(input_str, index, covert_func, allow_max_len)
-{
-    local
-    strlen := StrLen(input_str)
-    vowels_max_len := 0
-    loop {
-        if( vowels_max_len >= allow_max_len || index+vowels_max_len-1>=strlen ){
-            break
-        }
-        check_char := SubStr(input_str, index+vowels_max_len, 1)
-        check_char := Func(covert_func).Call(check_char, 0)
-
-        if( IsVowelsAnyMark(check_char) )
-        {
-            if( vowels_max_len == 0 ){
-                vowels_max_len := 1
-            }
-            break
-        }
-        if( IsTone(check_char) ){
-            break
-        }
-        if( IsRadical(check_char) ){
-            break
-        }
-        if( IsRadical(check_char) ){
-            break
-        }
-        if( IsInitialsAnyMark(check_char) ){
-            break
-        }
-        vowels_max_len += 1
-    }
-    return vowels_max_len
-}
-
-PinyinSplitterCheckCanSplit(input_str, index, initials, vowels, vowels_len, prev_splitted_input)
-{
-    next_char := SubStr(input_str, index+vowels_len, 1)
-    if( IsMustSplit(next_char) ){
-        return true
-    }
-    if( !IsZeroInitials(initials) && vowels_len == 1 ){
-        return true
-    }
-    if( IsInitials(next_char) && PinyinSplitterIsGraceful(initials, vowels, SubStr(input_str, index+vowels_len), prev_splitted_input) ) {
-        return true
-    }
-    return false
-}
-
-PinyinSplitterGetVowels(input_str, initials, ByRef index, prev_splitted_input, covert_func:="NormalToNormal", allow_max_len:=4)
-{
-    local
-    vowels_max_len  := PinyinSplitterCalcMaxVowelsLength(input_str, index, covert_func, allow_max_len)
-    vowels          := ""
-    vowels_len      := 0
-    found_vowels    := false
-    if( vowels_max_len > 0 )
-    {
-        loop
-        {
-            vowels_len := vowels_max_len+1-A_Index
-            vowels := SubStr(input_str, index, vowels_len)
-            if( IsVowelsAnyMark(vowels) )
-            {
-                break
-            }
-            last_vowels := ""
-            loop
-            {
-                covert_vowels := Func(covert_func).Call(vowels, A_Index)
-                if( last_vowels == covert_vowels ) {
-                    break
-                }
-                if( IsCompletePinyin(initials, covert_vowels) ) {
-                    if( PinyinSplitterCheckCanSplit(input_str, index, initials, vowels, vowels_len, prev_splitted_input) ){
-                        vowels := covert_vowels
-                        found_vowels := true
-                        break
-                    }
-                }
-                last_vowels := covert_vowels
-            }
-            if( A_Index >= vowels_max_len+1 || found_vowels ){
-                break
-            }
-        }
-    }
-    index += vowels_len
-
-    if( IsVowelsAnyMark(vowels) ){
-        vowels := "%"
-    }
-    else if( initials ) {
-        if( !IsCompletePinyin(initials, vowels) ){
-            vowels .= "%"
-        }
-    } else {
-        if( !IsCompletePinyin(vowels, "") ){
-            vowels .= "%"
-        }
-    }
-
-    return vowels
 }
 
 ;*******************************************************************************
@@ -303,7 +25,7 @@ PinyinSplitterInputStringNormal(input_string)
     {
         check_mark := SubStr(input_string, string_index, 1)
 
-        if( string_index > strlen || IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark) )
+        if( string_index > strlen || IsNeedSplit(check_mark) )
         {
             if( escape_string ) {
                 make_result := SplitterResultMake(escape_string, 0, "", start_string_index, string_index-1, false)
@@ -317,33 +39,33 @@ PinyinSplitterInputStringNormal(input_string)
             break
         }
 
-        ; 字母，自动分词
-        if( IsInitials(check_mark) || IsInitialsAnyMark(check_mark) || IsRepeatMark(check_mark) )
+        if( IsNeedSplit(check_mark) )
         {
             start_string_index := string_index
-
             if( !IsRepeatMark(check_mark) )
             {
-                initials    := PinyinSplitterGetInitials(input_string, check_mark, string_index)
-                vowels      := PinyinSplitterGetVowels(input_string, initials, string_index, prev_splitted_input)
+                test_index  := 0
+                initials    := PinyinSplitterGetInitials2(SubStr(input_string, string_index), test_index)
+                string_index += test_index
+
+                vowels      := PinyinSplitterGetVowels2(SubStr(input_string, string_index), initials, prev_splitted_input, test_index)
                 full_vowels := GetFullVowels(initials, vowels)
-                tone_string := SubStr(input_string, string_index, 1)
-                tone        := PinyinSplitterGetTone(input_string, initials, vowels, string_index)
+                vowels      := full_vowels ? full_vowels : vowels
+                string_index += test_index
 
-                if( !InStr(vowels, "%") && !IsCompletePinyin(initials, vowels, tone) ){
-                    vowels .= "%"
-                }
-                else
-                {
-                    ; 转全拼显示
-                    vowels := full_vowels ? full_vowels : vowels
-                }
+                empty_tone  := IsEmptyTone(SubStr(input_string, string_index, 1))
+                tone        := PinyinSplitterGetTone2(SubStr(input_string, string_index), test_index)
+                string_index += test_index
 
-                ; Radical
-                radical := GetRadical(SubStr(input_string, string_index))
-                string_index += StrLen(radical)
+                if( !empty_tone ) {
+                    radical := PinyinSplitterGetRadical(SubStr(input_string, string_index), test_index)
+                    string_index += test_index
+                } else {
+                    radical := 0
+                }
             } else {
                 string_index += 1
+                empty_tone := false
                 radical .= check_mark
             }
 
@@ -353,7 +75,7 @@ PinyinSplitterInputStringNormal(input_string)
             prev_splitted_input := initials . vowels . tone
 
             hope_length_list[hope_length_list.Length()] += 1
-            if( tone_string == " " ){
+            if( empty_tone == " " ){
                 hope_length_list.Push(0)
             }
         }

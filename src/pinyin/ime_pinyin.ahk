@@ -200,15 +200,20 @@ IsTone(char)
     return char != "" && InStr("012345' ", char)
 }
 
-IsRadical(char)
+IsEmptyTone(char)
 {
-    return char != "" && (InStr("AEOIUBPMFDTNLGKHJQXZCSRYWV", char, true) || InStr("!@#$^&=", char, true))
+    return char != "" && InStr("' ", char)
 }
 
 GetRadical(input_string)
 {
     RegExMatch(input_string, "^([A-Z!@#$^&]+)", radical)
     return radical
+}
+
+IsRadical(char)
+{
+    return char != "" && (InStr("AEOIUBPMFDTNLGKHJQXZCSRYWV", char, true) || InStr("!@#$^&=", char, true))
 }
 
 IsSymbol(char)
