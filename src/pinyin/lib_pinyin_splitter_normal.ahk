@@ -25,10 +25,9 @@ PinyinSplitterGetWeight(splitted_string, prev_splitted_input:="")
     }
 }
 
-; ban'an -> [ba'nan]
-; xie'ru -> [xi'eru]
-; tig'ong -> [ti'gong + tig'ong] + [ti'gon + tig'on] + [ti'go + tig'o]
-; le'ge -> [leg'e]
+; [banan]: [nan->ba0nan0(-1)][na->ba0na0(25373)] / [an->ban0an0(26693)]
+; [xieru]: [eru] / [ru->xie0ru0(26688)]
+; [wanan]: [nan->wa0nan0(-1)][na->wa0na0(23056)] / [an->wan0an0(26606)]
 PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_splitted_input)
 {
     right_string_len := StrLen(right_string)
@@ -81,7 +80,6 @@ PinyinSplitterCheckDBWeight(left_initials, left_vowels, right_string, prev_split
         next_char := SubStr(right_string, test_len+2, 1)
         if( next_char == "" || IsMustSplit(next_char) || IsInitials(next_char) )
         {
-
             test_vowels := SubStr(right_string, 2, test_len)
             profile_text .= "[" initials test_vowels
             if( IsCompletePinyin(initials, test_vowels, "", false) )
