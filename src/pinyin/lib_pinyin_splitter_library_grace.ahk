@@ -100,6 +100,11 @@ PinyinSplitterCheckIsMaxWeightWord(left_initials, left_vowels, right_string, pre
 
     first_char := SubStr(right_string, 1, 1)
     if( IsZeroInitials(first_char) ){
+        ; TODO: We need to check more vowel
+        ; Temporary fix "henexin"
+        if( left_initials . left_vowels == "hen" && first_char == "e" ) {
+            return true
+        }
         if( !IsCompletePinyin(first_char, SubStr(right_string, 2, 1)) && !IsCompletePinyin(first_char, SubStr(right_string, 2, 2)) ){
             return false
         }
