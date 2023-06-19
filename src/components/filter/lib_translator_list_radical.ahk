@@ -10,7 +10,7 @@ RadicalInitialize()
     global ime_radical_must_first    := "艹冖罓宀罒㓁癶亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸厂广耂虍疒⺈廴辶"
 
     ime_radical_table := ReadFileToTable("data\radicals.asm", "`t", "`t")
-    ime_radicals_pinyin := ReadFileToTable("data\radicals-pinyin.asm")
+    ime_radicals_pinyin := ReadFileToTable("data\radicals-pinyin.asm", "`t", " ")
 
     global radical_match_level_no_match      := 7
     global radical_match_level_no_radical    := 4
