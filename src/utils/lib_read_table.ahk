@@ -1,7 +1,8 @@
 ; Key`tvalue1 value2
 ; Ignore string start with ";"
 ; KEY<mark0><VALUE1><mark1><VALUE2><mark1><VALUE3> ; comment
-; VALUE = DATA1<mark2>DATA2<mark2>DATA3
+; if <mark2> is not null:
+;   VALUE = DATA1<mark2>DATA2<mark2>DATA3
 ReadFileToTable(file_name, mark0:="`t", mark1:=",", mark2:=" ")
 {
     FileRead, file_content, %file_name%

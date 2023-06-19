@@ -6,7 +6,7 @@ PinyinTraditionalInitialize()
         return
     }
     ime_traditional_table := {}
-    ime_traditional_table := ReadFileToTable("data\traditional.asm")
+    ime_traditional_table := ReadFileToTable("data\traditional.asm", "`t", ",", "")
     ime_traditional_initialize := true
 
     Assert(ime_traditional_table.Count() != 0, "", false)
