@@ -334,10 +334,13 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         if( match_level ) {
             match_level := (word_length-1) * 1 + match_level
         }
-        TranslatorResultAddMatchLevel(translate_result_list[index], match_level )
+
         if( match_level == 0 ) {
             translate_result_list.RemoveAt(index, 1)
         } else {
+            ; Fix sort
+            match_level += TranslatorResultGetWeight(translate_result_list[index]) / 10000000
+            TranslatorResultAddMatchLevel(translate_result_list[index], match_level)
             index += 1
         }
     }
