@@ -306,10 +306,11 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         translate_result := translate_result_list[index]
         word_value      := TranslatorResultGetWord(translate_result)
         match_level     := 0
+        word_length     := TranslatorResultGetWordLength(translate_result)
         if( RadicalCheckRepeatIsOk(word_value, radical_list) )
         {
             ; loop each character of "我爱你"
-            loop % TranslatorResultGetWordLength(translate_result)
+            loop % word_length
             {
                 test_radical := radical_list[A_Index]
                 if( test_radical )
@@ -325,6 +326,9 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
             }
         }
 
+        if( match_level ) {
+            match_level := (word_length-1) * 100 + match_level
+        }
         TranslatorResultAddMatchLevel(translate_result_list[index], match_level )
         if( match_level == 0 ) {
             translate_result_list.RemoveAt(index, 1)
