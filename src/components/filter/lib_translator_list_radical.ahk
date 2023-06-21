@@ -333,7 +333,7 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         }
     }
 
-    translate_result_list := ObjectSort(translate_result_list, 9)
+    translate_result_list := ObjectSort(translate_result_list, 9, , true)
 
     if( translate_result_list.Length() == 0 )
     {
