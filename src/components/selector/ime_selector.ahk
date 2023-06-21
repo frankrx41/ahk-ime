@@ -51,7 +51,16 @@ ImeSelectorOffsetCaretSelectIndex(offset)
     global ime_selector_select_list
     split_index := ImeInputterGetCaretSplitIndex()
     select_index := ImeSelectorGetSelectIndex(split_index) + offset
-    select_index := ImeSelectorGetAvailableSelect(select_index, split_index)
+    if( select_index == 0 && ImeCandidateGetTranslatorListLength(split_index) < 10 ) {
+        select_index := ImeCandidateGetTranslatorListLength(split_index)
+    }
+    else
+    if( select_index == ImeCandidateGetTranslatorListLength(split_index) + 1 && select_index < 11 ) {
+        select_index := 1
+    }
+    else {
+        select_index := ImeSelectorGetAvailableSelect(select_index, split_index)
+    }
     SelectorResultSetSelectIndex(ime_selector_select_list[split_index], select_index)
 }
 
