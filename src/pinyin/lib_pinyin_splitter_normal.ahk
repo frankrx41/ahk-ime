@@ -62,7 +62,7 @@ PinyinSplitterInputStringNormal(input_string)
                     radical := PinyinSplitterParseRadical(SubStr(input_string, string_index), parsing_length)
                     string_index += parsing_length
                 } else {
-                    radical := 0
+                    radical := ""
                 }
             } else {
                 string_index += 1
