@@ -47,7 +47,7 @@ TranslatorResultAppendComment(ByRef translate_result, comment) {
 }
 
 TranslatorResultAddMatchLevel(ByRef translate_result, match_level) {
-    ; 0: no_match, 1~100: match_level
+    ; 0: no_match, (0~1]: match_level
     translate_result[9] := match_level
 }
 

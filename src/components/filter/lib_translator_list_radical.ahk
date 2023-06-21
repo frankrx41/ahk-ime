@@ -155,18 +155,17 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
     ever_match_first := false
 
     skip_able_count := 1
-
+    test_radical_len := StrLen(test_radical)
+    radical_word_list_len := radical_word_list.Length()
     loop
     {
-        if( radical_word_list.Length() == 0 && test_radical == "" ){
-            return 100
-        }
         if( test_radical == "" ){
-            if( ever_match_first ){
-                return 50
-            } else {
-                return 10
-            }
+            return test_radical_len / radical_word_list_len
+            ; if( ever_match_first ){
+            ;     return 50
+            ; } else {
+            ;     return 10
+            ; }
         }
         if( radical_word_list.Length() == 0 ){
             return 0
@@ -193,6 +192,7 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
                         radical_word_list.InsertAt(A_Index, remain_radicals[A_Index])
                         skip_able_count += 1
                     }
+                    radical_word_list_len += remain_radicals.Length()
                     match_any_part := true
                     break
                 }
@@ -211,6 +211,7 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
                 {
                     radical_word_list.Push(remain_radicals[A_Index])
                 }
+                radical_word_list_len += remain_radicals.Length()
                 match_any_part := true
                 ; match_last_part := true
             }
@@ -250,7 +251,7 @@ UpdateMatchLevel(prev_match_level, curr_match_level)
 ;*******************************************************************************
 ; return:
 ;   0: No match         (No match word class or radical)
-;   1~100: match level
+;   (0~1]: match level
 RadicalCheckMatchLevel(test_word, test_radical)
 {
     ImeProfilerBegin()
@@ -325,13 +326,13 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 }
                 else
                 {
-                    match_level := 100
+                    match_level := 1
                 }
             }
         }
 
         if( match_level ) {
-            match_level := (word_length-1) * 100 + match_level
+            match_level := (word_length-1) * 1 + match_level
         }
         TranslatorResultAddMatchLevel(translate_result_list[index], match_level )
         if( match_level == 0 ) {

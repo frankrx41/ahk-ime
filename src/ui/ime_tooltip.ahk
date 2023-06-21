@@ -183,9 +183,9 @@ ImeTooltipUpdate()
         if( radical_words ) {
             extern_info .= " {" radical_words "}"
         }
-        match_level := ImeCandidateGetMatchLevel(split_index, select_index)
+        match_level := Format("{:.0f}", ImeCandidateGetMatchLevel(split_index, select_index)*100)
         if( match_level ) {
-            extern_info .= " " ImeCandidateGetMatchLevel(split_index, select_index) "%"
+            extern_info .= " " match_level "%"
         }
         extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, select_index) "|" ImeCandidateGetWordLength(split_index, select_index) ")"
         ; comment := ImeCandidateGetComment(split_index, select_index)
