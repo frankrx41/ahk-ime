@@ -323,6 +323,10 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                     }
                     match_level := UpdateMatchLevel(match_level, result_level)
                 }
+                else
+                {
+                    match_level := 100
+                }
             }
         }
 

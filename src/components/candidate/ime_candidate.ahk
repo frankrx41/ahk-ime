@@ -58,7 +58,7 @@ ImeCandidateUpdateResult(splitter_result_list)
                 }
             }
         }
-        ; Find last word
+        ; Add last length word
         ime_candidata.Push(translate_last_result_list)
 
         debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
