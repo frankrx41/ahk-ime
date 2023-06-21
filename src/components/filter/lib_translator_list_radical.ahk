@@ -226,34 +226,28 @@ UpdateMatchLevel(prev_match_level, curr_match_level)
 ;   0: No match         (No match word class or radical)
 ;   if have no radical but match word class, return 0.01
 ;   (0~1]: match level
-RadicalCheckMatchLevel(test_word, test_radical)
+RadicalCheckMatchRadicalLevel(test_word, test_radical)
 {
+    local
     ImeProfilerBegin()
     match_level := 0
-    if( RadicalCheckWordClass(test_word, test_radical) )
+    radical_word_list := CopyObj(RadicalWordSplit(test_word))
+    if( radical_word_list )
     {
-        ; You also need to update `GetRadical`
-        test_radical := RegExReplace(test_radical, "[!@#$^&=]")
-
-        radical_word_list := CopyObj(RadicalWordSplit(test_word))
-        if( radical_word_list )
+        for index, element in radical_word_list
         {
-            for index, element in radical_word_list
-            {
-                result_level := RadicalIsFullMatchList(test_word, test_radical, element)
-                match_level := UpdateMatchLevel(match_level, result_level)
-                if( match_level >= 100 ) {
-                    break
-                }
+            result_level := RadicalIsFullMatchList(test_word, test_radical, element)
+            match_level := UpdateMatchLevel(match_level, result_level)
+            if( match_level >= 100 ) {
+                break
             }
         }
-        else
-        {
-            match_level := 0.01
-        }
+    }
+    else
+    {
+        match_level := 0.01
     }
     ImeProfilerEnd()
-    return match_level
 }
 
 RadicalCheckRepeatIsOk(words, radical_list)
@@ -291,7 +285,13 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 if( test_radical )
                 {
                     test_word := SubStr(word_value, A_Index, 1)
-                    result_level := RadicalCheckMatchLevel(test_word, test_radical)
+                    result_level := RadicalCheckWordClass(test_word, test_radical)
+                    if( result_level )
+                    {
+                        ; You also need to update `GetRadical`
+                        test_radical := RegExReplace(test_radical, "[!@#$^&=]")
+                        result_level := RadicalCheckMatchRadicalLevel(test_word, test_radical)
+                    }
                     if( result_level == 0 ) {
                         match_level := 0
                         break
