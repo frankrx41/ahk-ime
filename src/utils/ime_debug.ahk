@@ -43,14 +43,17 @@ ImeDebugGetDisplayText()
         ; ```
         ; See ime_profiler.ahk for detail.
 
+        name_list := ImeProfilerGeneralGetAllNameList()
         name_list := ["PinyinSqlExecuteGetTable", "PinyinSqlGetResult"]
         name_list := ["PinyinSqlExecuteGetTable"]
-        name_list := ImeProfilerGeneralGetAllNameList()
         name_list := ["PinyinSplitterInputStringNormal", "PinyinSplitterCheckDBWeight", "PinyinSqlGetWeight", "ImeCandidateUpdateResult", "SelectorFixupSelectIndex", "PinyinSqlExecuteGetTable"]
         name_list := ["PinyinSqlGetWeight"]
         name_list := ["TranslatorResultListFilterByRadical"]
         name_list := ["ImeTranslateFilterResult", "SelectorFindGraceResultIndex", "SelectorCheckTotalWeight"]
         name_list := ["SelectorCheckTotalWeight", "SelectorFindGraceResultIndex"]
+        name_list := ["PinyinSplitterCheckDBWeight"]
+        name_list := ["PinyinSplitterInputStringNormal","PinyinSplitterInputStringSimple"]
+        name_list := ["PinyinSplitterCheckIsMaxWeightWord"]
 
         for index, element in name_list
         {
