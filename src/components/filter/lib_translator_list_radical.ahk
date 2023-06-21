@@ -326,8 +326,14 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
         }
 
         TranslatorResultAddMatchLevel(translate_result_list[index], match_level )
-        index += 1
+        if( match_level == 0 ) {
+            translate_result_list.RemoveAt(index, 1)
+        } else {
+            index += 1
+        }
     }
+
+    translate_result_list := ObjectSort(translate_result_list, 9)
 
     if( translate_result_list.Length() == 0 )
     {

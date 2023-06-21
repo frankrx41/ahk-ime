@@ -8,6 +8,7 @@
 ;   [6]: false      ; traditional:  0 false, 1 trad, 2 auto trad
 ;   [7]: 0          ; top position: 0 no top, 1 1st top, 2 2nd top
 ;   [8]: false      ; diable
+;   [9]: 100        ; match level
 ;
 TranslatorResultGetLegacyPinyin(ByRef translate_result) {
     return translate_result[1]
@@ -44,7 +45,7 @@ TranslatorResultAppendComment(ByRef translate_result, comment) {
 
 TranslatorResultAddMatchLevel(ByRef translate_result, match_level) {
     ; 0: no_match, 1~100: match_level
-    translate_result[4] := match_level "%"
+    translate_result[9] := match_level
 }
 
 ;*******************************************************************************
