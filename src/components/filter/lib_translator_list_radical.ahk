@@ -6,17 +6,11 @@ RadicalInitialize()
     local
     global ime_radical_table    := {}   ; data\radicals.txt
     global ime_radicals_pinyin  := {}   ; radicals-pinyin.txt
-    global ime_radical_atomic   := "一丨丿乀丶𠄌乁乛㇕乙𠃊乚亅㇆勹㇉𠃋匚匸冂凵⺆巜龴厶艹冖罓宀罒㓁癶覀𤇾𦥯龷皿亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸刂卩卪厂广虍疒⺈弋廴辶㔾𠂔疋肀𠔉𠤏𡿺叵囙夨夬屮丱彑𠂢旡歺辵尢夂匕刀儿几力人入又川寸大飞工弓己已巾口囗马门女山尸士巳兀夕小幺子贝长车斗方风父戈户戸戶火见斤毛木牛片气日氏手殳水瓦王韦文毋心牙曰月支止爪白甘瓜禾立龙矛母目鸟皮生石矢示田玄业臣虫而耳缶艮臼米齐肉色舌页先血羊聿至舟竹⺮自羽貝采镸車辰赤豆谷見角克里卤麦身豕辛言邑酉酋走足靑雨齿非金隶鱼鬼韭面首韋頁龹𠂉用电乃为了九万丁个丫不上下冫氵⺌⺗⻊巛"
+    global ime_radical_atomic   := "一丨丿乀丶𠄌乁乛㇕乙𠃊乚亅㇆勹㇉𠃋匚匸冂凵⺆巜龴厶艹冖罓宀罒㓁癶覀𤇾𦥯龷皿亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸刂卩卪厂广虍疒⺈弋廴辶㔾𠂔疋肀𠔉𠤏𡿺叵囙夨夬屮丱彑𠂢旡歺辵尢夂匕刀儿几力人入又川寸大飞工弓己已巾口囗马门女山尸士巳兀夕小幺子贝长车斗方风父戈户戸戶火见斤毛木牛片气日氏手殳水瓦王韦文毋心牙曰月支止爪白甘瓜禾立龙矛母目鸟皮生石矢示田玄业臣虫而耳缶艮臼米齐肉色舌页先血羊聿至舟竹⺮自羽貝采镸車辰赤豆谷見角克里卤麦身豕辛言邑酉酋走足靑雨齿非金隶鱼鬼韭面首韋頁龹𠂉用电乃为了九万丁个丫不上下冫氵⺌⺗⻊巛灬"
     global ime_radical_must_first    := "艹冖罓宀罒㓁癶亻彳阝牜衤飠纟犭丩丬礻讠訁扌忄饣釒钅爿豸厂广耂虍疒⺈廴辶"
 
     ime_radical_table := ReadFileToTable("data\radicals.asm", "`t", "`t", " ")
     ime_radicals_pinyin := ReadFileToTable("data\radicals-pinyin.asm", "`t", " ", "")
-
-    global radical_match_level_no_match      := 7
-    global radical_match_level_no_radical    := 4
-    global radical_match_level_last_match    := 3
-    global radical_match_level_part_match    := 2    ; (include first match)
-    global radical_match_level_full_match    := 1
 }
 
 ;*******************************************************************************
@@ -160,28 +154,22 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
     match_last_part := false
     ever_match_first := false
 
-    global radical_match_level_no_match
-    global radical_match_level_no_radical
-    global radical_match_level_last_match
-    global radical_match_level_part_match
-    global radical_match_level_full_match
-
     skip_able_count := 1
 
     loop
     {
         if( radical_word_list.Length() == 0 && test_radical == "" ){
-            return radical_match_level_full_match
+            return 100
         }
         if( test_radical == "" ){
             if( ever_match_first ){
-                return radical_match_level_part_match
+                return 50
             } else {
-                return radical_match_level_last_match
+                return 10
             }
         }
         if( radical_word_list.Length() == 0 ){
-            return radical_match_level_no_match
+            return 0
         }
 
         match_any_part := false
@@ -230,7 +218,7 @@ RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
 
         if( !match_any_part )
         {
-            return radical_match_level_no_match
+            return 0
         }
     }
 }
@@ -249,32 +237,44 @@ RadicalCheckWordClass(test_word, test_radical)
     return true
 }
 
+UpdateMatchLevel(prev_match_level, curr_match_level)
+{
+    if( curr_match_level > prev_match_level ) {
+        match_level := curr_match_level
+    } else {
+        match_level := prev_match_level
+    }
+    return match_level
+}
+
+;*******************************************************************************
+; return:
+;   0: No match         (No match word class or radical)
+;   1~100: match level
 RadicalCheckMatchLevel(test_word, test_radical)
 {
-    global radical_match_level_no_match
-    global radical_match_level_no_radical
-    global radical_match_level_last_match
-    global radical_match_level_part_match
-    global radical_match_level_full_match
-
     ImeProfilerBegin()
-    match_level := radical_match_level_no_match
-    if( RadicalCheckWordClass(test_word, test_radical) ){
+    match_level := 0
+    if( RadicalCheckWordClass(test_word, test_radical) )
+    {
         ; You also need to update `GetRadical`
         test_radical := RegExReplace(test_radical, "[!@#$^&=]")
 
         radical_word_list := CopyObj(RadicalWordSplit(test_word))
-        if( radical_word_list ){
+        if( radical_word_list )
+        {
             for index, element in radical_word_list
             {
-                result := RadicalIsFullMatchList(test_word, test_radical, element)
-                if( result < match_level ){
-                    match_level := result
-                }
-                if( result == radical_match_level_full_match ){
+                result_level := RadicalIsFullMatchList(test_word, test_radical, element)
+                match_level := UpdateMatchLevel(match_level, result_level)
+                if( match_level >= 100 ) {
                     break
                 }
             }
+        }
+        else
+        {
+            match_level := 1
         }
     }
     ImeProfilerEnd()
@@ -298,25 +298,16 @@ RadicalCheckRepeatIsOk(words, radical_list)
 TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
 {
     local
-    global radical_match_level_no_match
-    global radical_match_level_no_radical
-    global radical_match_level_last_match
-    global radical_match_level_part_match
-    global radical_match_level_full_match
-
-    translate_full_match_result_list := []
-    translate_last_match_result_list := []
-    translate_no_radical_result_list := []
-
     ImeProfilerBegin()
     index := 1
+
     loop % translate_result_list.Length()
     {
         translate_result := translate_result_list[index]
         word_value      := TranslatorResultGetWord(translate_result)
+        match_level     := 0
         if( RadicalCheckRepeatIsOk(word_value, radical_list) )
         {
-            match_level := radical_match_level_no_radical
             ; loop each character of "我爱你"
             loop % TranslatorResultGetWordLength(translate_result)
             {
@@ -324,63 +315,18 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 if( test_radical )
                 {
                     test_word := SubStr(word_value, A_Index, 1)
-                    match_result := RadicalCheckMatchLevel(test_word, test_radical)
-                    if( match_result == radical_match_level_no_match ) {
-                        match_level := match_result
+                    result_level := RadicalCheckMatchLevel(test_word, test_radical)
+                    if( result_level == 0 ) {
+                        match_level := 0
                         break
                     }
-                    if( match_result < match_level ) {
-                        match_level := match_result
-                    }
+                    match_level := UpdateMatchLevel(match_level, result_level)
                 }
             }
-        } else {
-            match_level := radical_match_level_no_match
         }
 
-        if( match_level == radical_match_level_full_match ) {
-            translate_full_match_result_list.Push(translate_result)
-        }
-        if( match_level == radical_match_level_last_match ) {
-            translate_last_match_result_list.Push(translate_result)
-        }
-        if( match_level == radical_match_level_no_radical ) {
-            translate_no_radical_result_list.Push(translate_result)
-        }
-
-        if( match_level != radical_match_level_part_match ) {
-            translate_result_list.RemoveAt(index)
-        } else {
-            index += 1
-        }
-    }
-
-    ; "Radical: [" radical_list "] " "(" found_result.Length() ") " ; "(" A_TickCount - begin_tick ") "
-
-    ; Show full match word first
-    loop, % translate_full_match_result_list.Length()
-    {
-        translate_result_list.InsertAt(A_Index, translate_full_match_result_list[A_Index])
-    }
-    if( translate_last_match_result_list.Length() > 0 )
-    {
-        if( translate_result_list.Length() > 0 ) {
-            translate_result_list.Push(TranslatorResultMakeDisable("", "----2-", ""))
-        }
-        loop, % translate_last_match_result_list.Length()
-        {
-            translate_result_list.Push(translate_last_match_result_list[A_Index])
-        }
-    }
-    if( translate_no_radical_result_list.Length() )
-    {
-        if( translate_result_list.Length() > 0 ) {
-            translate_result_list.Push(TranslatorResultMakeDisable("", "----3-", ""))
-        }
-        loop, % translate_no_radical_result_list.Length()
-        {
-            translate_result_list.Push(translate_no_radical_result_list[A_Index])
-        }
+        TranslatorResultAddMatchLevel(translate_result_list[index], match_level )
+        index += 1
     }
 
     if( translate_result_list.Length() == 0 )

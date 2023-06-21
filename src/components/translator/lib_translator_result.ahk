@@ -42,6 +42,11 @@ TranslatorResultAppendComment(ByRef translate_result, comment) {
     translate_result[4] .= comment
 }
 
+TranslatorResultAddMatchLevel(ByRef translate_result, match_level) {
+    ; 0: no_match, 1~100: match_level
+    translate_result[4] := match_level "%"
+}
+
 ;*******************************************************************************
 ;
 TranslatorResultMake(pinyin, word, weight, comment, word_length)
