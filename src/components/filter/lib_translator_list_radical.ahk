@@ -238,7 +238,7 @@ RadicalCheckMatchRadicalLevel(test_word, test_radical)
         {
             result_level := RadicalIsFullMatchList(test_word, test_radical, element)
             match_level := UpdateMatchLevel(match_level, result_level)
-            if( match_level >= 100 ) {
+            if( match_level >= 1 ) {
                 break
             }
         }
@@ -248,6 +248,7 @@ RadicalCheckMatchRadicalLevel(test_word, test_radical)
         match_level := 0.01
     }
     ImeProfilerEnd()
+    return match_level
 }
 
 RadicalCheckRepeatIsOk(words, radical_list)
