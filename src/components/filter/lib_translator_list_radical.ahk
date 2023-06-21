@@ -65,12 +65,11 @@ RadicalRecordMissWord(word)
 
 ;*******************************************************************************
 ;
+; e.g. 干 -> 二 丨, "一" H and "二" E both think match
 RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 {
     local
-    if( !test_word ){
-        return true
-    }
+    Assert( test_word, test_word, "msgbox" )
 
     can_continue_split := false
     if( !RadicalIsAtomic(test_word) )
@@ -104,6 +103,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
             test_radical := SubStr(test_radical, 2)
             return true
         }
+        ; e.g. 肉 -> 冂 仌, "人" R will also be match
         if( !RadicalIsMustFirst(test_word) && RadicalCheckPinyin(test_word, SubStr(test_radical, 0, 1)) ) {
             test_radical := SubStr(test_radical, 1, StrLen(test_radical)-1)
             return true
@@ -151,74 +151,50 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
 {
     local
-    match_last_part := false
-    ever_match_first := false
+    skip_able_count := 2
 
-    skip_able_count := 1
-    test_radical_len := StrLen(test_radical)
-    radical_word_list_len := radical_word_list.Length()
+    test_radical_len        := StrLen(test_radical)
+    skip_count              := 0
+    radical_word_list_len   := radical_word_list.Length()
     loop
     {
         if( test_radical == "" ){
-            return test_radical_len / radical_word_list_len
-            ; if( ever_match_first ){
-            ;     return 50
-            ; } else {
-            ;     return 10
-            ; }
+            return (test_radical_len - (skip_count/10)) / radical_word_list_len
         }
         if( radical_word_list.Length() == 0 ){
             return 0
         }
 
         match_any_part := false
-
         ; Check if is part of first char
-        ; e.g. 干 -> 二 丨, "一" H and "二" E both think match
-        if( !match_any_part )
+        loop, % skip_able_count
         {
-            loop, % skip_able_count
-            {
-                skip_able_index := A_Index
-                first_word := radical_word_list[skip_able_index]
-                remain_radicals := []
-                if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
-                {
-                    ever_match_first := true
-                    radical_word_list.RemoveAt(1, skip_able_index)
-                    skip_able_count := 1
-                    loop, % remain_radicals.Length()
-                    {
-                        radical_word_list.InsertAt(A_Index, remain_radicals[A_Index])
-                        skip_able_count += 1
-                    }
-                    radical_word_list_len += remain_radicals.Length()
-                    match_any_part := true
-                    break
-                }
+            check_index := A_Index
+            if( check_index > radical_word_list.Length() ) {
+                break
             }
-        }
-
-        ; e.g. 肉 -> 冂 仌, "人" R will also be match
-        if( !match_any_part && !match_last_part )
-        {
-            last_word := radical_word_list[radical_word_list.Length()]
+            first_word := radical_word_list[check_index]
             remain_radicals := []
-            if( RadicalMatchFirstPart(last_word, test_radical, remain_radicals) )
+            Assert(first_word, test_word "> " check_index ", " first_word, "msgbox")
+            if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
             {
-                radical_word_list.RemoveAt(radical_word_list.Length())
-                loop, % remain_radicals.Length()
-                {
-                    radical_word_list.Push(remain_radicals[A_Index])
+                ever_match_first := true
+                radical_word_list.RemoveAt(1, check_index)
+                loop, % remain_radicals.Length() {
+                    radical_word_list.InsertAt(A_Index, remain_radicals[A_Index])
                 }
+                skip_able_count := remain_radicals.Length() + 1
                 radical_word_list_len += remain_radicals.Length()
                 match_any_part := true
-                ; match_last_part := true
+                break
+            }
+            else
+            {
+                skip_count += 1
             }
         }
 
-        if( !match_any_part )
-        {
+        if( !match_any_part ) {
             return 0
         }
     }
@@ -275,7 +251,7 @@ RadicalCheckMatchLevel(test_word, test_radical)
         }
         else
         {
-            match_level := 1
+            match_level := 0.01
         }
     }
     ImeProfilerEnd()
