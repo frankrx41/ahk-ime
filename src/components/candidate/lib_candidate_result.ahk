@@ -60,6 +60,11 @@ CandidateIsDisable(ByRef candidata, split_index, word_index)
     return TranslatorResultIsDisable(candidata[split_index, word_index])
 }
 
+CandidateGetMatchLevel(ByRef candidata, split_index, word_index)
+{
+    return TranslatorResultGetMatchLevel(candidata[split_index, word_index])
+}
+
 CandidateGetMaxWordLength(ByRef candidata, split_index)
 {
     return TranslatorResultGetWordLength(candidata[split_index, 1])

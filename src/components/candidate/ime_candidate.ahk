@@ -138,6 +138,11 @@ ImeCandidateIsDisable(split_index, word_index)
     return CandidateIsDisable(ImeCandidateGet(), split_index, word_index)
 }
 
+ImeCandidateGetMatchLevel(split_index, word_index)
+{
+    return CandidateGetMatchLevel(ImeCandidateGet(), split_index, word_index)
+}
+
 ;*******************************************************************************
 ;
 ImeCandidateGetFormattedComment(split_index, word_index)

@@ -183,6 +183,10 @@ ImeTooltipUpdate()
         if( radical_words ) {
             extern_info .= " {" radical_words "}"
         }
+        match_level := ImeCandidateGetMatchLevel(split_index, select_index)
+        if( match_level ) {
+            extern_info .= " " ImeCandidateGetMatchLevel(split_index, select_index) "%"
+        }
         extern_info .= " (" ImeCandidateGetLegacyPinyin(split_index, select_index) "|" ImeCandidateGetWordLength(split_index, select_index) ")"
         ; comment := ImeCandidateGetComment(split_index, select_index)
         ; if( comment ) {

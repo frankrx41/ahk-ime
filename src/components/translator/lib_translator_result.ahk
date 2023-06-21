@@ -34,6 +34,9 @@ TranslatorResultGetTopLevel(ByRef translate_result) {
 TranslatorResultIsDisable(ByRef translate_result) {
     return translate_result[8]
 }
+TranslatorResultGetMatchLevel(ByRef translate_result) {
+    return translate_result[9]
+}
 
 TranslatorResultSetWordLength(ByRef translate_result, length) {
     translate_result[5] := length
