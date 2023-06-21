@@ -84,7 +84,7 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
     max_length := find_word_len
 
     ImeProfilerBegin()
-    debug_text := split_index "," candidate[split_index].Length()
+    profile_text := split_index "," candidate[split_index].Length()
     select_index := 0
     loop, % candidate[split_index].Length()
     {
@@ -92,11 +92,11 @@ CandidateFindWordSelectIndex(ByRef candidate, split_index, find_words)
         test_word := TranslatorResultGetWord(candidate[split_index, select_index])
         test_word_length := TranslatorResultGetWordLength(candidate[split_index, select_index])
         if( test_word_length <= max_length && find_words == SubStr(test_word, 1, find_word_len) ){
-            debug_text .= "[" select_index "] -> """ find_words """ == """ test_word """"
+            profile_text .= "[" select_index "] -> """ find_words """ == """ test_word """"
             break
         }
     }
-    ImeProfilerEnd(debug_text)
+    ImeProfilerEnd(profile_text)
     return select_index
 }
 

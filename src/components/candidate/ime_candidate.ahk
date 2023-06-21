@@ -20,12 +20,12 @@ ImeCandidateUpdateResult(splitter_result_list)
         ime_candidata := []
         translate_last_result_list := []
         CandidateSetSplittedList(ime_candidata, splitter_result_list)
-        debug_text := "["
+        profile_text := "["
         loop % splitter_result_list.Length()
         {
             splitter_index := A_Index
             test_splitter_list := SplitterResultListGetUntilSkip(splitter_result_list, splitter_index)
-            debug_text .= """" SplitterResultListGetDebugText(test_splitter_list) ""","
+            profile_text .= """" SplitterResultListGetDebugText(test_splitter_list) ""","
             if( !SplitterResultNeedTranslate(splitter_result_list[splitter_index]) || SplitterResultIsAutoSymbol(splitter_result_list[splitter_index]) )
             {
                 ; Add legacy text
@@ -61,8 +61,8 @@ ImeCandidateUpdateResult(splitter_result_list)
         ; Add last length word
         ime_candidata.Push(translate_last_result_list)
 
-        debug_text := SubStr(debug_text, 1, StrLen(debug_text) - 1) . "]"
-        ImeProfilerEnd(debug_text)
+        profile_text := SubStr(profile_text, 1, StrLen(profile_text) - 1) . "]"
+        ImeProfilerEnd(profile_text)
     } else {
         ImeCandidateClear()
     }
