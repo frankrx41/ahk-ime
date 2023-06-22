@@ -177,28 +177,28 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 ;   match last         召 K  C
 ;   no match
 ;   have no radical    一
-RadicalIsFullMatchList(radical_word_list, test_radical)
+RadicalIsFullMatchList(original_radical_word_list, test_radical)
 {
     local
     skip_able_count     := 2
     final_match_level   := 1
-    begin_index         := 0
-    skip_count          := 0
+    radical_word_list   := CopyObj(original_radical_word_list)
     loop
     {
         if( test_radical == "" ){
             break
         }
-        if( begin_index >= radical_word_list.Length() ){
+        if( radical_word_list.Length() == 0 ){
             final_match_level := 0
             break
         }
 
         ; Check if is part of first char
+        skip_count := 0
         loop, % skip_able_count
         {
             match_level := 0
-            check_index := A_Index + begin_index
+            check_index := A_Index
             if( check_index > radical_word_list.Length() ) {
                 break
             }
@@ -238,17 +238,18 @@ RadicalIsFullMatchList(radical_word_list, test_radical)
             }
         }
 
-
         final_match_level *= match_level
-        if( final_match_level == 0 ) {
+        if( match_level == 0 ) {
             break
         } else {
             test_radical := SubStr(test_radical, max_radical_check_length+1)
-            begin_index := check_index
+            radical_word_list.RemoveAt(check_index)
         }
     }
 
-    return final_match_level * (begin_index - skip_count) / radical_word_list.Length()
+    level := 1 - (radical_word_list.Length() / original_radical_word_list.Length())
+    Assert(level >= 0)
+    return final_match_level * level
 }
 
 RadicalCheckWordClass(test_word, test_radical)
