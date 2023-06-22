@@ -31,7 +31,7 @@ RadicalGetPinyin(single_radical)
     return ime_radicals_pinyin[single_radical]
 }
 
-RadicalCheckPinyin(radical, test_pinyin)
+RadicalIsMatchPinyin(radical, test_pinyin)
 {
     local
     radical_pinyin_list := RadicalGetPinyin(radical)
@@ -65,6 +65,38 @@ DebugRadicalRecordMissWord(word)
 
 ;*******************************************************************************
 ;
+;*******************************************************************************
+;
+RadicalCheckMatchRadicalLevel(test_word, test_radical)
+{
+    local
+    ; ImeProfilerBegin()
+
+    match_level := 0
+    if( !RadicalIsAtomic(test_word) )
+    {
+        radical_word_list := RadicalWordSplit(test_word)
+        if( !(radical_word_list.Length() != 0 && radical_word_list != "") )
+        {
+            DebugRadicalRecordMissWord(test_word)
+        }
+
+        loop, % radical_word_list.Length()
+        {
+            result_level := RadicalIsFullMatchList(radical_word_list[A_Index], test_radical)
+            match_level := Max(result_level, match_level)
+        }
+    }
+    else
+    {
+        match_level := 0
+    }
+
+    return match_level
+}
+
+;*******************************************************************************
+;
 ; e.g. 干 -> 二 丨, "一" H and "二" E both think match
 RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 {
@@ -86,7 +118,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
         loop, % radical_word_list.Length()
         {
             first_word := radical_word_list[A_Index, 1]
-            if( RadicalCheckPinyin(first_word, SubStr(test_radical, 1, 1)) ){
+            if( RadicalIsMatchPinyin(first_word, SubStr(test_radical, 1, 1)) ){
                 can_continue_split := true
                 break
             }
@@ -95,7 +127,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 
     if( !can_continue_split )
     {
-        if( RadicalCheckPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
+        if( RadicalIsMatchPinyin(test_word, SubStr(test_radical, 1, 1)) ) {
             test_radical := SubStr(test_radical, 2)
             return true
         }
@@ -145,56 +177,78 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 ;   match last         召 K  C
 ;   no match
 ;   have no radical    一
-RadicalIsFullMatchList(test_word, test_radical, radical_word_list)
+RadicalIsFullMatchList(radical_word_list, test_radical)
 {
     local
-    skip_able_count := 2
-
-    test_radical_len        := StrLen(test_radical)
-    skip_count              := 0
-    radical_word_list_len   := radical_word_list.Length()
+    skip_able_count     := 2
+    final_match_level   := 1
+    begin_index         := 0
+    skip_count          := 0
     loop
     {
         if( test_radical == "" ){
-            return (test_radical_len) / (radical_word_list_len - skip_count/4)
+            break
         }
-        if( radical_word_list.Length() == 0 ){
-            return 0
+        if( begin_index >= radical_word_list.Length() ){
+            final_match_level := 0
+            break
         }
 
-        match_any_part := false
         ; Check if is part of first char
         loop, % skip_able_count
         {
-            check_index := A_Index
+            match_level := 0
+            check_index := A_Index + begin_index
             if( check_index > radical_word_list.Length() ) {
                 break
             }
             first_word := radical_word_list[check_index]
-            remain_radicals := []
-            Assert(first_word, test_word "> " check_index ", " first_word, "msgbox")
-            if( RadicalMatchFirstPart(first_word, test_radical, remain_radicals) )
+            Assert(first_word, "> " check_index ", " first_word, "msgbox")
+
+
+            max_radical_check_length := 0
+            match_level := RadicalIsMatchPinyin(first_word, SubStr(test_radical, 1, 1))
+            if( match_level )
             {
-                ever_match_first := true
-                radical_word_list.RemoveAt(check_index)
-                loop, % remain_radicals.Length() {
-                    radical_word_list.InsertAt(A_Index, remain_radicals[A_Index])
-                }
-                skip_able_count := remain_radicals.Length() + 1
-                radical_word_list_len += remain_radicals.Length()
-                match_any_part := true
-                break
+                max_radical_check_length := 1
             }
             else
             {
-                ; skip_count += 1
+                test_radical_len := RadicalIsAtomic(first_word) ? 1 : StrLen(test_radical)
+                loop, % test_radical_len
+                {
+                    ; test_radical_check_length := test_radical_len - A_Index + 1
+                    test_radical_check_length := A_Index
+                    sub_test_radical := SubStr(test_radical, 1, test_radical_check_length)
+                    result_level := RadicalCheckMatchRadicalLevel(first_word, sub_test_radical)
+                    if( result_level > 0 && result_level >= match_level ) {
+                        match_level := result_level
+                        max_radical_check_length := test_radical_check_length
+                    }
+                    if( result_level == 0 && match_level > 0 ) {
+                        break
+                    }
+                }
+            }
+
+            if( match_level != 0 ) {
+                break
+            } else {
+                skip_count += 1
             }
         }
 
-        if( !match_any_part ) {
-            return 0
+
+        final_match_level *= match_level
+        if( final_match_level == 0 ) {
+            break
+        } else {
+            test_radical := SubStr(test_radical, max_radical_check_length+1)
+            begin_index := check_index
         }
     }
+
+    return final_match_level * (begin_index - skip_count) / radical_word_list.Length()
 }
 
 RadicalCheckWordClass(test_word, test_radical)
@@ -211,42 +265,40 @@ RadicalCheckWordClass(test_word, test_radical)
     return true
 }
 
-UpdateMatchLevel(prev_match_level, curr_match_level)
-{
-    if( curr_match_level > prev_match_level ) {
-        match_level := curr_match_level
-    } else {
-        match_level := prev_match_level
-    }
-    return match_level
-}
-
 ;*******************************************************************************
 ; return:
 ;   0: No match         (No match word class or radical)
 ;   if have no radical but match word class, return 0.01
 ;   (0~1]: match level
-RadicalCheckMatchRadicalLevel(test_word, test_radical)
+RadicalCheckMatchLevel(test_word, test_radical)
 {
     local
     ImeProfilerBegin()
+
     match_level := 0
-    radical_word_list := CopyObj(RadicalWordSplit(test_word))
-    if( radical_word_list )
+    if( RadicalCheckWordClass(test_word, test_radical) )
     {
-        for index, element in radical_word_list
+        ; You also need to update `GetRadical`
+        test_radical := RegExReplace(test_radical, "[!@#$^&=]")
+        radical_word_list := CopyObj(RadicalWordSplit(test_word))
+        if( radical_word_list )
         {
-            result_level := RadicalIsFullMatchList(test_word, test_radical, element)
-            match_level := UpdateMatchLevel(match_level, result_level)
-            if( match_level >= 1 ) {
-                break
+            for index, element_list in radical_word_list
+            {
+                result_level := RadicalIsFullMatchList(element_list, test_radical)
+                match_level := Max(result_level, match_level)
+                if( match_level >= 1 ) {
+                    break
+                }
             }
         }
+        else
+        {
+            ; If this word has no radical, set to 0.01 for sort at last
+            match_level := 0.01
+        }
     }
-    else
-    {
-        match_level := 0.01
-    }
+
     ImeProfilerEnd()
     return match_level
 }
@@ -286,18 +338,12 @@ TranslatorResultListFilterByRadical(ByRef translate_result_list, radical_list)
                 if( test_radical )
                 {
                     test_word := SubStr(word_value, A_Index, 1)
-                    result_level := RadicalCheckWordClass(test_word, test_radical)
-                    if( result_level )
-                    {
-                        ; You also need to update `GetRadical`
-                        test_radical := RegExReplace(test_radical, "[!@#$^&=]")
-                        result_level := RadicalCheckMatchRadicalLevel(test_word, test_radical)
-                    }
+                    result_level := RadicalCheckMatchLevel(test_word, test_radical)
                     if( result_level == 0 ) {
                         match_level := 0
                         break
                     }
-                    match_level := UpdateMatchLevel(match_level, result_level)
+                    match_level := Max(result_level, match_level)
                 }
                 else
                 {
