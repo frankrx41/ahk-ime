@@ -32,7 +32,8 @@ TranslatorResultGetTopLevel(ByRef translate_result) {
     return translate_result[7]
 }
 TranslatorResultIsDisable(ByRef translate_result) {
-    return translate_result[8]
+    ; return translate_result[8]
+    return false
 }
 TranslatorResultGetMatchLevel(ByRef translate_result) {
     return translate_result[9]

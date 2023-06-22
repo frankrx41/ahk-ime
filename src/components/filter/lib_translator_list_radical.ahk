@@ -180,7 +180,7 @@ RadicalMatchFirstPart(test_word, ByRef test_radical, ByRef remain_radicals)
 RadicalIsFullMatchList(original_radical_word_list, test_radical)
 {
     local
-    skip_able_count     := 2
+    skip_able_count     := 3
     final_match_level   := 1
     radical_word_list   := CopyObj(original_radical_word_list)
     loop
@@ -232,6 +232,9 @@ RadicalIsFullMatchList(original_radical_word_list, test_radical)
             }
 
             if( match_level != 0 ) {
+                if( skip_count ) {
+                    match_level /= skip_count
+                }
                 break
             } else {
                 skip_count += 1
