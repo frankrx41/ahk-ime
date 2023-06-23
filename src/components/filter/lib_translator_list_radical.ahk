@@ -233,7 +233,7 @@ RadicalIsFullMatchList(original_radical_word_list, test_radical)
 
             if( match_level != 0 ) {
                 if( skip_count ) {
-                    match_level /= skip_count
+                    match_level := match_level / skip_count
                 }
                 break
             } else {
