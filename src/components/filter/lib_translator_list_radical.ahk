@@ -284,22 +284,29 @@ RadicalCheckMatchLevel(test_word, test_radical)
     {
         ; You also need to update `GetRadical`
         test_radical := RegExReplace(test_radical, "[!@#$^&=]")
-        radical_word_list := CopyObj(RadicalWordSplit(test_word))
-        if( radical_word_list )
+        if( test_radical == "" )
         {
-            for index, element_list in radical_word_list
-            {
-                result_level := RadicalIsFullMatchList(element_list, test_radical)
-                match_level := Max(result_level, match_level)
-                if( match_level >= 1 ) {
-                    break
-                }
-            }
+            match_level := 1
         }
         else
         {
-            ; If this word has no radical, set to 0.01 for sort at last
-            match_level := 0.01
+            radical_word_list := CopyObj(RadicalWordSplit(test_word))
+            if( radical_word_list )
+            {
+                for index, element_list in radical_word_list
+                {
+                    result_level := RadicalIsFullMatchList(element_list, test_radical)
+                    match_level := Max(result_level, match_level)
+                    if( match_level >= 1 ) {
+                        break
+                    }
+                }
+            }
+            else
+            {
+                ; If this word has no radical, set to 0.01 for sort at last
+                match_level := 0.01
+            }
         }
     }
 
@@ -309,14 +316,24 @@ RadicalCheckMatchLevel(test_word, test_radical)
 
 RadicalCheckRepeatIsOk(words, radical_list)
 {
-    loop, % StrLen(words)
+    is_ok := true
+    if( InStr(radical_list[1], "=") )
     {
-        if( InStr(radical_list[A_Index], "=") && SubStr(words, A_Index, 1) != SubStr(words, A_Index-1, 1) )
+        is_ok := false
+    }
+    else
+    {
+        loop, % StrLen(words) - 1
         {
-            return false
+            index := A_Index + 1
+            if( InStr(radical_list[index], "=") && SubStr(words, index, 1) != SubStr(words, index-1, 1) )
+            {
+                is_ok := false
+                break
+            }
         }
     }
-    return true
+    return is_ok
 }
 
 ;*******************************************************************************
