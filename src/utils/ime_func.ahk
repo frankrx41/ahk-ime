@@ -127,11 +127,11 @@ PutStringTimer:
     SendInput, % "{Text}" global_input_string
 return
 
-PutString(input_string, use_clipboard:=false){
+PutString(input_string, use_clipboard:=false, sleep_time:=0){
     local
-    global global_input_string
     Critical
     if( !use_clipboard ){
+        global global_input_string
         global_input_string := input_string
         SetTimer, PutStringTimer, -1
     }
@@ -139,6 +139,7 @@ PutString(input_string, use_clipboard:=false){
         saveboard := clipboard
         clipboard := input_string
         Send, {RCtrl Down}v{RCtrl Up}
+        Sleep, %sleep_time%
         clipboard := saveboard
     }
 }

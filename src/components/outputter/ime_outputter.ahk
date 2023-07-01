@@ -1,7 +1,7 @@
 ImeOutputterInitialize()
 {
     global ime_send_by_clipboard_process_list
-    ime_send_by_clipboard_process_list := { "Tabletop Simulator.exe": 1 }
+    ime_send_by_clipboard_process_list := { "Tabletop Simulator.exe": 0, "ygopro.exe": 100 }
 }
 
 ;*******************************************************************************
@@ -23,8 +23,9 @@ ImeOutputterPutSelect(as_legacy, word_by_word:=0)
     {
         ImeInputterHistoryPush(ImeInputterStringGetLegacy())
         WinGet, process_name, ProcessName, A
-        use_clipboard := ime_send_by_clipboard_process_list[process_name]
-        PutString(input_string, use_clipboard)
+        use_clipboard := ime_send_by_clipboard_process_list.HasKey(process_name)
+        sleep_time := ime_send_by_clipboard_process_list[process_name]
+        PutString(input_string, use_clipboard, sleep_time)
     }
 
     ImeSchemeSimpleSet(false)
